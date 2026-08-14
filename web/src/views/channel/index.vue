@@ -220,7 +220,7 @@ export default {
       channelList: [],
       excelFields: {
         Name: 'gbName',
-        No.: 'gbDeviceId',
+        'No.': 'gbDeviceId',
         Manufacturer: 'gbManufacturer',
         Type: {
           field: 'dataType',
@@ -230,7 +230,7 @@ export default {
         },
         longitude: 'gbLongitude',
         Latitude: 'gbLatitude',
-        Camera type: 'ptzTypeText',
+        'Camera type': 'ptzTypeText',
         Status: {
           field: 'gbStatus',
           callback: (value) => {

@@ -564,7 +564,7 @@ export default {
     setFeatureImageById(layer, featureId, image) {
       let feature = layer.getSource().getFeatureById(featureId)
       if (!feature) {
-        console.error('No icon found when changing the feature's icon')
+        console.error("No icon found when changing the feature's icon")
         return
       }
       let style = feature.getStyle()
