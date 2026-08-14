@@ -2,25 +2,25 @@
   <div id="pushList" class="app-container">
     <div v-if="!streamPush" style="height: calc(100vh - 124px);">
       <el-form :inline="true" size="mini">
-        <el-form-item label="搜索">
+        <el-form-item label="Search">
           <el-input
             v-model="searchStr"
             style="margin-right: 1rem; width: auto;"
-            placeholder="关键字"
+            placeholder="Keywords"
             prefix-icon="el-icon-search"
             clearable
             @input="queryList"
           />
         </el-form-item>
-        <el-form-item label="流媒体">
+        <el-form-item label="streaming media">
           <el-select
             v-model="mediaServerId"
             style="margin-right: 1rem;"
-            placeholder="请选择"
+            placeholder="Please select"
             default-first-option
             @change="queryList"
           >
-            <el-option label="全部" value="" />
+            <el-option label="All" value="" />
             <el-option
               v-for="item in mediaServerList"
               :key="item.id"
@@ -29,32 +29,32 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item label="推流状态">
+        <el-form-item label="Push status">
           <el-select
             v-model="pushing"
             style="margin-right: 1rem;"
-            placeholder="请选择"
+            placeholder="Please select"
             default-first-option
             @change="queryList"
           >
-            <el-option label="全部" value="" />
-            <el-option label="推流中" value="true" />
-            <el-option label="已停止" value="false" />
+            <el-option label="All" value="" />
+            <el-option label="Pushing" value="true" />
+            <el-option label="Stopped" value="false" />
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button icon="el-icon-plus" style="margin-right: 1rem;" type="primary" @click="addStream">添加
+          <el-button icon="el-icon-plus" style="margin-right: 1rem;" type="primary" @click="addStream">add
           </el-button>
           <el-button-group>
             <el-button icon="el-icon-upload2" @click="importChannel">
-              通道导入
+              Channel import
             </el-button>
             <el-button icon="el-icon-download">
               <a
                 style="text-align: center; text-decoration: none"
-                href="/static/file/推流通道导入.zip"
-                download="推流通道导入.zip"
-              >下载模板</a>
+                href="/static/file/Push channel import.zip"
+                download="Push channel import.zip"
+              >Download template</a>
             </el-button>
           </el-button-group>
           <el-button
@@ -63,9 +63,9 @@
             :disabled="multipleSelection.length === 0"
             type="danger"
             @click="batchDel"
-          >移除
+          >Remove
           </el-button>
-          <el-button icon="el-icon-chicken" @click="buildPushStream">生成推流地址</el-button>
+          <el-button icon="el-icon-chicken" @click="buildPushStream">Generate push address</el-button>
         </el-form-item>
         <el-form-item style="float: right;">
           <el-button icon="el-icon-refresh-right" circle @click="refresh()" />
@@ -82,31 +82,31 @@
         @selection-change="handleSelectionChange"
       >
         <el-table-column type="selection" :reserve-selection="true" min-width="55" />
-        <el-table-column prop="gbName" label="名称" min-width="150" />
-        <el-table-column prop="app" label="应用名" min-width="100" />
-        <el-table-column prop="stream" label="流ID" min-width="200" />
-        <el-table-column label="推流状态" min-width="100">
+        <el-table-column prop="gbName" label="Name" min-width="150" />
+        <el-table-column prop="app" label="Application name" min-width="100" />
+        <el-table-column prop="stream" label="flowID" min-width="200" />
+        <el-table-column label="Push status" min-width="100">
           <template v-slot:default="scope">
-            <el-tag v-if="scope.row.pushing && myServerId !== scope.row.serverId" size="medium" style="border-color: #ecf1af">推流中</el-tag>
-            <el-tag v-if="scope.row.pushing && myServerId === scope.row.serverId" size="medium">推流中</el-tag>
-            <el-tag v-if="!scope.row.pushing" size="medium" type="info">已停止</el-tag>
+            <el-tag v-if="scope.row.pushing && myServerId !== scope.row.serverId" size="medium" style="border-color: #ecf1af">Pushing</el-tag>
+            <el-tag v-if="scope.row.pushing && myServerId === scope.row.serverId" size="medium">Pushing</el-tag>
+            <el-tag v-if="!scope.row.pushing" size="medium" type="info">Stopped</el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="gbDeviceId" label="国标编码" min-width="200" />
-        <el-table-column label="国标状态" min-width="100">
+        <el-table-column prop="gbDeviceId" label="National standard code" min-width="200" />
+        <el-table-column label="National standard status" min-width="100">
           <template v-slot:default="scope">
-            <el-tag v-if="scope.row.gbStatus === 'ON' " size="medium">在线</el-tag>
-            <el-tag v-if="scope.row.gbStatus !== 'ON' " size="medium" type="info">离线</el-tag>
+            <el-tag v-if="scope.row.gbStatus === 'ON' " size="medium">online</el-tag>
+            <el-tag v-if="scope.row.gbStatus !== 'ON' " size="medium" type="info">Offline</el-tag>
           </template>
         </el-table-column>
-        <el-table-column label="位置信息" min-width="150">
+        <el-table-column label="location information" min-width="150">
           <template v-slot:default="scope">
             <span v-if="scope.row.gbLongitude && scope.row.gbLatitude" size="medium">{{ scope.row.gbLongitude }}<br>{{ scope.row.gbLatitude }}</span>
-            <span v-if="!scope.row.gbLongitude || !scope.row.gbLatitude" size="medium">无</span>
+            <span v-if="!scope.row.gbLongitude || !scope.row.gbLatitude" size="medium">None</span>
           </template>
         </el-table-column>
-        <el-table-column prop="mediaServerId" label="流媒体" min-width="150" />
-        <el-table-column label="开始时间" min-width="150">
+        <el-table-column prop="mediaServerId" label="streaming media" min-width="150" />
+        <el-table-column label="start time" min-width="150">
           <template v-slot:default="scope">
             <el-button-group>
               {{ scope.row.pushTime == null? "-":scope.row.pushTime }}
@@ -114,17 +114,17 @@
           </template>
         </el-table-column>
 
-        <el-table-column label="操作" min-width="300" fixed="right">
+        <el-table-column label="Operation" min-width="300" fixed="right">
           <template v-slot:default="scope">
-            <el-button size="medium" :loading="scope.row.playLoading" icon="el-icon-video-play" type="text" @click="playPush(scope.row)">播放
+            <el-button size="medium" :loading="scope.row.playLoading" icon="el-icon-video-play" type="text" @click="playPush(scope.row)">play
             </el-button>
             <el-divider direction="vertical" />
-            <el-button size="medium" icon="el-icon-delete" type="text" style="color: #f56c6c" @click="deletePush(scope.row.id)">删除</el-button>
+            <el-button size="medium" icon="el-icon-delete" type="text" style="color: #f56c6c" @click="deletePush(scope.row.id)">Delete</el-button>
             <el-divider direction="vertical" />
             <el-button size="medium" icon="el-icon-position" type="text" @click="edit(scope.row)">
-              编辑
+              Edit
             </el-button>
-            <el-button size="medium" icon="el-icon-cloudy" type="text" @click="queryCloudRecords(scope.row)">云端录像
+            <el-button size="medium" icon="el-icon-cloudy" type="text" @click="queryCloudRecords(scope.row)">Cloud recording
             </el-button>
           </template>
         </el-table-column>
@@ -166,9 +166,9 @@ export default {
   },
   data() {
     return {
-      pushList: [], // 设备列表
-      currentPusher: {}, // 当前操作设备对象
-      updateLooper: 0, // 数据刷新轮训标志
+      pushList: [], // Device list
+      currentPusher: {}, // Current operating device object
+      updateLooper: 0, // Data refresh rotation training flag
       currentDeviceChannelsLenth: 0,
       currentPage: 1,
       count: 15,
@@ -258,9 +258,9 @@ export default {
         })
     },
     deletePush: function(id) {
-      this.$confirm('确定删除通道?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+      this.$confirm('Confirm to delete channel?', 'Tips', {
+        confirmButtonText: 'OK',
+        cancelButtonText: 'Cancel',
         type: 'warning'
       }).then(() => {
         this.loading = true
@@ -268,7 +268,7 @@ export default {
           .then((data) => {
             this.$message.success({
               showClose: true,
-              message: '删除成功'
+              message: 'Delete successfully'
             })
             this.initData()
           })
@@ -286,7 +286,7 @@ export default {
     edit: function(row) {
       this.streamPush = row
     },
-    // 结束编辑
+    // End editing
     closeEdit: function() {
       this.streamPush = null
       this.getPushList()
@@ -301,9 +301,9 @@ export default {
       this.streamPush = {}
     },
     batchDel: function() {
-      this.$confirm(`确定删除选中的${this.multipleSelection.length}个通道?`, '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+      this.$confirm(`Confirm to delete selected${this.multipleSelection.length}channels?`, 'Tips', {
+        confirmButtonText: 'OK',
+        cancelButtonText: 'Cancel',
         type: 'warning'
       }).then(() => {
         const ids = []

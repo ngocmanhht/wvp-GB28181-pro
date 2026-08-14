@@ -16,29 +16,29 @@ public class SubscribeInfo {
     private SipTransactionInfo transactionInfo;
 
     /**
-     * 以下为可选字段
+     * The following are optional fields
      */
     private String sn;
 
     private int gpsInterval;
 
     /**
-     * 模拟的FromTag
+     * simulatedFromTag
      */
     private String simulatedFromTag;
 
     /**
-     * 模拟的ToTag
+     * simulatedToTag
      */
     private String simulatedToTag;
 
     /**
-     * 模拟的CallID
+     * simulatedCallID
      */
     private String simulatedCallId;
 
     /**
-     * 来源serverId
+     * SourceserverId
      */
     private String serverId;
 

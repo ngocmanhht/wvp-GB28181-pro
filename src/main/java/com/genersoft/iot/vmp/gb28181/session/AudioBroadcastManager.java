@@ -13,7 +13,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * 语音广播消息管理类
+ * Voice broadcast message management class
  * @author lin
  */
 @Slf4j

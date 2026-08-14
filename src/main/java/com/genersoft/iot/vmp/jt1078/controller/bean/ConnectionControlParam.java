@@ -9,7 +9,7 @@ import lombok.Setter;
 @Getter
 public class ConnectionControlParam {
 
-    @Schema(description = "终端手机号")
+    @Schema(description = "Terminal mobile phone number")
     private String phoneNumber;
     private JTDeviceConnectionControl control;
 

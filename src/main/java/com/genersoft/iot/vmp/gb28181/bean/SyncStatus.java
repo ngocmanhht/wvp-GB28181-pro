@@ -6,26 +6,26 @@ import lombok.Data;
 import java.time.Instant;
 
 /**
- * 摄像机同步状态
+ * Camera sync status
  * @author lin
  */
 @Data
-@Schema(description = "摄像机同步状态")
+@Schema(description = "Camera sync status")
 public class SyncStatus {
 
-    @Schema(description = "总数")
+    @Schema(description = "total")
     private Integer total;
 
-    @Schema(description = "当前更新多少")
+    @Schema(description = "How many updates are currently")
     private Integer current;
 
-    @Schema(description = "错误描述")
+    @Schema(description = "Error description")
     private String errorMsg;
 
-    @Schema(description = "是否同步中")
+    @Schema(description = "Is syncing")
     private Boolean syncIng;
 
-    @Schema(description = "时间")
+    @Schema(description = "time")
     private Instant time;
 
 }

@@ -16,7 +16,7 @@ import javax.sip.message.Response;
 import java.text.ParseException;
 
 /**
- * SIP命令类型： CANCEL请求
+ * SIPCommand type: CANCEL request
  */
 @Slf4j
 @Component
@@ -29,22 +29,22 @@ public class CancelRequestProcessor extends SIPRequestProcessorParent implements
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
-		// 添加消息处理的订阅
+		// Add message processing subscription
 		sipProcessorObserver.addRequestProcessor(method, this);
 	}
 
 	/**
-	 * 处理CANCEL请求
+	 * Handling CANCEL requests
 	 *
-	 * @param evt 事件
+	 * @param evt event
 	 */
 	@Override
 	public void process(RequestEvent evt) {
-		// TODO 优先级99 Cancel Request消息实现，此消息一般为级联消息，上级给下级发送请求取消指令
+		// TODO priority99 Cancel RequestMessage implementation. This message is generally a cascade message. The superior sends a request to cancel the instruction to the subordinate.
 		try {
 			responseAck((SIPRequest) evt.getRequest(), Response.OK);
 		} catch (SipException | InvalidArgumentException | ParseException e) {
-			log.error("[命令发送失败] 回复200 OK: {}", e.getMessage());
+			log.error("[Command sending failed] Reply200 OK: {}", e.getMessage());
 		}
 	}
 

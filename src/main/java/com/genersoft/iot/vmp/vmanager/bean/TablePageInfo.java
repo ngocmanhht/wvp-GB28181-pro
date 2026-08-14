@@ -4,15 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TablePageInfo<T> {
-    //当前页
+    //Current page
     private int pageNum;
-    //每页的数量
+    //quantity per page
     private int pageSize;
-    //当前页的数量
+    //Number of current pages
     private int size;
-    //总页数
+    //Total pages
     private int pages;
-    //总数
+    //total
     private int total;
 
     private List<T> resultData;

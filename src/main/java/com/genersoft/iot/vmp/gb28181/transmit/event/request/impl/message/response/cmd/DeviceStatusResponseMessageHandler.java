@@ -41,15 +41,15 @@ public class DeviceStatusResponseMessageHandler extends SIPRequestProcessorParen
     @Override
     public void handForDevice(RequestEvent evt, Device device, Element element) {
         log.info("[DeviceStatus Response] \n {}", element.asXML());
-        // 检查设备是否存在， 不存在则不回复
+        // Check whether the device exists. If it does not exist, do not reply.
         if (device == null) {
             return;
         }
-        // 回复200 OK
+        // Reply200 OK
         try {
             responseAckAsync((SIPRequest) evt.getRequest(), Response.OK);
         } catch (SipException | InvalidArgumentException | ParseException e) {
-            log.error("[命令发送失败] 国标级联 设备状态应答回复200OK: {}", e.getMessage());
+            log.error("[Command sending failed] National standard cascade equipment status response reply200OK: {}", e.getMessage());
         }
         String text = element.elementText("Online");
         responseMessageHandler.handMessageEvent(element, text);

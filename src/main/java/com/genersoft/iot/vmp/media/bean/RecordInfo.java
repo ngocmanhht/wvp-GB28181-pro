@@ -16,11 +16,11 @@ public class RecordInfo {
     private String folder;
     private String url;
     /**
-     * 单位毫秒
+     * Unit millisecond
      */
     private long startTime;
     /**
-     * 单位毫秒
+     * Unit millisecond
      */
     private double timeLen;
     private String params;
@@ -65,11 +65,11 @@ public class RecordInfo {
     @Override
     public String toString() {
         return "RecordInfo{" +
-                "文件名称='" + fileName + '\'' +
-                ", 文件路径='" + filePath + '\'' +
-                ", 文件大小=" + fileSize +
-                ", 开始时间=" + startTime +
-                ", 时长=" + timeLen +
+                "File name='" + fileName + '\'' +
+                ", file path='" + filePath + '\'' +
+                ", file size=" + fileSize +
+                ", start time=" + startTime +
+                ", duration=" + timeLen +
                 ", params=" + params +
                 '}';
     }

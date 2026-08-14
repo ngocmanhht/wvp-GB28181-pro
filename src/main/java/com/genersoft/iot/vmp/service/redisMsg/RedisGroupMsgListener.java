@@ -27,9 +27,9 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
- * 接收redis发送的推流设备列表更新通知
- * 监听： SUBSCRIBE VM_MSG_GROUP_LIST_RESPONSE
- * 发布 PUBLISH VM_MSG_GROUP_LIST_RESPONSE '[{"groupName":"研发AAS","topGroupGAlias":"6","groupAlias":"6"},{"groupName":"测试AAS","topGroupGAlias":"5","groupAlias":"5"},{"groupName":"研发2","topGroupGAlias":"4","groupAlias":"4"},{"groupName":"啊实打实的","topGroupGAlias":"4","groupAlias":"100000009"},{"groupName":"测试域","topGroupGAlias":"3","groupAlias":"3"},{"groupName":"结构1","topGroupGAlias":"3","groupAlias":"100000000"},{"groupName":"结构1-1","topGroupGAlias":"3","parentGAlias":"100000000","groupAlias":"100000001"},{"groupName":"结构2-2","topGroupGAlias":"3","groupAlias":"100000002"},{"groupName":"结构1-2","topGroupGAlias":"3","parentGAlias":"100000001","groupAlias":"100000003"},{"groupName":"结构1-3","topGroupGAlias":"3","parentGAlias":"100000003","groupAlias":"100000004"},{"groupName":"研发1","topGroupGAlias":"3","groupAlias":"100000005"},{"groupName":"研发3","topGroupGAlias":"3","parentGAlias":"100000005","groupAlias":"100000006"},{"groupName":"测试42","topGroupGAlias":"3","parentGAlias":"100000000","groupAlias":"100000010"},{"groupName":"测试2","topGroupGAlias":"3","parentGAlias":"100000000","groupAlias":"100000011"},{"groupName":"测试3","topGroupGAlias":"3","parentGAlias":"100000000","groupAlias":"100000007"},{"groupName":"测试4","topGroupGAlias":"3","parentGAlias":"100000007","groupAlias":"100000008"}]'
+ * Receive push device list update notifications sent by redis
+ * monitor： SUBSCRIBE VM_MSG_GROUP_LIST_RESPONSE
+ * publish PUBLISH VM_MSG_GROUP_LIST_RESPONSE '[{"groupName":"R&DAAS","topGroupGAlias":"6","groupAlias":"6"},{"groupName":"testAAS","topGroupGAlias":"5","groupAlias":"5"},{"groupName":"R&D2","topGroupGAlias":"4","groupAlias":"4"},{"groupName":"Ah, the real deal","topGroupGAlias":"4","groupAlias":"100000009"},{"groupName":"test domain","topGroupGAlias":"3","groupAlias":"3"},{"groupName":"structure1","topGroupGAlias":"3","groupAlias":"100000000"},{"groupName":"structure1-1","topGroupGAlias":"3","parentGAlias":"100000000","groupAlias":"100000001"},{"groupName":"structure2-2","topGroupGAlias":"3","groupAlias":"100000002"},{"groupName":"structure1-2","topGroupGAlias":"3","parentGAlias":"100000001","groupAlias":"100000003"},{"groupName":"structure1-3","topGroupGAlias":"3","parentGAlias":"100000003","groupAlias":"100000004"},{"groupName":"R&D1","topGroupGAlias":"3","groupAlias":"100000005"},{"groupName":"R&D3","topGroupGAlias":"3","parentGAlias":"100000005","groupAlias":"100000006"},{"groupName":"test42","topGroupGAlias":"3","parentGAlias":"100000000","groupAlias":"100000010"},{"groupName":"test2","topGroupGAlias":"3","parentGAlias":"100000000","groupAlias":"100000011"},{"groupName":"test3","topGroupGAlias":"3","parentGAlias":"100000000","groupAlias":"100000007"},{"groupName":"test4","topGroupGAlias":"3","parentGAlias":"100000007","groupAlias":"100000008"}]'
  */
 @Slf4j
 @Component
@@ -55,7 +55,7 @@ public class RedisGroupMsgListener implements MessageListener {
         if (!userSetting.getServerId().equals(serverId)) {
             return;
         }
-        log.info("[REDIS: 业务分组同步回复] key： {}， ： {}", VideoManagerConstants.VM_MSG_GROUP_LIST_RESPONSE, new String(message.getBody()));
+        log.info("[REDIS: Business group synchronization reply] key： {}， ： {}", VideoManagerConstants.VM_MSG_GROUP_LIST_RESPONSE, new String(message.getBody()));
         taskQueue.offer(message);
     }
 
@@ -73,23 +73,23 @@ public class RedisGroupMsgListener implements MessageListener {
             }
         }
         if (messageDataList.isEmpty()) {
-            log.warn("[REDIS消息-业务分组同步回复] 处理队列时发现队列为空");
+            log.warn("[REDISnews-Business group synchronization reply] When processing the queue, the queue is found to be empty.");
             return;
         }
-        // 按照别名获取所有业务分组
+        // Get all business groups by alias
         Map<String, Group> aliasGroupMap = groupService.queryGroupByAliasMap();
         Map<String, Group> aliasGroupToSave = new LinkedHashMap<>();
         for (Message msg : messageDataList) {
             try {
-                log.info("[REDIS消息-业务分组同步回复] 处理数据:  {}", new String(msg.getBody()));
+                log.info("[REDISnews-Business group synchronization reply] Process data:  {}", new String(msg.getBody()));
                 List<RedisGroupMessage> groupMessages = JSON.parseArray(new String(msg.getBody()), RedisGroupMessage.class);
-                log.info("[REDIS消息-业务分组同步回复] 待处理数量:  {}", groupMessages.size());
+                log.info("[REDISnews-Business group synchronization reply] Quantity to be processed:  {}", groupMessages.size());
                 for (RedisGroupMessage groupMessage : groupMessages) {
 
-                    // 此处使用别名作为判断依据，别名此处常常是分组在第三方系统里的唯一ID
+                    // Alias is used here as the basis for judgment. The alias here is often the only one grouped in the third-party system.ID
                     if (groupMessage.getGroupAlias() == null || ObjectUtils.isEmpty(groupMessage.getGroupName())
                             || ObjectUtils.isEmpty(groupMessage.getTopGroupGAlias())) {
-                        log.info("[REDIS消息-业务分组同步回复] 消息关键字段缺失， {}", groupMessage.toString());
+                        log.info("[REDISnews-Business group synchronization reply] Message key fields are missing， {}", groupMessage.toString());
                         continue;
                     }
                     boolean isTop = groupMessage.getTopGroupGAlias().equals(groupMessage.getGroupAlias());
@@ -105,7 +105,7 @@ public class RedisGroupMsgListener implements MessageListener {
 
                     if (!isTop) {
                         if (ObjectUtils.isEmpty(groupMessage.getTopGroupGAlias())) {
-                            log.info("[REDIS消息-业务分组同步回复] 消息缺失业务分组别名， {}", groupMessage.toString());
+                            log.info("[REDISnews-Business group synchronization reply] Message missing business group alias， {}", groupMessage.toString());
                             continue;
                         }
 
@@ -114,7 +114,7 @@ public class RedisGroupMsgListener implements MessageListener {
                             topGroup = aliasGroupToSave.get(groupMessage.getTopGroupGAlias());
                         }
                         if (topGroup == null) {
-                            log.info("[REDIS消息-业务分组同步回复] 业务分组信息未发送或者未首先发送， {}", groupMessage.toString());
+                            log.info("[REDISnews-Business group synchronization reply] The business group information was not sent or was not sent first.， {}", groupMessage.toString());
                             continue;
                         }
                         group.setBusinessGroup(topGroup.getDeviceId());
@@ -124,7 +124,7 @@ public class RedisGroupMsgListener implements MessageListener {
                                 parentGroup = aliasGroupToSave.get(groupMessage.getParentGAlias());
                             }
                             if (parentGroup == null) {
-                                log.info("[REDIS消息-业务分组同步回复] 虚拟组织父节点未发送或者未首先发送， {}", groupMessage.toString());
+                                log.info("[REDISnews-Business group synchronization reply] The virtual organization parent node was not sent or was not sent first.， {}", groupMessage.toString());
                                 continue;
                             }
                             group.setParentId(null);
@@ -141,15 +141,15 @@ public class RedisGroupMsgListener implements MessageListener {
                     group.setUpdateTime(DateUtil.getNow());
                     aliasGroupToSave.put(group.getAlias(), group);
                 }
-                log.info("[业务分组同步回复-存储分组数据] {}", JSONObject.toJSONString(aliasGroupToSave.values()));
-                // 存储分组数据
+                log.info("[Business group synchronization reply-Store grouped data] {}", JSONObject.toJSONString(aliasGroupToSave.values()));
+                // Store grouped data
                 groupService.saveByAlias(aliasGroupToSave.values());
 
             } catch (ControllerException e) {
-                log.warn("[REDIS消息-业务分组同步回复] 失败, \r\n{}", e.getMsg());
+                log.warn("[REDISnews-Business group synchronization reply] failed, \r\n{}", e.getMsg());
             } catch (Exception e) {
-                log.warn("[REDIS消息-业务分组同步回复] 发现未处理的异常, \r\n{}", new String(msg.getBody()));
-                log.error("[REDIS消息-业务分组同步回复] 异常内容： ", e);
+                log.warn("[REDISnews-Business group synchronization reply] Unhandled exception found, \r\n{}", new String(msg.getBody()));
+                log.error("[REDISnews-Business group synchronization reply] Unusual content： ", e);
             }
         }
 
@@ -157,7 +157,7 @@ public class RedisGroupMsgListener implements MessageListener {
     }
 
     /**
-     * 生成分组国标编号
+     * Generate grouping national standard number
      */
     private String buildGroupDeviceId(boolean isTop) {
         try {
@@ -175,7 +175,7 @@ public class RedisGroupMsgListener implements MessageListener {
             }
             return String.format(deviceTemplate, codeType, RandomStringUtils.insecure().next(6, false, true));
         } catch (Exception e) {
-            log.error("[REDIS消息-业务分组同步回复] 构建新的分组编号失败", e);
+            log.error("[REDISnews-Business group synchronization reply] Failed to build new group number", e);
             return null;
         }
     }

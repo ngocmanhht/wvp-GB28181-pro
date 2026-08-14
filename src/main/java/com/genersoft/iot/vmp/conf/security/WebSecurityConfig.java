@@ -27,7 +27,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * 配置Spring Security
+ * ConfigurationSpring Security
  *
  * @author lin
  */
@@ -44,12 +44,12 @@ public class WebSecurityConfig {
     @Autowired
     private DefaultUserDetailsServiceImpl userDetailsService;
     /**
-     * 登出成功的处理
+     * Successful logout processing
      */
     @Autowired
     private LogoutHandler logoutHandler;
     /**
-     * 未登录的处理
+     * Not logged in processing
      */
     @Autowired
     private AnonymousAuthenticationEntryPoint anonymousAuthenticationEntryPoint;
@@ -64,11 +64,11 @@ public class WebSecurityConfig {
     @Bean
     public AuthenticationProvider authProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        // 设置不隐藏 未找到用户异常
+        // Set not to hide user exception not found
         provider.setHideUserNotFoundExceptions(true);
-        // 用户认证service - 查询数据库的逻辑
+        // User authenticationservice - Query database logic
         provider.setUserDetailsService(userDetailsService);
-        // 设置密码加密算法
+        // Set password encryption algorithm
         provider.setPasswordEncoder(passwordEncoder());
         return provider;
     }
@@ -113,13 +113,13 @@ public class WebSecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                // 配置拦截规则
+                // Configure interception rules
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
                         .requestMatchers(defaultExcludes.toArray(new String[0])).permitAll()
                         .anyRequest().authenticated()
                 )
-                // 异常处理器
+                // exception handler
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(anonymousAuthenticationEntryPoint))
                 .logout(logout -> logout.logoutUrl("/api/user/logout")
                         .permitAll()
@@ -129,7 +129,7 @@ public class WebSecurityConfig {
     }
 
     CorsConfigurationSource configurationSource() {
-        // 配置跨域
+        // Configure cross-domain
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         corsConfiguration.setAllowedHeaders(Arrays.asList("*"));
         corsConfiguration.setAllowedMethods(Arrays.asList("*"));
@@ -138,10 +138,10 @@ public class WebSecurityConfig {
             corsConfiguration.setAllowCredentials(true);
             corsConfiguration.setAllowedOrigins(userSetting.getAllowedOrigins());
         } else {
-            // 在SpringBoot 2.4及以上版本处理跨域时，遇到错误提示：当allowCredentials为true时，allowedOrigins不能包含特殊值"*"。
-            // 解决方法是明确指定allowedOrigins或使用allowedOriginPatterns。
+            // When handling cross-domain in SpringBoot 2.4 and above, an error message is encountered: WhenallowCredentialsWhen true, allowedOrigins cannot contain special values"*"。
+            // The workaround is to specify allowedOrigins explicitly or useallowedOriginPatterns。
             corsConfiguration.setAllowCredentials(true);
-            corsConfiguration.addAllowedOriginPattern(CorsConfiguration.ALL); // 默认全部允许所有跨域
+            corsConfiguration.addAllowedOriginPattern(CorsConfiguration.ALL); // Default all allows all cross-domain
         }
 
         corsConfiguration.setExposedHeaders(Arrays.asList(JwtUtils.getHeader()));
@@ -152,7 +152,7 @@ public class WebSecurityConfig {
     }
 
     /**
-     * 描述: 密码加密算法 BCrypt 推荐使用
+     * Description: Password encryption algorithm BCrypt recommended
      **/
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

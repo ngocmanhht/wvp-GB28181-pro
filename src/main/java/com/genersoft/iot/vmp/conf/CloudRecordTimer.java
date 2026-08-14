@@ -17,7 +17,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * 录像文件定时删除
+ * Recording files are deleted regularly
  */
 @Slf4j
 @Component
@@ -30,13 +30,13 @@ public class CloudRecordTimer {
     private CloudRecordServiceMapper cloudRecordServiceMapper;
 
     /**
-     * 定时查询待删除的录像文件
+     * Regularly query video files to be deleted
      */
-//    @Scheduled(fixedRate = 10000) //每五秒执行一次，方便测试
-    @Scheduled(cron = "0 0 0 * * ?")   //每天的0点执行
+//    @Scheduled(fixedRate = 10000) //Executed every five seconds for easy testing
+    @Scheduled(cron = "0 0 0 * * ?")   //Executed at 0 o'clock every day
     public void execute(){
-        log.info("[录像文件定时清理] 开始清理过期录像文件");
-        // 获取配置了assist的流媒体节点
+        log.info("[Regular cleaning of video files] Start cleaning up expired video files");
+        // Get the streaming node configured with assist
         List<MediaServer> mediaServerItemList =  mediaServerService.getAllOnline();
         if (mediaServerItemList.isEmpty()) {
             return;
@@ -47,24 +47,24 @@ public class CloudRecordTimer {
             Calendar lastCalendar = Calendar.getInstance();
             if (mediaServerItem.getRecordDay() > 0) {
                 lastCalendar.setTime(new Date());
-                // 获取保存的最后截至日[期，因为每个节点都有一个日期，也就是支持每个节点设置不同的保存日期，
+                // Get the last save date[period, because each node has a date, that is, each node is supported to set a different save date.，
                 lastCalendar.add(Calendar.DAY_OF_MONTH, -mediaServerItem.getRecordDay());
                 Long lastDate = lastCalendar.getTimeInMillis();
 
-                // 获取到截至日期之前的录像文件列表，文件列表满足未被收藏和保持的。这两个字段目前共能一致，
-                // 为我自己业务系统相关的代码，大家使用的时候直接使用收藏（collect）这一个类型即可
+                // Obtain the list of video files before the end of the date. The file list satisfies the requirements of not being collected or saved. These two fields are currently consistent，
+                // For the code related to my own business system, you can just use the collect type when you use it.
                 List<CloudRecordItem> cloudRecordItemList = cloudRecordServiceMapper.queryRecordListForDelete(lastDate, mediaServerItem.getId());
                 if (cloudRecordItemList.isEmpty()) {
                     continue;
                 }
-                // TODO 后续可以删除空了的过期日期文件夹
+                // TODO You can delete the empty expiration date folder later.
                 for (CloudRecordItem cloudRecordItem : cloudRecordItemList) {
                     String date = new File(cloudRecordItem.getFilePath()).getParentFile().getName();
                     try {
                         boolean deleteResult = mediaServerService.deleteRecordDirectory(mediaServerItem, cloudRecordItem.getApp(),
                                 cloudRecordItem.getStream(), date, cloudRecordItem.getFileName());
                         if (deleteResult) {
-                            log.warn("[录像文件定时清理] 删除磁盘文件成功： {}", cloudRecordItem.getFilePath());
+                            log.warn("[Regular cleaning of video files] Disk file deleted successfully： {}", cloudRecordItem.getFilePath());
                         }
                     }catch (ControllerException ignored) {}
 
@@ -72,6 +72,6 @@ public class CloudRecordTimer {
                 result += cloudRecordServiceMapper.deleteList(cloudRecordItemList);
             }
         }
-        log.info("[录像文件定时清理] 共清理{}个过期录像文件", result);
+        log.info("[Regular cleaning of video files] Total cleanup{}expired video files", result);
     }
 }

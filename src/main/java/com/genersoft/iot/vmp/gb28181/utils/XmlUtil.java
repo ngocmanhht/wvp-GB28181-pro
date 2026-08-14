@@ -23,13 +23,13 @@ import java.lang.reflect.Type;
 import java.util.*;
 
 /**
- * 基于dom4j的工具包
+ * Toolkit based on dom4j
  */
 @Slf4j
 public class XmlUtil {
 
     /**
-     * 解析XML为Document对象
+     * Parse XML into Document object
      */
     public static Element parseXml(String xml) {
         Document document = null;
@@ -39,17 +39,17 @@ public class XmlUtil {
         try {
             document = saxReader.read(sr);
         } catch (DocumentException e) {
-            log.error("解析失败", e);
+            log.error("Parsing failed", e);
         }
         return null == document ? null : document.getRootElement();
     }
 
     /**
-     * 获取element对象的text的值
+     * Get the value of text of element object
      *
-     * @param em  节点的对象
-     * @param tag 节点的tag
-     * @return 节点
+     * @param em  node object
+     * @param tag Nodaltag
+     * @return node
      */
     public static String getText(Element em, String tag) {
         if (null == em) {
@@ -61,11 +61,11 @@ public class XmlUtil {
     }
 
     /**
-     * 获取element对象的text的值
+     * Get the value of text of element object
      *
-     * @param em  节点的对象
-     * @param tag 节点的tag
-     * @return 节点
+     * @param em  node object
+     * @param tag Nodaltag
+     * @return node
      */
     public static Double getDouble(Element em, String tag) {
         if (null == em) {
@@ -83,11 +83,11 @@ public class XmlUtil {
     }
 
     /**
-     * 获取element对象的text的值
+     * Get the value of text of element object
      *
-     * @param em  节点的对象
-     * @param tag 节点的tag
-     * @return 节点
+     * @param em  node object
+     * @param tag Nodaltag
+     * @return node
      */
     public static Integer getInteger(Element em, String tag) {
         if (null == em) {
@@ -105,7 +105,7 @@ public class XmlUtil {
     }
 
     /**
-     * 递归解析xml节点，适用于 多节点数据
+     * Recursively parse xml nodes, suitable for multi-node data
      *
      * @param node     node
      * @param nodeName nodeName
@@ -115,26 +115,26 @@ public class XmlUtil {
         if (null == node) {
             return null;
         }
-        // 初始化返回
+        // initialization return
         List<Map<String, Object>> listMap = new ArrayList<Map<String, Object>>();
-        // 首先获取当前节点的所有属性节点
+        // First get all attribute nodes of the current node
         List<Attribute> list = node.attributes();
 
         Map<String, Object> map = null;
-        // 遍历属性节点
+        // Traverse attribute nodes
         for (Attribute attribute : list) {
             if (nodeName.equals(node.getName())) {
                 if (null == map) {
                     map = new HashMap<String, Object>();
                     listMap.add(map);
                 }
-                // 取到的节点属性放到map中
+                // Put the obtained node attributes into the map
                 map.put(attribute.getName(), attribute.getValue());
             }
 
         }
-        // 遍历当前节点下的所有节点 ，nodeName 要解析的节点名称
-        // 使用递归
+        // Traverse all nodes under the current node, nodeName is the name of the node to be parsed
+        // Use recursion
         Iterator<Element> iterator = node.elementIterator();
         while (iterator.hasNext()) {
             Element e = iterator.next();
@@ -144,13 +144,13 @@ public class XmlUtil {
     }
 
     /**
-     * xml转json
+     * xmlturnjson
      *
      * @param element
      * @param json
      */
     public static void node2Json(Element element, JSONObject json) {
-        // 如果是属性
+        // If it is an attribute
         for (Object o : element.attributes()) {
             Attribute attr = (Attribute) o;
             if (!ObjectUtils.isEmpty(attr.getValue())) {
@@ -158,18 +158,18 @@ public class XmlUtil {
             }
         }
         List<Element> chdEl = element.elements();
-        if (chdEl.isEmpty() && !ObjectUtils.isEmpty(element.getText())) {// 如果没有子元素,只有一个值
+        if (chdEl.isEmpty() && !ObjectUtils.isEmpty(element.getText())) {// If there are no child elements, there is only one value
             json.put(element.getName(), element.getText());
         }
 
-        for (Element e : chdEl) {   // 有子元素
-            if (!e.elements().isEmpty()) {  // 子元素也有子元素
+        for (Element e : chdEl) {   // has child elements
+            if (!e.elements().isEmpty()) {  // Child elements also have child elements
                 JSONObject chdjson = new JSONObject();
                 node2Json(e, chdjson);
                 Object o = json.get(e.getName());
                 if (o != null) {
                     JSONArray jsona = null;
-                    if (o instanceof JSONObject) {  // 如果此元素已存在,则转为jsonArray
+                    if (o instanceof JSONObject) {  // If this element already exists, it will be converted tojsonArray
                         JSONObject jsono = (JSONObject) o;
                         json.remove(e.getName());
                         jsona = new JSONArray();
@@ -186,7 +186,7 @@ public class XmlUtil {
                         json.put(e.getName(), chdjson);
                     }
                 }
-            } else { // 子元素没有子元素
+            } else { // Child element has no child elements
                 for (Object o : element.attributes()) {
                     Attribute attr = (Attribute) o;
                     if (!ObjectUtils.isEmpty(attr.getValue())) {
@@ -228,21 +228,21 @@ public class XmlUtil {
 //        deviceChannel.setDeviceId(device.getDeviceId());
 //        Element channdelIdElement = itemDevice.element("DeviceID");
 //        if (channdelIdElement == null) {
-//            logger.warn("解析Catalog消息时发现缺少 DeviceID");
+//            logger.warn("When parsing the Catalog message, it was found that the DeviceID");
 //            return null;
 //        }
 //        String channelId = channdelIdElement.getTextTrim();
 //        if (ObjectUtils.isEmpty(channelId)) {
-//            logger.warn("解析Catalog消息时发现缺少 DeviceID");
+//            logger.warn("When parsing the Catalog message, it was found that the DeviceID");
 //            return null;
 //        }
 //        deviceChannel.setDeviceId(channelId);
 //        if (event != null && !event.equals(CatalogEvent.ADD) && !event.equals(CatalogEvent.UPDATE)) {
-//            // 除了ADD和update情况下需要识别全部内容，
+//            // All content needs to be identified except for ADD and update.，
 //            return deviceChannel;
 //        }
 //        Element nameElement = itemDevice.element("Name");
-//        // 当通道名称为空时，设置通道名称为通道编码，避免级联时因通道名称为空导致上级接收通道失败
+//        // When the channel name is empty, set the channel name to the channel code to avoid the upper-level receiving channel failure due to the empty channel name during cascading.
 //        if (nameElement != null && StringUtils.isNotBlank(nameElement.getText())) {
 //            deviceChannel.setName(nameElement.getText());
 //        } else {
@@ -255,13 +255,13 @@ public class XmlUtil {
 //                deviceChannel.setParentId(parentCode.getCode());
 //                deviceChannel.setCivilCode(parentCode.getCode());
 //            }else {
-//                logger.warn("[xml解析] 无法确定行政区划{}的上级行政区划", channelId);
+//                logger.warn("[xmlparse] Unable to determine administrative division{}the superior administrative division of", channelId);
 //            }
 //            deviceChannel.setStatus("ON");
 //            return deviceChannel;
 //        }else {
 //            if(channelId.length() != 20) {
-//                logger.warn("[xml解析] 失败，编号不符合国标28181定义： {}", channelId);
+//                logger.warn("[xmlparse] Failed, the number does not meet the definition of national standard 28181： {}", channelId);
 //                return null;
 //            }
 //
@@ -271,31 +271,31 @@ public class XmlUtil {
 //            }else {
 //                deviceChannel.setHasAudio(false);
 //            }
-//            // 设备厂商
+//            // Equipment manufacturer
 //            String manufacturer = getText(itemDevice, "Manufacturer");
-//            // 设备型号
+//            // Device model
 //            String model = getText(itemDevice, "Model");
-//            // 设备归属
+//            // Equipment ownership
 //            String owner = getText(itemDevice, "Owner");
-//            // 行政区域
+//            // Administrative region
 //            String civilCode = getText(itemDevice, "CivilCode");
-//            // 虚拟组织所属的业务分组ID,业务分组根据特定的业务需求制定,一个业务分组包含一组特定的虚拟组织
+//            // The business group ID to which the virtual organization belongs. The business group is formulated according to specific business needs. A business group contains a specific group of virtual organizations.
 //            String businessGroupID = getText(itemDevice, "BusinessGroupID");
-//            // 父设备/区域/系统ID
+//            // parent device/area/systemID
 //            String parentID = getText(itemDevice, "ParentID");
 //            if (parentID != null && parentID.equalsIgnoreCase("null")) {
 //                parentID = null;
 //            }
-//            // 注册方式(必选)缺省为1;1:符合IETFRFC3261标准的认证注册模式;2:基于口令的双向认证注册模式;3:基于数字证书的双向认证注册模式
+//            // Registration method(Required)The default is1;1:Certification registration model that complies with IETFRFC3261 standard;2:Password-based two-way authentication registration mode;3:Two-way authentication registration mode based on digital certificate
 //            String registerWay = getText(itemDevice, "RegisterWay");
-//            // 保密属性(必选)缺省为0;0:不涉密,1:涉密
+//            // Confidential attribute(Required)The default is0;0:Not confidential, 1: confidential
 //            String secrecy = getText(itemDevice, "Secrecy");
-//            // 安装地址
+//            // Installation address
 //            String address = getText(itemDevice, "Address");
 //
 //            switch (code){
 //                case 200:
-//                    // 系统目录
+//                    // System directory
 //                    if (!ObjectUtils.isEmpty(manufacturer)) {
 //                        deviceChannel.setManufacture(manufacturer);
 //                    }
@@ -321,7 +321,7 @@ public class XmlUtil {
 //                        try {
 //                            deviceChannel.setRegisterWay(Integer.parseInt(registerWay));
 //                        }catch (NumberFormatException exception) {
-//                            logger.warn("[xml解析] 从通道数据获取registerWay失败： {}", registerWay);
+//                            logger.warn("[xmlparse] Failed to get registerWay from channel data： {}", registerWay);
 //                        }
 //                    }
 //                    if (!ObjectUtils.isEmpty(secrecy)) {
@@ -329,21 +329,21 @@ public class XmlUtil {
 //                    }
 //                    return deviceChannel;
 //                case 215:
-//                    // 业务分组
+//                    // business grouping
 //                    deviceChannel.setStatus(true);
 //                    if (!ObjectUtils.isEmpty(parentID)) {
 //                        if (!parentID.trim().equalsIgnoreCase(device.getDeviceId())) {
 //                            deviceChannel.setParentId(parentID);
 //                        }
 //                    }else {
-//                        logger.warn("[xml解析] 业务分组数据中缺少关键信息->ParentId");
+//                        logger.warn("[xmlparse] Key information is missing from business grouping data->ParentId");
 //                        if (!ObjectUtils.isEmpty(civilCode)) {
 //                            deviceChannel.setCivilCode(civilCode);
 //                        }
 //                    }
 //                    break;
 //                case 216:
-//                    // 虚拟组织
+//                    // virtual organization
 //                    deviceChannel.setStatus(true);
 //                    if (!ObjectUtils.isEmpty(businessGroupID)) {
 //                        deviceChannel.setBusinessGroupId(businessGroupID);
@@ -362,7 +362,7 @@ public class XmlUtil {
 //                    }
 //                    break;
 //                default:
-//                    // 设备目录
+//                    // Device catalog
 //                    if (!ObjectUtils.isEmpty(manufacturer)) {
 //                        deviceChannel.setManufacture(manufacturer);
 //                    }
@@ -383,7 +383,7 @@ public class XmlUtil {
 //                        deviceChannel.setBusinessGroupId(businessGroupID);
 //                    }
 //
-//                    // 警区
+//                    // police district
 //                    String block = getText(itemDevice, "Block");
 //                    if (!ObjectUtils.isEmpty(block)) {
 //                        deviceChannel.setBlock(block);
@@ -396,21 +396,21 @@ public class XmlUtil {
 //                        deviceChannel.setSecrecy(secrecy);
 //                    }
 //
-//                    // 当为设备时,是否有子设备(必选)1有,0没有
+//                    // When it is a device, whether there are sub-devices(Required)1Yes, 0 No
 //                    String parental = getText(itemDevice, "Parental");
 //                    if (!ObjectUtils.isEmpty(parental)) {
 //                        try {
-//                            // 由于海康会错误的发送65535作为这里的取值,所以这里除非是0否则认为是1
+//                            // Since Hikvision will mistakenly send 65535 as the value here, it is considered to be 0 unless it is 0.1
 //                            if (!ObjectUtils.isEmpty(parental) && parental.length() == 1 && Integer.parseInt(parental) == 0) {
 //                                deviceChannel.setParental(0);
 //                            }else {
 //                                deviceChannel.setParental(1);
 //                            }
 //                        }catch (NumberFormatException e) {
-//                            logger.warn("[xml解析] 从通道数据获取 parental失败： {}", parental);
+//                            logger.warn("[xmlparse] Failed to get parental from channel data： {}", parental);
 //                        }
 //                    }
-//                    // 父设备/区域/系统ID
+//                    // parent device/area/systemID
 //
 //                    if (!ObjectUtils.isEmpty(parentID) ) {
 //                        if (parentID.contains("/")) {
@@ -420,7 +420,7 @@ public class XmlUtil {
 //                            if (parentID.length()%2 == 0) {
 //                                deviceChannel.setParentId(parentID);
 //                            }else {
-//                                logger.warn("[xml解析] 不规范的parentID：{}, 已舍弃", parentID);
+//                                logger.warn("[xmlparse] irregularparentID：{}, Abandoned", parentID);
 //                            }
 //                        }
 //                    }else {
@@ -432,89 +432,89 @@ public class XmlUtil {
 //                            }
 //                        }
 //                    }
-//                    // 注册方式
+//                    // Registration method
 //                    if (!ObjectUtils.isEmpty(registerWay)) {
 //                        try {
 //                            int registerWayInt = Integer.parseInt(registerWay);
 //                            deviceChannel.setRegisterWay(registerWayInt);
 //                        }catch (NumberFormatException exception) {
-//                            logger.warn("[xml解析] 从通道数据获取registerWay失败： {}", registerWay);
+//                            logger.warn("[xmlparse] Failed to get registerWay from channel data： {}", registerWay);
 //                            deviceChannel.setRegisterWay(1);
 //                        }
 //                    }else {
 //                        deviceChannel.setRegisterWay(1);
 //                    }
 //
-//                    // 信令安全模式(可选)缺省为0; 0:不采用;2:S/MIME 签名方式;3:S/MIME加密签名同时采用方式;4:数字摘要方式
+//                    // Signaling security mode(Optional)The default is0; 0:Not adopted;2:S/MIME Signature method;3:S/MIMEEncrypted signature simultaneous use method;4:digital summary method
 //                    String safetyWay = getText(itemDevice, "SafetyWay");
 //                    if (!ObjectUtils.isEmpty(safetyWay)) {
 //                        try {
 //                            deviceChannel.setSafetyWay(Integer.parseInt(safetyWay));
 //                        }catch (NumberFormatException e) {
-//                            logger.warn("[xml解析] 从通道数据获取 safetyWay失败： {}", safetyWay);
+//                            logger.warn("[xmlparse] Failed to get safetyWay from channel data： {}", safetyWay);
 //                        }
 //                    }
 //
-//                    // 证书序列号(有证书的设备必选)
+//                    // Certificate serial number(Devices with certificates are required)
 //                    String certNum = getText(itemDevice, "CertNum");
 //                    if (!ObjectUtils.isEmpty(certNum)) {
 //                        deviceChannel.setCertNum(certNum);
 //                    }
 //
-//                    // 证书有效标识(有证书的设备必选)缺省为0;证书有效标识:0:无效 1:有效
+//                    // Certificate valid identifier(Devices with certificates are required)The default is0;Certificate valid identification: 0: invalid 1: valid
 //                    String certifiable = getText(itemDevice, "Certifiable");
 //                    if (!ObjectUtils.isEmpty(certifiable)) {
 //                        try {
 //                            deviceChannel.setCertifiable(Integer.parseInt(certifiable));
 //                        }catch (NumberFormatException e) {
-//                            logger.warn("[xml解析] 从通道数据获取 Certifiable失败： {}", certifiable);
+//                            logger.warn("[xmlparse] Failed to get Certifiable from channel data： {}", certifiable);
 //                        }
 //                    }
 //
-//                    // 无效原因码(有证书且证书无效的设备必选)
+//                    // Invalid reason code(Required for devices with certificates and invalid certificates)
 //                    String errCode = getText(itemDevice, "ErrCode");
 //                    if (!ObjectUtils.isEmpty(errCode)) {
 //                        try {
 //                            deviceChannel.setErrCode(Integer.parseInt(errCode));
 //                        }catch (NumberFormatException e) {
-//                            logger.warn("[xml解析] 从通道数据获取 ErrCode失败： {}", errCode);
+//                            logger.warn("[xmlparse] Failed to get ErrCode from channel data： {}", errCode);
 //                        }
 //                    }
 //
-//                    // 证书终止有效期(有证书的设备必选)
+//                    // Certificate expiry date(Devices with certificates are required)
 //                    String endTime = getText(itemDevice, "EndTime");
 //                    if (!ObjectUtils.isEmpty(endTime)) {
 //                        deviceChannel.setEndTime(endTime);
 //                    }
 //
 //
-//                    // 设备/区域/系统IP地址
+//                    // Equipment/area/System IP address
 //                    String ipAddress = getText(itemDevice, "IPAddress");
 //                    if (!ObjectUtils.isEmpty(ipAddress)) {
 //                        deviceChannel.setIpAddress(ipAddress);
 //                    }
 //
-//                    // 设备/区域/系统端口
+//                    // Equipment/area/system port
 //                    String port = getText(itemDevice, "Port");
 //                    if (!ObjectUtils.isEmpty(port)) {
 //                        try {
 //                            deviceChannel.setPort(Integer.parseInt(port));
 //                        }catch (NumberFormatException e) {
-//                            logger.warn("[xml解析] 从通道数据获取 Port失败： {}", port);
+//                            logger.warn("[xmlparse] Failed to obtain Port from channel data： {}", port);
 //                        }
 //                    }
 //
-//                    // 设备口令
+//                    // Device password
 //                    String password = getText(itemDevice, "Password");
 //                    if (!ObjectUtils.isEmpty(password)) {
 //                        deviceChannel.setPassword(password);
 //                    }
 //
 //
-//                    // 设备状态
+//                    // Device status
 //                    String status = getText(itemDevice, "Status");
 //                    if (status != null) {
-//                        // ONLINE OFFLINE HIKVISION DS-7716N-E4 NVR的兼容性处理
+//                        // ONLINE OFFLINE HIKVISION DS-7716N-E4 NVRCompatibility processing
 //                        if (status.equalsIgnoreCase("ON") || status.equalsIgnoreCase("On") || status.equalsIgnoreCase("ONLINE") || status.equalsIgnoreCase("OK")) {
 //                            deviceChannel.setStatus(true);
 //                        }
@@ -524,9 +524,9 @@ public class XmlUtil {
 //                    }else {
 //                        deviceChannel.setStatus(true);
 //                    }
-////                    logger.info("状态字符串： {}", status);
-////                    logger.info("状态结果： {}", deviceChannel.isStatus());
-//                    // 经度
+////                    logger.info("status string： {}", status);
+////                    logger.info("status result： {}", deviceChannel.isStatus());
+//                    // longitude
 //                    String longitude = getText(itemDevice, "Longitude");
 //                    if (NumericUtil.isDouble(longitude)) {
 //                        deviceChannel.setLongitude(Double.parseDouble(longitude));
@@ -534,7 +534,7 @@ public class XmlUtil {
 //                        deviceChannel.setLongitude(0.00);
 //                    }
 //
-//                    // 纬度
+//                    // Latitude
 //                    String latitude = getText(itemDevice, "Latitude");
 //                    if (NumericUtil.isDouble(latitude)) {
 //                        deviceChannel.setLatitude(Double.parseDouble(latitude));
@@ -544,56 +544,56 @@ public class XmlUtil {
 //
 //                    deviceChannel.setGpsTime(DateUtil.getNow());
 //
-//                    // -摄像机类型扩展,标识摄像机类型:1-球机;2-半球;3-固定枪机;4-遥控枪机。当目录项为摄像机时可选
+//                    // -Camera type extension, identifying camera type:1-ball machine;2-hemisphere;3-Fixed bolt;4-Remote control gun. Optional when the directory item is a camera
 //                    String ptzType = getText(itemDevice, "PTZType");
 //                    if (ObjectUtils.isEmpty(ptzType)) {
-//                        //兼容INFO中的信息
+//                        //Compatible with information in INFO
 //                        Element info = itemDevice.element("Info");
 //                        String ptzTypeFromInfo = XmlUtil.getText(info, "PTZType");
 //                        if(!ObjectUtils.isEmpty(ptzTypeFromInfo)){
 //                            try {
 //                                deviceChannel.setPtzType(Integer.parseInt(ptzTypeFromInfo));
 //                            }catch (NumberFormatException e){
-//                                logger.warn("[xml解析] 从通道数据info中获取PTZType失败： {}", ptzTypeFromInfo);
+//                                logger.warn("[xmlparse] Failed to obtain PTZType from channel data info： {}", ptzTypeFromInfo);
 //                            }
 //                        }
 //                    } else {
 //                        try {
 //                            deviceChannel.setPtzType(Integer.parseInt(ptzType));
 //                        }catch (NumberFormatException e){
-//                            logger.warn("[xml解析] 从通道数据中获取PTZType失败： {}", ptzType);
+//                            logger.warn("[xmlparse] Failed to get PTZType from channel data： {}", ptzType);
 //                        }
 //                    }
 //
-//                    // TODO 摄像机位置类型扩展。
-//                    // 1-省际检查站、
-//                    // 2-党政机关、
-//                    // 3-车站码头、
-//                    // 4-中心广场、
-//                    // 5-体育场馆、
-//                    // 6-商业中心、
-//                    // 7-宗教场所、
-//                    // 8-校园周边、
-//                    // 9-治安复杂区域、
-//                    // 10-交通干线。
+//                    // TODO Camera position type extension。
+//                    // 1-interprovincial checkpoint、
+//                    // 2-Party and government organs、
+//                    // 3-Station Pier、
+//                    // 4-central square、
+//                    // 5-sports venues、
+//                    // 6-business center、
+//                    // 7-religious place、
+//                    // 8-Around campus、
+//                    // 9-Complex security area、
+//                    // 10-traffic arteries。
 //                    // String positionType = getText(itemDevice, "PositionType");
 //
-//                    // TODO 摄像机安装位置室外、室内属性。1-室外、2-室内。
+//                    // TODO Camera installation location outdoor and indoor attributes。1-outdoor、2-indoor。
 //                    // String roomType = getText(itemDevice, "RoomType");
-//                    // TODO 摄像机用途属性
+//                    // TODO Camera usage properties
 //                    // String useType = getText(itemDevice, "UseType");
-//                    // TODO 摄像机补光属性。1-无补光、2-红外补光、3-白光补光
+//                    // TODO Camera fill light properties。1-No fill light、2-Infrared fill light、3-white light fill light
 //                    // String supplyLightType = getText(itemDevice, "SupplyLightType");
-//                    // TODO 摄像机监视方位属性。1-东、2-西、3-南、4-北、5-东南、6-东北、7-西南、8-西北。
+//                    // TODO Camera surveillance orientation attributes。1-East、2-west、3-South、4-north、5-Southeast、6-Northeast、7-Southwest、8-Northwest。
 //                    // String directionType = getText(itemDevice, "DirectionType");
-//                    // TODO 摄像机支持的分辨率,可有多个分辨率值,各个取值间以“/”分隔。分辨率取值参见附录 F中SDPf字段规定
+//                    // TODO The resolution supported by the camera can have multiple resolution values, and each value must be“/”Separate. For the resolution value, please refer to the SDPf field provisions in Appendix F.
 //                    // String resolution = getText(itemDevice, "Resolution");
 //
-//                    // TODO 下载倍速范围(可选),各可选参数以“/”分隔,如设备支持1,2,4倍速下载则应写为“1/2/4
+//                    // TODO Download speed range(Optional),Each optional parameter starts with“/”Separate, if the device supports 1, 2, 4 times download speed, it should be written as“1/2/4
 //                    // String downloadSpeed = getText(itemDevice, "DownloadSpeed");
-//                    // TODO 空域编码能力,取值0:不支持;1:1级增强(1个增强层);2:2级增强(2个增强层);3:3级增强(3个增强层)
+//                    // TODO Airspace coding capability, value 0: not supported;1:1level enhancement(1enhancement layer);2:2level enhancement(2enhancement layer);3:3level enhancement(3enhancement layer)
 //                    // String svcSpaceSupportMode = getText(itemDevice, "SVCSpaceSupportMode");
-//                    // TODO 时域编码能力,取值0:不支持;1:1级增强;2:2级增强;3:3级增强
+//                    // TODO Time domain coding capability, value 0: not supported;1:1level enhancement;2:2level enhancement;3:3level enhancement
 //                    // String svcTimeSupportMode = getText(itemDevice, "SVCTimeSupportMode");
 //
 //
@@ -606,12 +606,12 @@ public class XmlUtil {
 //    }
 
     /**
-     * 新增方法支持内部嵌套
+     * New method supports internal nesting
      *
      * @param element xmlElement
-     * @param clazz 结果类
-     * @param <T> 泛型
-     * @return 结果对象
+     * @param clazz result class
+     * @param <T> Generics
+     * @return result object
      * @throws NoSuchMethodException
      * @throws InvocationTargetException
      * @throws InstantiationException
@@ -633,12 +633,12 @@ public class XmlUtil {
                 continue;
             }
             if ("".equals(subVal)) {
-                // 无下级数据
+                // No subordinate data
                 Object fieldVal = element1.isTextOnly() ? element1.getText() : loadElement(element1, field.getType());
                 Object o = simpleTypeDeal(field.getType(), fieldVal);
                 ReflectionUtils.setField(field, t,  o);
             } else {
-                // 存在下级数据
+                // Subordinate data exists
                 ArrayList<Object> list = new ArrayList<>();
                 Type genericType = field.getGenericType();
                 if (!(genericType instanceof ParameterizedType)) {
@@ -671,7 +671,7 @@ public class XmlUtil {
                     if (element1 == null) {
                         continue;
                     }
-                    // 无下级数据
+                    // No subordinate data
                     Object fieldVal = element1.isTextOnly() ? element1.getText() : loadElement(element1, field.getType());
                     Object o = simpleTypeDeal(field.getType(), fieldVal);
                     ReflectionUtils.setField(field, t,  o);
@@ -699,7 +699,7 @@ public class XmlUtil {
     }
 
     /**
-     * 简单类型处理
+     * Simple type handling
      *
      * @param tClass
      * @param val

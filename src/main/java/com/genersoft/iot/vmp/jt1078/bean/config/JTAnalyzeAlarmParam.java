@@ -6,20 +6,20 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * 视频分析报警参数
+ * Video analysis alarm parameters
  */
 @Setter
 @Getter
 public class JTAnalyzeAlarmParam implements JTDeviceSubConfig{
 
     /**
-     * 车辆核载人数
+     * Number of people on board the vehicle
      */
     private int numberForPeople;
 
 
     /**
-     * 疲劳程度阈值
+     * Fatigue level threshold
      */
     private int fatigueThreshold;
 

@@ -9,7 +9,7 @@ import lombok.Setter;
 import java.util.List;
 
 /**
- * 删除矩形区域
+ * Delete rectangular area
  */
 @Setter
 @Getter
@@ -18,7 +18,7 @@ public class J8603 extends Rs {
 
 
     /**
-     * 待删除的区域ID
+     * Area to be deletedID
      */
     private List<Long> idList;
 

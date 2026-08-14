@@ -2,7 +2,7 @@
   <div id="chooseDateTimeRange">
     <el-dialog
       v-el-drag-dialog
-      title="选择时间段"
+      title="Select time period"
       width="500px"
       top="5rem"
       :append-to-body="true"
@@ -16,15 +16,15 @@
           v-model="timeRange"
           type="datetimerange"
           is-range
-          range-separator="至"
-          start-placeholder="开始时间"
-          end-placeholder="结束时间"
-          placeholder="选择时间范围"
+          range-separator="to"
+          start-placeholder="start time"
+          end-placeholder="end time"
+          placeholder="Select time range"
         />
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="close">取消</el-button>
-        <el-button type="primary" @click="onSubmit">确认</el-button>
+        <el-button @click="close">Cancel</el-button>
+        <el-button type="primary" @click="onSubmit">Confirm</el-button>
       </span>
     </el-dialog>
   </div>

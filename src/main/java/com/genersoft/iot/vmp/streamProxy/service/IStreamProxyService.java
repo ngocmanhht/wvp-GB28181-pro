@@ -12,7 +12,7 @@ import java.util.Map;
 public interface IStreamProxyService {
 
     /**
-     * 分页查询
+     * Page query
      * @param page
      * @param count
      * @return
@@ -20,14 +20,14 @@ public interface IStreamProxyService {
     PageInfo<StreamProxy> getAll(Integer page, Integer count, String query, Boolean pulling,String mediaServerId);
 
     /**
-     * 删除视频代理
+     * Delete video proxy
      * @param app
      * @param stream
      */
     void delteByAppAndStream(String app, String stream);
 
     /**
-     * 启用视频代理
+     * Enable video proxy
      * @param app
      * @param stream
      * @return
@@ -35,7 +35,7 @@ public interface IStreamProxyService {
     void startByAppAndStream(String app, String stream, ErrorCallback<StreamInfo> callback);
 
     /**
-     * 停用用视频代理
+     * Disable video proxy
      * @param app
      * @param stream
      * @return
@@ -43,40 +43,40 @@ public interface IStreamProxyService {
     void stopByAppAndStream(String app, String stream);
 
     /**
-     * 获取ffmpeg.cmd模板
+     * Get ffmpeg.cmd template
      *
      * @return
      */
     Map<String, String> getFFmpegCMDs(MediaServer mediaServerItem);
 
     /**
-     * 根据app与stream获取streamProxy
+     * Get based on app and streamstreamProxy
      * @return
      */
     StreamProxy getStreamProxyByAppAndStream(String app, String streamId);
 
 
     /**
-     * 新的节点加入
+     * New node added
      * @param mediaServer
      * @return
      */
     void zlmServerOnline(MediaServer mediaServer);
 
     /**
-     * 节点离线
+     * Node offline
      * @param mediaServer
      * @return
      */
     void zlmServerOffline(MediaServer mediaServer);
 
     /**
-     * 更新代理流
+     * Update agent flow
      */
     boolean update(StreamProxy streamProxyItem);
 
     /**
-     * 获取统计信息
+     * Get statistics
      * @return
      */
     ResourceBaseInfo getOverview();

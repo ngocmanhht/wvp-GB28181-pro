@@ -11,7 +11,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * 退出登录成功
+ * Log out successfully
  */
 @Slf4j
 @Component
@@ -20,6 +20,6 @@ public class LogoutHandler implements LogoutSuccessHandler {
     @Override
     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
         String username = request.getParameter("username");
-        log.info("[退出登录成功] - [{}]", username);
+        log.info("[Log out successfully] - [{}]", username);
     }
 }

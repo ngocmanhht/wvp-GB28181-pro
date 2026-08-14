@@ -1,15 +1,15 @@
 package com.genersoft.iot.vmp.gb28181.bean;
 
 /**
- * 语音广播状态
+ * Voice broadcast status
  * @author lin
  */
 public enum AudioBroadcastCatchStatus {
 
-    // 发送语音广播消息等待对方回复语音广播
+    // Send a voice broadcast message and wait for the other party to reply with a voice broadcast
     Ready,
-    // 收到回复等待invite消息
+    // Receive reply and wait for invite message
     WaiteInvite,
-    // 收到invite消息
+    // Receive invite message
     Ok,
 }

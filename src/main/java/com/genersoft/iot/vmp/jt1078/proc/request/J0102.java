@@ -15,7 +15,7 @@ import org.springframework.context.ApplicationEvent;
 import java.nio.charset.Charset;
 
 /**
- * 终端鉴权
+ * Terminal authentication
  *
  * @author QingtaiJiang
  * @date 2023/4/27 18:06
@@ -36,7 +36,7 @@ public class J0102 extends Re {
         }else {
             authenticationCode = buf.readCharSequence(buf.readableBytes(), Charset.forName("GBK")).toString();
         }
-        log.info("设备鉴权： authenticationCode： " + authenticationCode);
+        log.info("Device authentication： authenticationCode： " + authenticationCode);
         return null;
     }
 

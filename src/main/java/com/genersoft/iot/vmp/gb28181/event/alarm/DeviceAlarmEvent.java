@@ -9,7 +9,7 @@ import java.io.Serial;
 import java.util.List;
 
 /**
- * @description: 报警事件
+ * @description: Alarm event
  * @author: lawrencehj
  * @data: 2021-01-20
  */

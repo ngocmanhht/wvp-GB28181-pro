@@ -37,7 +37,7 @@ public class PlatformStatusTaskRunner {
 
     private final String prefix = "VMP_PLATFORM_STATUS";
 
-    // 订阅过期检查
+    // Subscription expiration check
     @Scheduled(fixedDelay = 500, timeUnit = TimeUnit.MILLISECONDS)
     public void expirationCheckForRegister(){
         while (!registerDelayQueue.isEmpty()) {
@@ -48,10 +48,10 @@ public class PlatformStatusTaskRunner {
                     removeRegisterTask(take.getPlatformServerId());
                     take.expired();
                 }catch (Exception e) {
-                    log.error("[平台注册到期] 到期处理时出现异常， 平台上级编号: {} ", take.getPlatformServerId());
+                    log.error("[Platform registration expires] An exception occurred during expiry processing, platform superior number: {} ", take.getPlatformServerId());
                 }
             } catch (InterruptedException e) {
-                log.error("[平台注册到期] ", e);
+                log.error("[Platform registration expires] ", e);
             }
         }
     }
@@ -65,10 +65,10 @@ public class PlatformStatusTaskRunner {
                     removeKeepAliveTask(take.getPlatformServerId());
                     take.expired();
                 }catch (Exception e) {
-                    log.error("[平台心跳到期] 到期处理时出现异常， 平台上级编号: {} ", take.getPlatformServerId());
+                    log.error("[Platform heartbeat expires] An exception occurred during expiry processing, platform superior number: {} ", take.getPlatformServerId());
                 }
             } catch (InterruptedException e) {
-                log.error("[平台心跳到期] ", e);
+                log.error("[Platform heartbeat expires] ", e);
             }
         }
     }
@@ -94,7 +94,7 @@ public class PlatformStatusTaskRunner {
         if (registerDelayQueue.contains(task)) {
             boolean remove = registerDelayQueue.remove(task);
             if (!remove) {
-                log.info("[移除平台注册任务] 从延时队列内移除失败： {}", platformServerId);
+                log.info("[Remove platform registration task] Removal from delay queue failed： {}", platformServerId);
             }
         }
         return true;
@@ -133,7 +133,7 @@ public class PlatformStatusTaskRunner {
         if (keepaliveTaskDelayQueue.contains(task)) {
             boolean remove = keepaliveTaskDelayQueue.remove(task);
             if (!remove) {
-                log.info("[移除平台心跳任务] 从延时队列内移除失败： {}", platformServerId);
+                log.info("[Remove platform heartbeat task] Removal from delay queue failed： {}", platformServerId);
             }
         }
         return true;

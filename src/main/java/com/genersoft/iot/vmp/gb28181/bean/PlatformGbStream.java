@@ -7,10 +7,10 @@ public class PlatformGbStream {
     @Schema(description = "ID")
     private int gbStreamId;
 
-    @Schema(description = "平台ID")
+    @Schema(description = "platformID")
     private String platformId;
 
-    @Schema(description = "目录ID")
+    @Schema(description = "DirectoryID")
     private String catalogId;
 
     public Integer getGbStreamId() {

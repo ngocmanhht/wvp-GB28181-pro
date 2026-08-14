@@ -11,7 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEvent;
 
 /**
- * 终端心跳
+ * Terminal heartbeat
  *
  * @author QingtaiJiang
  * @date 2023/4/27 18:04
@@ -27,7 +27,7 @@ public class J0002 extends Re {
 
     @Override
     protected Rs handler(Header header, Session session, Ijt1078Service service) {
-        log.info("[终端心跳] {}", header.getPhoneNumber());
+        log.info("[Terminal heartbeat] {}", header.getPhoneNumber());
         J8001 j8001 = new J8001();
         j8001.setRespNo(header.getSn());
         j8001.setRespId(header.getMsgId());

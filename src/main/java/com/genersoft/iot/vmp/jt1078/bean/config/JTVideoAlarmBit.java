@@ -4,36 +4,36 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 
 /**
- * 视频报警标志位
+ * Video alarm flag
  */
 public class JTVideoAlarmBit implements JTDeviceSubConfig{
 
     /**
-     * 视频信号丢失报警
+     * Video signal loss alarm
      */
     private boolean lossSignal;
     /**
-     * 视频信号遮挡报警
+     * Video signal blocking alarm
      */
     private boolean occlusionSignal;
     /**
-     * 存储单元故障报警
+     * Storage unit failure alarm
      */
     private boolean storageFault;
     /**
-     * 其他视频设备故障报警
+     * Other video equipment failure alarms
      */
     private boolean otherDeviceFailure;
     /**
-     * 客车超员报警
+     * Bus overcrowding alarm
      */
     private boolean overcrowding;
     /**
-     * 异常驾驶行为报警
+     * Abnormal driving behavior alarm
      */
     private boolean abnormalDriving;
     /**
-     * 特殊报警录像达到存储阈值报警
+     * Special alarm: The recording reaches the storage threshold alarm.
      */
     private boolean storageLimit;
 

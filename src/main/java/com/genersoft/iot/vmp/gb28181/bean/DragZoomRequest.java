@@ -4,7 +4,7 @@ import com.genersoft.iot.vmp.gb28181.utils.MessageElement;
 import lombok.Data;
 
 /**
- * 设备信息查询响应
+ * Device information query response
  *
  * @author Y.G
  * @version 1.0
@@ -13,7 +13,7 @@ import lombok.Data;
 @Data
 public class DragZoomRequest {
     /**
-     * 序列号
+     * serial number
      */
     @MessageElement("SN")
     private String sn;

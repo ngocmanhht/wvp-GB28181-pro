@@ -7,17 +7,17 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * 云台控制指令-红外补光控制
+ * PTZ control instructions-Infrared fill light control
  *
  */
 @Setter
 @Getter
 @MsgId(id = "9305")
 public class J9305 extends Rs {
-    // 逻辑通道号
+    // Logical channel number
     private int channel;
 
-    // 启停标识: 0：停止； 1：启动
+    // Start and stop identification: 0: Stop; 1: Start
     private int on;
 
     @Override

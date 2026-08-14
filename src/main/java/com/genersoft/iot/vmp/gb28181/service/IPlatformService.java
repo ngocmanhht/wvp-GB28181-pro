@@ -15,7 +15,7 @@ import java.text.ParseException;
 import java.util.List;
 
 /**
- * 国标平台的业务类
+ * Business categories of the national standard platform
  * @author lin
  */
 public interface IPlatformService {
@@ -23,7 +23,7 @@ public interface IPlatformService {
     Platform queryPlatformByServerGBId(String platformGbId);
 
     /**
-     * 分页获取上级平台
+     * Get the upper-level platform by page
      * @param page
      * @param count
      * @return
@@ -31,43 +31,43 @@ public interface IPlatformService {
     PageInfo<Platform> queryPlatformList(int page, int count, String query);
 
     /**
-     * 添加级联平台
-     * @param parentPlatform 级联平台
+     * Add cascading platform
+     * @param parentPlatform Cascade platform
      */
     boolean add(Platform parentPlatform);
 
     /**
-     * 添加级联平台
-     * @param parentPlatform 级联平台
+     * Add cascading platform
+     * @param parentPlatform Cascade platform
      */
     boolean update(Platform parentPlatform);
 
     /**
-     * 平台上线
-     * @param parentPlatform 平台信息
+     * Platform is online
+     * @param parentPlatform Platform information
      */
     void online(Platform parentPlatform, SipTransactionInfo sipTransactionInfo);
 
     /**
-     * 平台离线
-     * @param parentPlatform 平台信息
+     * Platform offline
+     * @param parentPlatform Platform information
      */
     void offline(Platform parentPlatform);
 
     /**
-     * 向上级平台发送位置订阅
-     * @param platformId 平台
+     * Send location subscriptions to upper-level platforms
+     * @param platformId platform
      */
     void sendNotifyMobilePosition(String platformId);
 
     /**
-     * 向上级发送语音喊话的消息
+     * Send a voice message to superiors
      */
     void broadcastInvite(Platform platform, CommonGBChannel channel, String sourceId, MediaServer mediaServerItem, HookSubscribe.Event hookEvent,
                          SipSubscribe.Event errorEvent, InviteTimeOutCallback timeoutCallback) throws InvalidArgumentException, ParseException, SipException;
 
     /**
-     * 语音喊话回复BYE
+     * Voice call replyBYE
      */
     void stopBroadcast(Platform platform, CommonGBChannel channel, String app, String stream, boolean sendBye, MediaServer mediaServerItem);
 

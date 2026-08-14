@@ -42,7 +42,7 @@ public class RedisRpcGbDeviceController extends RpcController {
 
 
     /**
-     * 目录订阅
+     * directory subscription
      */
     @RedisRpcMapping("subscribeCatalog")
     public RedisRpcResponse subscribeCatalog(RedisRpcRequest request) {
@@ -63,7 +63,7 @@ public class RedisRpcGbDeviceController extends RpcController {
     }
 
     /**
-     * 移动位置订阅
+     * Mobile location subscription
      */
     @RedisRpcMapping("subscribeMobilePosition")
     public RedisRpcResponse subscribeMobilePosition(RedisRpcRequest request) {
@@ -85,7 +85,7 @@ public class RedisRpcGbDeviceController extends RpcController {
     }
 
     /**
-     * 报警订阅
+     * Alarm subscription
      */
     @RedisRpcMapping("subscribeAlarm")
     public RedisRpcResponse subscribeAlarm(RedisRpcRequest request) {

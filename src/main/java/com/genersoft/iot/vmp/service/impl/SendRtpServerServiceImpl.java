@@ -97,7 +97,7 @@ public class SendRtpServerServiceImpl implements ISendRtpServerService {
     }
 
     /**
-     * 删除RTP推送信息缓存
+     * Delete RTP push information cache
      */
     @Override
     public void delete(SendRtpInfo sendRtpInfo) {
@@ -165,7 +165,7 @@ public class SendRtpServerServiceImpl implements ISendRtpServerService {
     }
 
     /**
-     * 查询某个通道是否存在上级点播（RTP推送）
+     * Query whether a channel has superior on-demand (RTP push）
      */
     @Override
     public boolean isChannelSendingRTP(Integer channelId) {
@@ -197,7 +197,7 @@ public class SendRtpServerServiceImpl implements ISendRtpServerService {
     @Override
     public synchronized int getNextPort(MediaServer mediaServer) {
         if (mediaServer == null) {
-            log.warn("[发送端口管理] 参数错误，mediaServer为NULL");
+            log.warn("[Send port management] Parameter error, mediaServer isNULL");
             return -1;
         }
         String sendIndexKey = VideoManagerConstants.SEND_RTP_PORT + userSetting.getServerId() + ":" +  mediaServer.getId();
@@ -208,12 +208,12 @@ public class SendRtpServerServiceImpl implements ISendRtpServerService {
         if (sendRtpPortRange != null) {
             String[] portArray = sendRtpPortRange.split(",");
             if (portArray.length != 2 || !NumberUtils.isParsable(portArray[0]) || !NumberUtils.isParsable(portArray[1])) {
-                log.warn("{}发送端口配置格式错误，自动使用50000-60000作为端口范围", mediaServer.getId());
+                log.warn("{}The sending port configuration format is incorrect and will be used automatically.50000-60000as port range", mediaServer.getId());
                 startPort = 50000;
                 endPort = 60000;
             }else {
                 if ( Integer.parseInt(portArray[1]) - Integer.parseInt(portArray[0]) < 1) {
-                    log.warn("{}发送端口配置错误,结束端口至少比开始端口大一，自动使用50000-60000作为端口范围", mediaServer.getId());
+                    log.warn("{}The sending port is configured incorrectly. The end port is at least one greater than the start port and is automatically used.50000-60000as port range", mediaServer.getId());
                     startPort = 50000;
                     endPort = 60000;
                 }else {
@@ -222,12 +222,12 @@ public class SendRtpServerServiceImpl implements ISendRtpServerService {
                 }
             }
         }else {
-            log.warn("{}未设置发送端口默认值，自动使用50000-60000作为端口范围", mediaServer.getId());
+            log.warn("{}The send port default value is not set and is used automatically.50000-60000as port range", mediaServer.getId());
             startPort = 50000;
             endPort = 60000;
         }
         if (redisTemplate == null || redisTemplate.getConnectionFactory() == null) {
-            log.warn("{}获取redis连接信息失败", mediaServer.getId());
+            log.warn("{}Failed to obtain redis connection information", mediaServer.getId());
             return -1;
         }
         RedisAtomicInteger redisAtomicInteger = new RedisAtomicInteger(sendIndexKey , redisTemplate.getConnectionFactory());
@@ -250,7 +250,7 @@ public class SendRtpServerServiceImpl implements ISendRtpServerService {
                 }
             }
         }
-        log.warn("{}获取发送端口失败, 无可用端口", mediaServer.getId());
+        log.warn("{}Failed to obtain send port, no available port", mediaServer.getId());
         return -1;
     }
 }

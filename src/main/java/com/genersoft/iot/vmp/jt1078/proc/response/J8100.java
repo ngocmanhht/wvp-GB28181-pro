@@ -15,11 +15,11 @@ import lombok.Setter;
 @MsgId(id = "8100")
 public class J8100 extends Rs {
     /**
-     * 0 成功
-     * 1 车辆已被注册
-     * 2 数据库中无该车辆
-     * 3 终端已被注册
-     * 4 数据库中无该终端
+     * 0 success
+     * 1 Vehicle has been registered
+     * 2 The vehicle does not exist in the database
+     * 3 The terminal has been registered
+     * 4 The terminal does not exist in the database
      */
     public static final Integer SUCCESS = 0;
     public static final Integer FAIL = 4;

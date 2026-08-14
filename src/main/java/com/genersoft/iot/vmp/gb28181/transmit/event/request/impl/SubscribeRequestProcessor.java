@@ -26,7 +26,7 @@ import javax.sip.message.Response;
 import java.text.ParseException;
 
 /**
- * SIP命令类型： SUBSCRIBE请求
+ * SIPCommand type: SUBSCRIBE request
  * @author lin
  */
 @Slf4j
@@ -50,14 +50,14 @@ public class SubscribeRequestProcessor extends SIPRequestProcessorParent impleme
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
-		// 添加消息处理的订阅
+		// Add message processing subscription
 		sipProcessorObserver.addRequestProcessor(method, this);
 	}
 
 	/**
-	 * 处理SUBSCRIBE请求
+	 * Handling SUBSCRIBE requests
 	 *
-	 * @param evt 事件
+	 * @param evt event
 	 */
 	@Override
 	public void process(RequestEvent evt) {
@@ -65,28 +65,28 @@ public class SubscribeRequestProcessor extends SIPRequestProcessorParent impleme
 		try {
 			Element rootElement = getRootElement(evt);
 			if (rootElement == null) {
-				log.error("处理SUBSCRIBE请求  未获取到消息体{}", evt.getRequest());
+				log.error("Processing SUBSCRIBE request, message body not obtained{}", evt.getRequest());
 				responseAck(request, Response.BAD_REQUEST);
 				return;
 			}
 			ExpiresHeader expires = request.getExpires();
 			if (expires == null) {
-				log.error("处理SUBSCRIBE请求  未获取到ExpiresHeader{}", evt.getRequest());
+				log.error("Processing SUBSCRIBE request not obtainedExpiresHeader{}", evt.getRequest());
 				responseAck(request, Response.BAD_REQUEST, "missing expires");
 				return;
 			}
 			String platformId = SipUtils.getUserIdFromFromHeader(request);
 			String cmd = XmlUtil.getText(rootElement, "CmdType");
-			log.info("[收到订阅请求] 类型： {}, 来自： {}", cmd, platformId);
+			log.info("[Subscription request received] Type： {}, from： {}", cmd, platformId);
 			if (CmdType.MOBILE_POSITION.equals(cmd)) {
 				processNotifyMobilePosition(request, rootElement);
 //			} else if (CmdType.ALARM.equals(cmd)) {
-//				logger.info("接收到Alarm订阅");
+//				logger.info("Alarm subscription received");
 //				processNotifyAlarm(serverTransaction, rootElement);
 			} else if (CmdType.CATALOG.equals(cmd)) {
 				processNotifyCatalogList(request, rootElement);
 			} else {
-                log.info("接收到消息：{}", cmd);
+                log.info("message received：{}", cmd);
 
 				Response response = getMessageFactory().createResponse(200, request);
 				if (response != null) {
@@ -97,13 +97,13 @@ public class SubscribeRequestProcessor extends SIPRequestProcessorParent impleme
 				sipSender.transmitRequest(request.getLocalAddress().getHostAddress(), response);
 			}
 		} catch (ParseException | SipException | InvalidArgumentException | DocumentException e) {
-			log.error("未处理的异常 ", e);
+			log.error("unhandled exception ", e);
 		}
 
 	}
 
 	/**
-	 * 处理移动位置订阅消息
+	 * Handling mobile location subscription messages
 	 */
 	private void processNotifyMobilePosition(SIPRequest request, Element rootElement) throws SipException {
 		if (request == null) {
@@ -117,7 +117,7 @@ public class SubscribeRequestProcessor extends SIPRequestProcessorParent impleme
 		}
 
 		String sn = XmlUtil.getText(rootElement, "SN");
-		log.info("[回复上级的移动位置订阅请求]: {}", platformId);
+		log.info("[Reply to superior's mobile location subscription request]: {}", platformId);
 		StringBuilder resultXml = new StringBuilder(200);
 		resultXml.append("<?xml version=\"1.0\" ?>\r\n")
 				.append("<Response>\r\n")
@@ -133,7 +133,7 @@ public class SubscribeRequestProcessor extends SIPRequestProcessorParent impleme
 			SubscribeInfo subscribeInfo = SubscribeInfo.getInstance(response, platformId, expires,
 					(EventHeader)request.getHeader(EventHeader.NAME));
 			if (subscribeInfo.getExpires() > 0) {
-				// GPS上报时间间隔
+				// GPSReporting interval
 				String interval = XmlUtil.getText(rootElement, "Interval");
 				if (interval == null) {
 					subscribeInfo.setGpsInterval(5);
@@ -152,7 +152,7 @@ public class SubscribeRequestProcessor extends SIPRequestProcessorParent impleme
 			}
 
 		} catch (SipException | InvalidArgumentException | ParseException e) {
-			log.error("未处理的异常 ", e);
+			log.error("unhandled exception ", e);
 		}
 	}
 
@@ -162,19 +162,19 @@ public class SubscribeRequestProcessor extends SIPRequestProcessorParent impleme
 
 	private void processNotifyCatalogList(SIPRequest request, Element rootElement) throws SipException {
 		if (request == null) {
-			log.info("[处理目录订阅] 发现request为NUll。已忽略");
+			log.info("[Handle directory subscriptions] Found request to be NUll. Ignored");
 			return;
 		}
 		String platformId = SipUtils.getUserIdFromFromHeader(request);
 		String deviceId = XmlUtil.getText(rootElement, "DeviceID");
 		Platform platform = platformService.queryPlatformByServerGBId(platformId);
 		if (platform == null){
-			log.info("[处理目录订阅] 未找到平台 {}。已忽略", platformId);
+			log.info("[Handle directory subscriptions] Platform not found {}。Ignored", platformId);
 			return;
 		}
 
 		String sn = XmlUtil.getText(rootElement, "SN");
-		log.info("[回复上级的目录订阅请求]: {}/{}", platformId, deviceId);
+		log.info("[Respond to directory subscription requests from superiors]: {}/{}", platformId, deviceId);
 		StringBuilder resultXml = new StringBuilder(200);
 		resultXml.append("<?xml version=\"1.0\" ?>\r\n")
 				.append("<Response>\r\n")
@@ -199,7 +199,7 @@ public class SubscribeRequestProcessor extends SIPRequestProcessorParent impleme
 				subscribeHolder.putCatalogSubscribe(platformId, subscribeInfo);
 			}
 		} catch (SipException | InvalidArgumentException | ParseException e) {
-			log.error("未处理的异常 ", e);
+			log.error("unhandled exception ", e);
 		}
 		if (subscribeHolder.getCatalogSubscribe(platformId) == null
 				&& platform.getAutoPushChannel() != null && platform.getAutoPushChannel()) {

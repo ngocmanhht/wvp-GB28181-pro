@@ -9,7 +9,7 @@ import lombok.Getter;
 import java.util.Arrays;
 
 /**
- * 查询指定终端参数
+ * Query specified terminal parameters
  */
 @Getter
 @MsgId(id = "8106")

@@ -1,7 +1,7 @@
 package com.genersoft.iot.vmp.media.event.mediaServer;
 
 /**
- * zlm离线事件类
+ * zlmOffline event class
  */
 public class MediaServerOfflineEvent extends MediaServerEventAbstract {
 

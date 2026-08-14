@@ -6,32 +6,32 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * 音视频通道
+ * Audio and video channels
  */
 @Setter
 @Getter
 public class JTChanelConfig implements JTDeviceSubConfig{
 
     /**
-     * 物理通道号 单独
+     * Physical channel number alone
      */
     private int physicalChannelId;
 
     /**
-     * 逻辑通道号
+     * Logical channel number
      */
     private int logicChannelId;
 
     /**
-     * 通道类型:
-     * 0:音视频;
-     * 1:音频
-     * 2:视频
+     * Channel type:
+     * 0:Audio and video;
+     * 1:Audio
+     * 2:video
      */
     private int channelType;
     /**
-     * 是否连接云台: 通道类型为 0 和 2 时,此字段有效
-     * 0:未连接;1:连接
+     * Whether to connect to the PTZ: This field is valid when the channel type is 0 and 2
+     * 0:Not connected;1:connect
      */
     private int ptzEnable;
 

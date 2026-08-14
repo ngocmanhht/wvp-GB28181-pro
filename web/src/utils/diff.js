@@ -1,7 +1,7 @@
 // utils/diff.js
-// 返回 newObj 相对于 oldObj 的变化部分（新增/修改）。
-// 可选 includeRemoved=true 时把被删除字段以 removedValue 标记返回。
-// 使用示例： diff(oldObj, newObj) 或 diff(oldObj, newObj, { includeRemoved: true })
+// Returns the changed part of newObj relative to oldObj (new/Modify）。
+// Optional includeRemoved=true When the removed field is returned, it is marked with removedValue.。
+// Usage example： diff(oldObj, newObj) or diff(oldObj, newObj, { includeRemoved: true })
 
 export function diff(oldObj, newObj, options = {}) {
   const { includeRemoved = false, removedValue = null, comparator } = options

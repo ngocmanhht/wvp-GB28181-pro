@@ -23,14 +23,14 @@ export default {
       chartSettings: {
         area: true,
         labelMap: {
-          'in': '下载',
-          'out': '上传'
+          'in': 'Download',
+          'out': 'upload'
         }
       },
       extend: {
         title: {
           show: true,
-          text: '网络',
+          text: 'network',
           left: 'center',
           top: 20
 
@@ -65,36 +65,36 @@ export default {
             let in_sel = true
             let out_sel = true
             for (const key in this.extend.legend.selected) {
-              if (key == '上传') {
+              if (key == 'upload') {
                 out_sel = this.extend.legend.selected[key]
               }
-              if (key == '下载') {
+              if (key == 'Download') {
                 in_sel = this.extend.legend.selected[key]
               }
             }
             if (out_sel && in_sel) {
               return (
                 data[1].marker +
-                '下载：' +
+                'Download：' +
                 parseFloat(data[1].data[1]).toFixed(2) +
                 'Mbps' +
                 '</br> ' +
                 data[0].marker +
-                '上传：' +
+                'upload：' +
                 parseFloat(data[0].data[1]).toFixed(2) +
                 'Mbps'
               )
             } else if (out_sel) {
               return (
                 data[0].marker +
-                '上传：' +
+                'upload：' +
                 parseFloat(data[0].data[1]).toFixed(2) +
                 'Mbps'
               )
             } else if (in_sel) {
               return (
                 data[0].marker +
-                '下载：' +
+                'Download：' +
                 parseFloat(data[0].data[1]).toFixed(2) +
                 'Mbps'
               )

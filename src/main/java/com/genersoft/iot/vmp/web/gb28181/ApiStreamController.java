@@ -27,7 +27,7 @@ import javax.sip.SipException;
 import java.text.ParseException;
 
 /**
- * API兼容：实时直播
+ * APICompatible with: Live broadcast
  */
 @SuppressWarnings(value = {"rawtypes", "unchecked"})
 
@@ -56,16 +56,16 @@ public class ApiStreamController {
     private IInviteStreamService inviteStreamService;
 
     /**
-     * 实时直播 - 开始直播
-     * @param serial 设备编号
-     * @param channel 通道序号 默认值: 1
-     * @param code 通道编号,通过 /api/v1/device/channellist 获取的 ChannelList.ID, 该参数和 channel 二选一传递即可
-     * @param cdn 转推 CDN 地址, 形如: [rtmp|rtsp]://xxx, encodeURIComponent
-     * @param audio 是否开启音频, 默认 开启
-     * @param transport 流传输模式， 默认 UDP
-     * @param checkchannelstatus 是否检查通道状态, 默认 false, 表示 拉流前不检查通道状态是否在线
-     * @param transportmode 当 transport=TCP 时有效, 指示流传输主被动模式, 默认被动
-     * @param timeout 拉流超时(秒),
+     * Live broadcast - Start live broadcast
+     * @param serial Device number
+     * @param channel Channel number default value: 1
+     * @param code Channel number, pass /api/v1/device/channellist obtained ChannelList.ID, You can choose to pass this parameter or channel.
+     * @param cdn Retweet CDN address, in the form: [rtmp|rtsp]://xxx, encodeURIComponent
+     * @param audio Whether to enable audio, enabled by default
+     * @param transport Streaming mode, default UDP
+     * @param checkchannelstatus Whether to check the channel status, the default is false, which means that the channel status is not checked whether it is online before pulling the stream.
+     * @param transportmode When transport=TCP Valid, indicating active and passive streaming mode, the default is passive
+     * @param timeout Pull timeout(seconds),
      * @return
      */
     @GetMapping("/start")
@@ -84,7 +84,7 @@ public class ApiStreamController {
         Device device = deviceService.getDeviceByDeviceId(serial);
         if (device == null ) {
             JSONObject resultJSON = new JSONObject();
-            resultJSON.put("error","device[ " + serial + " ]未找到");
+            resultJSON.put("error","device[ " + serial + " ]not found");
             result.setResult(resultJSON);
             return result;
         }else if (!device.isOnLine()) {
@@ -98,7 +98,7 @@ public class ApiStreamController {
         DeviceChannel deviceChannel = deviceChannelService.getOne(serial, code);
         if (deviceChannel == null) {
             JSONObject resultJSON = new JSONObject();
-            resultJSON.put("error","channel[ " + code + " ]未找到");
+            resultJSON.put("error","channel[ " + code + " ]not found");
             result.setResult(resultJSON);
             return result;
         }else if (!deviceChannel.getStatus().equalsIgnoreCase("ON")) {
@@ -109,13 +109,13 @@ public class ApiStreamController {
         }
 
         result.onTimeout(()->{
-            log.info("播放等待超时");
+            log.info("Play wait timeout");
             JSONObject resultJSON = new JSONObject();
             resultJSON.put("error","timeout");
             result.setResult(resultJSON);
             inviteStreamService.removeInviteInfoByDeviceAndChannel(InviteSessionType.PLAY, deviceChannel.getId());
             deviceChannelService.stopPlay(deviceChannel.getId());
-            // 清理RTP server
+            // clean upRTP server
         });
 
         MediaServer newMediaServerItem = playService.getNewMediaServerItem(device);
@@ -210,10 +210,10 @@ public class ApiStreamController {
     }
 
     /**
-     * 实时直播 - 直播流停止
-     * @param serial 设备编号
-     * @param channel 通道序号
-     * @param code 通道国标编号
+     * Live broadcast - Live stream stopped
+     * @param serial Device number
+     * @param channel Channel number
+     * @param code Channel national standard number
      * @param check_outputs
      * @return
      */
@@ -230,26 +230,26 @@ public class ApiStreamController {
         Device device = deviceService.getDeviceByDeviceId(serial);
         if (device == null) {
             JSONObject result = new JSONObject();
-            result.put("error","未找到设备");
+            result.put("error","Device not found");
             return result;
         }
         DeviceChannel deviceChannel = deviceChannelService.getOne(serial, code);
         if (deviceChannel == null) {
             JSONObject result = new JSONObject();
-            result.put("error","未找到通道");
+            result.put("error","Channel not found");
             return result;
         }
         InviteInfo inviteInfo = inviteStreamService.getInviteInfoByDeviceAndChannel(InviteSessionType.PLAY, deviceChannel.getId());
         if (inviteInfo == null) {
             JSONObject result = new JSONObject();
-            result.put("error","未找到流信息");
+            result.put("error","Flow information not found");
             return result;
         }
 
         try {
             cmder.streamByeCmd(device, code, MediaStreamUtil.RTP_APP, inviteInfo.getStream(), null, null);
         } catch (InvalidArgumentException | ParseException | SipException | SsrcTransactionNotFoundException e) {
-            log.error("[停止点播] 发送BYE失败: {}", e.getMessage());
+            log.error("[Stop on demand] Sending BYE failed: {}", e.getMessage());
         } finally {
             inviteStreamService.removeInviteInfo(inviteInfo);
             deviceChannelService.stopPlay(inviteInfo.getChannelId());
@@ -258,10 +258,10 @@ public class ApiStreamController {
     }
 
     /**
-     * 实时直播 - 直播流保活
-     * @param serial 设备编号
-     * @param channel 通道序号
-     * @param code 通道国标编号
+     * Live broadcast - Live stream keep alive
+     * @param serial Device number
+     * @param channel Channel number
+     * @param code Channel national standard number
      * @return
      */
     @GetMapping("/touch")

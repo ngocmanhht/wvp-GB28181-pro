@@ -24,12 +24,12 @@ public class GbChannelControlServiceImpl implements IGbChannelControlService {
 
     @Override
     public void ptz(CommonGBChannel channel, FrontEndControlCodeForPTZ frontEndControlCode, ErrorCallback<String> callback) {
-        log.info("[通用通道] 云台控制， 类型： {}， 编号：{}", channel.getDataType(), channel.getGbDeviceId());
+        log.info("[Universal channel] PTZ control, type： {}， No.：{}", channel.getDataType(), channel.getGbDeviceId());
         Integer dataType = channel.getDataType();
         ISourcePTZService sourcePTZService = sourcePTZServiceMap.get(ChannelDataType.PTZ_SERVICE + dataType);
         if (sourcePTZService == null) {
-            // 通道数据异常
-            log.error("[点播通用通道] 类型： {} 不支持云台控制", dataType);
+            // Channel data abnormality
+            log.error("[On-demand universal channel] Type： {} Does not support PTZ control", dataType);
             throw new PlayException(Response.BUSY_HERE, "channel not support");
         }
         sourcePTZService.ptz(channel, frontEndControlCode, callback);
@@ -37,12 +37,12 @@ public class GbChannelControlServiceImpl implements IGbChannelControlService {
 
     @Override
     public void preset(CommonGBChannel channel, FrontEndControlCodeForPreset frontEndControlCode, ErrorCallback<String> callback) {
-        log.info("[通用通道] 预置位控制， 类型： {}， 编号：{}", channel.getDataType(), channel.getGbDeviceId());
+        log.info("[Universal channel] Preset position control, type： {}， No.：{}", channel.getDataType(), channel.getGbDeviceId());
         Integer dataType = channel.getDataType();
         ISourcePTZService sourcePTZService = sourcePTZServiceMap.get(ChannelDataType.PTZ_SERVICE + dataType);
         if (sourcePTZService == null) {
-            // 通道数据异常
-            log.error("[点播通用通道] 类型： {} 不支持预置位控制", dataType);
+            // Channel data abnormality
+            log.error("[On-demand universal channel] Type： {} Does not support preset position control", dataType);
             throw new PlayException(Response.BUSY_HERE, "channel not support");
         }
         sourcePTZService.preset(channel, frontEndControlCode, callback);
@@ -50,12 +50,12 @@ public class GbChannelControlServiceImpl implements IGbChannelControlService {
 
     @Override
     public void fi(CommonGBChannel channel, FrontEndControlCodeForFI frontEndControlCode, ErrorCallback<String> callback) {
-        log.info("[通用通道] FI指令， 类型： {}， 编号：{}", channel.getDataType(), channel.getGbDeviceId());
+        log.info("[Universal channel] FIdirective, type： {}， No.：{}", channel.getDataType(), channel.getGbDeviceId());
         Integer dataType = channel.getDataType();
         ISourcePTZService sourcePTZService = sourcePTZServiceMap.get(ChannelDataType.PTZ_SERVICE + dataType);
         if (sourcePTZService == null) {
-            // 通道数据异常
-            log.error("[点播通用通道] 类型： {} 不支持FI指令", dataType);
+            // Channel data abnormality
+            log.error("[On-demand universal channel] Type： {} Does not support FI instructions", dataType);
             throw new PlayException(Response.BUSY_HERE, "channel not support");
         }
         sourcePTZService.fi(channel, frontEndControlCode, callback);
@@ -63,12 +63,12 @@ public class GbChannelControlServiceImpl implements IGbChannelControlService {
 
     @Override
     public void tour(CommonGBChannel channel, FrontEndControlCodeForTour frontEndControlCode, ErrorCallback<String> callback) {
-        log.info("[通用通道] 巡航指令， 类型： {}， 编号：{}", channel.getDataType(), channel.getGbDeviceId());
+        log.info("[Universal channel] cruise command, type： {}， No.：{}", channel.getDataType(), channel.getGbDeviceId());
         Integer dataType = channel.getDataType();
         ISourcePTZService sourcePTZService = sourcePTZServiceMap.get(ChannelDataType.PTZ_SERVICE + dataType);
         if (sourcePTZService == null) {
-            // 通道数据异常
-            log.error("[点播通用通道] 类型： {} 不支持巡航指令", dataType);
+            // Channel data abnormality
+            log.error("[On-demand universal channel] Type： {} Does not support cruise commands", dataType);
             throw new PlayException(Response.BUSY_HERE, "channel not support");
         }
         sourcePTZService.tour(channel, frontEndControlCode, callback);
@@ -76,12 +76,12 @@ public class GbChannelControlServiceImpl implements IGbChannelControlService {
 
     @Override
     public void scan(CommonGBChannel channel, FrontEndControlCodeForScan frontEndControlCode, ErrorCallback<String> callback) {
-        log.info("[通用通道] 扫描指令， 类型： {}， 编号：{}", channel.getDataType(), channel.getGbDeviceId());
+        log.info("[Universal channel] Scan command, type： {}， No.：{}", channel.getDataType(), channel.getGbDeviceId());
         Integer dataType = channel.getDataType();
         ISourcePTZService sourcePTZService = sourcePTZServiceMap.get(ChannelDataType.PTZ_SERVICE + dataType);
         if (sourcePTZService == null) {
-            // 通道数据异常
-            log.error("[点播通用通道] 类型： {} 不支持扫描指令", dataType);
+            // Channel data abnormality
+            log.error("[On-demand universal channel] Type： {} Scan command not supported", dataType);
             throw new PlayException(Response.BUSY_HERE, "channel not support");
         }
         sourcePTZService.scan(channel, frontEndControlCode, callback);
@@ -89,12 +89,12 @@ public class GbChannelControlServiceImpl implements IGbChannelControlService {
 
     @Override
     public void auxiliary(CommonGBChannel channel, FrontEndControlCodeForAuxiliary frontEndControlCode, ErrorCallback<String> callback) {
-        log.info("[通用通道] 辅助开关控制指令， 类型： {}， 编号：{}", channel.getDataType(), channel.getGbDeviceId());
+        log.info("[Universal channel] Auxiliary switch control command, type： {}， No.：{}", channel.getDataType(), channel.getGbDeviceId());
         Integer dataType = channel.getDataType();
         ISourcePTZService sourcePTZService = sourcePTZServiceMap.get(ChannelDataType.PTZ_SERVICE + dataType);
         if (sourcePTZService == null) {
-            // 通道数据异常
-            log.error("[点播通用通道] 类型： {} 不支持辅助开关控制指令", dataType);
+            // Channel data abnormality
+            log.error("[On-demand universal channel] Type： {} Does not support auxiliary switch control instructions", dataType);
             throw new PlayException(Response.BUSY_HERE, "channel not support");
         }
         sourcePTZService.auxiliary(channel, frontEndControlCode, callback);
@@ -102,12 +102,12 @@ public class GbChannelControlServiceImpl implements IGbChannelControlService {
 
     @Override
     public void wiper(CommonGBChannel channel, FrontEndControlCodeForWiper frontEndControlCode, ErrorCallback<String> callback) {
-        log.info("[通用通道] 雨刷控制， 类型： {}， 编号：{}", channel.getDataType(), channel.getGbDeviceId());
+        log.info("[Universal channel] wiper control, type： {}， No.：{}", channel.getDataType(), channel.getGbDeviceId());
         Integer dataType = channel.getDataType();
         ISourcePTZService sourcePTZService = sourcePTZServiceMap.get(ChannelDataType.PTZ_SERVICE + dataType);
         if (sourcePTZService == null) {
-            // 通道数据异常
-            log.error("[点播通用通道] 类型： {} 不支持雨刷控制", dataType);
+            // Channel data abnormality
+            log.error("[On-demand universal channel] Type： {} Does not support wiper control", dataType);
             throw new PlayException(Response.BUSY_HERE, "channel not support");
         }
         sourcePTZService.wiper(channel, frontEndControlCode, callback);
@@ -115,12 +115,12 @@ public class GbChannelControlServiceImpl implements IGbChannelControlService {
 
     @Override
     public void queryPreset(CommonGBChannel channel, ErrorCallback<List<Preset>> callback) {
-        log.info("[通用通道] 预置位查询， 类型： {}， 编号：{}", channel.getDataType(), channel.getGbDeviceId());
+        log.info("[Universal channel] Preset position query, type： {}， No.：{}", channel.getDataType(), channel.getGbDeviceId());
         Integer dataType = channel.getDataType();
         ISourcePTZService sourcePTZService = sourcePTZServiceMap.get(ChannelDataType.PTZ_SERVICE + dataType);
         if (sourcePTZService == null) {
-            // 通道数据异常
-            log.error("[点播通用通道] 类型： {} 不支持预置位查询", dataType);
+            // Channel data abnormality
+            log.error("[On-demand universal channel] Type： {} Preset position query is not supported", dataType);
             throw new PlayException(Response.BUSY_HERE, "channel not support");
         }
         sourcePTZService.queryPreset(channel, callback);
@@ -128,12 +128,12 @@ public class GbChannelControlServiceImpl implements IGbChannelControlService {
 
     @Override
     public void dragZoom(CommonGBChannel channel, FrontEndControlCodeForDragZoom frontEndControlCode, ErrorCallback<String> callback) {
-        log.info("[通用通道] 拉框{} 类型： {}， 编号：{}", frontEndControlCode.getCode() == 1 ? "放大": "缩小", channel.getDataType(), channel.getGbDeviceId());
+        log.info("[Universal channel] Pull frame{} Type： {}， No.：{}", frontEndControlCode.getCode() == 1 ? "Zoom in": "zoom out", channel.getDataType(), channel.getGbDeviceId());
         Integer dataType = channel.getDataType();
         ISourcePTZService sourcePTZService = sourcePTZServiceMap.get(ChannelDataType.PTZ_SERVICE + dataType);
         if (sourcePTZService == null) {
-            // 通道数据异常
-            log.error("[点播通用通道] 类型： {} 不支持拉框控制", dataType);
+            // Channel data abnormality
+            log.error("[On-demand universal channel] Type： {} Does not support pull box control", dataType);
             throw new PlayException(Response.BUSY_HERE, "channel not support");
         }
         sourcePTZService.dragZoom(channel, frontEndControlCode, callback);
@@ -141,11 +141,11 @@ public class GbChannelControlServiceImpl implements IGbChannelControlService {
 
     @Override
     public void homePosition(CommonGBChannel channel, Boolean enabled, Integer resetTime, Integer presetIndex, ErrorCallback<String> callback) {
-        log.info("[通用通道] 看守位设置， 类型： {}， 编号：{}", channel.getDataType(), channel.getGbDeviceId());
+        log.info("[Universal channel] Guard bit setting, type： {}， No.：{}", channel.getDataType(), channel.getGbDeviceId());
         Integer dataType = channel.getDataType();
         ISourcePTZService sourcePTZService = sourcePTZServiceMap.get(ChannelDataType.PTZ_SERVICE + dataType);
         if (sourcePTZService == null) {
-            log.error("[通用通道] 类型： {} 不支持看守位设置", dataType);
+            log.error("[Universal channel] Type： {} Does not support guard bit setting", dataType);
             throw new PlayException(Response.BUSY_HERE, "channel not support");
         }
         sourcePTZService.homePosition(channel, enabled, resetTime, presetIndex, callback);

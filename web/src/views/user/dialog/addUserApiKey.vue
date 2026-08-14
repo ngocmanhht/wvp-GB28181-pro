@@ -2,7 +2,7 @@
   <div id="addUserApiKey" v-loading="isLoading">
     <el-dialog
       v-el-drag-dialog
-      title="添加ApiKey"
+      title="addApiKey"
       width="40%"
       top="2rem"
       :close-on-click-modal="false"
@@ -12,22 +12,22 @@
     >
       <div id="shared" style="margin-right: 20px;">
         <el-form ref="formRef" :model="form" :rules="rules" status-icon label-width="80px">
-          <el-form-item label="应用名" prop="app">
+          <el-form-item label="Application name" prop="app">
             <el-input
               v-model="form.app"
               property="app"
               autocomplete="off"
             />
           </el-form-item>
-          <el-form-item label="启用状态" prop="enable" style="text-align: left">
+          <el-form-item label="Enabled status" prop="enable" style="text-align: left">
             <el-switch
               v-model="form.enable"
               property="enable"
-              active-text="启用"
-              inactive-text="停用"
+              active-text="enable"
+              inactive-text="deactivate"
             />
           </el-form-item>
-          <el-form-item label="过期时间" prop="expiresAt" style="text-align: left">
+          <el-form-item label="Expiration time" prop="expiresAt" style="text-align: left">
             <el-date-picker
               v-model="form.expiresAt"
               style="width: 100%"
@@ -35,10 +35,10 @@
               type="datetime"
               value-format="yyyy-MM-dd HH:mm:ss"
               format="yyyy-MM-dd HH:mm:ss"
-              placeholder="选择过期时间"
+              placeholder="Select expiration time"
             />
           </el-form-item>
-          <el-form-item label="备注信息" prop="remark">
+          <el-form-item label="Remarks" prop="remark">
             <el-input
               v-model="form.remark"
               type="textarea"
@@ -51,8 +51,8 @@
           </el-form-item>
           <el-form-item>
             <div style="float: right;">
-              <el-button type="primary" @click="onSubmit">保存</el-button>
-              <el-button @click="close">取消</el-button>
+              <el-button type="primary" @click="onSubmit">save</el-button>
+              <el-button @click="close">Cancel</el-button>
             </div>
           </el-form-item>
         </el-form>
@@ -79,7 +79,7 @@ export default {
         remark: null
       },
       rules: {
-        app: [{ required: true, trigger: 'blur', message: '应用名不能为空' }]
+        app: [{ required: true, trigger: 'blur', message: 'Application name cannot be empty' }]
       },
       listChangeCallback: null,
       showDialog: false,
@@ -117,7 +117,7 @@ export default {
             .then(data => {
               this.$message({
                 showClose: true,
-                message: '添加成功',
+                message: 'Added successfully',
                 type: 'success'
               })
               this.showDialog = false

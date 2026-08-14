@@ -22,11 +22,11 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
- * 接收来自redis的GPS更新通知
+ * Receive GPS update notifications from redis
  *
  * @author lin
- * 监听：  SUBSCRIBE VM_MSG_GPS
- * 发布   PUBLISH VM_MSG_GPS '{"messageId":"1727228507555","id":"24212345671381000047","lng":116.30307666666667,"lat":40.03295833333333,"time":"2024-09-25T09:41:47","direction":"56.0","speed":0.0,"altitude":60.0,"unitNo":"100000000","memberNo":"10000047"}'
+ * monitor：  SUBSCRIBE VM_MSG_GPS
+ * publish   PUBLISH VM_MSG_GPS '{"messageId":"1727228507555","id":"24212345671381000047","lng":116.30307666666667,"lat":40.03295833333333,"time":"2024-09-25T09:41:47","direction":"56.0","speed":0.0,"altitude":60.0,"unitNo":"100000000","memberNo":"10000047"}'
  */
 @Slf4j
 @Component
@@ -46,7 +46,7 @@ public class RedisGpsMsgListener implements MessageListener {
         taskQueue.offer(message);
     }
 
-    @Scheduled(fixedDelay = 200, timeUnit = TimeUnit.MILLISECONDS)   //每400毫秒执行一次
+    @Scheduled(fixedDelay = 200, timeUnit = TimeUnit.MILLISECONDS)   //Executed every 400 milliseconds
     public void executeTaskQueue() {
         if (taskQueue.isEmpty()) {
             return;
@@ -67,22 +67,22 @@ public class RedisGpsMsgListener implements MessageListener {
                 GPSMsgInfo gpsMsgInfo = JSON.parseObject(msg.getBody(), GPSMsgInfo.class);
                 gpsMsgInfo.setStored(false);
                 gpsMsgInfo.setTime(DateUtil.ISO8601Toyyyy_MM_dd_HH_mm_ss(gpsMsgInfo.getTime()));
-                log.debug("[REDIS的位置变化通知], {}", JSON.toJSONString(gpsMsgInfo));
-                // 只是放入redis缓存起来
+                log.debug("[REDISlocation change notifications], {}", JSON.toJSONString(gpsMsgInfo));
+                // Just put it into redis and cache it
                 redisCatchStorage.updateGpsMsgInfo(gpsMsgInfo);
             } catch (Exception e) {
-                log.warn("[REDIS的位置变化通知] 发现未处理的异常, \r\n{}", JSON.toJSONString(msg));
-                log.error("[REDIS的位置变化通知] 异常内容： ", e);
+                log.warn("[REDISlocation change notifications] Unhandled exception found, \r\n{}", JSON.toJSONString(msg));
+                log.error("[REDISlocation change notifications] Unusual content： ", e);
             }
         }
     }
 
     /**
-     * 定时将经纬度更新到数据库
+     * Update the latitude and longitude to the database regularly
      */
-    @Scheduled(fixedDelay = 2, timeUnit = TimeUnit.SECONDS)   //每2秒执行一次
+    @Scheduled(fixedDelay = 2, timeUnit = TimeUnit.SECONDS)   //Executed every 2 seconds
     public void execute() {
-        // 需要查询到
+        // Need to find out
         List<GPSMsgInfo> gpsMsgInfoList = redisCatchStorage.getAllGpsMsgInfo();
         if (!gpsMsgInfoList.isEmpty()) {
             gpsMsgInfoList = gpsMsgInfoList.stream().filter(gpsMsgInfo -> !gpsMsgInfo.isStored()).collect(Collectors.toList());;

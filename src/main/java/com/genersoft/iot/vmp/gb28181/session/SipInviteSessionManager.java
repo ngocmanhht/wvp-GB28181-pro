@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 视频流session管理器，管理视频预览、预览回放的通信句柄
+ * Video stream session manager, manages communication handles for video preview and preview playback
  */
 @Component
 public class SipInviteSessionManager {
@@ -23,7 +23,7 @@ public class SipInviteSessionManager {
 	private RedisTemplate<String, Object> redisTemplate;
 
 	/**
-	 * 添加一个点播/回放的事务信息
+	 * Add an on-demand/Replayed transaction information
 	 */
 	public void put(SsrcTransaction ssrcTransaction){
 		redisTemplate.opsForHash().put(VideoManagerConstants.SIP_INVITE_SESSION_STREAM + userSetting.getServerId()

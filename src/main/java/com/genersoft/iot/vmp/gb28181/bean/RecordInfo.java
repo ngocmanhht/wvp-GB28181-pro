@@ -9,28 +9,28 @@ import java.time.Instant;
 import java.util.List;
 
 /**
- * @description:设备录像信息bean
+ * @description:Device recording informationbean
  * @author: swwheihei
- * @date:   2020年5月8日 下午2:05:56
+ * @date:   2020May 8, 2018, afternoon2:05:56
  */
 @Setter
 @Getter
-@Schema(description = "设备录像查询结果信息")
+@Schema(description = "Device recording query result information")
 public class RecordInfo {
 
-	@Schema(description = "设备编号")
+	@Schema(description = "Device number")
 	private String deviceId;
 
-	@Schema(description = "通道编号")
+	@Schema(description = "Channel number")
 	private String channelId;
 
-	@Schema(description = "命令序列号")
+	@Schema(description = "command sequence number")
 	private String sn;
 
-	@Schema(description = "设备名称")
+	@Schema(description = "Device name")
 	private String name;
 
-	@Schema(description = "列表总数")
+	@Schema(description = "total number of lists")
 	private int sumNum;
 
 	private int count;

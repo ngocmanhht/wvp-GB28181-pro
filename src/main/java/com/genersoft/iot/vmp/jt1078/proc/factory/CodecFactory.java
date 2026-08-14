@@ -27,7 +27,7 @@ public class CodecFactory {
             protocolHash.put(id, handlerClass);
         }
         if (log.isDebugEnabled()) {
-            log.debug("消息ID缓存表 protocolHash:{}", protocolHash);
+            log.debug("Message ID cache table protocolHash:{}", protocolHash);
         }
     }
 

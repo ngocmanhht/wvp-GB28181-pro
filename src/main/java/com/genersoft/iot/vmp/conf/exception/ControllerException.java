@@ -3,7 +3,7 @@ package com.genersoft.iot.vmp.conf.exception;
 import com.genersoft.iot.vmp.vmanager.bean.ErrorCode;
 
 /**
- * 自定义异常，controller出现错误时直接抛出异常由全局异常捕获并返回结果
+ * Custom exceptions. When an error occurs in the controller, the exception is thrown directly and the global exception is captured and the result is returned.
  */
 public class ControllerException extends RuntimeException{
 

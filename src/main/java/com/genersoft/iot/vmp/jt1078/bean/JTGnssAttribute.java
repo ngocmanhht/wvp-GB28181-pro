@@ -5,11 +5,11 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * JT GNSS 模块属性
+ * JT GNSS module properties
  */
 @Setter
 @Getter
-@Schema(description = "JTGNSS 模块属性")
+@Schema(description = "JTGNSS module properties")
 public class JTGnssAttribute {
 
     private boolean gps;

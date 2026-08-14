@@ -45,7 +45,7 @@ public class RedisRpcStreamProxyController extends RpcController {
     }
 
     /**
-     * 播放
+     * play
      */
     @RedisRpcMapping("play")
     public RedisRpcResponse play(RedisRpcRequest request) {
@@ -72,7 +72,7 @@ public class RedisRpcStreamProxyController extends RpcController {
     }
 
     /**
-     * 停止
+     * stop
      */
     @RedisRpcMapping("stop")
     public RedisRpcResponse stop(RedisRpcRequest request) {

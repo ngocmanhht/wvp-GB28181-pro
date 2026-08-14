@@ -10,137 +10,137 @@ import lombok.Data;
 public class SendRtpInfo {
 
     /**
-     * 推流ip
+     * Push streamingip
      */
     private String ip;
 
     /**
-     * 推流端口
+     * Push port
      */
     private int port;
 
     /**
-     * 推流标识
+     * Push logo
      */
     private String ssrc;
 
     /**
-     * 目标平台或设备的编号
+     * Target platform or device number
      */
     private String targetId;
 
     /**
-     * 目标平台或设备的名称
+     * The name of the target platform or device
      */
     private String targetName;
 
     /**
-     * 是否是发送给上级平台
+     * Whether it is sent to the superior platform
      */
     private boolean sendToPlatform;
 
     /**
-     * 直播流的应用名
+     * Live streaming application name
      */
     private String app;
 
    /**
-     * 通道id
+     * channelid
      */
     private Integer channelId;
 
     /**
-     * 推流状态
-     * 0 等待设备推流上来
-     * 1 等待上级平台回复ack
-     * 2 推流中
+     * Push status
+     * 0 Wait for the device to push the stream
+     * 1 Waiting for reply from superior platformack
+     * 2 Pushing
      */
     private int status = 0;
 
 
     /**
-     * 设备推流的streamId
+     * device pushstreamId
      */
     private String stream;
 
     /**
-     * 是否为tcp
+     * Is ittcp
      */
     private boolean tcp;
 
     /**
-     * 是否为tcp主动模式
+     * Whether it is tcp active mode
      */
     private boolean tcpActive;
 
     /**
-     * 自己推流使用的IP
+     * Used for self-pushIP
      */
     private String localIp;
 
     /**
-     * 自己推流使用的端口
+     * The port used to push the stream yourself
      */
     private int localPort;
 
     /**
-     * 使用的流媒体
+     * Streaming media used
      */
     private String mediaServerId;
 
     /**
-     * 使用的服务的ID
+     * of services usedID
      */
     private String serverId;
 
     /**
-     *  invite 的 callId
+     *  invite of callId
      */
     private String callId;
 
     /**
-     *  invite 的 fromTag
+     *  invite of fromTag
      */
     private String fromTag;
 
     /**
-     *  invite 的 toTag
+     *  invite of toTag
      */
     private String toTag;
 
     /**
-     * 发送时，rtp的pt（uint8_t）,不传时默认为96
+     * When sending, rtp's pt (uint8_t), defaults to96
      */
     private int pt = 96;
 
     /**
-     * 发送时，rtp的负载类型。为true时，负载为ps；为false时，为es；
+     * When sending, the payload type of rtp. When it is true, the load is ps; when it is false, it ises；
      */
     private boolean usePs = true;
 
     /**
-     * 当usePs 为false时，有效。为1时，发送音频；为0时，发送视频；不传时默认为0
+     * Valid when usePs is false. When it is 1, audio is sent; when it is 0, video is sent; when not transmitted, the default is0
      */
     private boolean onlyAudio = false;
 
     /**
-     * 是否开启rtcp保活
+     * Whether to enable rtcp keepalive
      */
     private boolean rtcp = false;
 
 
     /**
-     * 播放类型
+     * Play type
      */
     private InviteStreamType playType;
 
     /**
-     * 发流的同时收流
+     * Send out flow and receive flow at the same time
      */
     private String receiveStream;
 
     /**
-     * 上级的点播类型
+     * Superior on-demand type
      */
     private String sessionName;
 

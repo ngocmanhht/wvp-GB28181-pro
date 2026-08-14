@@ -11,7 +11,7 @@ import lombok.Setter;
 import java.util.List;
 
 /**
- * 设置矩形区域
+ * Set rectangular area
  */
 @Setter
 @Getter
@@ -19,12 +19,12 @@ import java.util.List;
 public class J8602 extends Rs {
 
     /**
-     * 设置属性, 0：更新区域； 1：追加区域； 2：修改区域
+     * Set attributes, 0: update area; 1: add area; 2: modify area
      */
     private int attribute;
 
     /**
-     * 区域项
+     * area item
      */
     private List<JTRectangleArea> rectangleAreas;
 

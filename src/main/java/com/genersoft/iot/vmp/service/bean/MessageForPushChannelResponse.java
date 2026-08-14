@@ -1,27 +1,27 @@
 package com.genersoft.iot.vmp.service.bean;
 
 /**
- * 当redis回复推流结果上级平台
+ * When redis replies to the upper-level platform of push results
  * @author lin
  */
 public class MessageForPushChannelResponse {
     /**
-     * 错误玛
-     * 0 成功 1 失败
+     * Wrong horse
+     * 0 Success 1 Failure
      */
     private int code;
     /**
-     * 错误内容
+     * Error content
      */
     private String msg;
 
     /**
-     * 流应用名
+     * Streaming application name
      */
     private String app;
 
     /**
-     * 流Id
+     * flowId
      */
     private String stream;
 

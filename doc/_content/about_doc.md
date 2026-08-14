@@ -1,7 +1,7 @@
-<!-- 关于本文档 -->
+<!-- About this document -->
 
-# 关于本文档
+# About this document
 
-本文档开源在gitee上，[https://gitee.com/pan648540858/wvp-pro-doc.git](https://gitee.com/pan648540858/wvp-pro-doc.git)
-,如果文档出现任何错误或者不易理解的语句，请大家提ISSUE帮助我及时更正。欢迎大家提交PR一起维护这份文档，让更多的人可以使用到这个开源的视频平台。
+This document is open source on gitee, [https://gitee.com/pan648540858/wvp-pro-doc.git](https://gitee.com/pan648540858/wvp-pro-doc.git) 
+, If there are any errors or difficult-to-understand statements in the document, please raise an ISSUE to help me correct it in time. Everyone is welcome to submit a PR and work together to maintain this document so that more people can use this open source video platform.
 

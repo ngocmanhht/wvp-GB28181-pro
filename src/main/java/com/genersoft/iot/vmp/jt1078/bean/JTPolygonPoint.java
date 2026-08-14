@@ -8,13 +8,13 @@ import lombok.Setter;
 
 @Setter
 @Getter
-@Schema(description = "多边形区域的顶点")
+@Schema(description = "vertices of polygon area")
 public class JTPolygonPoint {
 
-    @Schema(description = "顶点纬度")
+    @Schema(description = "vertex latitude")
     private Double latitude;
 
-    @Schema(description = "顶点经度")
+    @Schema(description = "vertex longitude")
     private Double longitude;
 
     public ByteBuf encode(){

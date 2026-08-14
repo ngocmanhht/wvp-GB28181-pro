@@ -1,7 +1,7 @@
 package com.genersoft.iot.vmp.media.zlm.dto.hook;
 
 /**
- * zlm hook事件中的on_send_rtp_stopped事件的参数
+ * zlm hookin the eventon_send_rtp_stoppedevent parameters
  * @author lin
  */
 public class OnSendRtpStoppedHookParam extends HookParam{

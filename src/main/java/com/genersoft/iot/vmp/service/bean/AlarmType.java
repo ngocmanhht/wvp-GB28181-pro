@@ -2,64 +2,64 @@ package com.genersoft.iot.vmp.service.bean;
 
 public enum AlarmType {
 
-    // 视频丢失报警
-    VideoLoss("视频丢失报警"),
-    // 设备防拆报警
-    DeviceTamper("设备防拆报警"),
-    // 存储设备磁盘满报警
-    StorageFull("存储设备磁盘满报警"),
-    // 设备高温报警
-    DeviceHighTemperature("设备高温报警"),
-    // 设备低温报警
-    DeviceLowTemperature("设备低温报警"),
-    // 人工视频报警
-    ManualVideo("人工视频报警"),
-    // 运动目标检测报警
-    MotionDetection("运动目标检测报警"),
-    // 遗留物检测报警
-    LeftObjectDetection("遗留物检测报警"),
-    // 物体移除检测报警
-    ObjectRemovalDetection("物体移除检测报警"),
-    // 绊线检测报警
-    TripwireDetection("绊线检测报警"),
-    // 入侵检测报警
-    IntrusionDetection("入侵检测报警"),
-    // 移动侦测报警
-    MobileDetection("移动侦测报警"),
-    // 视频遮挡报警
-    VideoOcclusion("视频遮挡报警"),
-    // 逆行检测报警
-    ReverseDetection("逆行检测报警"),
-    // 徘徊检测报警
-    LoiteringDetection("徘徊检测报警"),
-    // 流量统计报警
-    FlowStatistics("流量统计报警"),
-    // 密度检测报警
-    DensityDetection("密度检测报警"),
-    // 视频异常检测报警
-    VideoAbnormal("视频异常检测报警"),
-    // 快速移动报警
-    RapidMovement("快速移动报警"),
-    // 存储设备磁盘故障报警
-    StorageFault("存储设备磁盘故障报警"),
-    // 存储设备风扇故障报警
-    StorageFanFault("存储设备风扇故障报警"),
-    // 声音异常报警
-    SoundAbnormal("声音异常报警"),
-    // 信号量异常报警
-    SignalAbnormal("信号量异常报警"),
-    // 非法访问报警
-    IllegalAccess("非法访问报警"),
-    // 虚焦报警
-    Defocus("虚焦报警"),
-    // 场景变更报警
-    SceneChange("场景变更报警"),
-    // 人员聚集报警
-    CrowdGathering("人员聚集报警"),
-    // 停车侦测报警
-    ParkingDetection("停车侦测报警"),
-    // 其他报警
-    Other("其他报警");
+    // Video loss alarm
+    VideoLoss("Video loss alarm"),
+    // Equipment anti-tamper alarm
+    DeviceTamper("Equipment anti-tamper alarm"),
+    // Storage device disk full alarm
+    StorageFull("Storage device disk full alarm"),
+    // Equipment high temperature alarm
+    DeviceHighTemperature("Equipment high temperature alarm"),
+    // Equipment low temperature alarm
+    DeviceLowTemperature("Equipment low temperature alarm"),
+    // Manual video alarm
+    ManualVideo("Manual video alarm"),
+    // Moving target detection alarm
+    MotionDetection("Moving target detection alarm"),
+    // Remaining object detection alarm
+    LeftObjectDetection("Remaining object detection alarm"),
+    // Object removal detection alarm
+    ObjectRemovalDetection("Object removal detection alarm"),
+    // Tripwire detection alarm
+    TripwireDetection("Tripwire detection alarm"),
+    // Intrusion detection alarm
+    IntrusionDetection("Intrusion detection alarm"),
+    // Motion detection alarm
+    MobileDetection("Motion detection alarm"),
+    // Video occlusion alarm
+    VideoOcclusion("Video occlusion alarm"),
+    // Retrograde detection alarm
+    ReverseDetection("Retrograde detection alarm"),
+    // Wandering detection alarm
+    LoiteringDetection("Wandering detection alarm"),
+    // Traffic statistics alarm
+    FlowStatistics("Traffic statistics alarm"),
+    // Density detection alarm
+    DensityDetection("Density detection alarm"),
+    // Video anomaly detection and alarm
+    VideoAbnormal("Video anomaly detection and alarm"),
+    // Fast moving alarm
+    RapidMovement("Fast moving alarm"),
+    // Storage device disk failure alarm
+    StorageFault("Storage device disk failure alarm"),
+    // Storage device fan failure alarm
+    StorageFanFault("Storage device fan failure alarm"),
+    // Abnormal sound alarm
+    SoundAbnormal("Abnormal sound alarm"),
+    // Semaphore exception alarm
+    SignalAbnormal("Semaphore exception alarm"),
+    // Illegal access alarm
+    IllegalAccess("Illegal access alarm"),
+    // Virtual focus alarm
+    Defocus("Virtual focus alarm"),
+    // Scene change alarm
+    SceneChange("Scene change alarm"),
+    // Call the police when people gather
+    CrowdGathering("Call the police when people gather"),
+    // Parking detection alarm
+    ParkingDetection("Parking detection alarm"),
+    // Other alarms
+    Other("Other alarms");
 
     private String description;
 

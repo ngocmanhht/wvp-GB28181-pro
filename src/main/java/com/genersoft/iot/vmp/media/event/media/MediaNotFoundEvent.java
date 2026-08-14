@@ -5,7 +5,7 @@ import com.genersoft.iot.vmp.media.bean.MediaServer;
 import com.genersoft.iot.vmp.media.zlm.dto.hook.OnStreamNotFoundHookParam;
 
 /**
- * 流未找到
+ * Stream not found
  */
 public class MediaNotFoundEvent extends MediaEvent {
     public MediaNotFoundEvent(Object source) {

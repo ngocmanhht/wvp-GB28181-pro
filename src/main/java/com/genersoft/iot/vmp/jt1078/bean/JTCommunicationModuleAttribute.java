@@ -5,11 +5,11 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * JT 通信模块属性
+ * JT Communication module properties
  */
 @Setter
 @Getter
-@Schema(description = "JT通信模块属性")
+@Schema(description = "JTCommunication module properties")
 public class JTCommunicationModuleAttribute {
 
     private boolean gprs ;

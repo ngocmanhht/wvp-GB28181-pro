@@ -30,7 +30,7 @@ import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
- * 移动设备位置数据查询回复
+ * Mobile device location data query responses
  * @author lin
  */
 @Slf4j
@@ -58,14 +58,14 @@ public class MobilePositionResponseMessageHandler extends SIPRequestProcessorPar
     @Override
     public void handForDevice(RequestEvent evt, Device device, Element rootElement) {
         if (taskQueue.size() >= userSetting.getMaxNotifyCountQueue()) {
-            log.error("[移动设备位置查询回复] 待处理消息队列已满 {}，丢弃消息", userSetting.getMaxNotifyCountQueue());
+            log.error("[Mobile device location query responses] The pending message queue is full {}，discard message", userSetting.getMaxNotifyCountQueue());
             return;
         }
         taskQueue.offer(new HandlerCatchData(evt, device, rootElement));
         try {
             responseAckAsync((SIPRequest) evt.getRequest(), Response.OK);
         } catch (SipException | InvalidArgumentException | ParseException e) {
-            log.error("[命令发送失败] 移动设备位置数据查询 200: {}", e.getMessage());
+            log.error("[Command sending failed] Mobile device location data query 200: {}", e.getMessage());
         }
     }
 
@@ -92,12 +92,12 @@ public class MobilePositionResponseMessageHandler extends SIPRequestProcessorPar
             try {
                 Element rootElementAfterCharset = getRootElement(take.getEvt(), device.getCharset());
                 if (rootElementAfterCharset == null) {
-                    log.warn("[移动设备位置查询回复] {}处理失败，未识别到信息体", device.getDeviceId());
+                    log.warn("[Mobile device location query responses] {}Processing failed, the information body was not recognized", device.getDeviceId());
                     continue;
                 }
                 List<DeviceMobilePosition> mobilePositions = DeviceMobilePosition.decode(device, rootElementAfterCharset);
                 for (DeviceMobilePosition mobilePosition : mobilePositions) {
-                    log.info("[收到移动位置查询回复]：{}/{}->{}.{}, 时间： {}", device.getDeviceId(), mobilePosition.getChannelDeviceId(),
+                    log.info("[Receive mobile location query reply]：{}/{}->{}.{}, time： {}", device.getDeviceId(), mobilePosition.getChannelDeviceId(),
                             mobilePosition.getLongitude(), mobilePosition.getLatitude(), mobilePosition.getTimestamp());
                     mobilePositionList.add(mobilePosition);
                     String key = DeferredResultHolder.CALLBACK_CMD_MOBILE_POSITION + device.getDeviceId();
@@ -107,15 +107,15 @@ public class MobilePositionResponseMessageHandler extends SIPRequestProcessorPar
                     resultHolder.invokeAllResult(msg);
                 }
             } catch (Exception e) {
-                log.warn("[移动设备位置查询回复] 发现未处理的异常, \r\n{}", take.getEvt().getRequest());
-                log.error("[移动设备位置查询回复] 异常内容： ", e);
+                log.warn("[Mobile device location query responses] Unhandled exception found, \r\n{}", take.getEvt().getRequest());
+                log.error("[Mobile device location query responses] Unusual content： ", e);
             }
         }
         if (!mobilePositionList.isEmpty()) {
             try {
                 eventPublisher.mobilePositionsEventPublish(mobilePositionList);
             } catch (Exception e) {
-                log.error("[MobilePositionEvent] 发送失败：  ", e);
+                log.error("[MobilePositionEvent] Sending failed：  ", e);
             }
         }
     }

@@ -31,8 +31,8 @@ import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
- * 监听 SUBSCRIBE alarm_receive
- * 发布 PUBLISH alarm_receive '{ "gbId": "", "alarmSn": 1, "alarmType": "111", "alarmDescription": "222", }'
+ * monitor SUBSCRIBE alarm_receive
+ * publish PUBLISH alarm_receive '{ "gbId": "", "alarmSn": 1, "alarmType": "111", "alarmDescription": "222", }'
  */
 @Slf4j
 @Component
@@ -90,7 +90,7 @@ public class RedisAlarmMsgListener implements MessageListener {
             try {
                 AlarmChannelMessage alarmChannelMessage = JSON.parseObject(msg.getBody(), AlarmChannelMessage.class);
                 if (alarmChannelMessage == null) {
-                    log.warn("[REDIS的ALARM通知]消息解析失败");
+                    log.warn("[REDISALARM NOTICE]Message parsing failed");
                     continue;
                 }
                 String chanelId = alarmChannelMessage.getGbId();
@@ -108,7 +108,7 @@ public class RedisAlarmMsgListener implements MessageListener {
 
                 if (ObjectUtils.isEmpty(chanelId)) {
                     if (userSetting.getSendToPlatformsWhenIdLost()) {
-                        // 发送给所有的上级
+                        // Send to all superiors
                         List<Platform> parentPlatforms = platformService.queryEnablePlatformList(userSetting.getServerId());
                         if (!parentPlatforms.isEmpty()) {
                             for (Platform parentPlatform : parentPlatforms) {
@@ -116,12 +116,12 @@ public class RedisAlarmMsgListener implements MessageListener {
                                     deviceAlarm.setChannelId(parentPlatform.getDeviceGBId());
                                     commanderForPlatform.sendAlarmMessage(parentPlatform, deviceAlarm);
                                 } catch (SipException | InvalidArgumentException | ParseException e) {
-                                    log.error("[命令发送失败] 国标级联 发送报警: {}", e.getMessage());
+                                    log.error("[Command sending failed] National standard cascade sends alarm: {}", e.getMessage());
                                 }
                             }
                         }
                     } else {
-                        // 获取开启了消息推送的设备和平台
+                        // Get the devices and platforms that have enabled message push
                         List<Platform> parentPlatforms = mobilePositionService.queryEnablePlatformListWithAsMessageChannel();
                         if (!parentPlatforms.isEmpty()) {
                             for (Platform parentPlatform : parentPlatforms) {
@@ -129,12 +129,12 @@ public class RedisAlarmMsgListener implements MessageListener {
                                     deviceAlarm.setChannelId(parentPlatform.getDeviceGBId());
                                     commanderForPlatform.sendAlarmMessage(parentPlatform, deviceAlarm);
                                 } catch (SipException | InvalidArgumentException | ParseException e) {
-                                    log.error("[命令发送失败] 国标级联 发送报警: {}", e.getMessage());
+                                    log.error("[Command sending failed] National standard cascade sends alarm: {}", e.getMessage());
                                 }
                             }
                         }
                     }
-                    // 获取开启了消息推送的设备和平台
+                    // Get the devices and platforms that have enabled message push
                     List<Device> devices = channelService.queryDeviceWithAsMessageChannel();
                     if (!devices.isEmpty()) {
                         for (Device device : devices) {
@@ -142,19 +142,19 @@ public class RedisAlarmMsgListener implements MessageListener {
                                 deviceAlarm.setChannelId(device.getDeviceId());
                                 commander.sendAlarmMessage(device, deviceAlarm);
                             } catch (InvalidArgumentException | SipException | ParseException e) {
-                                log.error("[命令发送失败] 发送报警: {}", e.getMessage());
+                                log.error("[Command sending failed] Send alarm: {}", e.getMessage());
                             }
                         }
                     }
                 } else {
-                    // 获取该通道ID是属于设备还是对应的上级平台
+                    // Get whether the channel ID belongs to the device or the corresponding upper-level platform
                     Device device = deviceService.getDeviceBySourceChannelDeviceId(chanelId);
                     List<Platform> platforms = platformChannelService.queryByPlatformBySharChannelId(chanelId);
                     if (device != null && device.getServerId().equals(userSetting.getServerId()) && (platforms == null || platforms.isEmpty())) {
                         try {
                             commander.sendAlarmMessage(device, deviceAlarm);
                         } catch (InvalidArgumentException | SipException | ParseException e) {
-                            log.error("[命令发送失败] 发送报警: {}", e.getMessage());
+                            log.error("[Command sending failed] Send alarm: {}", e.getMessage());
                         }
                     } else if (device == null && (platforms != null && !platforms.isEmpty() )) {
                         for (Platform platform : platforms) {
@@ -162,17 +162,17 @@ public class RedisAlarmMsgListener implements MessageListener {
                                 try {
                                     commanderForPlatform.sendAlarmMessage(platform, deviceAlarm);
                                 } catch (InvalidArgumentException | SipException | ParseException e) {
-                                    log.error("[命令发送失败] 发送报警: {}", e.getMessage());
+                                    log.error("[Command sending failed] Send alarm: {}", e.getMessage());
                                 }
                             }
                         }
                     } else {
-                        log.warn("[REDIS的ALARM通知] 未查询到" + chanelId + "所属的平台或设备");
+                        log.warn("[REDISALARM NOTICE] Not found" + chanelId + "The platform or device it belongs to");
                     }
                 }
             } catch (Exception e) {
-                log.error("未处理的异常 ", e);
-                log.warn("[REDIS的ALARM通知] 发现未处理的异常, {}", e.getMessage());
+                log.error("unhandled exception ", e);
+                log.warn("[REDISALARM NOTICE] Unhandled exception found, {}", e.getMessage());
             }
         }
     }

@@ -38,19 +38,19 @@ public class SourceOtherServiceForGbImpl implements ISourceOtherService {
     @Override
     public Boolean closeStreamOnNoneReader(String mediaServerId, String app, String stream, String schema) {
         if (MediaStreamUtil.GB28181_TALK.equals(app) ||  MediaStreamUtil.GB28181_BROADCAST.equals(app)) {
-            // 国标对讲/广播流， 直接关闭
+            // National standard intercom/Broadcast stream, close directly
             return false;
         }
         if (!MediaStreamUtil.isGB28181(app, stream)) {
             return null;
         }
-        // 国标流， 点播/录像回放/录像下载
+        // National standard streaming, on-demand/Video playback/Video download
         InviteInfo inviteInfo = inviteStreamService.getInviteInfoByStream(null, stream);
         if (inviteInfo == null) {
             return null;
         }
         if (inviteInfo.getStatus() == InviteSessionStatus.ok) {
-            // 录像下载
+            // Video download
             if (inviteInfo.getType() == InviteSessionType.DOWNLOAD) {
                 return false;
             }
@@ -79,7 +79,7 @@ public class SourceOtherServiceForGbImpl implements ISourceOtherService {
             return false;
         }
 
-        // 查询通道表，为mobilePositionList赋值channelId
+        // Query the channel table formobilePositionListAssignmentchannelId
         for (DeviceMobilePosition position : deviceMobilePositionList) {
             if (position.getDevice() == null) {
                 continue;
@@ -99,7 +99,7 @@ public class SourceOtherServiceForGbImpl implements ISourceOtherService {
                 deviceChannel.setLatitude(position.getLatitude());
             }
         }
-        // 批量更新通道
+        // Batch update channels
         deviceChannelService.asyncBatchChannelPosition(deviceChannelMap.values());
         return true;
     }

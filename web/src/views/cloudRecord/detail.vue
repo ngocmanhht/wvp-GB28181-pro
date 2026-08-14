@@ -3,10 +3,10 @@
     <div :style="boxStyle">
       <div>
         <div v-if="this.$route.query.mediaServerId" class="page-header-btn" style="padding-right: 1rem">
-          <b>节点：</b> {{ mediaServerId }}
+          <b>node：</b> {{ mediaServerId }}
         </div>
         <div v-if="this.$route.params.mediaServerId">
-          <span>流媒体：{{ this.$route.params.mediaServerId }}</span>
+          <span>streaming media：{{ this.$route.params.mediaServerId }}</span>
         </div>
         <div class="record-list-box-box">
           <div v-if="showSidebar">
@@ -16,11 +16,11 @@
               :picker-options="pickerOptions"
               type="date"
               value-format="yyyy-MM-dd"
-              placeholder="日期"
+              placeholder="Date"
               style="width: 190px"
               @change="dateChange()"
             />
-            <!--            <el-button :disabled="!mediaServerId" size="mini" type="primary" icon="fa fa-cloud-download" style="margin: auto; margin-left: 12px " title="裁剪合并" @click="drawerOpen"></el-button>-->
+            <!--            <el-button :disabled="!mediaServerId" size="mini" type="primary" icon="fa fa-cloud-download" style="margin: auto; margin-left: 12px " title="Crop and merge" @click="drawerOpen"></el-button>-->
           </div>
           <div class="record-list-box" style="height: calc(100vh - 170px); overflow: auto">
             <ul v-if="detailFiles.length >0" v-infinite-scroll="infiniteScroll" class="infinite-list record-list">
@@ -41,7 +41,7 @@
                 />
               </li>
             </ul>
-            <div v-if="detailFiles.length === 0" class="record-list-no-val">暂无数据</div>
+            <div v-if="detailFiles.length === 0" class="record-list-no-val">No data yet</div>
           </div>
         </div>
       </div>
@@ -87,7 +87,7 @@ export default {
       chooseFileIndex: null,
       queryDate: new Date(),
       currentPage: 1,
-      count: 1000000, // TODO 分页导致滑轨视频有效值无法获取完全
+      count: 1000000, // TODO Pagination causes the slide rail video to fail to obtain all valid values
       total: 0,
       playLoading: false,
       isFullScreen: false,
@@ -101,7 +101,7 @@ export default {
       timeSegments: [],
       pickerOptions: {
         cellClassName: (date) => {
-          // 通过显示一个点标识这一天有录像
+          // Indicates that there is video recording on this day by displaying a dot
           const time = moment(date).format('YYYY-MM-DD')
           if (this.dateFilesObj[time]) {
             return 'data-picker-true'
@@ -137,7 +137,7 @@ export default {
     document.addEventListener('mouseup', this.timeProcessMouseup)
   },
   mounted() {
-    // 查询当年有视频的日期
+    // Query the date of video in the current year
     this.getDateInYear(() => {
       if (Object.values(this.dateFilesObj).length > 0) {
         this.chooseDate = Object.values(this.dateFilesObj)[Object.values(this.dateFilesObj).length - 1]
@@ -162,14 +162,14 @@ export default {
       this.$refs.recordVideoPlayer.screenshot()
     },
     playLast() {
-      // 播放上一个
+      // Play previous
       if (this.chooseFileIndex === 0) {
         return
       }
       this.chooseFile(this.chooseFileIndex - 1)
     },
     playNext() {
-      // 播放上一个
+      // Play previous
       if (this.chooseFileIndex === this.detailFiles.length - 1) {
         this.nextBtnDiable = true
         return
@@ -181,7 +181,7 @@ export default {
 
     },
     stopPLay() {
-      // 停止
+      // stop
       this.$refs.cloudRecordPlayer.stopPLay()
     },
     play() {
@@ -192,7 +192,7 @@ export default {
       }
     },
     fullScreen() {
-      // 全屏
+      // full screen
       if (this.isFullScreen) {
         screenfull.exit()
         this.isFullScreen = false
@@ -448,9 +448,9 @@ export default {
   color: rgb(217, 217, 217);
   font-size: 14px;
   text-shadow:
-    -1px -1px 0 black, /* 左上角阴影 */
-    1px -1px 0 black, /* 右上角阴影 */
-    -1px 1px 0 black, /* 左下角阴影 */
-    1px 1px 0 black; /* 右下角阴影 */
+    -1px -1px 0 black, /* upper left shadow */
+    1px -1px 0 black, /* upper right shadow */
+    -1px 1px 0 black, /* lower left shadow */
+    1px 1px 0 black; /* lower right shadow */
 }
 </style>

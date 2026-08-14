@@ -7,7 +7,7 @@ import java.io.Serial;
 import java.util.*;
 
 /**
- * 重写jain sip的SIPDate解决与国标时间格式不一致的问题
+ * Rewrite jain sip's SIPDate to solve the problem of inconsistency with the national standard time format
  */
 public class GbSipDate extends SIPDate {
 

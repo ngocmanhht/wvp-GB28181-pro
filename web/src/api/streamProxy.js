@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-// 拉流代理API
+// Streaming agentAPI
 
 export function queryFfmpegCmdList(mediaServerId) {
   return request({

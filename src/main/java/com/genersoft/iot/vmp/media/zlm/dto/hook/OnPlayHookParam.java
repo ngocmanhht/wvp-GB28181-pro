@@ -1,7 +1,7 @@
 package com.genersoft.iot.vmp.media.zlm.dto.hook;
 
 /**
- * zlm hook事件中的on_play事件的参数
+ * zlm hookParameters of the on_play event in the event
  * @author lin
  */
 public class OnPlayHookParam extends HookParam{

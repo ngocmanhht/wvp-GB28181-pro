@@ -5,7 +5,7 @@ import com.genersoft.iot.vmp.gb28181.bean.MobilePosition;
 import java.util.List;
 
 /**
- * 资源能力接入-其他
+ * Resource capability access-Others
  */
 public interface ISourceOtherService {
 

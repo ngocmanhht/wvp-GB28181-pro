@@ -10,7 +10,7 @@ import lombok.Setter;
 import java.nio.charset.Charset;
 
 /**
- * 实时音视频传输请求
+ * Real-time audio and video transmission request
  *
  * @author QingtaiJiang
  * @date 2023/4/27 18:25
@@ -22,24 +22,24 @@ import java.nio.charset.Charset;
 public class J9101 extends Rs {
     String ip;
 
-    // TCP端口
+    // TCPport
     Integer tcpPort;
 
-    // UDP端口
+    // UDPport
     Integer udpPort;
 
-    // 逻辑通道号
+    // Logical channel number
     Integer channel;
 
-    // 数据类型
+    // data type
     /**
-     * 0：音视频，1：视频，2：双向对讲，3：监听，4：中心广播，5：透传
+     * 0：Audio and video, 1: video, 2: two-way intercom, 3: monitoring, 4: central broadcast, 5: transparent transmission
      */
     Integer type;
 
-    // 码流类型
+    // Stream type
     /**
-     * 0：主码流，1：子码流
+     * 0：Main stream, 1: sub stream
      */
     Integer rate;
 

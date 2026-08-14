@@ -14,7 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEvent;
 
 /**
- * 终端上传乘客流量
+ * Terminal uploads passenger traffic
  *
  */
 @Slf4j
@@ -26,7 +26,7 @@ public class J1005 extends Re {
     @Override
     protected Rs decode0(ByteBuf buf, Header header, Session session) {
         passengerNum = JTPassengerNum.decode(buf);
-        log.info("[终端上传乘客流量] {}", passengerNum);
+        log.info("[Terminal uploads passenger traffic] {}", passengerNum);
         return null;
     }
 

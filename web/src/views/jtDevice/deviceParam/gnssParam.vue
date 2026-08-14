@@ -2,11 +2,11 @@
   <div style="width: 100%;">
     <div style="height: calc(100vh - 260px); overflow: auto">
       <el-form ref="form" :model="form" label-width="240px" style="width: 50%; margin: 0 auto">
-        <el-form-item label="波特率" prop="gnssBaudRate">
+        <el-form-item label="baud rate" prop="gnssBaudRate">
           <el-select
             v-model="form.gnssBaudRate"
             style="width: 100%"
-            placeholder="请选择波特率"
+            placeholder="Please select a baud rate"
           >
             <el-option label="4800" :value="0" />
             <el-option label="19200" :value="1" />
@@ -15,11 +15,11 @@
             <el-option label="115200" :value="4" />
           </el-select>
         </el-form-item>
-        <el-form-item label="输出频率" prop="gnssOutputFrequency">
+        <el-form-item label="Output frequency" prop="gnssOutputFrequency">
           <el-select
             v-model="form.gnssOutputFrequency"
             style="width: 100%"
-            placeholder="请选择输出频率"
+            placeholder="Please select output frequency"
           >
             <el-option label="500ms" :value="0" />
             <el-option label="1000ms" :value="1" />
@@ -28,21 +28,21 @@
             <el-option label="4000ms" :value="4" />
           </el-select>
         </el-form-item>
-        <el-form-item label="采集频率(秒)" prop="gnssCollectionFrequency">
+        <el-form-item label="Collection frequency(seconds)" prop="gnssCollectionFrequency">
           <el-input v-model="form.gnssCollectionFrequency" />
         </el-form-item>
-        <el-form-item label="上传方式" prop="gnssDataUploadMethod">
+        <el-form-item label="Upload method" prop="gnssDataUploadMethod">
           <el-select
             v-model="form.gnssDataUploadMethod"
             style="width: 100%"
-            placeholder="请选择上传方式"
+            placeholder="Please select upload method"
           >
-            <el-option label="本地存储, 不上传" :value="0" />
-            <el-option label="按时间间隔上传" :value="1" />
-            <el-option label="按距离间隔上传" :value="2" />
-            <el-option label="按累计时间上传, 达到传输时间后自动停止上传" :value="11" />
-            <el-option label="按累计距离上传, 达到距离后自动停止上传" :value="12" />
-            <el-option label="按累计条数上传, 达到上传条数后自动停止上传" :value="13" />
+            <el-option label="Local storage, no upload" :value="0" />
+            <el-option label="Upload by time interval" :value="1" />
+            <el-option label="Upload by distance interval" :value="2" />
+            <el-option label="Upload according to the cumulative time, and automatically stop uploading after the transmission time is reached" :value="11" />
+            <el-option label="Upload according to the cumulative distance, and automatically stop uploading after reaching the distance" :value="12" />
+            <el-option label="Upload based on the cumulative number of items, and automatically stop uploading when the number of uploads is reached." :value="13" />
           </el-select>
         </el-form-item>
         <el-form-item v-if="form.gnssDataUploadMethod > 0" :label="gnssDataUploadMethodUnitLable" prop="gnssDataUploadMethodUnit">
@@ -51,8 +51,8 @@
       </el-form>
     </div>
     <p style="text-align: right">
-      <el-button type="primary" @click="onSubmit">确认</el-button>
-      <el-button @click="showDevice">取消</el-button>
+      <el-button type="primary" @click="onSubmit">Confirm</el-button>
+      <el-button @click="showDevice">Cancel</el-button>
     </p>
 
   </div>
@@ -68,14 +68,14 @@ export default {
       switch (this.form.gnssDataUploadMethod) {
         case 1:
         case 11:
-          return '上传设置（秒）'
+          return 'Upload settings (seconds）'
         case 2:
         case 12:
-          return '上传设置（米）'
+          return 'Upload settings (m）'
         case 13:
-          return '上传设置（条）'
+          return 'Upload settings (bar）'
         default:
-          return '上传设置'
+          return 'Upload settings'
       }
     }
   },

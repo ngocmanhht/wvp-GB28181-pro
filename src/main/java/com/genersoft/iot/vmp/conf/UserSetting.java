@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 配置文件 user-settings 映射的配置信息
+ * Configuration file user-settings Mapping configuration information
  */
 @Component
 @ConfigurationProperties(prefix = "user-settings", ignoreInvalidFields = true)
@@ -19,260 +19,260 @@ import java.util.List;
 public class UserSetting {
 
     /**
-     * 是否保存位置的历史记录(轨迹)
+     * Whether to save location history(trajectory)
      */
     private Boolean savePositionHistory = Boolean.FALSE;
 
     /**
-     * 是否开始自动点播: 请求流为未拉起的流时,自动开启点播, 需要rtp.enable=true
+     * Whether to start automatic on-demand playback: When the request stream is an unpulled stream, on-demand playback will be started automatically. Requiredrtp.enable=true
      */
     private Boolean autoApplyPlay = Boolean.FALSE;
 
     /**
-     * [可选] 部分设备需要扩展SDP，需要打开此设置,一般设备无需打开
+     * [Optional] Some devices need to expand SDP and need to turn on this setting. General equipment does not need to turn it on.
      */
     private Boolean seniorSdp = Boolean.FALSE;
 
     /**
-     * 点播/录像回放 等待超时时间,单位：毫秒
+     * on demand/Video playback waiting timeout, unit: milliseconds
      */
     private Integer playTimeout = 10000;
 
     /**
-     * 获取设备录像数据超时时间,单位：毫秒
+     * Timeout for obtaining device recording data, unit: milliseconds
      */
     private Integer recordInfoTimeout = 15000;
 
     /**
-     * 上级点播等待超时时间,单位：毫秒
+     * Superior on-demand waiting timeout, unit: milliseconds
      */
     private int platformPlayTimeout = 20000;
 
     /**
-     * 是否开启接口鉴权
+     * Whether to enable interface authentication
      */
     private Boolean interfaceAuthentication = Boolean.TRUE;
 
     /**
-     * 接口鉴权例外的接口, 即不进行接口鉴权的接口,尽量详细书写，尽量不用/**，至少两级目录
+     * Interfaces with exceptions to interface authentication, that is, interfaces that do not perform interface authentication, should be written in as much detail as possible and should be used as little as possible./**，At least two levels of directories
      */
     private List<String> interfaceAuthenticationExcludes = new ArrayList<>();
 
     /**
-     * 推流直播是否录制
+     * Whether to record live push streaming
      */
     private Boolean recordPushLive = Boolean.TRUE;
 
     /**
-     * 国标是否录制
+     * Is the national standard recorded?
      */
     private Boolean recordSip = Boolean.TRUE;
 
     /**
-     * 使用推流状态作为推流通道状态
+     * Use push flow status as push flow channel status
      */
     private Boolean usePushingAsStatus = Boolean.FALSE;
 
     /**
-     * 使用来源请求ip作为streamIp,当且仅当你只有zlm节点它与wvp在一起的情况下开启
+     * Use the source request ip as streamIp, and enable it if and only if you only have the zlm node and it is together with wvp
      */
     private Boolean useSourceIpAsStreamIp = Boolean.FALSE;
 
     /**
-     * 是否使用设备来源Ip作为回复IP， 不设置则为 false
+     * Whether to use the device source IP as the reply IP, if not set, it will be false
      */
     private Boolean sipUseSourceIpAsRemoteAddress = Boolean.FALSE;
 
     /**
-     * 国标点播 按需拉流, true：有人观看拉流，无人观看释放， false：拉起后不自动释放
+     * National standard on-demand streaming on demand, true: someone is watching the stream, no one is watching it, it is released, false: it is not automatically released after it is pulled up.
      */
     private Boolean streamOnDemand = Boolean.TRUE;
 
     /**
-     * 推流鉴权， 默认开启
+     * Push authentication, enabled by default
      */
     private Boolean pushAuthority = Boolean.TRUE;
 
     /**
-     * 设备上线时是否自动同步通道
+     * Whether to automatically synchronize channels when the device goes online
      */
     private Boolean syncChannelOnDeviceOnline = Boolean.FALSE;
 
     /**
-     * 是否开启sip日志
+     * Whether to enable sip logs
      */
     private Boolean sipLog = Boolean.FALSE;
 
     /**
-     * 是否开启mybatis-sql日志
+     * Whether to turn onmybatis-sqlLog
      */
     private Boolean sqlLog = Boolean.FALSE;
 
     /**
-     * 消息通道功能-缺少国标ID是否给所有上级发送消息
+     * Message channel function-Whether to send a message to all superiors if the national standard ID is missing
      */
     private Boolean sendToPlatformsWhenIdLost = Boolean.FALSE;
 
     /**
-     * 保持通道状态，不接受notify通道状态变化， 兼容海康平台发送错误消息
+     * Keep channel status, do not accept notify channel status changes, compatible with Hikvision platform to send error messages
      */
     private Boolean refuseChannelStatusChannelFormNotify = Boolean.FALSE;
 
     /**
-     * 设备/通道状态变化时发送消息
+     * Equipment/Send messages when channel status changes
      */
     private Boolean deviceStatusNotify = Boolean.TRUE;
 
     /**
-     * 上级平台点播时不使用上级平台指定的ssrc，使用自定义的ssrc，参考国标文档-点播外域设备媒体流SSRC处理方式
+     * The upper-level platform does not use the ssrc specified by the upper-level platform when on-demand. Use the customized ssrc. Please refer to the national standard document.-On-demand external domain device media stream SSRC processing method
      */
     private Boolean useCustomSsrcForParentInvite = Boolean.TRUE;
 
     /**
-     * 多端口模式使用随机SSRC，端口区分流，SSRC允许重复
+     * Multi-port mode uses random SSRC, port differentiation is performed, and SSRC is allowed to be repeated.
      */
     private Boolean ssrcRandom = Boolean.FALSE;
 
     /**
-     * 开启接口文档页面。 默认开启，生产环境建议关闭，遇到swagger相关的漏洞时也可以关闭
+     * Open the interface documentation page. It is turned on by default. It is recommended to turn it off in production environments. It can also be turned off when encountering swagger-related vulnerabilities.
      */
     private Boolean docEnable = Boolean.TRUE;
 
     /**
-     * 服务ID，不写则为000000
+     * Service ID, if not written, it will be000000
      */
     private String serverId = "000000";
 
 
     /**
-     * 国标级联语音喊话发流模式 * UDP:udp传输 TCP-ACTIVE：tcp主动模式 TCP-PASSIVE：tcp被动模式
+     * National standard cascade voice broadcast streaming mode * UDP:udptransmission TCP-ACTIVE：tcpActive mode TCP-PASSIVE：tcppassive mode
      */
     private String broadcastForPlatform = "UDP";
 
     /**
-     * 行政区划信息文件,系统启动时会加载到系统里
+     * Administrative division information files will be loaded into the system when the system starts.
      */
     private String civilCodeFile = "classpath:civilCode.csv";
 
     /**
-     * 跨域配置，不配置此项则允许所有跨域请求，配置后则只允许配置的页面的地址请求， 可以配置多个
+     * Cross-domain configuration. If this is not configured, all cross-domain requests will be allowed. After configuration, only address requests for the configured page will be allowed. Multiple configurations can be configured.
      */
     private List<String> allowedOrigins = new ArrayList<>();
 
     /**
-     * 设置notify缓存队列最大长度，超过此长度的数据将返回486 BUSY_HERE，消息丢弃, 默认100000
+     * Set the maximum length of the notify cache queue. Data exceeding this length will return 486 BUSY_HERE and the message will be discarded. Default100000
      */
     private int maxNotifyCountQueue = 100000;
 
     /**
-     * 国标级联离线后多久重试一次注册
+     * How long does it take to retry registration after the GB cascade is offline?
      */
     private int registerAgainAfterTime = 60;
 
     /**
-     * 国标续订方式，true为续订，每次注册在同一个会话里，false为重新注册，每次使用新的会话
+     * National standard renewal method, true means renewal, each registration is in the same session, false means re-registration, each time a new session is used
      */
     private boolean registerKeepIntDialog = false;
 
     /**
-     * 国标设备离线后的上线策略，
-     * 0： 国标标准实现，设备离线后不回复心跳，直到设备重新注册上线，
-     * 1（默认）： 对于离线设备，收到心跳就把设备设置为上线，并更新注册时间为上次这次心跳的时间。防止过期时间判断异常
+     * Online strategy for national standard equipment after it goes offline，
+     * 0： The national standard is implemented. The device will not reply to the heartbeat after it is offline until the device is re-registered and online.，
+     * 1（Default): For offline devices, when a heartbeat is received, the device is set online and the registration time is updated to the time of the last heartbeat. Prevent expiration time judgment exceptions
      */
     private int gbDeviceOnline = 1;
 
     /**
-     *    登录超时时间(分钟)，
+     *    Login timeout(minutes)，
      */
     private long loginTimeout = 60;
 
     /**
-     * jwk文件路径，若不指定则使用resources目录下的jwk.json
+     * jwkFile path, if not specified, the file path in the resources directory will be used.jwk.json
      */
     private String jwkFile = null;
 
     /**
-     * wvp集群模式下如果注册向上级的wvp奔溃，则自动选择一个其他wvp继续注册到上级
+     * wvpIn cluster mode, if the registration fails with the superior wvp, another wvp will be automatically selected to continue registering with the superior.
      */
     private boolean autoRegisterPlatform = false;
 
     /**
-     * 按需发送推流设备位置， 默认发送移动位置订阅时如果位置不变则不发送， 设置为false按照国标间隔持续发送
+     * Send the location of the push device on demand. By default, when sending mobile location subscriptions, if the location remains unchanged, it will not be sent. Set to false to continue sending at the national standard interval.
      */
     private boolean sendPositionOnDemand = true;
 
     /**
-     * 部分设备会在短时间内发送大量注册， 导致协议栈内存溢出， 开启此项可以防止这部分设备注册， 避免服务崩溃，但是会降低系统性能， 描述如下
-     * 默认值为 true。
-     * 将此设置为 false 会使 Stack 在 Server Transaction 进入 TERMINATED 状态后关闭服务器套接字。
-     * 这允许服务器防止客户端发起的基于 TCP 的拒绝服务攻击（即发起数百个客户端事务）。
-     * 如果为 true（默认作），则堆栈将保持套接字打开，以便以牺牲线程和内存资源为代价来最大化性能 - 使自身容易受到 DOS 攻击。
+     * Some devices will send a large number of registrations in a short period of time, causing the protocol stack memory to overflow. Turning this on can prevent these devices from registering and avoid service crashes, but it will reduce system performance, as described below.
+     * The default value is true。
+     * Setting this to false will cause the Stack to Server Transaction Close the server socket after entering the TERMINATED state。
+     * This allows the server to prevent client-initiated TCP-based denial-of-service attacks (i.e., initiating hundreds of client transactions）。
+     * If true (the default), the stack will keep the socket open to maximize performance at the expense of thread and memory resources - Make yourself vulnerable to DOS attacks。
      */
     private boolean sipCacheServerConnections = true;
 
     /**
-     * 禁用date头，变相禁用了校时
+     * Disable the date header, disabling time adjustment in disguise
      */
     private boolean disableDateHeader = false;
 
     /**
-     * 同步业务分组时自动生成分组国标编号的模板，不配置则默认参考当前的sip域信息生成
+     * When synchronizing business groups, the template of the group's national standard number is automatically generated. If not configured, it will be generated by referring to the current SIP domain information by default.
      */
     private String groupSyncDeviceTemplate;
 
     /**
-     * 与第三方进行分组同步时使用别名而不是分组ID， 如果没有设置此项为true，那么分组编号就是必须传递的。如果是设置为true则，自动为别名的分组生成新的编号
+     * When synchronizing groups with third parties, use aliases instead of group IDs. If this is not set to true, the group number must be passed. If set to true, a new number will be automatically generated for the alias group.
      */
     private boolean useAliasForGroupSync = false;
 
     /**
-     * 设备ID严格模式，开启后设备注册时如果设备ID不符合规范则拒绝注册, 默认开启
+     * Device ID strict mode, when enabled, will reject the registration if the device ID does not meet the specifications when registering the device. It is enabled by default.
      */
     private boolean deviceIdStrict = true;
 
     /**
-     * 对于识别为设备的国标设备的，是否默认开启位置订阅
+     * For national standard devices identified as devices, whether to enable location subscription by default
      */
     private boolean subscribeMobilePosition = false;
 
     /**
-     * 处理报警消息时，会缓存通道数据，如果超出则丢弃低热度消息，被丢弃的通道下次使用就需要重新查询数据库，默认10000，
-     * 建议根据实际情况调整，过大可能会占用较多内存，过小可能会增加数据库查询压力
+     * When processing alarm messages, the channel data will be cached. If it exceeds the limit, the low-heat messages will be discarded. The discarded channel will need to re-query the database next time. The default10000，
+     * It is recommended to adjust it according to the actual situation. If it is too large, it may occupy more memory. If it is too small, it may increase the pressure of database query.
      */
     private long alarmCatchSize = 10000;
 
     /**
-     * 是否使用拉流的方式获取快照，默认false，避免流量大规模消耗，开启后则使用拉流的方式获取快照
+     * Whether to use the pull method to obtain snapshots. The default is false to avoid large-scale consumption of traffic. When enabled, the pull method will be used to obtain snapshots.
      */
     private boolean alarmSnapByStream = false;
 
     /**
-     * 报警订阅白名单，设置后只有在此列表中的上级平台才会接收报警订阅消息，默认不设置则不限制
+     * Alarm subscription whitelist. After setting, only upper-level platforms in this list will receive alarm subscription messages. If not set by default, there will be no restriction.
      */
     private List<AlarmType> allowedAlarmType = new ArrayList<>();
 
     /**
-     * 报警记录保留天数，超过此天数的报警记录将在每天凌晨自动清理，默认30天，设置为0则不自动清理
+     * The number of days that alarm records are retained. Alarm records that exceed this number of days will be automatically cleared in the early morning of every day. The default is 30 days. If set to 0, they will not be automatically cleared.
      */
     private int alarmKeepDays = 7;
 
     /**
-     * 设备注册时间列表最大保留条数，默认100
+     * The maximum number of entries in the device registration time list, default100
      */
     private int deviceRegisterTimeMaxCount = 100;
 
     /**
-     * 设备注册时间列表过期时间（小时），默认3，设置为0则永不过期
+     * Device registration time list expiration time (hours), default 3, set to 0 to never expire
      */
     private int deviceRegisterTimeTtlHours = 3;
 
     /**
-     * 设备心跳时间列表最大保留条数，默认100
+     * The maximum number of entries retained in the device heartbeat time list, default100
      */
     private int deviceKeepaliveTimeMaxCount = 100;
 
     /**
-     * 设备心跳时间列表过期时间（小时），默认1，设置为0则永不过期
+     * Device heartbeat time list expiration time (hours), default 1, set to 0 to never expire
      */
     private int deviceKeepaliveTimeTtlHours = 1;
 

@@ -7,10 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
- * 命令类型： 控制命令
- * 命令类型： 设备控制： 远程启动, 录像控制（TODO）, 报警布防/撤防命令（TODO）, 报警复位命令（TODO）,
- *                   强制关键帧命令（TODO）, 拉框放大/缩小控制命令（TODO）, 看守位控制（TODO）, 报警复位（TODO）
- * 命令类型： 设备配置： SVAC编码配置（TODO）, 音频参数（TODO）, SVAC解码配置（TODO）
+ * Command type: control command
+ * Command type: Device control: remote start, video control (TODO), alarm arming/Disarm command (TODO), alarm reset command（TODO）,
+ *                   Forced keyframe command (TODO), zoom in by pulling the box/Reduce control command (TODO), guard position control (TODO), alarm reset（TODO）
+ * Command type: Device configuration: SVAC encoding configuration (TODO), audio parameters (TODO), SVAC decoding configuration（TODO）
  */
 @Component
 public class ControlMessageHandler extends MessageHandlerAbstract implements InitializingBean  {

@@ -1,7 +1,7 @@
 package com.genersoft.iot.vmp.common.enums;
 
 /**
- * 支持的通道数据类型
+ * Supported channel data types
  */
 
 public class ChannelDataType {
@@ -21,14 +21,14 @@ public class ChannelDataType {
 
     public static String getDateTypeDesc(Integer dataType) {
         if (dataType == null) {
-            return "未知";
+            return "unknown";
         }
         return switch (dataType) {
-            case ChannelDataType.GB28181 -> "国标28181";
-            case ChannelDataType.STREAM_PUSH -> "推流设备";
-            case ChannelDataType.STREAM_PROXY -> "拉流代理";
-            case ChannelDataType.JT_1078 -> "部标设备";
-            default -> "未知";
+            case ChannelDataType.GB28181 -> "National standard28181";
+            case ChannelDataType.STREAM_PUSH -> "Push streaming equipment";
+            case ChannelDataType.STREAM_PROXY -> "Streaming agent";
+            case ChannelDataType.JT_1078 -> "Ministry standard equipment";
+            default -> "unknown";
         };
     }
 

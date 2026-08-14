@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-dialog
-      title="语音对讲"
+      title="Voice intercom"
       top="10vh"
       width="61.5vw"
       :close-on-click-modal="false"
@@ -16,7 +16,7 @@
               icon="el-icon-video-play"
               :loading="previewLoading"
               @click="startPreview"
-            >开启预览</el-button>
+            >Turn on preview</el-button>
           </div>
           <playerTabs
             v-if="showPlayer"
@@ -33,11 +33,11 @@
               Your browser is too old which doesn't support HTML5 video.
             </video>
             <el-radio-group v-model="talkMode" size="big" @change="onModeChange">
-              <el-radio-button :label="true">喊话</el-radio-button>
-              <el-radio-button :label="false">对讲</el-radio-button>
+              <el-radio-button :label="true">shout</el-radio-button>
+              <el-radio-button :label="false">intercom</el-radio-button>
             </el-radio-group>
             <p style="color: #909399; font-size: 14px; margin-top: 4px;">
-              {{ talkMode ? '单向喊话，仅向设备发送语音' : '双向语音交互，可听到设备声音' }}
+              {{ talkMode ? 'One-way calling, only sending voice to the device' : 'Two-way voice interaction, device sound can be heard' }}
             </p>
           </div>
           <div style="text-align: center;">
@@ -50,12 +50,12 @@
               @click="talkButtonClick()"
             />
             <p style="margin-top: 16px; color: #606266;">
-              <span v-if="talkStatus === -2">正在释放资源</span>
-              <span v-if="talkStatus === -1">点击开始{{ talkMode ? '喊话' : '对讲' }}</span>
-              <span v-if="talkStatus === 0">等待接通中...</span>
-              <span v-if="talkStatus === 1 && talkMode">喊话中</span>
-              <span v-if="talkStatus === 1 && !talkMode && !playConnected">等待接通中...</span>
-              <span v-if="talkStatus === 1 && !talkMode && playConnected">对讲中</span>
+              <span v-if="talkStatus === -2">Releasing resources</span>
+              <span v-if="talkStatus === -1">Click to start{{ talkMode ? 'shout' : 'intercom' }}</span>
+              <span v-if="talkStatus === 0">Waiting to be connected...</span>
+              <span v-if="talkStatus === 1 && talkMode">shouting</span>
+              <span v-if="talkStatus === 1 && !talkMode && !playConnected">Waiting to be connected...</span>
+              <span v-if="talkStatus === 1 && !talkMode && playConnected">Talking</span>
             </p>
             <p v-if="talkStatus === 1 && !talkMode && talkAudioFailed" style="margin-top: 8px;">
               <el-button
@@ -63,7 +63,7 @@
                 size="mini"
                 icon="el-icon-refresh"
                 @click="retryTalkAudio"
-              >重试音频</el-button>
+              >Retry audio</el-button>
             </p>
           </div>
         </div>
@@ -225,7 +225,7 @@ export default {
 
       const url = location.protocol === 'https:' ? playStreamInfo.rtcs : playStreamInfo.rtc
       if (!url) {
-        console.warn('[AudioTalk] 无可用的设备音频播放地址')
+        console.warn('[AudioTalk] No device audio playback address available')
         return
       }
       this.talkAudioRetryTimer = setTimeout(() => {
@@ -268,8 +268,8 @@ export default {
       })
 
       this.talkAudioRtc.on(ZLMRTCClient.Events.WEBRTC_OFFER_ANWSER_EXCHANGE_FAILED, (e) => {
-        console.warn('[AudioTalk] 播放流offer失败:', e?.code, e?.msg)
-        if (e && e.code == -400 && e.msg == '流不存在') {
+        console.warn('[AudioTalk] Playback stream offer failed:', e?.code, e?.msg)
+        if (e && e.code == -400 && e.msg == 'Stream does not exist') {
           this.talkAudioRetryTimer = setTimeout(() => {
             this.startTalkAudioByRtc(url)
           }, 1000)
@@ -277,16 +277,16 @@ export default {
       })
 
       this.talkAudioRtc.on(ZLMRTCClient.Events.WEBRTC_ON_REMOTE_STREAMS, () => {
-        console.warn('[AudioTalk] 设备音频流到达')
+        console.warn('[AudioTalk] Device audio stream arrives')
         this.playConnected = true
       })
 
       this.talkAudioRtc.on(ZLMRTCClient.Events.WEBRTC_ICE_CANDIDATE_ERROR, () => {
-        console.error('[AudioTalk] 音频播放ICE协商失败')
+        console.error('[AudioTalk] Audio playback ICE negotiation failed')
       })
 
       this.talkAudioRtc.on(ZLMRTCClient.Events.WEBRTC_ON_CONNECTION_STATE_CHANGE, (s) => {
-        console.warn('[AudioTalk] 音频播放连接状态:', s)
+        console.warn('[AudioTalk] Audio playback connection status:', s)
         if (s === 'connected') {
           this.playConnected = true
         } else if (s === 'disconnected' || s === 'failed' || s === 'closed') {
@@ -321,7 +321,7 @@ export default {
       try {
         await this.$store.dispatch('play/broadcastStop', [this.deviceId, this.channelId])
       } catch (e) {
-        console.warn('停止对讲失败', e)
+        console.warn('Failed to stop intercom', e)
       }
       this.talkStatus = -1
     },

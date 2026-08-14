@@ -36,7 +36,7 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 @SuppressWarnings("rawtypes")
-@Tag(name = "第三方PS服务对接")
+@Tag(name = "Third-party PS service docking")
 @Slf4j
 @RestController
 @RequestMapping("/api/ps")
@@ -67,34 +67,34 @@ public class PsController {
 
     @GetMapping(value = "/receive/open")
     @ResponseBody
-    @Operation(summary = "开启收流和获取发流信息", security = @SecurityRequirement(name = JwtUtils.HEADER))
-    @Parameter(name = "isSend", description = "是否发送，false时只开启收流， true同时返回推流信息", required = true)
-    @Parameter(name = "callId", description = "整个过程的唯一标识，为了与后续接口关联", required = true)
-    @Parameter(name = "ssrc", description = "来源流的SSRC，不传则不校验来源ssrc", required = false)
-    @Parameter(name = "stream", description = "形成的流的ID", required = true)
-    @Parameter(name = "tcpMode", description = "收流模式， 0为UDP， 1为TCP被动", required = true)
-    @Parameter(name = "callBack", description = "回调地址，如果收流超时会通道回调通知，回调为get请求，参数为callId", required = true)
+    @Operation(summary = "Enable streaming and obtain streaming information", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Parameter(name = "isSend", description = "Whether to send or not. If false, only stream collection will be enabled. If true, push stream information will be returned at the same time.", required = true)
+    @Parameter(name = "callId", description = "The unique identifier of the entire process, in order to be associated with subsequent interfaces", required = true)
+    @Parameter(name = "ssrc", description = "SSRC of the source stream. If not passed, the source will not be verified.ssrc", required = false)
+    @Parameter(name = "stream", description = "forming a flowID", required = true)
+    @Parameter(name = "tcpMode", description = "Traffic collection mode, 0 is UDP, 1 is TCP passive", required = true)
+    @Parameter(name = "callBack", description = "Callback address. If the flow collection times out, the channel callback notification will be sent. The callback is a get request, and the parameters arecallId", required = true)
     public OtherPsSendInfo openRtpServer(Boolean isSend, @RequestParam(required = false)String ssrc, String callId, String stream, Integer tcpMode, String callBack) {
 
-        log.info("[第三方PS服务对接->开启收流和获取发流信息] isSend->{}, ssrc->{}, callId->{}, stream->{}, tcpMode->{}, callBack->{}",
-                isSend, ssrc, callId, stream, tcpMode==0?"UDP":"TCP被动", callBack);
+        log.info("[Third-party PS service docking->Enable streaming and obtain streaming information] isSend->{}, ssrc->{}, callId->{}, stream->{}, tcpMode->{}, callBack->{}",
+                isSend, ssrc, callId, stream, tcpMode==0?"UDP":"TCPPassive", callBack);
 
         MediaServer mediaServer = mediaServerService.getDefaultMediaServer();
         if (mediaServer == null) {
-            throw new ControllerException(ErrorCode.ERROR100.getCode(),"没有可用的MediaServer");
+            throw new ControllerException(ErrorCode.ERROR100.getCode(),"None availableMediaServer");
         }
         if (stream == null) {
-            throw new ControllerException(ErrorCode.ERROR100.getCode(),"stream参数不可为空");
+            throw new ControllerException(ErrorCode.ERROR100.getCode(),"streamParameters cannot be empty");
         }
         if (isSend != null && isSend && callId == null) {
-            throw new ControllerException(ErrorCode.ERROR100.getCode(),"isSend为true时，CallID不能为空");
+            throw new ControllerException(ErrorCode.ERROR100.getCode(),"isSendWhen true, CallID cannot be empty");
         }
         long ssrcInt = 0;
         if (ssrc != null) {
             try {
                 ssrcInt = Long.parseLong(ssrc);
             }catch (NumberFormatException e) {
-                throw new ControllerException(ErrorCode.ERROR100.getCode(),"ssrc格式错误");
+                throw new ControllerException(ErrorCode.ERROR100.getCode(),"ssrcFormat error");
             }
         }
         String receiveKey = VideoManagerConstants.WVP_OTHER_RECEIVE_PS_INFO + userSetting.getServerId() + "_" + callId + "_"  + stream;
@@ -111,8 +111,8 @@ public class PsController {
                 return;
             }
             if (code == InviteErrorCode.SUCCESS.getCode()) {
-                log.info("[第三方PS服务对接->开启收流和获取发流信息] 成功回调，callId->{}, data->{}", callId, data);
-                // 将信息写入redis中，以备后用
+                log.info("[Third-party PS service docking->Enable streaming and obtain streaming information] successful callback，callId->{}, data->{}", callId, data);
+                // Write information to redis for later use
                 redisTemplate.delete(receiveKey);
                 OkHttpClient.Builder httpClientBuilder = new OkHttpClient.Builder();
                 OkHttpClient client = httpClientBuilder.build();
@@ -121,20 +121,20 @@ public class PsController {
                 try {
                     client.newCall(request).execute();
                 } catch (IOException e) {
-                    log.error("[第三方PS服务对接->开启收流和获取发流信息] 成功回调 callId->{}, 发送回调失败", callId, e);
+                    log.error("[Third-party PS service docking->Enable streaming and obtain streaming information] successful callback callId->{}, Failed to send callback", callId, e);
                 }
             } else {
-                log.info("[第三方PS服务对接->开启收流和获取发流信息] 失败回调，callId->{}, code->{}, msg->{}", callId, code, msg);
-                // 将信息写入redis中，以备后用
+                log.info("[Third-party PS service docking->Enable streaming and obtain streaming information] Failure callback，callId->{}, code->{}, msg->{}", callId, code, msg);
+                // Write information to redis for later use
                 redisTemplate.delete(receiveKey);
             }
         }));
 
         if (rtpServerPort == 0) {
-            throw new ControllerException(ErrorCode.ERROR100.getCode(), "获取端口失败");
+            throw new ControllerException(ErrorCode.ERROR100.getCode(), "Failed to get port");
         }
 
-        // 补充鉴权参数
+        // Supplementary authentication parameters
         receiveRtpServerService.addAuthenticateInfo(stream, null, false, false, null);
 
         OtherPsSendInfo otherPsSendInfo = new OtherPsSendInfo();
@@ -143,35 +143,35 @@ public class PsController {
         otherPsSendInfo.setCallId(callId);
         otherPsSendInfo.setStream(stream);
 
-        // 将信息写入redis中，以备后用
+        // Write information to redis for later use
         redisTemplate.opsForValue().set(receiveKey, otherPsSendInfo);
         if (isSend != null && isSend) {
             String key = VideoManagerConstants.WVP_OTHER_SEND_PS_INFO + userSetting.getServerId() + "_"  + callId;
-            // 预创建发流信息
+            // Pre-created streaming information
             int port = sendRtpServerService.getNextPort(mediaServer);
 
             otherPsSendInfo.setSendLocalIp(mediaServer.getSdpIp());
             otherPsSendInfo.setSendLocalPort(port);
-            // 将信息写入redis中，以备后用
+            // Write information to redis for later use
             redisTemplate.opsForValue().set(key, otherPsSendInfo, 300, TimeUnit.SECONDS);
-            log.info("[第三方PS服务对接->开启收流和获取发流信息] 结果，callId->{}， {}", callId, otherPsSendInfo);
+            log.info("[Third-party PS service docking->Enable streaming and obtain streaming information] result，callId->{}， {}", callId, otherPsSendInfo);
         }
         return otherPsSendInfo;
     }
 
     @GetMapping(value = "/receive/close")
     @ResponseBody
-    @Operation(summary = "关闭收流", security = @SecurityRequirement(name = JwtUtils.HEADER))
-    @Parameter(name = "stream", description = "流的ID", required = true)
+    @Operation(summary = "Turn off traffic collection", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Parameter(name = "stream", description = "flowingID", required = true)
     public void closeRtpServer(String stream) {
-        log.info("[第三方PS服务对接->关闭收流] stream->{}", stream);
+        log.info("[Third-party PS service docking->Turn off traffic collection] stream->{}", stream);
         MediaServer mediaServerItem = mediaServerService.getDefaultMediaServer();
         receiveRtpServerService.closeRTPServer(mediaServerItem, MediaStreamUtil.RTP_APP, stream);
         String receiveKey = VideoManagerConstants.WVP_OTHER_RECEIVE_PS_INFO + userSetting.getServerId() + "_*_"  + stream;
         List<Object> scan = RedisUtil.scan(redisTemplate, receiveKey);
         if (!scan.isEmpty()) {
             for (Object key : scan) {
-                // 将信息写入redis中，以备后用
+                // Write information to redis for later use
                 redisTemplate.delete((String) key);
             }
         }
@@ -179,14 +179,14 @@ public class PsController {
 
     @GetMapping(value = "/send/start")
     @ResponseBody
-    @Operation(summary = "发送流", security = @SecurityRequirement(name = JwtUtils.HEADER))
-    @Parameter(name = "ssrc", description = "发送流的SSRC", required = true)
-    @Parameter(name = "dstIp", description = "目标收流IP", required = true)
-    @Parameter(name = "dstPort", description = "目标收流端口", required = true)
-    @Parameter(name = "app", description = "待发送应用名", required = true)
-    @Parameter(name = "stream", description = "待发送流Id", required = true)
-    @Parameter(name = "callId", description = "整个过程的唯一标识，不传则使用随机端口发流", required = true)
-    @Parameter(name = "isUdp", description = "是否为UDP", required = true)
+    @Operation(summary = "send stream", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Parameter(name = "ssrc", description = "sending streamSSRC", required = true)
+    @Parameter(name = "dstIp", description = "target flowIP", required = true)
+    @Parameter(name = "dstPort", description = "Target traffic port", required = true)
+    @Parameter(name = "app", description = "Application name to be sent", required = true)
+    @Parameter(name = "stream", description = "Stream to be sentId", required = true)
+    @Parameter(name = "callId", description = "The unique identifier of the entire process. If not transmitted, a random port will be used to send the stream.", required = true)
+    @Parameter(name = "isUdp", description = "Is itUDP", required = true)
     public void sendRTP(String ssrc,
                         String dstIp,
                         Integer dstPort,
@@ -195,7 +195,7 @@ public class PsController {
                         String callId,
                         Boolean isUdp
         ) {
-        log.info("[第三方PS服务对接->发送流] " +
+        log.info("[Third-party PS service docking->send stream] " +
                         "ssrc->{}, \r\n" +
                         "dstIp->{}, \n" +
                         "dstPort->{},  \n" +
@@ -221,32 +221,32 @@ public class PsController {
         Boolean streamReady = mediaServerService.isStreamReady(mediaServer, app, stream);
         if (streamReady) {
             mediaServerService.startSendRtp(mediaServer, sendRtpItem);
-            log.info("[第三方PS服务对接->发送流] 视频流发流成功，callId->{}，param->{}", callId, sendRtpItem);
+            log.info("[Third-party PS service docking->send stream] Video streaming successful，callId->{}，param->{}", callId, sendRtpItem);
             redisTemplate.opsForValue().set(key, sendInfo);
         }else {
-            log.info("[第三方PS服务对接->发送流] 流不存在，等待流上线，callId->{}", callId);
+            log.info("[Third-party PS service docking->send stream] The stream does not exist, waiting for the stream to come online.，callId->{}", callId);
             String uuid = UUID.randomUUID().toString();
             Hook hook = Hook.getInstance(HookType.on_media_arrival, app, stream, mediaServer.getId());
             dynamicTask.startDelay(uuid, ()->{
-                log.info("[第三方PS服务对接->发送流] 等待流上线超时 callId->{}", callId);
+                log.info("[Third-party PS service docking->send stream] Timeout waiting for stream to come online callId->{}", callId);
                 redisTemplate.delete(key);
                 hookSubscribe.removeSubscribe(hook);
             }, 10000);
 
-            // 订阅 zlm启动事件, 新的zlm也会从这里进入系统
+            // Subscribe to the zlm startup event, the new zlm will also enter the system from here
             OtherPsSendInfo finalSendInfo = sendInfo;
             hookSubscribe.removeSubscribe(hook);
             hookSubscribe.addSubscribe(hook,
                     (hookData)->{
                         dynamicTask.stop(uuid);
-                        log.info("[第三方PS服务对接->发送流] 流上线，开始发流 callId->{}", callId);
+                        log.info("[Third-party PS service docking->send stream] Stream online and start streaming callId->{}", callId);
                         try {
                             Thread.sleep(400);
                         } catch (InterruptedException e) {
                             throw new RuntimeException(e);
                         }
                         mediaServerService.startSendRtp(mediaServer, sendRtpItem);
-                        log.info("[第三方PS服务对接->发送流] 视频流发流成功，callId->{}，param->{}", callId, sendRtpItem);
+                        log.info("[Third-party PS service docking->send stream] Video streaming successful，callId->{}，param->{}", callId, sendRtpItem);
                         redisTemplate.opsForValue().set(key, finalSendInfo);
                         hookSubscribe.removeSubscribe(hook);
                     });
@@ -255,22 +255,22 @@ public class PsController {
 
     @GetMapping(value = "/send/stop")
     @ResponseBody
-    @Operation(summary = "关闭发送流")
-    @Parameter(name = "callId", description = "整个过程的唯一标识，不传则使用随机端口发流", required = true)
+    @Operation(summary = "Close send stream")
+    @Parameter(name = "callId", description = "The unique identifier of the entire process. If not transmitted, a random port will be used to send the stream.", required = true)
     public void closeSendRTP(String callId) {
-        log.info("[第三方PS服务对接->关闭发送流] callId->{}", callId);
+        log.info("[Third-party PS service docking->Close send stream] callId->{}", callId);
         String key = VideoManagerConstants.WVP_OTHER_SEND_PS_INFO + userSetting.getServerId() + "_"  + callId;
         OtherPsSendInfo sendInfo = (OtherPsSendInfo)redisTemplate.opsForValue().get(key);
         if (sendInfo == null){
-            throw new ControllerException(ErrorCode.ERROR100.getCode(), "未开启发流");
+            throw new ControllerException(ErrorCode.ERROR100.getCode(), "Not open to traffic");
         }
         MediaServer mediaServerItem = mediaServerService.getDefaultMediaServer();
         boolean result = mediaServerService.stopSendRtp(mediaServerItem, sendInfo.getPushApp(), sendInfo.getStream(), sendInfo.getPushSSRC());
         if (!result) {
-            log.info("[第三方PS服务对接->关闭发送流] 失败 callId->{}", callId);
-            throw new ControllerException(ErrorCode.ERROR100.getCode(), "停止发流失败");
+            log.info("[Third-party PS service docking->Close send stream] failed callId->{}", callId);
+            throw new ControllerException(ErrorCode.ERROR100.getCode(), "Failed to stop streaming");
         }else {
-            log.info("[第三方PS服务对接->关闭发送流] 成功 callId->{}", callId);
+            log.info("[Third-party PS service docking->Close send stream] success callId->{}", callId);
         }
         redisTemplate.delete(key);
     }

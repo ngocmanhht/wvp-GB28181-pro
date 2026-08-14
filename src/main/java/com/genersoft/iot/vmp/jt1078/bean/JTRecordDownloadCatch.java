@@ -23,7 +23,7 @@ public class JTRecordDownloadCatch implements Delayed {
     private J9206 j9206;
 
     /**
-     * 超时时间(单位： 毫秒)
+     * timeout(Unit: millisecond)
      */
     @Getter
     @Setter

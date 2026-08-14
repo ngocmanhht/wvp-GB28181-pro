@@ -48,7 +48,7 @@ public class RedisRpcDevicePlayController extends RpcController {
     }
 
     /**
-     * 获取通道同步状态
+     * Get channel synchronization status
      */
     @RedisRpcMapping("audioBroadcast")
     public RedisRpcResponse audioBroadcast(RedisRpcRequest request) {

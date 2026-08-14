@@ -9,7 +9,7 @@ import java.io.Serial;
 import java.time.Clock;
 
 /**
- * 链接断或者连接的事件
+ * Link disconnection or connection events
  */
 
 @Setter

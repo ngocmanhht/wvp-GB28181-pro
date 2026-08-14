@@ -1,36 +1,36 @@
 <template>
   <div style="width: 100%;">
-    <el-checkbox label="紧急报警" v-model="form.urgent" @change="change"></el-checkbox>
-    <el-checkbox label="超速报警" v-model="form.alarmSpeeding" @change="change"></el-checkbox>
-    <el-checkbox label="疲劳驾驶报警" v-model="form.alarmTired" @change="change"></el-checkbox>
-    <el-checkbox label="危险驾驶行为报警" v-model="form.alarmDangerous" @change="change"></el-checkbox>
-    <el-checkbox label="GNSS模块发生故障报警" v-model="form.alarmGnssFault" @change="change"></el-checkbox>
-    <el-checkbox label="GNSS天线未接或被剪断报警" v-model="form.alarmGnssBreak" @change="change"></el-checkbox>
-    <el-checkbox label="GNSS天线短路报警" v-model="form.alarmGnssShortCircuited" @change="change"></el-checkbox>
-    <el-checkbox label="终端主电源欠压报警" v-model="form.alarmUnderVoltage" @change="change"></el-checkbox>
-    <el-checkbox label="终端主电源掉电报警" v-model="form.alarmPowerOff" @change="change"></el-checkbox>
-    <el-checkbox label="终端LCD或显示器故障报警" v-model="form.alarmLCD" @change="change"></el-checkbox>
-    <el-checkbox label="TTS模块故障报警" v-model="form.alarmTtsFault" @change="change"></el-checkbox>
-    <el-checkbox label="摄像头故障报警" v-model="form.alarmCameraFault" @change="change"></el-checkbox>
-    <el-checkbox label="IC卡模块故障报警" v-model="form.alarmIcFault" @change="change"></el-checkbox>
-    <el-checkbox label="超速预警" v-model="form.warningSpeeding" @change="change"></el-checkbox>
-    <el-checkbox label="疲劳驾驶预警" v-model="form.warningTired" @change="change"></el-checkbox>
-    <el-checkbox label="违规行驶报警" v-model="form.alarmWrong" @change="change"></el-checkbox>
-    <el-checkbox label="胎压预警" v-model="form.warningTirePressure" @change="change"></el-checkbox>
-    <el-checkbox label="右转盲区异常报警" v-model="form.alarmBlindZone" @change="change"></el-checkbox>
-    <el-checkbox label="当天累计驾驶超时报警" v-model="form.alarmDrivingTimeout" @change="change"></el-checkbox>
-    <el-checkbox label="超时停车报警" v-model="form.alarmParkingTimeout" @change="change"></el-checkbox>
-    <el-checkbox label="进出区域报警" v-model="form.alarmRegion" @change="change"></el-checkbox>
-    <el-checkbox label="进出路线报警" v-model="form.alarmRoute" @change="change"></el-checkbox>
-    <el-checkbox label="路段行驶时间不足/过长报警" v-model="form.alarmTravelTime" @change="change"></el-checkbox>
-    <el-checkbox label="路线偏离报警" v-model="form.alarmRouteDeviation" @change="change"></el-checkbox>
-    <el-checkbox label="车辆VSS故障" v-model="form.alarmVSS" @change="change"></el-checkbox>
-    <el-checkbox label="车辆油量异常报警" v-model="form.alarmOil" @change="change"></el-checkbox>
-    <el-checkbox label="车辆被盗报警" v-model="form.alarmStolen" @change="change"></el-checkbox>
-    <el-checkbox label="车辆非法点火报警" v-model="form.alarmIllegalIgnition" @change="change"></el-checkbox>
-    <el-checkbox label="车辆非法位移报警" v-model="form.alarmIllegalDisplacement" @change="change"></el-checkbox>
-    <el-checkbox label="碰撞侧翻报警" v-model="form.alarmRollover" @change="change"></el-checkbox>
-    <el-checkbox label="侧翻预警" v-model="form.warningRollover" @change="change"></el-checkbox>
+    <el-checkbox label="emergency alarm" v-model="form.urgent" @change="change"></el-checkbox>
+    <el-checkbox label="speed alarm" v-model="form.alarmSpeeding" @change="change"></el-checkbox>
+    <el-checkbox label="Fatigue driving alarm" v-model="form.alarmTired" @change="change"></el-checkbox>
+    <el-checkbox label="Dangerous driving behavior warning" v-model="form.alarmDangerous" @change="change"></el-checkbox>
+    <el-checkbox label="GNSSModule failure alarm" v-model="form.alarmGnssFault" @change="change"></el-checkbox>
+    <el-checkbox label="GNSSAlarm if antenna is not connected or cut off" v-model="form.alarmGnssBreak" @change="change"></el-checkbox>
+    <el-checkbox label="GNSSAntenna short circuit alarm" v-model="form.alarmGnssShortCircuited" @change="change"></el-checkbox>
+    <el-checkbox label="Terminal main power undervoltage alarm" v-model="form.alarmUnderVoltage" @change="change"></el-checkbox>
+    <el-checkbox label="Terminal main power failure alarm" v-model="form.alarmPowerOff" @change="change"></el-checkbox>
+    <el-checkbox label="Terminal LCD or display failure alarm" v-model="form.alarmLCD" @change="change"></el-checkbox>
+    <el-checkbox label="TTSModule fault alarm" v-model="form.alarmTtsFault" @change="change"></el-checkbox>
+    <el-checkbox label="Camera failure alarm" v-model="form.alarmCameraFault" @change="change"></el-checkbox>
+    <el-checkbox label="ICCard module failure alarm" v-model="form.alarmIcFault" @change="change"></el-checkbox>
+    <el-checkbox label="speed warning" v-model="form.warningSpeeding" @change="change"></el-checkbox>
+    <el-checkbox label="Fatigue driving warning" v-model="form.warningTired" @change="change"></el-checkbox>
+    <el-checkbox label="Violation driving alarm" v-model="form.alarmWrong" @change="change"></el-checkbox>
+    <el-checkbox label="Tire pressure warning" v-model="form.warningTirePressure" @change="change"></el-checkbox>
+    <el-checkbox label="Right turn blind spot abnormality alarm" v-model="form.alarmBlindZone" @change="change"></el-checkbox>
+    <el-checkbox label="Accumulated driving overtime alarm for the day" v-model="form.alarmDrivingTimeout" @change="change"></el-checkbox>
+    <el-checkbox label="Overtime parking alarm" v-model="form.alarmParkingTimeout" @change="change"></el-checkbox>
+    <el-checkbox label="Alarm for entry and exit areas" v-model="form.alarmRegion" @change="change"></el-checkbox>
+    <el-checkbox label="Alarm for entry and exit routes" v-model="form.alarmRoute" @change="change"></el-checkbox>
+    <el-checkbox label="Insufficient travel time on the road section/Alarm if too long" v-model="form.alarmTravelTime" @change="change"></el-checkbox>
+    <el-checkbox label="Route deviation alarm" v-model="form.alarmRouteDeviation" @change="change"></el-checkbox>
+    <el-checkbox label="Vehicle VSS failure" v-model="form.alarmVSS" @change="change"></el-checkbox>
+    <el-checkbox label="Vehicle oil level abnormality alarm" v-model="form.alarmOil" @change="change"></el-checkbox>
+    <el-checkbox label="vehicle stolen alarm" v-model="form.alarmStolen" @change="change"></el-checkbox>
+    <el-checkbox label="Illegal vehicle ignition alarm" v-model="form.alarmIllegalIgnition" @change="change"></el-checkbox>
+    <el-checkbox label="Vehicle illegal displacement alarm" v-model="form.alarmIllegalDisplacement" @change="change"></el-checkbox>
+    <el-checkbox label="Collision and rollover alarm" v-model="form.alarmRollover" @change="change"></el-checkbox>
+    <el-checkbox label="Rollover warning" v-model="form.warningRollover" @change="change"></el-checkbox>
   </div>
 </template>
 

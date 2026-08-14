@@ -11,9 +11,9 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**    
- * @description: 异步请求处理
+ * @description: Asynchronous request handling
  * @author: swwheihei
- * @date:   2020年5月8日 下午7:59:05     
+ * @date:   2020May 8, 2018, afternoon7:59:05     
  */
 @SuppressWarnings(value = {"rawtypes", "unchecked"})
 @Component
@@ -78,7 +78,7 @@ public class DeferredResultHolder {
 	}
 
 	/**
-	 * 释放单个请求
+	 * Release a single request
 	 * @param msg
 	 */
 	public void invokeResult(RequestMessage msg) {
@@ -98,7 +98,7 @@ public class DeferredResultHolder {
 	}
 
 	/**
-	 * 释放所有的请求
+	 * Release all requests
 	 * @param msg
 	 */
 	public void invokeAllResult(RequestMessage msg) {

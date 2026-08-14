@@ -18,7 +18,7 @@ import org.springframework.context.ApplicationEvent;
 import java.nio.charset.Charset;
 
 /**
- * 查询终端属性应答
+ * Query terminal attribute response
  *
  */
 @Slf4j
@@ -56,7 +56,7 @@ public class J0107 extends Re {
 
         deviceAttribute.setGnssAttribute(JTGnssAttribute.getInstance(buf.readUnsignedByte()));
         deviceAttribute.setCommunicationModuleAttribute(JTCommunicationModuleAttribute.getInstance(buf.readUnsignedByte()));
-        log.info("[查询终端属性应答] {}， {}", header.getPhoneNumber(), deviceAttribute);
+        log.info("[Query terminal attribute response] {}， {}", header.getPhoneNumber(), deviceAttribute);
         SessionManager.INSTANCE.response(header.getPhoneNumber(), "0107", null, deviceAttribute);
         return null;
     }

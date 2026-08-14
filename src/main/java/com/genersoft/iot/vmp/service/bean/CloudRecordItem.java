@@ -8,37 +8,37 @@ import lombok.Data;
 import java.util.Map;
 
 /**
- * 云端录像数据
+ * Cloud recording data
  */
 @Data
 public class CloudRecordItem {
     /**
-     * 主键
+     * primary key
      */
     private int id;
 
     /**
-     * 应用名
+     * Application name
      */
     private String app;
 
     /**
-     * 流
+     * flow
      */
     private String stream;
 
     /**
-     * 健全ID
+     * soundID
      */
     private String callId;
 
     /**
-     * 开始时间
+     * start time
      */
     private long startTime;
 
     /**
-     * 结束时间
+     * end time
      */
     private long endTime;
 
@@ -48,42 +48,42 @@ public class CloudRecordItem {
     private String mediaServerId;
 
     /**
-     * 文件名称
+     * File name
      */
     private String fileName;
 
     /**
-     * 文件路径
+     * file path
      */
     private String filePath;
 
     /**
-     * 文件夹
+     * folder
      */
     private String folder;
 
     /**
-     * 收藏，收藏的文件不移除
+     * Collection, the collected files will not be removed
      */
     private Boolean collect;
 
     /**
-     * 保留，收藏的文件不移除
+     * Keep, collected files will not be removed
      */
     private Boolean reserve;
 
     /**
-     * 文件大小
+     * file size
      */
     private long fileSize;
 
     /**
-     * 文件时长
+     * File duration
      */
     private double timeLen;
 
     /**
-     * 所属服务ID
+     * ServicesID
      */
     private String serverId;
 

@@ -7,134 +7,134 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * 终端休眠唤醒模式设置
+ * Terminal sleep wakeup mode setting
  */
 @Setter
 @Getter
 public class JTAwakenParam implements JTDeviceSubConfig{
 
     /**
-     * 休眠唤醒模式-条件唤醒
+     * sleep wake mode-Conditional wake-up
      */
     private boolean wakeUpModeByCondition;
 
     /**
-     * 休眠唤醒模式-定时唤醒
+     * sleep wake mode-Wake up regularly
      */
     private boolean wakeUpModeByTime;
 
     /**
-     * 休眠唤醒模式-手动唤醒
+     * sleep wake mode-Manual wake up
      */
     private boolean wakeUpModeByManual;
 
     /**
-     * 唤醒条件类型-紧急报警
+     * wake condition type-emergency alarm
      */
     private boolean wakeUpConditionsByAlarm;
 
     /**
-     * 唤醒条件类型-碰撞侧翻报警
+     * wake condition type-Collision and rollover alarm
      */
     private boolean wakeUpConditionsByRollover;
 
     /**
-     * 唤醒条件类型-车辆开门
+     * wake condition type-vehicle door opening
      */
     private boolean wakeUpConditionsByOpenTheDoor;
 
     /**
-     * 定时唤醒日设置-周一
+     * Scheduled wake-up day settings-Monday
      */
     private boolean awakeningDayForMonday;
 
     /**
-     * 定时唤醒日设置-周二
+     * Scheduled wake-up day settings-Tuesday
      */
     private boolean awakeningDayForTuesday;
 
     /**
-     * 定时唤醒日设置-周三
+     * Scheduled wake-up day settings-wednesday
      */
     private boolean awakeningDayForWednesday;
 
     /**
-     * 定时唤醒日设置-周四
+     * Scheduled wake-up day settings-Thursday
      */
     private boolean awakeningDayForThursday;
 
     /**
-     * 定时唤醒日设置-周五
+     * Scheduled wake-up day settings-Friday
      */
     private boolean awakeningDayForFriday;
 
     /**
-     * 定时唤醒日设置-周六
+     * Scheduled wake-up day settings-Saturday
      */
     private boolean awakeningDayForSaturday;
 
     /**
-     * 定时唤醒日设置-周日
+     * Scheduled wake-up day settings-Sunday
      */
     private boolean awakeningDayForSunday;
 
     /**
-     * 日定时唤醒-启用时间段1
+     * Daily wake up time-Enable time period1
      */
     private boolean time1Enable;
 
     /**
-     * 日定时唤醒-时间段1开始时间
+     * Daily wake up time-Time period 1 start time
      */
     private String time1StartTime;
 
     /**
-     * 日定时唤醒-时间段1结束时间
+     * Daily wake up time-Time period 1 end time
      */
     private String time1EndTime;
 
     /**
-     * 日定时唤醒-启用时间段2
+     * Daily wake up time-Enable time period2
      */
     private boolean time2Enable;
 
     /**
-     * 日定时唤醒-时间段2开始时间
+     * Daily wake up time-Time period 2 start time
      */
     private String time2StartTime;
 
     /**
-     * 日定时唤醒-时间段2结束时间
+     * Daily wake up time-Time period 2 end time
      */
     private String time2EndTime;
 
     /**
-     * 日定时唤醒-启用时间段3
+     * Daily wake up time-Enable time period3
      */
     private boolean time3Enable;
 
     /**
-     * 日定时唤醒-时间段3开始时间
+     * Daily wake up time-Time period 3 start time
      */
     private String time3StartTime;
 
     /**
-     * 日定时唤醒-时间段3结束时间
+     * Daily wake up time-Time period 3 end time
      */
     private String time3EndTime;
 
     /**
-     * 日定时唤醒-启用时间段4
+     * Daily wake up time-Enable time period4
      */
     private boolean time4Enable;
 
     /**
-     * 日定时唤醒-时间段4开始时间
+     * Daily wake up time-Time period 4 start time
      */
     private String time4StartTime;
 
     /**
-     * 日定时唤醒-时间段4结束时间
+     * Daily wake up time-Time period 4 end time
      */
     private String time4EndTime;
 

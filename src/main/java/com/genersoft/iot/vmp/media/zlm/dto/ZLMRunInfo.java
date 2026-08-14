@@ -1,17 +1,17 @@
 package com.genersoft.iot.vmp.media.zlm.dto;
 
 /**
- * 记录zlm运行中一些参数
+ * Record some parameters during zlm operation
  */
 public class ZLMRunInfo {
 
     /**
-     * zlm当前流数量
+     * zlmCurrent number of streams
      */
     private int mediaCount;
 
     /**
-     * 在线状态
+     * online status
      */
     private boolean online;
 

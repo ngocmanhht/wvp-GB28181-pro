@@ -3,7 +3,7 @@ package com.genersoft.iot.vmp.gb28181.bean;
 import com.genersoft.iot.vmp.gb28181.utils.MessageElement;
 
 /**
- * 设备信息查询响应
+ * Device information query response
  *
  * @author Y.G
  * @version 1.0
@@ -11,7 +11,7 @@ import com.genersoft.iot.vmp.gb28181.utils.MessageElement;
  */
 public class HomePositionRequest {
     /**
-     * 序列号
+     * serial number
      */
     @MessageElement("SN")
     private String sn;
@@ -24,21 +24,21 @@ public class HomePositionRequest {
 
 
     /**
-     * 基本参数
+     * Basic parameters
      */
     public static class HomePosition {
         /**
-         * 播放窗口长度像素值
+         * Play window length pixel value
          */
         @MessageElement("Enabled")
         protected String enabled;
         /**
-         * 播放窗口宽度像素值
+         * Play window width pixel value
          */
         @MessageElement("ResetTime")
         protected String resetTime;
         /**
-         * 拉框中心的横轴坐标像素值
+         * The horizontal axis coordinate pixel value of the center of the pull box
          */
         @MessageElement("PresetIndex")
         protected String presetIndex;

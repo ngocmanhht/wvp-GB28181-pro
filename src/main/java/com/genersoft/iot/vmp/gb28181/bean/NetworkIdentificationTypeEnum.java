@@ -1,28 +1,28 @@
 package com.genersoft.iot.vmp.gb28181.bean;
 
 /**
- * 收录行业编码
+ * Include industry codes
  */
 public enum NetworkIdentificationTypeEnum {
-    PUBLIC_SECURITY_VIDEO_TRANSMISSION_NETWORK("0", "公安视频传输网"),
-    PUBLIC_SECURITY_VIDEO_TRANSMISSION_NETWORK2("1", "公安视频传输网"),
-    INDUSTRY_SPECIFIC_NETWORK("2", "行业专网"),
-    POLITICAL_AND_LEGAL_INFORMATION_NETWORK("3", "政法信息网"),
-    PUBLIC_SECURITY_MOBILE_INFORMATION_NETWORK("4", "公安移动信息网"),
-    PUBLIC_SECURITY_INFORMATION_NETWORK("5", "公安信息网"),
-    ELECTRONIC_GOVERNMENT_EXTRANET("6", "电子政务外网"),
-    PUBLIC_NETWORKS_SUCH_AS_THE_INTERNET("7", "互联网等公共网络"),
-    Dedicated_Line("8", "专线"),
-    RESERVE("9", "预留"),
+    PUBLIC_SECURITY_VIDEO_TRANSMISSION_NETWORK("0", "Public Security Video Transmission Network"),
+    PUBLIC_SECURITY_VIDEO_TRANSMISSION_NETWORK2("1", "Public Security Video Transmission Network"),
+    INDUSTRY_SPECIFIC_NETWORK("2", "Industry private network"),
+    POLITICAL_AND_LEGAL_INFORMATION_NETWORK("3", "Political and Legal Information Network"),
+    PUBLIC_SECURITY_MOBILE_INFORMATION_NETWORK("4", "Public Security Mobile Information Network"),
+    PUBLIC_SECURITY_INFORMATION_NETWORK("5", "Public Security Information Network"),
+    ELECTRONIC_GOVERNMENT_EXTRANET("6", "E-Government Extranet"),
+    PUBLIC_NETWORKS_SUCH_AS_THE_INTERNET("7", "Public networks such as the Internet"),
+    Dedicated_Line("8", "dedicated line"),
+    RESERVE("9", "reserved"),
     ;
 
     /**
-     * 接入类型码
+     * Access type code
      */
     private String name;
 
     /**
-     * 名称
+     * Name
      */
     private String code;
 

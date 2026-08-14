@@ -22,9 +22,9 @@ import javax.sip.message.Response;
 import java.text.ParseException;
 
 /**
- * @description:Register响应处理器
+ * @description:Registerresponse handler
  * @author: swwheihei
- * @date:   2020年5月3日 下午5:32:23
+ * @date:   2020May 3rd, afternoon5:32:23
  */
 @Slf4j
 @Component
@@ -49,14 +49,14 @@ public class RegisterResponseProcessor extends SIPResponseProcessorAbstract {
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
-		// 添加消息处理的订阅
+		// Add message processing subscription
 		sipProcessorObserver.addResponseProcessor(method, this);
 	}
 
 	/**
-	 * 处理Register响应
+	 * Handle Register response
 	 *
- 	 * @param evt 事件
+ 	 * @param evt event
 	 */
 	@Override
 	public void process(ResponseEvent evt) {
@@ -68,13 +68,13 @@ public class RegisterResponseProcessor extends SIPResponseProcessorAbstract {
 			return;
 		}
 
-		String action = subscribe.getSipTransactionInfo().getExpires()  > 0 ? "注册" : "注销";
+		String action = subscribe.getSipTransactionInfo().getExpires()  > 0 ? "Register" : "Log out";
 		String platFormServerGbId = subscribe.getSipTransactionInfo().getUser();
 
-		log.info("[国标级联]{} {}响应 {} ", action, response.getStatusCode(), platFormServerGbId);
+		log.info("[National standard cascade]{} {}response {} ", action, response.getStatusCode(), platFormServerGbId);
 		Platform platform = platformService.queryPlatformByServerGBId(platFormServerGbId);
 		if (platform == null) {
-			log.warn("[国标级联]收到 来自{}的 {} 回复 {}, 但是平台信息未查询到!!!", platFormServerGbId, action, response.getStatusCode());
+			log.warn("[National standard cascade]received from{}of {} Reply {}, However, the platform information was not found!!!", platFormServerGbId, action, response.getStatusCode());
 			return;
 		}
 
@@ -84,7 +84,7 @@ public class RegisterResponseProcessor extends SIPResponseProcessorAbstract {
 			try {
 				sipCommanderForPlatform.register(platform, sipTransactionInfo, www, null, null, subscribe.getSipTransactionInfo().getExpires()  > 0);
 			} catch (SipException | InvalidArgumentException | ParseException e) {
-				log.error("[命令发送失败] 国标级联 再次注册: {}", e.getMessage());
+				log.error("[Command sending failed] National Standard Cascade Register again: {}", e.getMessage());
 			}
 		}else if (response.getStatusCode() == Response.OK){
 			if (subscribe.getSipTransactionInfo().getExpires()  > 0) {

@@ -4,53 +4,53 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 /**
- * JT 终端控制
+ * JT terminal control
  */
 @Data
-@Schema(description = "终端控制")
+@Schema(description = "terminal control")
 public class JTDeviceConnectionControl {
 
     /**
-     * false 表示切换到指定监管平台服务器 ,true 表示切换回原 缺省监控平台服务器
+     * false means switching to the specified monitoring platform server, true means switching back to the original default monitoring platform server
      */
     private Boolean switchOn;
     /**
-     * 监管平台鉴权码
+     * Supervision platform authentication code
      */
     private String authentication;
 
     /**
-     * 拨号点名称
+     * dial point name
      */
     private String name;
 
     /**
-     * 拨号用户名
+     * Dial-up username
      */
     private String username;
 
     /**
-     * 拨号密码
+     * Dial-up password
      */
     private String password;
 
     /**
-     * 地址
+     * address
      */
     private String address;
 
     /**
-     * TCP端口
+     * TCPport
      */
     private Integer tcpPort;
 
     /**
-     * UDP端口
+     * UDPport
      */
     private Integer udpPort;
 
     /**
-     * 连接到指定服务器时限
+     * Time limit for connecting to the specified server
      */
     private Long timeLimit;
 

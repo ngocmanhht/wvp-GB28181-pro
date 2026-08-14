@@ -57,9 +57,9 @@ service.interceptors.response.use(
       if (!showLoginConfirm && store.getters.showConfirmBoxForLoginLose) {
         // to re-login
         showLoginConfirm = true
-        MessageBox.confirm('登录已经到期， 是否重新登录', '登录确认', {
-          confirmButtonText: '重新登录',
-          cancelButtonText: '取消',
+        MessageBox.confirm('Login has expired. Do you want to log in again?', 'Login confirmation', {
+          confirmButtonText: 'Log in again',
+          cancelButtonText: 'Cancel',
           type: 'warning'
         }).then(() => {
           store.dispatch('user/resetToken').then(() => {
@@ -69,9 +69,9 @@ service.interceptors.response.use(
           store.dispatch('user/closeConfirmBoxForLoginLose')
           Message.warning({
             type: 'warning',
-            message: '登录过期提示已经关闭，请注销后重新登录'
+            message: 'The login expiration prompt has been closed. Please log out and log in again.'
           })
-          // 清除token， 后续请求不再继续
+          // Clear the token and subsequent requests will not continue.
 
         })
       }

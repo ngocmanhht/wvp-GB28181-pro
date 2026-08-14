@@ -1,7 +1,7 @@
 package com.genersoft.iot.vmp.media.zlm.dto.hook;
 
 /**
- * zlm hook事件中的on_rtp_server_timeout事件的参数
+ * zlm hookin the eventon_rtp_server_timeoutevent parameters
  * @author lin
  */
 public class OnRtpServerTimeoutHookParam extends HookParam{

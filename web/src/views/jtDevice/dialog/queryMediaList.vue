@@ -5,31 +5,31 @@
         <el-select
           v-model="type"
           style="width: 8rem; margin-right: 1rem;"
-          placeholder="请选择类型"
+          placeholder="Please select type"
           default-first-option
         >
-          <el-option label="图像" :value="0" />
-          <el-option label="音频" :value="1" />
-          <el-option label="视频" :value="2" />
+          <el-option label="image" :value="0" />
+          <el-option label="Audio" :value="1" />
+          <el-option label="video" :value="2" />
         </el-select>
         <el-select
           v-model="event"
           style="width: 8rem; margin-right: 1rem;"
-          placeholder="请选择事件"
+          placeholder="Please select an event"
           default-first-option
         >
-          <el-option label="平台下发指令" :value="0" />
-          <el-option label="定时动作" :value="1" />
-          <el-option label="抢劫报警触发" :value="2" />
-          <el-option label="碰撞侧翻报警触发" :value="3" />
+          <el-option label="Platform issues instructions" :value="0" />
+          <el-option label="timed action" :value="1" />
+          <el-option label="Robbery alarm triggered" :value="2" />
+          <el-option label="Collision rollover alarm triggered" :value="3" />
         </el-select>
         <el-select
           v-model="chanelId"
           style="width: 8rem; margin-right: 1rem;"
-          placeholder="请选择通道"
+          placeholder="Please select channel"
           default-first-option
         >
-          <el-option label="所有通道" :value="0" />
+          <el-option label="all channels" :value="0" />
           <el-option v-for="item in channelList" :key="item.channelId" :label="item.name" :value="item.channelId" />
         </el-select>
         <el-date-picker
@@ -38,33 +38,33 @@
           format="yyyy-MM-dd HH-mm-ss"
           value-format="yyyy-MM-dd HH:mm:ss"
           :picker-options="pickerOptions"
-          range-separator="至"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
+          range-separator="to"
+          start-placeholder="start date"
+          end-placeholder="end date"
           align="right">
         </el-date-picker>
 
       </el-form-item>
       <el-form-item>
         <el-button type="primary" :loading="queryLoading" icon="el-icon-search" @click="search()" >
-          检索
+          Search
         </el-button>
       </el-form-item>
     </el-form>
-    <el-table :data="mediaDataInfoList" :height="500" stripe style="width: 100%" empty-text="暂无数据">
+    <el-table :data="mediaDataInfoList" :height="500" stripe style="width: 100%" empty-text="No data yet">
       <el-table-column prop="id" label="ID" />
-      <el-table-column prop="type" label="类型" >
+      <el-table-column prop="type" label="Type" >
         <template v-slot:default="scope">
           {{typeLabel(scope.row.type)}}
         </template>
       </el-table-column>
-      <el-table-column label="事件" >
+      <el-table-column label="event" >
         <template v-slot:default="scope">
           {{eventCodeLabel(scope.row.eventCode)}}
         </template>
       </el-table-column>
-      <el-table-column prop="channelId" label="通道ID" />
-      <el-table-column label="操作" fixed="right">
+      <el-table-column prop="channelId" label="channelID" />
+      <el-table-column label="Operation" fixed="right">
         <template v-slot:default="scope">
           <el-button
             size="medium"
@@ -73,7 +73,7 @@
             :loading="scope.row.addRegionLoading"
             @click="showPositionInfo(scope.row)"
           >
-            位置汇报
+            location report
           </el-button>
           <el-button
             size="medium"
@@ -82,7 +82,7 @@
             :loading="scope.row.addRegionLoading"
             @click="download(scope.row)"
           >
-            下载
+            Download
           </el-button>
         </template>
       </el-table-column>
@@ -113,7 +113,7 @@ export default {
       pickerOptions: {
         shortcuts: [
           {
-            text: '最近24小时',
+            text: 'last 24 hours',
             onClick(picker) {
               const end = new Date()
               const start = new Date()
@@ -122,7 +122,7 @@ export default {
             }
           },
           {
-            text: '最近一周',
+            text: 'last week',
             onClick(picker) {
               const end = new Date()
               const start = new Date()
@@ -131,7 +131,7 @@ export default {
             }
           },
           {
-            text: '最近一个月',
+            text: 'last month',
             onClick(picker) {
               const end = new Date()
               const start = new Date()
@@ -140,7 +140,7 @@ export default {
             }
           },
           {
-            text: '最近三个月',
+            text: 'last three months',
             onClick(picker) {
               const end = new Date()
               const start = new Date()
@@ -166,11 +166,11 @@ export default {
     typeLabel: function(type) {
       switch (type){
         case 0:
-          return '图像'
+          return 'image'
         case 1:
-          return '音频'
+          return 'Audio'
         case 2:
-          return '视频'
+          return 'video'
         default:
           return type
       }
@@ -178,21 +178,21 @@ export default {
     eventCodeLabel: function(eventCode) {
       switch (eventCode){
         case 0:
-          return '平台下发指令'
+          return 'Platform issues instructions'
         case 1:
-          return '定时动作'
+          return 'timed action'
         case 2:
-          return '抢劫报警触发'
+          return 'Robbery alarm triggered'
         case 3:
-          return '碰撞侧翻报警触发'
+          return 'Collision rollover alarm triggered'
         case 4:
-          return '门开拍照'
+          return 'Taking photos with the door open'
         case 5:
-          return '门关拍照'
+          return 'Taking photos after closing the door'
         case 6:
-          return '车门由开变关, 车速从小于20km到超过20km'
+          return 'The door changes from open to closed, and the vehicle speed changes from less than 20km to more than 20km.20km'
         case 7:
-          return '定距拍照'
+          return 'Taking photos at a fixed distance'
         default:
           return eventCode
       }
@@ -213,7 +213,7 @@ export default {
         .then(data => {
           console.log(data)
           if (data.length === 0) {
-            this.$message.info('未查询到相关记录')
+            this.$message.info('No relevant records found')
           }
           this.mediaDataInfoList = data
         })
@@ -225,16 +225,16 @@ export default {
       this.$refs.position.openDialog(row.positionBaseInfo)
     },
     download: function(row) {
-      this.$message.success('下载请求已发送', { closed: true })
-      // 文件下载地址
+      this.$message.success('Download request sent', { closed: true })
+      // File download address
       const baseUrl = window.baseUrl ? window.baseUrl : ''
       const fileUrl = ((process.env.NODE_ENV === 'development') ? process.env.VUE_APP_BASE_API : baseUrl) + `/api/jt1078/media/upload/one/upload?phoneNumber=${this.phoneNumber}&mediaId=${row.id}`
       let controller = new AbortController()
       let signal = controller.signal
-      // 设置请求头
+      // Set request header
       const headers = new Headers()
-      headers.append('access-token', this.$store.getters.token) // 设置授权头，替换YourAccessToken为实际的访问令牌
-      // 发起  请求
+      headers.append('access-token', this.$store.getters.token) // Set the authorization header and replace YourAccessToken with the actual access token
+      // Make a request
       fetch(fileUrl, {
         method: 'GET',
         headers: headers,
@@ -243,7 +243,7 @@ export default {
         .then(response => response.blob())
         .then(blob => {
           console.log(blob)
-          // 创建一个虚拟的链接元素，模拟点击下载
+          // Create a virtual link element to simulate a click to download
           const link = document.createElement('a')
           link.href = window.URL.createObjectURL(blob)
           let suffix = 'jpg'
@@ -258,17 +258,17 @@ export default {
               suffix = 'mp4'
               break
           }
-          link.download = `${row.id}.${suffix}` // 设置下载文件名，替换filename.ext为实际的文件名和扩展名
+          link.download = `${row.id}.${suffix}` // Set the download file name and replace filename.ext with the actual file name and extension.
           document.body.appendChild(link)
-          // 模拟点击
+          // simulate click
           link.click()
-          // 移除虚拟链接元素
+          // Remove virtual link element
           document.body.removeChild(link)
         })
-        .catch(error => console.error('下载失败：', error))
+        .catch(error => console.error('Download failed：', error))
 
       setTimeout(() => {
-        this.$message.error('下载超时', { closed: true })
+        this.$message.error('Download timeout', { closed: true })
         controller.abort('timeout')
       }, 15000)
     }

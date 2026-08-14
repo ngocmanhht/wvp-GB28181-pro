@@ -153,7 +153,7 @@ public class DigestServerAuthenticationHelper  {
     }
 
     /**
-     * 鉴权
+     * Authentication
      *
      * A1 = username + ":" + realm + ":" + password
      * A2 = REGISTER:URI
@@ -185,14 +185,14 @@ public class DigestServerAuthenticationHelper  {
         if (uri == null) {
             return false;
         }
-        // qop 保护质量 包含auth（默认的）和auth-int（增加了报文完整性检测）两种策略
+        // qop Protection quality includes auth (default) andauth-int（Added message integrity detection) two strategies
         String qop = authHeader.getQop();
 
-        // 客户端随机数，这是一个不透明的字符串值，由客户端提供，并且客户端和服务器都会使用，以避免用明文文本。
-        // 这使得双方都可以查验对方的身份，并对消息的完整性提供一些保护
+        // Client-side nonce, which is an opaque string value provided by the client and used by both the client and the server to avoid clear text。
+        // This allows both parties to verify the identity of the other party and provides some protection for the integrity of the message
         String cnonce = authHeader.getCNonce();
 
-        // nonce计数器，是一个16进制的数值，表示同一nonce下客户端发送出请求的数量
+        // nonceThe counter is a hexadecimal value that represents the number of requests sent by the client under the same nonce.
         int nc = authHeader.getNonceCount();
         String ncStr = String.format("%08x", nc).toUpperCase();
 

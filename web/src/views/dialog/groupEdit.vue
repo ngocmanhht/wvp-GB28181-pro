@@ -2,7 +2,7 @@
   <div id="groupEdit" v-loading="loading">
     <el-dialog
       v-el-drag-dialog
-      title="分组编辑"
+      title="Group editing"
       width="40%"
       top="2rem"
       :append-to-body="true"
@@ -13,24 +13,24 @@
     >
       <div id="shared" style="margin-top: 1rem;margin-right: 100px;">
         <el-form ref="form" :model="group" label-width="140px">
-          <el-form-item label="节点编号" prop="id">
-            <el-input v-model="group.deviceId" placeholder="请输入编码">
-              <el-button slot="append" @click="buildDeviceIdCode(group.deviceId)">生成</el-button>
+          <el-form-item label="Node number" prop="id">
+            <el-input v-model="group.deviceId" placeholder="Please enter the code">
+              <el-button slot="append" @click="buildDeviceIdCode(group.deviceId)">generate</el-button>
             </el-input>
           </el-form-item>
-          <el-form-item label="节点名称" prop="name">
+          <el-form-item label="Node name" prop="name">
             <el-input v-model="group.name" clearable />
           </el-form-item>
-          <el-form-item label="行政区划" prop="name">
+          <el-form-item label="Administrative division" prop="name">
             <el-input v-model="group.civilCode">
-              <el-button slot="append" @click="buildCivilCode(group.civilCode)">选择</el-button>
+              <el-button slot="append" @click="buildCivilCode(group.civilCode)">Choose</el-button>
             </el-input>
           </el-form-item>
 
           <el-form-item>
             <div style="float: right;">
-              <el-button type="primary" @click="onSubmit">确认</el-button>
-              <el-button @click="close">取消</el-button>
+              <el-button type="primary" @click="onSubmit">Confirm</el-button>
+              <el-button @click="close">Cancel</el-button>
             </div>
 
           </el-form-item>
@@ -87,7 +87,7 @@ export default {
           .then(data => {
             this.$message.success({
               showClose: true,
-              message: '保存成功'
+              message: 'Saved successfully'
             })
             if (this.submitCallback) this.submitCallback(this.group)
           })
@@ -103,7 +103,7 @@ export default {
           .then(data => {
             this.$message.success({
               showClose: true,
-              message: '保存成功'
+              message: 'Saved successfully'
             })
             if (this.submitCallback) this.submitCallback(this.group)
             this.close()

@@ -6,20 +6,20 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * 文本信息下发参数
+ * Text message delivery parameters
  */
 @Setter
 @Getter
-@Schema(description = "人工确认报警消息参数")
+@Schema(description = "Manually confirm alarm message parameters")
 public class TextMessageParam {
 
-    @Schema(description = "终端手机号")
+    @Schema(description = "Terminal mobile phone number")
     private String phoneNumber;
-    @Schema(description = "标志")
+    @Schema(description = "logo")
     private JTTextSign sign;
-    @Schema(description = "文本类型,1 = 通知 ，2 = 服务")
+    @Schema(description = "text type,1 = Notification ，2 = service")
     private int textType;
-    @Schema(description = "消息内容，最长为1024字节")
+    @Schema(description = "Message content, up to 1024 bytes")
     private String content;
 
     @Override

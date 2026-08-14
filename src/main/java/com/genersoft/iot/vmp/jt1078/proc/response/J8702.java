@@ -5,7 +5,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 
 /**
- * 上报驾驶员身份信息请求
+ * Report driver identification information request
  */
 @MsgId(id = "8702")
 public class J8702 extends Rs {

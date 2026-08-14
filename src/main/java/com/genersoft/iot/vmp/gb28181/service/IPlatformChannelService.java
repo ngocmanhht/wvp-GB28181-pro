@@ -6,7 +6,7 @@ import com.github.pagehelper.PageInfo;
 import java.util.List;
 
 /**
- * 平台关联通道管理
+ * Platform associated channel management
  * @author lin
  */
 public interface IPlatformChannelService {

@@ -9,12 +9,12 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-@Schema(description = "时间统计信息")
+@Schema(description = "time statistics")
 public class TimeStatistics {
 
-    @Schema(description = "时间")
+    @Schema(description = "time")
     private String time;
 
-    @Schema(description = "时间差")
+    @Schema(description = "time difference")
     private Long timeDiff;
 }

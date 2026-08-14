@@ -75,7 +75,7 @@ public class RedisRpcServiceImpl implements IRedisRpcService {
 
     @Override
     public WVPResult<?> startSendRtp(String callId, SendRtpInfo sendRtpItem) {
-        log.info("[请求其他WVP] 开始推流，wvp：{}， {}/{}", sendRtpItem.getServerId(), sendRtpItem.getApp(), sendRtpItem.getStream());
+        log.info("[Request otherWVP] Start streaming，wvp：{}， {}/{}", sendRtpItem.getServerId(), sendRtpItem.getApp(), sendRtpItem.getStream());
         RedisRpcRequest request = buildRequest("sendRtp/startSendRtp", callId);
         request.setToId(sendRtpItem.getServerId());
         RedisRpcResponse response = redisRpcConfig.request(request, 10, TimeUnit.MILLISECONDS);
@@ -86,10 +86,10 @@ public class RedisRpcServiceImpl implements IRedisRpcService {
     public WVPResult stopSendRtp(String callId) {
         SendRtpInfo sendRtpItem = (SendRtpInfo)redisTemplate.opsForValue().get(callId);
         if (sendRtpItem == null) {
-            log.info("[请求其他WVP] 停止推流, 未找到redis中的发流信息， key：{}", callId);
-            return WVPResult.fail(ErrorCode.ERROR100.getCode(), "未找到发流信息");
+            log.info("[Request otherWVP] Stop pushing, no streaming information found in redis， key：{}", callId);
+            return WVPResult.fail(ErrorCode.ERROR100.getCode(), "No streaming information found");
         }
-        log.info("[请求其他WVP] 停止推流，wvp：{}， {}/{}", sendRtpItem.getServerId(), sendRtpItem.getApp(), sendRtpItem.getStream());
+        log.info("[Request otherWVP] Stop pushing，wvp：{}， {}/{}", sendRtpItem.getServerId(), sendRtpItem.getApp(), sendRtpItem.getStream());
         RedisRpcRequest request = buildRequest("sendRtp/stopSendRtp", callId);
         request.setToId(sendRtpItem.getServerId());
         RedisRpcResponse response = redisRpcConfig.request(request, 10, TimeUnit.MILLISECONDS);
@@ -98,14 +98,14 @@ public class RedisRpcServiceImpl implements IRedisRpcService {
 
     @Override
     public long waitePushStreamOnline(SendRtpInfo sendRtpItem, CommonCallback<Integer> callback) {
-        log.info("[请求所有WVP监听流上线] {}/{}", sendRtpItem.getApp(), sendRtpItem.getStream());
-        // 监听流上线。 流上线直接发送sendRtpItem消息给实际的信令处理者
+        log.info("[Request all WVP listening streams to go online] {}/{}", sendRtpItem.getApp(), sendRtpItem.getStream());
+        // The monitoring stream is online. When the stream goes online, it directly sends the sendRtpItem message to the actual signaling processor.
         Hook hook = Hook.getInstance(HookType.on_media_arrival, sendRtpItem.getApp(), sendRtpItem.getStream(), null);
         RedisRpcRequest request = buildRequest("streamPush/waitePushStreamOnline", sendRtpItem);
         request.setToId(sendRtpItem.getServerId());
         hookSubscribe.addSubscribe(hook, (hookData) -> {
 
-            // 读取redis中的上级点播信息，生成sendRtpItm发送出去
+            // Read the superior on-demand information in redis, generate sendRtpItm and send it out
             if (sendRtpItem.getSsrc() == null) {
                 sendRtpItem.setSsrc(sendSsrcFactory.getSendSsrc(
                         "Play".equalsIgnoreCase(sendRtpItem.getSessionName()) ? "0" : "1"));
@@ -123,10 +123,10 @@ public class RedisRpcServiceImpl implements IRedisRpcService {
 
         redisRpcConfig.request(request, response -> {
             if (response.getBody() == null) {
-                log.info("[请求所有WVP监听流上线] 流上线,但是未找到发流信息：{}/{}", sendRtpItem.getApp(), sendRtpItem.getStream());
+                log.info("[Request all WVP listening streams to go online] The stream is online, but no streaming information was found.：{}/{}", sendRtpItem.getApp(), sendRtpItem.getStream());
                 return;
             }
-            log.info("[请求所有WVP监听流上线] 流上线 {}/{}->{}", sendRtpItem.getApp(), sendRtpItem.getStream(), sendRtpItem.toString());
+            log.info("[Request all WVP listening streams to go online] stream online {}/{}->{}", sendRtpItem.getApp(), sendRtpItem.getStream(), sendRtpItem.toString());
 
             if (callback != null) {
                 callback.run(Integer.parseInt(response.getBody().toString()));
@@ -138,7 +138,7 @@ public class RedisRpcServiceImpl implements IRedisRpcService {
 
     @Override
     public void stopWaitePushStreamOnline(SendRtpInfo sendRtpItem) {
-        log.info("[停止WVP监听流上线] {}/{}", sendRtpItem.getApp(), sendRtpItem.getStream());
+        log.info("[Stop WVP listening stream from going online] {}/{}", sendRtpItem.getApp(), sendRtpItem.getStream());
         Hook hook = Hook.getInstance(HookType.on_media_arrival, sendRtpItem.getApp(), sendRtpItem.getStream(), null);
         hookSubscribe.removeSubscribe(hook);
         RedisRpcRequest request = buildRequest("streamPush/stopWaitePushStreamOnline", sendRtpItem);
@@ -150,7 +150,7 @@ public class RedisRpcServiceImpl implements IRedisRpcService {
     public void rtpSendStopped(String callId) {
         SendRtpInfo sendRtpItem = (SendRtpInfo)redisTemplate.opsForValue().get(callId);
         if (sendRtpItem == null) {
-            log.info("[停止WVP监听流上线] 未找到redis中的发流信息， key：{}", callId);
+            log.info("[Stop WVP listening stream from going online] The streaming information in redis was not found， key：{}", callId);
             return;
         }
         RedisRpcRequest request = buildRequest("streamPush/rtpSendStopped", callId);
@@ -166,15 +166,15 @@ public class RedisRpcServiceImpl implements IRedisRpcService {
     @Override
     public long onStreamOnlineEvent(String app, String stream, CommonCallback<StreamInfo> callback) {
 
-        log.info("[请求所有WVP监听流上线] {}/{}", app, stream);
-        // 监听流上线。 流上线直接发送sendRtpItem消息给实际的信令处理者
+        log.info("[Request all WVP listening streams to go online] {}/{}", app, stream);
+        // The monitoring stream is online. When the stream goes online, it directly sends the sendRtpItem message to the actual signaling processor.
         Hook hook = Hook.getInstance(HookType.on_media_arrival, app, stream);
         StreamInfo streamInfoParam = new StreamInfo();
         streamInfoParam.setApp(app);
         streamInfoParam.setStream(stream);
         RedisRpcRequest request = buildRequest("streamPush/onStreamOnlineEvent", streamInfoParam);
         hookSubscribe.addSubscribe(hook, (hookData) -> {
-            log.info("[请求所有WVP监听流上线] 监听流上线 {}/{}", app, stream);
+            log.info("[Request all WVP listening streams to go online] Listening stream online {}/{}", app, stream);
             if (callback != null) {
                 callback.run(mediaServerService.getStreamInfoByAppAndStream(hookData.getMediaServer(),
                         app, stream, hookData.getMediaInfo(),
@@ -186,10 +186,10 @@ public class RedisRpcServiceImpl implements IRedisRpcService {
 
         redisRpcConfig.request(request, response -> {
             if (response.getBody() == null) {
-                log.info("[请求所有WVP监听流上线] 流上线,但是未找到发流信息：{}/{}", app, stream);
+                log.info("[Request all WVP listening streams to go online] The stream is online, but no streaming information was found.：{}/{}", app, stream);
                 return;
             }
-            log.info("[请求所有WVP监听流上线] 流上线 {}/{}", app, stream);
+            log.info("[Request all WVP listening streams to go online] stream online {}/{}", app, stream);
 
             if (callback != null) {
                 callback.run(JSON.parseObject(response.getBody().toString(), StreamInfo.class));

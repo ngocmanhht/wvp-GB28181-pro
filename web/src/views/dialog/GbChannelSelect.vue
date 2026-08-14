@@ -2,7 +2,7 @@
   <div id="gbChannelSelect" v-loading="getChannelListLoading">
     <el-dialog
       v-el-drag-dialog
-      title="添加国标通道"
+      title="Add national standard channel"
       width="60%"
       top="2rem"
       :close-on-click-modal="false"
@@ -12,49 +12,49 @@
       @close="close()"
     >
       <el-form :inline="true" size="mini">
-        <el-form-item label="搜索">
+        <el-form-item label="Search">
           <el-input
             v-model="searchStr"
             style="margin-right: 1rem; width: auto;"
-            placeholder="关键字"
+            placeholder="Keywords"
             prefix-icon="el-icon-search"
             clearable
             @input="getChannelList"
           />
         </el-form-item>
-        <el-form-item label="在线状态">
+        <el-form-item label="online status">
           <el-select
             v-model="online"
             style="width: 8rem; margin-right: 1rem;"
-            placeholder="请选择"
+            placeholder="Please select"
             default-first-option
             @change="getChannelList"
           >
-            <el-option label="全部" value="" />
-            <el-option label="在线" value="true" />
-            <el-option label="离线" value="false" />
+            <el-option label="All" value="" />
+            <el-option label="online" value="true" />
+            <el-option label="Offline" value="false" />
           </el-select>
         </el-form-item>
-        <el-form-item label="类型">
+        <el-form-item label="Type">
           <el-select
             v-model="channelType"
             style="width: 8rem; margin-right: 1rem;"
-            placeholder="请选择"
+            placeholder="Please select"
             default-first-option
             @change="getChannelList"
           >
-            <el-option label="全部" value="" />
+            <el-option label="All" value="" />
             <el-option v-for="item in Object.values($channelTypeList)" :key="item.id" :label="item.name" :value="item.id" />
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" style="float: right" @click="onSubmit">确 定</el-button>
+          <el-button type="primary" style="float: right" @click="onSubmit">OK</el-button>
         </el-form-item>
         <el-form-item style="float: right;">
           <el-button icon="el-icon-refresh-right" circle :loading="getChannelListLoading" @click="getChannelList()" />
         </el-form-item>
       </el-form>
-      <!--通道列表-->
+      <!--Channel list-->
       <el-table
         ref="channelListTable"
         size="small"
@@ -65,34 +65,34 @@
         @selection-change="handleSelectionChange"
       >
         <el-table-column type="selection" width="55" />
-        <el-table-column prop="gbName" label="名称" min-width="180" />
-        <el-table-column prop="gbDeviceId" label="编号" min-width="180" />
-        <el-table-column prop="gbManufacturer" label="厂家" min-width="100" />
-        <el-table-column label="类型" min-width="100">
+        <el-table-column prop="gbName" label="Name" min-width="180" />
+        <el-table-column prop="gbDeviceId" label="No." min-width="180" />
+        <el-table-column prop="gbManufacturer" label="Manufacturer" min-width="100" />
+        <el-table-column label="Type" min-width="100">
           <template v-slot:default="scope">
             <div slot="reference" class="name-wrapper">
               <el-tag size="medium" effect="plain" type="success" :style="$channelTypeList[scope.row.dataType].style">{{ $channelTypeList[scope.row.dataType].name }}</el-tag>
             </div>
           </template>
         </el-table-column>
-        <el-table-column label="位置信息" min-width="150">
+        <el-table-column label="location information" min-width="150">
           <template v-slot:default="scope">
             <span v-if="scope.row.gbLongitude && scope.row.gbLatitude">{{ scope.row.gbLongitude }}<br>{{ scope.row.gbLatitude }}</span>
-            <span v-if="!scope.row.gbLongitude || !scope.row.gbLatitude">无</span>
+            <span v-if="!scope.row.gbLongitude || !scope.row.gbLatitude">None</span>
           </template>
         </el-table-column>
-        <el-table-column label="状态" min-width="100">
+        <el-table-column label="Status" min-width="100">
           <template v-slot:default="scope">
             <div slot="reference" class="name-wrapper">
-              <el-tag v-if="scope.row.gbStatus === 'ON'" size="medium">在线</el-tag>
-              <el-tag v-if="scope.row.gbStatus !== 'ON'" size="medium" type="info">离线</el-tag>
+              <el-tag v-if="scope.row.gbStatus === 'ON'" size="medium">online</el-tag>
+              <el-tag v-if="scope.row.gbStatus !== 'ON'" size="medium" type="info">Offline</el-tag>
             </div>
           </template>
         </el-table-column>
       </el-table>
       <div style="display: grid; grid-template-columns: 1fr 1fr">
         <div style="text-align: left; line-height: 32px">
-          <i class="el-icon-info" /> 未找到通道，可在国标设备/通道中选择编辑按钮， 选择{{ dataType === 'civilCode'?'行政区划':'父节点编码' }}
+          <i class="el-icon-info" /> Channel not found, can be found in the national standard equipment/Select the edit button in the channel and select{{ dataType === 'civilCode'?'Administrative division':'Parent node encoding' }}
         </div>
         <el-pagination
           style="text-align: right"
@@ -121,13 +121,13 @@ export default {
   data() {
     return {
       showDialog: false,
-      channelList: [], // 设备列表
-      currentDevice: {}, // 当前操作设备对象
+      channelList: [], // Device list
+      currentDevice: {}, // Current operating device object
       searchStr: '',
       online: null,
       channelType: '',
       videoComponentList: [],
-      updateLooper: 0, // 数据刷新轮训标志
+      updateLooper: 0, // Data refresh rotation training flag
       currentDeviceChannelsLenth: 0,
       winHeight: 580,
       currentPage: 1,

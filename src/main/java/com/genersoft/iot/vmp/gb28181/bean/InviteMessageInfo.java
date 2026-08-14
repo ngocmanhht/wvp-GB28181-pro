@@ -2,7 +2,7 @@ package com.genersoft.iot.vmp.gb28181.bean;
 
 import lombok.Data;
 
-// 从INVITE消息中解析需要的信息
+// Parse the required information from the INVITE message
 @Data
 public class InviteMessageInfo {
     private String requesterId;

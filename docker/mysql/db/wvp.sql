@@ -1,4 +1,4 @@
-/*建库*/
+/*Build a database*/
 DROP DATABASE IF EXISTS `wvp`;
 
 CREATE DATABASE `wvp` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
@@ -8,7 +8,7 @@ SET FOREIGN_KEY_CHECKS = 0;
 
 USE `wvp`;
 
-/*建表*/
+/*Create table*/
 drop table IF EXISTS wvp_device;
 create table IF NOT EXISTS wvp_device
 (
@@ -417,7 +417,7 @@ create table IF NOT EXISTS wvp_user_api_key
 );
 
 
-/*初始数据*/
+/*initial data*/
 INSERT INTO wvp_user
 VALUES (1, 'admin', '21232f297a57a5a743894a0e4a801fc3', 1, '2021-04-13 14:14:57', '2021-04-13 14:14:57',
         '3e80d1762a324d5b0ff636e0bd16f1e3');
@@ -477,7 +477,7 @@ create table IF NOT EXISTS wvp_record_plan_item
 /*
 * 20240528
 */
-DELIMITER //  -- 重定义分隔符避免分号冲突
+DELIMITER //  -- Redefine separators to avoid semicolon conflicts
 CREATE PROCEDURE `wvp_20240528`()
 BEGIN
     IF NOT EXISTS (SELECT column_name FROM information_schema.columns
@@ -536,7 +536,7 @@ create table IF NOT EXISTS wvp_user_api_key (
 /*
 * 20241222
 */
-DELIMITER //  -- 重定义分隔符避免分号冲突
+DELIMITER //  -- Redefine separators to avoid semicolon conflicts
 CREATE PROCEDURE `wvp_20241222`()
 BEGIN
     IF EXISTS (SELECT column_name FROM information_schema.STATISTICS
@@ -617,7 +617,7 @@ DELIMITER ;
 /*
 * 20250111
 */
-DELIMITER //  -- 重定义分隔符避免分号冲突
+DELIMITER //  -- Redefine separators to avoid semicolon conflicts
 CREATE PROCEDURE `wvp_20250111`()
 BEGIN
     IF EXISTS (SELECT column_name FROM information_schema.STATISTICS
@@ -645,7 +645,7 @@ DELIMITER ;
 /*
 * 20250211
 */
-DELIMITER //  -- 重定义分隔符避免分号冲突
+DELIMITER //  -- Redefine separators to avoid semicolon conflicts
 CREATE PROCEDURE `wvp_20250211`()
 BEGIN
     IF EXISTS (SELECT column_name FROM information_schema.STATISTICS
@@ -673,10 +673,10 @@ DELIMITER ;
 /**
   * 20250312
  */
-DELIMITER //  -- 重定义分隔符避免分号冲突
+DELIMITER //  -- Redefine separators to avoid semicolon conflicts
 CREATE PROCEDURE `wvp_20250312`()
 BEGIN
-    DECLARE serverId VARCHAR(32) DEFAULT '你的服务ID';
+    DECLARE serverId VARCHAR(32) DEFAULT 'your servicesID';
     IF not EXISTS (SELECT column_name FROM information_schema.columns
                    WHERE TABLE_SCHEMA = (SELECT DATABASE()) and table_name = 'wvp_device' and column_name = 'server_id')
     THEN
@@ -718,7 +718,7 @@ DELIMITER ;
 /*
 * 20250319
 */
-DELIMITER //  -- 重定义分隔符避免分号冲突
+DELIMITER //  -- Redefine separators to avoid semicolon conflicts
 CREATE PROCEDURE `wvp_20250319`()
 BEGIN
     IF NOT EXISTS (SELECT column_name FROM information_schema.columns
@@ -746,7 +746,7 @@ DELIMITER ;
 /*
 * 20250402
 */
-DELIMITER //  -- 重定义分隔符避免分号冲突
+DELIMITER //  -- Redefine separators to avoid semicolon conflicts
 CREATE PROCEDURE `wvp_20250402`()
 BEGIN
     IF NOT EXISTS (SELECT column_name FROM information_schema.STATISTICS

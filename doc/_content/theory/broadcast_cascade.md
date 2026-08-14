@@ -1,47 +1,47 @@
-<!-- 点播流程 -->
+<!-- On-demand process -->
 
-# 点播流程
+#On-demand process
 
-> 以下为WVP-PRO级联语音喊话流程。
+> The following is the WVP-PRO cascade voice call process.
 
 ```plantuml
 @startuml
-"上级平台"  -> "下级平台": 1. 发起语音喊话请求
-"上级平台" <--  "下级平台": 2. 200OK
-"上级平台" <- "下级平台": 3. 回复Result OK
-"上级平台" -->  "下级平台": 4. 200OK
+""Upper-level platform" -> "Subordinate platform": 1. Initiate a voice call request
+"Upper-level platform" <-- "Subordinate platform": 2. 200OK
+"Upper-level platform" <- "lower-level platform": 3. ReplyResult OK
+"Upper-level platform" --> "Subordinate platform": 4. 200OK
 
-"下级平台"  -> "设备": 5. 发起语音喊话请求
-"下级平台" <--  "设备": 6. 200OK
-"下级平台" <- "设备": 7. 回复Result OK
-"下级平台" -->  "设备": 8. 200OK
+""Subordinate Platform" -> "Device": 5. Initiate a voice call request
+"Lower-level platform" <-- "Device": 6. 200OK
+"Subordinate platform" <- "device": 7. ReplyResult OK
+"Lower-level platform" --> "Equipment": 8. 200OK
 
-"下级平台"  <- "设备": 9. invite(broadcast)
-"下级平台"  --> "设备": 10. 100 trying
-"下级平台"  --> "设备": 11. 200OK SDP
-"下级平台"  <-- "设备": 12. ack
+"Lower-level platform" <- "Device": 9. invite(broadcast)
+"Lower-level platform" --> "Equipment": 10. 100 trying
+"Lower-level platform" --> "Equipment": 11. 200OK SDP
+"Lower-level platform" <-- "Device": 12. ack
 
-"上级平台"  <- "下级平台": 13. invite(broadcast)
-"上级平台"  --> "下级平台": 14. 100 trying
-"上级平台"  --> "下级平台": 15. 200OK SDP
-"上级平台"  <-- "下级平台": 16. ack
+"Upper-level platform" <- "Subordinate platform": 13. invite(broadcast)
+"Upper-level platform" --> "Subordinate platform": 14. 100 trying
+"Upper-level platform" --> "Subordinate platform": 15. 200OK SDP
+"Upper-level platform" <-- "Subordinate platform": 16. ack
 
-"上级平台"  -> "下级平台": 17. 推送RTP
-"下级平台"  -> "设备": 18. 推送RTP
+"Upper-level platform" -> "Lower-level platform": 17. PushRTP
+"Lower-level platform" -> "Device": 18. PushRTP
 
 @enduml
 ```
 
-## 注册流程描述如下:
+## The registration process is described as follows:
 
-1. 用户从网页或调用接口发起点播请求;
-2. WVP-PRO向摄像机发送Invite消息,消息头域中携带 Subject字段,表明点播的视频源ID、发送方媒体流序列号、ZLMediaKit接收流使用的IP、端口号、
-   接收端媒体流序列号等参数,SDP消息体中 s字段为“Play”代表实时点播，y字段描述SSRC值,f字段描述媒体参数。
-3. 摄像机向WVP-PRO回复200OK，消息体中描述了媒体流发送者发送媒体流的IP、端口、媒体格式、SSRC字段等内容。
-4. WVP-PRO向设备回复Ack， 会话建立成功。
-5. 设备向ZLMediaKit发送实时流。
-6. ZLMediaKit向WVP-PRO发送流改变事件。
-7. WVP-PRO向WEB用户回复播放地址。
-8. ZLMediaKit向WVP发送流无人观看事件。
-9. WVP-PRO向设备回复Bye， 结束会话。
-10. 设备回复200OK，会话结束成功。
+1. The user initiates an on-demand request from the web page or calling interface;
+2. WVP-PRO sends an Invite message to the camera. The message header field carries the Subject field, indicating the on-demand video source ID, the sender's media stream serial number, the IP and port number used by ZLMediaKit to receive the stream,
+Receiver media stream sequence number and other parameters, the s field in the SDP message body is "Play" which represents real-time on-demand, the y field describes the SSRC value, and the f field describes the media parameters.
+3. The camera replies 200OK to WVP-PRO. The message body describes the IP, port, media format, SSRC field, etc. of the media stream sent by the media stream sender.
+4. WVP-PRO replies Ack to the device, and the session is established successfully.
+5. The device sends a real-time stream to ZLMediaKit.
+6. ZLMediaKit sends stream change events to WVP-PRO.
+7. WVP-PRO replies to the WEB user with the playback address.
+8. ZLMediaKit sends the stream unwatched event to WVP.
+9. WVP-PRO replies Bye to the device and ends the session.
+10. The device replies 200OK and the session ends successfully.

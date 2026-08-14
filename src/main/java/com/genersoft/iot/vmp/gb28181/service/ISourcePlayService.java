@@ -6,7 +6,7 @@ import com.genersoft.iot.vmp.gb28181.bean.Platform;
 import com.genersoft.iot.vmp.service.bean.ErrorCallback;
 
 /**
- * 资源能力接入-实时录像
+ * Resource capability access-real time video
  */
 public interface ISourcePlayService {
 

@@ -33,7 +33,7 @@ public class SubscribeHolder {
     private final String prefix = "VMP_SUBSCRIBE_OVERDUE";
 
     public void putCatalogSubscribe(String platformId, SubscribeInfo subscribeInfo) {
-        log.info("[国标级联] 添加目录订阅，平台： {}， 有效期： {}", platformId, subscribeInfo.getExpires());
+        log.info("[National standard cascade] Add directory subscription, platform： {}， Validity period： {}", platformId, subscribeInfo.getExpires());
 
         subscribeInfo.setServerId(userSetting.getServerId());
         String key = String.format("%s:%s:%s", prefix, "catalog", platformId);
@@ -56,7 +56,7 @@ public class SubscribeHolder {
     }
 
     public void putMobilePositionSubscribe(String platformId, SubscribeInfo subscribeInfo, Runnable gpsTask) {
-        log.info("[国标级联] 添加移动位置订阅，平台： {}， 有效期： {}s", platformId, subscribeInfo.getExpires());
+        log.info("[National standard cascade] Add mobile location subscription, platform： {}， Validity period： {}s", platformId, subscribeInfo.getExpires());
         subscribeInfo.setServerId(userSetting.getServerId());
         String key = String.format("%s:%s:%s", prefix, "mobilePosition", platformId);
         if (subscribeInfo.getExpires() > 0) {
@@ -115,18 +115,18 @@ public class SubscribeHolder {
         }
         Map<Integer, Platform> result = new HashMap<>();
 
-        // 1. 先批量构建所有 key
+        // 1. Build all in batches first key
         List<String> keys = platformList.stream()
                 .map(platform -> String.format("%s:%s:%s", prefix, "mobilePosition", platform.getServerGBId()))
                 .toList();
 
-        // 2. 批量查询 Redis 【关键：只发1次请求！】
+        // 2. Batch Query Redis [Key: Only send 1 request！】
         List<Object> results = redisTemplate.executePipelined((RedisCallback<Object>) connection -> {
             for (String key : keys) {
-                // 注意：这里使用的是底层 connection 接口
+                // Note: The underlying connection interface is used here
                 connection.keyCommands().exists(key.getBytes());
             }
-            return null; // 流水线模式下必须返回 null
+            return null; // Must return in pipeline mode null
         });
         for (int i = 0; i < results.size(); i++) {
             if (results.get(i) instanceof Boolean exists && exists) {

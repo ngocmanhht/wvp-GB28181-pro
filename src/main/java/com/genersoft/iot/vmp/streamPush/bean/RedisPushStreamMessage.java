@@ -10,15 +10,15 @@ public class RedisPushStreamMessage {
     private String stream;
     private String name;
     private Boolean status;
-    // 终端所属的虚拟组织
+    // The virtual organization to which the terminal belongs
     private String groupGbId;
-    // 终端所属的虚拟组织别名 可选，可作为地方同步组织结构到wvp时的关联关系
+    // The virtual organization alias to which the terminal belongs is optional and can be used as an association when synchronizing the organization structure to wvp.
     private String groupAlias;
-    // 生产商
+    // manufacturer
     private String manufacturer;
-    // 设备型号
+    // Device model
     private String model;
-    // 摄像机类型
+    // Camera type
     private Integer ptzType;
 
     public StreamPush buildstreamPush() {

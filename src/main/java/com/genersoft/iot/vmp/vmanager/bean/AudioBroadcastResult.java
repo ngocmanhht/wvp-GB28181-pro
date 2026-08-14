@@ -10,27 +10,27 @@ import lombok.Setter;
 @Getter
 public class AudioBroadcastResult {
     /**
-     * 推流的各个方式流地址
+     * Streaming addresses for various methods of streaming
      */
     private StreamContent streamInfo;
 
     /**
-     * 编码格式
+     * encoding format
      */
     private String codec;
 
     /**
-     * 向zlm推流的应用名
+     * Application name to push to zlm
      */
     private String app;
 
     /**
-     * 向zlm推流的流ID
+     * Stream pushed to zlmID
      */
     private String stream;
 
     /**
-     * 播放流地址（设备音频通过ZLM播放给浏览器），对讲时设置
+     * Playback stream address (device audio is played to the browser through ZLM), set during intercom
      */
     private StreamContent playStreamInfo;
 

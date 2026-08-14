@@ -8,52 +8,52 @@ import lombok.Data;
 public class SsrcTransaction {
 
     /**
-     * 设备编号
+     * Device number
      */
     private String deviceId;
 
     /**
-     * 上级平台的编号
+     * The number of the upper level platform
      */
     private String platformId;
 
     /**
-     * 通道的数据库ID
+     * channel databaseID
      */
     private Integer channelId;
 
     /**
-     * 会话的CALL ID
+     * ConversationalCALL ID
      */
     private String callId;
 
     /**
-     * 关联的流应用名
+     * Associated streaming application name
      */
     private String app;
 
     /**
-     * 关联的流ID
+     * associated streamsID
      */
     private String stream;
 
     /**
-     * 使用的流媒体
+     * Streaming media used
      */
     private String mediaServerId;
 
     /**
-     * 使用的SSRC
+     * usedSSRC
      */
     private String ssrc;
 
     /**
-     * 事务信息
+     * transaction information
      */
     private SipTransactionInfo sipTransactionInfo;
 
     /**
-     * 类型
+     * Type
      */
     private InviteSessionType type;
 

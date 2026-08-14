@@ -11,7 +11,7 @@ import lombok.Setter;
 import java.util.List;
 
 /**
- * 摄像头立即拍摄命令
+ * Camera shooting command immediately
  */
 @Setter
 @Getter

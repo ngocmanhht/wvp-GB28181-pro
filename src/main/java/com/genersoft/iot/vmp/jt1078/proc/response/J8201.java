@@ -5,7 +5,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 
 /**
- * 位置信息查询
+ * Location information query
  */
 @MsgId(id = "8201")
 public class J8201 extends Rs {

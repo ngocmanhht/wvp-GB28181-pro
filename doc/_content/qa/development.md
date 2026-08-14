@@ -1,21 +1,21 @@
-<!-- 参与开发 -->
+<!-- Participate in development -->
 
-# 参与到开发中来
+# Participate in the development
 
-非常欢迎有兴趣的小伙伴一起来维护这个项目
+Interested partners are very welcome to maintain this project together.
 
-## 与开发有关的信息
+## Development related information
 
-- 开发语言：后端java + 前端vue；
-- jdk版本： 1.8；
-- 作者自用开发ide： jetbrains intellij idea；
-- nodejs/npm版本：v10.19.0/6.14.4；
-- 后端使用Spring boot框架开发；
-- 项目大量使用了异步操作；
-- 跟代码学流程需要参考28181文档，只看代码你会很懵的；
-- 必须学会[抓包](_content/skill/tcpdump.md),这是必须的
+- Development language: back-end java + front-end vue;
+- jdk version: 1.8;
+- The author's own development IDE: jetbrains intellij idea;
+- nodejs/npm version: v10.19.0/6.14.4;
+- The backend is developed using the Spring boot framework;
+- The project makes extensive use of asynchronous operations;
+- You need to refer to the 28181 document to learn the code process. You will be confused just by looking at the code;
+- You must learn [Capture packets](_content/skill/tcpdump.md) , this is a must
 
-## 提交代码
+## Submit code
 
-大家可以通过fork项目的方式提交自己的代码，然后提交PR，我来合并到主线。提交代码的过程中我们需要遵循“**阿里编码规约**
-”，现有代码也有很多代码没有做到，但是我们在朝这个方向努力。
+You can submit your own code by forking the project, then submit a PR, and I will merge it into the mainline. When submitting code, we need to follow the "**Alibaba Coding Convention**
+”, there are many existing codes that do not do this, but we are working hard in this direction.

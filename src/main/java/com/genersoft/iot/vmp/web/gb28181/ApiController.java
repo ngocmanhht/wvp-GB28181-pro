@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
- * API兼容：系统接口
+ * APICompatible with: system interface
  */
 @Controller
 @Slf4j
@@ -32,7 +32,7 @@ public class ApiController {
         result.put("IsDemo","");
         result.put("Hardware","false");
         result.put("APIAuth","false");
-        result.put("RemainDays","永久");
+        result.put("RemainDays","permanent");
         result.put("RunningTime","");
         result.put("ServerTime","2020-09-02 17：11");
         result.put("StartUpTime","2020-09-02 17：11");
@@ -59,7 +59,7 @@ public class ApiController {
 //        result.put("IsDemo","");
 //        result.put("Hardware","false");
 //        result.put("APIAuth","false");
-//        result.put("RemainDays","永久");
+//        result.put("RemainDays","permanent");
 //        result.put("RunningTime","");
 //        result.put("ServerTime","2020-09-02 17：11");
 //        result.put("StartUpTime","2020-09-02 17：11");
@@ -78,16 +78,16 @@ public class ApiController {
     }
 
     /**
-     *  系统接口 - 登录
-     * @param username 用户名
-     * @param password 密码(经过md5加密,32位长度,不带中划线,不区分大小写)
+     *  System interface - Login
+     * @param username Username
+     * @param password Password(After md5 encryption, 32-bit length, without underscore, not case sensitive)
      * @return
      */
     @GetMapping(value = "/login")
     @ResponseBody
     private JSONObject login(String username,String password ){
         if (log.isDebugEnabled()) {
-            log.debug(String.format("模拟接口> 登录 API调用，username：%s ，password：%s ",
+            log.debug(String.format("Analog interface> Login API call，username：%s ，password：%s ",
                     username, password));
         }
 

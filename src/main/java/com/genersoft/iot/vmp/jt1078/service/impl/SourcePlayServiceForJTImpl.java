@@ -26,22 +26,22 @@ public class SourcePlayServiceForJTImpl implements ISourcePlayService {
 
     @Override
     public void play(CommonGBChannel channel, Platform platform, Boolean record, ErrorCallback<StreamInfo> callback) {
-        // 部标设备通道
+        // Ministry standard equipment channel
         try {
             playService.start(channel.getDataDeviceId(), record, callback);
         }catch (Exception e) {
-            log.info("[通用通道] 部标设备点播异常 {}", e.getMessage());
+            log.info("[Universal channel] On-demand playback on ministry standard equipment is abnormal {}", e.getMessage());
             callback.run(Response.BUSY_HERE, "busy here", null);
         }
     }
 
     @Override
     public void stopPlay(CommonGBChannel channel) {
-        // 推流
+        // Push streaming
         try {
             playService.stop(channel.getDataDeviceId());
         }catch (Exception e) {
-            log.error("[停止点播失败] {}({})", channel.getGbName(), channel.getGbDeviceId(), e);
+            log.error("[Failed to stop on demand] {}({})", channel.getGbName(), channel.getGbDeviceId(), e);
         }
     }
 

@@ -6,28 +6,28 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 @Data
-@Schema(description = "多媒体事件信息")
+@Schema(description = "Multimedia event information")
 public class JTMediaEventInfo {
 
-    @Schema(description = "多媒体数据 ID")
+    @Schema(description = "multimedia data ID")
     private long id;
 
-    @Schema(description = "多媒体类型, 0：图像；1：音频；2：视频")
+    @Schema(description = "Multimedia type, 0: image; 1: audio; 2: video")
     private int type;
 
-    @Schema(description = "多媒体格式编码, 0：JPEG；1：TIF；2：MP3；3：WAV；4：WMV；其他保留")
+    @Schema(description = "Multimedia format encoding, 0：JPEG；1：TIF；2：MP3；3：WAV；4：WMV；Other reservations")
     private int code;
 
-    @Schema(description = "事件项编码: 0：平台下发指令；1：定时动作；2：抢劫报警触发；3：碰 撞侧翻报警触发；4：门开拍照；5：门关拍照；6：车门由开 变关 ,车速从小于20km到超过20km；7：定距拍照")
+    @Schema(description = "Event item coding: 0: Platform issues instructions; 1: Scheduled action; 2: Robbery alarm triggered; 3: Collision rollover alarm triggered; 4: Door open to take photos; 5: Door closed to take photos; 6: Car door changes from open to closed, vehicle speed from less than 20km to over 20km; 7: Fixed distance photo")
     private int eventCode;
 
-    @Schema(description = "通道 ID")
+    @Schema(description = "channel ID")
     private int channelId;
 
-    @Schema(description = "媒体数据")
+    @Schema(description = "media data")
     private byte[] mediaData;
 
-    @Schema(description = "位置信息汇报")
+    @Schema(description = "Location information reporting")
     private JTPositionBaseInfo positionBaseInfo;
 
 

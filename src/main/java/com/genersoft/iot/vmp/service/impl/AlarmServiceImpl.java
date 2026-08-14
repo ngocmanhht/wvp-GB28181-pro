@@ -52,16 +52,16 @@ public class AlarmServiceImpl implements IAlarmService {
 
     private final IGbChannelService gbChannelService;
 
-    // 使用Caffeine缓存设备通道信息，避免频繁查询数据库，提升性能
+    // Use Caffeine to cache device channel information to avoid frequent database queries and improve performance
     private Cache<String, DeviceChannel> channelCache = null;
 
     private final ConcurrentLinkedQueue<Alarm> alarmQueue = new ConcurrentLinkedQueue<>();
 
     @PostConstruct
     public void init() {
-        // 初始化Caffeine缓存，设置合理的过期时间和最大容量
+        // Initialize the Caffeine cache and set a reasonable expiration time and maximum capacity
         channelCache = Caffeine.newBuilder()
-                .maximumSize(userSetting.getAlarmCatchSize()) // 固定容量
+                .maximumSize(userSetting.getAlarmCatchSize()) // fixed capacity
                 .build();
     }
 
@@ -71,15 +71,15 @@ public class AlarmServiceImpl implements IAlarmService {
         if (channelCache == null || !sipConfig.isAlarm()) {
             return;
         }
-        // 处理国标的报警事件，转换为通用的Alarm对象后缓存，在定时任务中批量保存到数据库
+        // Process national standard alarm events, convert them into general Alarm objects, cache them, and save them to the database in batches in scheduled tasks.
         if (event.getDeviceAlarmList().isEmpty()) {
             return;
         }
-        log.info("收到设备报警事件，数量：{}", event.getDeviceAlarmList().size());
+        log.info("Device alarm events received, quantity：{}", event.getDeviceAlarmList().size());
         for (DeviceAlarmNotify notify : event.getDeviceAlarmList()) {
             Alarm alarm = Alarm.buildFromDeviceAlarmNotify(notify);
             if (!userSetting.getAllowedAlarmType().isEmpty() && !userSetting.getAllowedAlarmType().contains(alarm.getAlarmType())) {
-                log.debug("报警类型不在允许的范围内，alarmType：{}，alarmId：{}", alarm.getAlarmType(), alarm.getId());
+                log.debug("Alarm type is not within the allowed range，alarmType：{}，alarmId：{}", alarm.getAlarmType(), alarm.getId());
                 continue;
             }
             String key = notify.getDeviceId() + notify.getChannelId();
@@ -88,7 +88,7 @@ public class AlarmServiceImpl implements IAlarmService {
                 continue;
             }
             alarm.setChannelId(deviceChannel.getId());
-            // 分配一个快照路径，后续在去补充快照文件
+            // Assign a snapshot path and add the snapshot file later.
             alarm.setSnapPath("snap/alarm_" + notify.getChannelId() + "_" + System.currentTimeMillis() + ".jpg");
             alarmQueue.offer(alarm);
         }
@@ -103,7 +103,7 @@ public class AlarmServiceImpl implements IAlarmService {
         String endTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
                 .format(new Date(System.currentTimeMillis() - (long) keepDays * 24 * 3600 * 1000));
         int count = clearAlarmsByCondition(null, null, endTime);
-        log.info("自动清理过期报警记录完成，保留天数：{}，清理数量：{}", keepDays, count);
+        log.info("Automatic clearing of expired alarm records is completed and the number of days to be retained is：{}，Clean quantity：{}", keepDays, count);
     }
 
     @Scheduled(fixedDelay = 500)
@@ -122,14 +122,14 @@ public class AlarmServiceImpl implements IAlarmService {
         if (handlerCatchDataList.isEmpty()) {
             return;
         }
-        // 批量保存到数据库
+        // Batch save to database
         int batchSize = 1000;
         for (int i = 0; i < handlerCatchDataList.size(); i += batchSize) {
             int end = Math.min(i + batchSize, handlerCatchDataList.size());
             List<Alarm> batchList = handlerCatchDataList.subList(i, end);
             alarmMapper.insertAlarms(batchList);
         }
-        // 按照通道ID分组，去补充快照文件
+        // Group according to channel ID to supplement snapshot files
         handlerCatchDataList.forEach(this::getSnapByAlarm);
     }
 
@@ -137,7 +137,7 @@ public class AlarmServiceImpl implements IAlarmService {
     public void getSnapByAlarm(Alarm alarm) {
         CommonGBChannel channel = gbChannelService.getOne(alarm.getChannelId());
         if (channel == null) {
-            log.warn("未找到报警关联的通道信息，alarmId：{}，channelId：{}", alarm.getId(), alarm.getChannelId());
+            log.warn("The channel information associated with the alarm was not found，alarmId：{}，channelId：{}", alarm.getId(), alarm.getChannelId());
             return;
         }
         gbChannelPlayService.getSnap(channel, (code, msg, data) -> {
@@ -151,7 +151,7 @@ public class AlarmServiceImpl implements IAlarmService {
             try {
                 FileUtils.writeByteArrayToFile(file, data);
             } catch (Exception e) {
-                log.warn("保存报警快照失败，alarmId：{}，channelId：{}", alarm.getId(), alarm.getChannelId(), e);
+                log.warn("Failed to save alarm snapshot，alarmId：{}，channelId：{}", alarm.getId(), alarm.getChannelId(), e);
             }
         });
     }
@@ -193,7 +193,7 @@ public class AlarmServiceImpl implements IAlarmService {
         if (endTime != null) {
             endTimeLong = DateUtil.yyyy_MM_dd_HH_mm_ssToTimestampMs(endTime);
         }
-        // 清理前缓存数据，数据库删除后，相关的报警快照文件也需要清理掉
+        // Cache data before cleaning. After the database is deleted, the related alarm snapshot files also need to be cleaned up.
         alarmMapper.getAlarms(alarmType, beginTimeLong, endTimeLong).forEach(alarm -> {
             String snapPath = alarm.getSnapPath();
             if (snapPath != null) {

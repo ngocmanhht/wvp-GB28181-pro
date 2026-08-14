@@ -6560,7 +6560,7 @@ var ZLMRTCClient = (function (exports) {
 	    resolve(response);
 	  } else {
 	    reject(new AxiosError_1(
-	      '请求失败， 状态码： ' + response.status,
+	      'Request failed, status code： ' + response.status,
 	      [AxiosError_1.ERR_BAD_REQUEST, AxiosError_1.ERR_BAD_RESPONSE][Math.floor(response.status / 100) - 4],
 	      response.config,
 	      response.request,

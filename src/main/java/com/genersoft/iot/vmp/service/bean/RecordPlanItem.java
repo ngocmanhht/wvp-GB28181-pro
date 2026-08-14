@@ -4,22 +4,22 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 @Data
-@Schema(description = "录制计划项")
+@Schema(description = "Recording schedule items")
 public class RecordPlanItem {
 
-    @Schema(description = "计划项数据库ID")
+    @Schema(description = "Plan item databaseID")
     private int id;
 
-    @Schema(description = "计划开始时间的序号， 从0点开始，每半个小时增加1")
+    @Schema(description = "The sequence number of the planned start time, starting from 0 o'clock, increasing every half hour1")
     private Integer start;
 
-    @Schema(description = "计划结束时间的序号， 从0点开始，每半个小时增加1")
+    @Schema(description = "The serial number of the planned end time, starting from 0 o'clock, increasing every half hour1")
     private Integer stop;
 
-    @Schema(description = "计划周几执行")
+    @Schema(description = "Planned days of the week to be executed")
     private Integer weekDay;
 
-    @Schema(description = "所属计划ID")
+    @Schema(description = "ProjectID")
     private Integer planId;
 
 }

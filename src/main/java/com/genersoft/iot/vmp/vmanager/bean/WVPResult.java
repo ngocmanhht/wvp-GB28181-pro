@@ -7,7 +7,7 @@ import lombok.Setter;
 
 @Setter
 @Getter
-@Schema(description = "统一返回结果")
+@Schema(description = "Return results uniformly")
 public class WVPResult<T> implements Cloneable{
 
     public WVPResult() {
@@ -20,11 +20,11 @@ public class WVPResult<T> implements Cloneable{
     }
 
 
-    @Schema(description = "错误码，0为成功")
+    @Schema(description = "Error code, 0 means success")
     private int code;
-    @Schema(description = "描述，错误时描述错误原因")
+    @Schema(description = "Description, when an error occurs, describe the cause of the error.")
     private String msg;
-    @Schema(description = "数据")
+    @Schema(description = "data")
     private T data;
 
 

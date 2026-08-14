@@ -6,26 +6,26 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * GNSS 定位模式
+ * GNSS Positioning mode
  */
 @Setter
 @Getter
 public class JTGnssPositioningMode implements JTDeviceSubConfig{
 
     /**
-     * GPS 定位 true: 开启， false： 关闭
+     * GPS Positioning true: on, false: off
      */
     private boolean gps;
     /**
-     * 北斗定位 true: 开启， false： 关闭
+     * Beidou positioning true: on, false: off
      */
     private boolean beidou;
     /**
-     * GLONASS定位 true: 开启， false： 关闭
+     * GLONASSPositioning true: on, false: off
      */
     private boolean glonass;
     /**
-     * GaLiLeo定位 true: 开启， false： 关闭
+     * GaLiLeoPositioning true: on, false: off
      */
     private boolean gaLiLeo;
 

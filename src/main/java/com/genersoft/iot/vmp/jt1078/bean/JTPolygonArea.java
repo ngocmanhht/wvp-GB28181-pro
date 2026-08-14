@@ -14,34 +14,34 @@ import java.util.List;
 
 @Setter
 @Getter
-@Schema(description = "多边形区域")
+@Schema(description = "polygon area")
 public class JTPolygonArea implements JTAreaOrRoute{
 
-    @Schema(description = "区域 ID")
+    @Schema(description = "area ID")
     private long id;
 
     @Schema(description = "")
     private JTAreaAttribute attribute;
 
-    @Schema(description = "起始时间, yyyy-MM-dd HH:mm:ss")
+    @Schema(description = "start time, yyyy-MM-dd HH:mm:ss")
     private String startTime;
 
-    @Schema(description = "结束时间, yyyy-MM-dd HH:mm:ss")
+    @Schema(description = "end time, yyyy-MM-dd HH:mm:ss")
     private String endTime;
 
-    @Schema(description = "最高速度, 单位为千米每小时(km/h)")
+    @Schema(description = "Maximum speed in kilometers per hour(km/h)")
     private int maxSpeed;
 
-    @Schema(description = "超速持续时间, 单位为秒(s)")
+    @Schema(description = "Overspeed duration, in seconds(s)")
     private int overSpeedDuration;
 
-    @Schema(description = "区域顶点")
+    @Schema(description = "area vertex")
     private List<JTPolygonPoint> polygonPoints;
 
-    @Schema(description = "夜间最高速度, 单位为千米每小时(km/h)")
+    @Schema(description = "Maximum speed at night in kilometers per hour(km/h)")
     private int nighttimeMaxSpeed;
 
-    @Schema(description = "区域的名称")
+    @Schema(description = "The name of the area")
     private String name;
 
     public ByteBuf encode(){

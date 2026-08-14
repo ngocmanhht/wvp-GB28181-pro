@@ -92,11 +92,11 @@ public class DeviceChannelServiceImpl implements IDeviceChannelService {
     @Autowired
     private ISIPCommander commander;
 
-    // 记录录像查询的结果等待
+    // Waiting for the results of recording video query
     private final Map<String, SynchronousQueue<RecordInfo>> topicSubscribers = new ConcurrentHashMap<>();
 
     /**
-     * 监听录像查询结束事件
+     * Monitor the recording query end event
      */
     @Async
     @EventListener
@@ -114,7 +114,7 @@ public class DeviceChannelServiceImpl implements IDeviceChannelService {
         if (CollectionUtils.isEmpty(channels)) {
             return 0;
         }
-        // 入参去重
+        // Add ginseng and remove weight
         Set<String> dedupSet = new HashSet<>();
         List<DeviceChannel> uniqueChannels = new ArrayList<>();
         for (DeviceChannel ch : channels) {
@@ -197,7 +197,7 @@ public class DeviceChannelServiceImpl implements IDeviceChannelService {
     public DeviceChannel getOne(String deviceId, String channelId){
         Device device = deviceMapper.getDeviceByDeviceId(deviceId);
         if (device == null) {
-            throw new ControllerException(ErrorCode.ERROR100.getCode(), "未找到设备：" + deviceId);
+            throw new ControllerException(ErrorCode.ERROR100.getCode(), "Device not found：" + deviceId);
         }
         return channelMapper.getOneByDeviceId(device.getId(), channelId);
     }
@@ -206,7 +206,7 @@ public class DeviceChannelServiceImpl implements IDeviceChannelService {
     public DeviceChannel getOneForSource(String deviceId, String channelId){
         Device device = deviceMapper.getDeviceByDeviceId(deviceId);
         if (device == null) {
-            throw new ControllerException(ErrorCode.ERROR100.getCode(), "未找到设备：" + deviceId);
+            throw new ControllerException(ErrorCode.ERROR100.getCode(), "Device not found：" + deviceId);
         }
         return channelMapper.getOneByDeviceIdForSource(device.getId(), channelId);
     }
@@ -223,11 +223,11 @@ public class DeviceChannelServiceImpl implements IDeviceChannelService {
 
     @Override
     public void updateChannelStreamIdentification(DeviceChannel channel) {
-        Assert.hasLength(channel.getStreamIdentification(), "码流标识必须存在");
+        Assert.hasLength(channel.getStreamIdentification(), "Code stream identifier must exist");
         if (ObjectUtils.isEmpty(channel.getStreamIdentification())) {
-            log.info("[重置通道码流类型] 设备: {}, 码流： {}", channel.getDeviceId(), channel.getStreamIdentification());
+            log.info("[Reset channel stream type] Equipment: {}, Code stream： {}", channel.getDeviceId(), channel.getStreamIdentification());
         }else {
-            log.info("[更新通道码流类型] 设备: {}, 通道：{}， 码流： {}", channel.getDeviceId(), channel.getDeviceId(),
+            log.info("[Update channel code stream type] Equipment: {}, channel：{}， Code stream： {}", channel.getDeviceId(), channel.getDeviceId(),
                     channel.getStreamIdentification());
         }
         if (channel.getId() > 0) {
@@ -241,7 +241,7 @@ public class DeviceChannelServiceImpl implements IDeviceChannelService {
     public List<DeviceChannel> queryChaneListByDeviceId(String deviceId) {
         Device device = deviceMapper.getDeviceByDeviceId(deviceId);
         if (device == null) {
-            throw new ControllerException(ErrorCode.ERROR100.getCode(), "未找到通道：" + deviceId);
+            throw new ControllerException(ErrorCode.ERROR100.getCode(), "Channel not found：" + deviceId);
         }
         return channelMapper.queryChannelsByDeviceDbId(device.getId());
     }
@@ -254,23 +254,23 @@ public class DeviceChannelServiceImpl implements IDeviceChannelService {
     @Override
     public void handlePtzCmd(@NotNull Integer dataDeviceId, @NotNull Integer gbId, Element rootElement, DeviceControlType type, ErrorCallback<String> callback) {
 
-        // 根据通道ID，获取所属设备
+        // Get the device according to the channel ID
         Device device = deviceMapper.query(dataDeviceId);
         if (device == null) {
-            // 不存在则回复404
-            log.warn("[INFO 消息] 通道所属设备不存在， 设备ID： {}", dataDeviceId);
+            // Reply if it does not exist404
+            log.warn("[INFO news] The device to which the channel belongs does not exist, deviceID： {}", dataDeviceId);
             callback.run(Response.NOT_FOUND, "device  not found", null);
             return;
         }
 
         DeviceChannel deviceChannel = channelMapper.getOneForSource(gbId);
         if (deviceChannel == null) {
-            log.warn("[deviceControl] 未找到设备原始通道， 设备： {}（{}），通道编号：{}", device.getName(),
+            log.warn("[deviceControl] Device raw channel not found, device： {}（{}），Channel number：{}", device.getName(),
                     device.getDeviceId(), gbId);
             callback.run(Response.NOT_FOUND, "channel  not found", null);
             return;
         }
-        log.info("[deviceControl] 命令: {}, 设备： {}（{}）， 通道{}（{}", type,  device.getName(), device.getDeviceId(),
+        log.info("[deviceControl] command: {}, Equipment： {}（{}）， channel{}（{}", type,  device.getName(), device.getDeviceId(),
                 deviceChannel.getName(), deviceChannel.getDeviceId());
         String cmdString = getText(rootElement, type.getVal());
         try {
@@ -280,7 +280,7 @@ public class DeviceChannelServiceImpl implements IDeviceChannelService {
                         callback.run(errorResult.statusCode, errorResult.msg, null);
                     });
         } catch (InvalidArgumentException | SipException | ParseException e) {
-            log.error("[命令发送失败] 云台/前端: {}", e.getMessage());
+            log.error("[Command sending failed] PTZ/front end: {}", e.getMessage());
         }
     }
 
@@ -315,7 +315,7 @@ public class DeviceChannelServiceImpl implements IDeviceChannelService {
 
         List<DeviceChannel> deviceChannels = new ArrayList<>();
         if (deviceChannel.getDeviceId() == null) {
-            // 有的设备这里上报的deviceId与通道Id是一样，这种情况更新设备下的全部通道
+            // The deviceId reported here by some devices is the same as the channel ID. In this case, all channels under the device are updated.
             List<DeviceChannel> deviceChannelsInDb = queryChaneListByDeviceId(device.getDeviceId());
             deviceChannels.addAll(deviceChannelsInDb);
         }else {
@@ -325,17 +325,17 @@ public class DeviceChannelServiceImpl implements IDeviceChannelService {
             return;
         }
         if (deviceChannels.size() > 100) {
-            log.warn("[更新通道位置信息后发送通知] 设备可能是平台，上报的位置信息未标明通道编号，" +
-                    "导致所有通道被更新位置， deviceId:{}", device.getDeviceId());
+            log.warn("[Send notification after updating channel location information] The device may be a platform, and the reported location information does not indicate the channel number.，" +
+                    "Causes all channels to be updated in position， deviceId:{}", device.getDeviceId());
         }
         for (DeviceChannel channel : deviceChannels) {
-            // 向关联了该通道并且开启移动位置订阅的上级平台发送移动位置订阅消息
+            // Send a mobile location subscription message to the upper-level platform that is associated with the channel and has enabled mobile location subscription.
             mobilePosition.setChannelId(channel.getId());
             mobilePosition.setChannelDeviceId(channel.getDeviceId());
             try {
                 eventPublisher.mobilePositionEventPublish(mobilePosition);
             }catch (Exception e) {
-                log.error("[向上级转发移动位置失败] ", e);
+                log.error("[Failed to forward mobile location to superior] ", e);
             }
         }
     }
@@ -368,7 +368,7 @@ public class DeviceChannelServiceImpl implements IDeviceChannelService {
                 allChannelMap.put(deviceChannel.getDataDeviceId() + deviceChannel.getDeviceId(), deviceChannel);
             }
         }
-        // 入参去重
+        // Add ginseng and remove weight
         Set<String> dedupSet = new HashSet<>();
         List<DeviceChannel> uniqueChannels = new ArrayList<>();
         for (DeviceChannel ch : deviceChannelList) {
@@ -420,7 +420,7 @@ public class DeviceChannelServiceImpl implements IDeviceChannelService {
         }
 
         if(CollectionUtils.isEmpty(upsertChannels)){
-            log.info("通道重设，数据为空={}" , deviceChannelList);
+            log.info("Channel reset, data is empty={}" , deviceChannelList);
             return false;
         }
         int limitCount = 500;
@@ -433,14 +433,14 @@ public class DeviceChannelServiceImpl implements IDeviceChannelService {
         }
         if (!deleteChannels.isEmpty()) {
             try {
-                // 这些通道可能关联了，上级平台需要删除同时发送消息
+                // These channels may be associated, and the upper-level platform needs to delete them and send messages at the same time.
                 List<Integer> ids = new ArrayList<>();
                 deleteChannels.stream().forEach(deviceChannel -> {
                     ids.add(deviceChannel.getId());
                 });
                 platformChannelService.removeChannels(ids);
             }catch (Exception e) {
-                log.error("[移除通道国标级联共享失败]", e);
+                log.error("[Failed to remove channel national standard cascade sharing]", e);
             }
             if (deleteChannels.size() > limitCount) {
                 for (int i = 0; i < deleteChannels.size(); i += limitCount) {
@@ -492,7 +492,7 @@ public class DeviceChannelServiceImpl implements IDeviceChannelService {
     public PageInfo queryChannelsByDeviceId(String deviceId, String query, Boolean hasSubChannel, Boolean online, int page, int count) {
         Device device = deviceMapper.getDeviceByDeviceId(deviceId);
         if (device == null) {
-            throw new ControllerException(ErrorCode.ERROR100.getCode(), "未找到设备：" + deviceId);
+            throw new ControllerException(ErrorCode.ERROR100.getCode(), "Device not found：" + deviceId);
         }
         if (query != null) {
             query = query.replaceAll("/", "//")
@@ -543,7 +543,7 @@ public class DeviceChannelServiceImpl implements IDeviceChannelService {
             return channels.get(0);
         }
         for (DeviceChannel channel : channels) {
-            // 获取137类型的
+            // Get 137 type
             if (SipUtils.isFrontEnd(channel.getDeviceId())) {
                 return channel;
             }
@@ -575,7 +575,7 @@ public class DeviceChannelServiceImpl implements IDeviceChannelService {
 
     @Override
     public void queryRecordInfo(Device device, DeviceChannel channel, String startTime, String endTime, ErrorCallback<RecordInfo> callback) {
-        log.info("录像查询 API调用，deviceId：{}，channelId：{}，startTime：{}，endTime：{}", device.getDeviceId(), channel.getDeviceId(), startTime, endTime);
+        log.info("Video query API call，deviceId：{}，channelId：{}，startTime：{}，endTime：{}", device.getDeviceId(), channel.getDeviceId(), startTime, endTime);
         if (!userSetting.getServerId().equals(device.getServerId())){
             redisRpcPlayService.queryRecordInfo(device.getServerId(), channel.getId(), startTime, endTime, callback);
             return;
@@ -584,7 +584,7 @@ public class DeviceChannelServiceImpl implements IDeviceChannelService {
             int sn  =  (int)((Math.random()*9+1)*100000);
             commander.recordInfoQuery(device, channel.getDeviceId(), startTime, endTime, sn, null, null, eventResult -> {
                 try {
-                    // 消息发送成功, 监听等待数据到来
+                    // The message is sent successfully, listening and waiting for the data to arrive.
                     SynchronousQueue<RecordInfo> queue = new SynchronousQueue<>();
                     topicSubscribers.put("record" + sn, queue);
                     RecordInfo recordInfo = queue.poll(userSetting.getRecordInfoTimeout(), TimeUnit.MILLISECONDS);
@@ -600,26 +600,26 @@ public class DeviceChannelServiceImpl implements IDeviceChannelService {
                 }
 
             }, (eventResult -> {
-                callback.run(ErrorCode.ERROR100.getCode(), "查询录像失败, status: " +  eventResult.statusCode + ", message: " + eventResult.msg, null);
+                callback.run(ErrorCode.ERROR100.getCode(), "Failed to query video, status: " +  eventResult.statusCode + ", message: " + eventResult.msg, null);
             }));
         } catch (InvalidArgumentException | SipException | ParseException e) {
-            log.error("[命令发送失败] 查询录像: {}", e.getMessage());
-            throw new ControllerException(ErrorCode.ERROR100.getCode(), "命令发送失败: " +  e.getMessage());
+            log.error("[Command sending failed] Query video: {}", e.getMessage());
+            throw new ControllerException(ErrorCode.ERROR100.getCode(), "Command sending failed: " +  e.getMessage());
         }
     }
 
     @Override
     public void queryRecordInfo(CommonGBChannel channel, String startTime, String endTime, ErrorCallback<RecordInfo> callback) {
         if (channel.getDataType() != ChannelDataType.GB28181){
-            // 只支持国标的语音喊话
-            log.warn("[INFO 消息] 非国标设备， 通道ID： {}", channel.getGbId());
-            callback.run(ErrorCode.ERROR100.getCode(), "非国标设备", null);
+            // Only supports national standard voice calls
+            log.warn("[INFO news] Non-national standard equipment, channelID： {}", channel.getGbId());
+            callback.run(ErrorCode.ERROR100.getCode(), "Non-national standard equipment", null);
             return;
         }
         Device device = deviceMapper.query(channel.getDataDeviceId());
         if (device == null) {
-            log.warn("[点播] 未找到通道{}的设备信息", channel);
-            callback.run(ErrorCode.ERROR100.getCode(), "设备不存在", null);
+            log.warn("[on demand] Channel not found{}device information", channel);
+            callback.run(ErrorCode.ERROR100.getCode(), "Device does not exist", null);
             return;
         }
         DeviceChannel deviceChannel = getOneForSourceById(channel.getGbId());
@@ -636,7 +636,7 @@ public class DeviceChannelServiceImpl implements IDeviceChannelService {
     @Async
     @Transactional
     public void asyncBatchChannelPosition(Collection<DeviceChannel> channels) {
-        // 批量更新通道位置信息
+        // Update channel location information in batches
         int limitCount = 500;
         List<DeviceChannel> channelList = new ArrayList<>(channels);
         if (!channelList.isEmpty()) {

@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Tag(name = "录制计划")
+@Tag(name = "Recording plan")
 @Slf4j
 @RestController
 @RequestMapping("/api/record/plan")
@@ -37,19 +37,19 @@ public class RecordPlanController {
 
     @ResponseBody
     @PostMapping("/add")
-    @Operation(summary = "添加录制计划", security = @SecurityRequirement(name = JwtUtils.HEADER))
-    @Parameter(name = "plan", description = "计划", required = true)
+    @Operation(summary = "Add recording schedule", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Parameter(name = "plan", description = "plan", required = true)
     public void add(@RequestBody RecordPlan plan) {
         if (plan.getPlanItemList() == null || plan.getPlanItemList().isEmpty()) {
-            throw new ControllerException(ErrorCode.ERROR100.getCode(), "添加录制计划时，录制计划不可为空");
+            throw new ControllerException(ErrorCode.ERROR100.getCode(), "When adding a recording plan, the recording plan cannot be empty");
         }
         recordPlanService.add(plan);
     }
 
     @ResponseBody
     @PostMapping("/link")
-    @Operation(summary = "通道关联录制计划", security = @SecurityRequirement(name = JwtUtils.HEADER))
-    @Parameter(name = "param", description = "通道关联录制计划", required = true)
+    @Operation(summary = "Channel associated recording schedule", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Parameter(name = "param", description = "Channel associated recording schedule", required = true)
     public void link(@RequestBody RecordPlanParam param) {
         if (param.getAllLink() != null) {
             if (param.getAllLink()) {
@@ -61,7 +61,7 @@ public class RecordPlanController {
         }
 
         if (param.getChannelIds() == null && param.getDeviceDbIds() == null) {
-            throw new ControllerException(ErrorCode.ERROR100.getCode(), "通道ID和国标设备ID不可都为NULL");
+            throw new ControllerException(ErrorCode.ERROR100.getCode(), "Channel ID and national standard device ID cannot both beNULL");
         }
 
         List<Integer> channelIds = new ArrayList<>();
@@ -78,21 +78,21 @@ public class RecordPlanController {
 
     @ResponseBody
     @GetMapping("/get")
-    @Operation(summary = "查询录制计划", security = @SecurityRequirement(name = JwtUtils.HEADER))
-    @Parameter(name = "planId", description = "计划ID", required = true)
+    @Operation(summary = "Query recording plan", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Parameter(name = "planId", description = "planID", required = true)
     public RecordPlan get(Integer planId) {
         if (planId == null) {
-            throw new ControllerException(ErrorCode.ERROR100.getCode(), "计划ID不可为NULL");
+            throw new ControllerException(ErrorCode.ERROR100.getCode(), "Plan ID cannot beNULL");
         }
         return recordPlanService.get(planId);
     }
 
     @ResponseBody
     @GetMapping("/query")
-    @Operation(summary = "查询录制计划列表", security = @SecurityRequirement(name = JwtUtils.HEADER))
-    @Parameter(name = "query", description = "检索内容", required = false)
-    @Parameter(name = "page", description = "当前页", required = true)
-    @Parameter(name = "count", description = "每页查询数量", required = true)
+    @Operation(summary = "Query the recording plan list", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Parameter(name = "query", description = "Search content", required = false)
+    @Parameter(name = "page", description = "Current page", required = true)
+    @Parameter(name = "count", description = "Number of queries per page", required = true)
     public PageInfo<RecordPlan> query(@RequestParam(required = false) String query, @RequestParam Integer page, @RequestParam Integer count) {
         if (query != null && ObjectUtils.isEmpty(query.trim())) {
             query = null;
@@ -100,14 +100,14 @@ public class RecordPlanController {
         return recordPlanService.query(page, count, query);
     }
 
-    @Operation(summary = "分页查询录制计划关联的所有通道", security = @SecurityRequirement(name = JwtUtils.HEADER))
-    @Parameter(name = "page", description = "当前页", required = true)
-    @Parameter(name = "count", description = "每页条数", required = true)
-    @Parameter(name = "planId", description = "录制计划ID")
-    @Parameter(name = "channelType", description = "通道类型， 0：国标设备，1：推流设备，2：拉流代理")
-    @Parameter(name = "query", description = "查询内容")
-    @Parameter(name = "online", description = "是否在线")
-    @Parameter(name = "hasLink", description = "是否已经关联")
+    @Operation(summary = "Paging query for all channels associated with the recording plan", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Parameter(name = "page", description = "Current page", required = true)
+    @Parameter(name = "count", description = "Number of items per page", required = true)
+    @Parameter(name = "planId", description = "Recording planID")
+    @Parameter(name = "channelType", description = "Channel type, 0: national standard equipment, 1: push device, 2: pull agent")
+    @Parameter(name = "query", description = "Query content")
+    @Parameter(name = "online", description = "Is online")
+    @Parameter(name = "hasLink", description = "Is it already associated?")
     @GetMapping("/channel/list")
     @ResponseBody
     public PageInfo<CommonGBChannel> queryChannelList(int page, int count,
@@ -117,7 +117,7 @@ public class RecordPlanController {
                                                       @RequestParam(required = false) Boolean online,
                                                       @RequestParam(required = false) Boolean hasLink) {
 
-        Assert.notNull(planId, "录制计划ID不可为NULL");
+        Assert.notNull(planId, "The recording plan ID cannot beNULL");
         if (org.springframework.util.ObjectUtils.isEmpty(query)) {
             query = null;
         }
@@ -127,8 +127,8 @@ public class RecordPlanController {
 
     @ResponseBody
     @PostMapping("/update")
-    @Operation(summary = "更新录制计划", security = @SecurityRequirement(name = JwtUtils.HEADER))
-    @Parameter(name = "plan", description = "计划", required = true)
+    @Operation(summary = "Update recording schedule", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Parameter(name = "plan", description = "plan", required = true)
     public void update(@RequestBody RecordPlan plan) {
         if (plan == null || plan.getId() == 0) {
             throw new ControllerException(ErrorCode.ERROR400);
@@ -138,11 +138,11 @@ public class RecordPlanController {
 
     @ResponseBody
     @DeleteMapping("/delete")
-    @Operation(summary = "删除录制计划", security = @SecurityRequirement(name = JwtUtils.HEADER))
-    @Parameter(name = "planId", description = "计划ID", required = true)
+    @Operation(summary = "Delete recording schedule", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Parameter(name = "planId", description = "planID", required = true)
     public void delete(Integer planId) {
         if (planId == null) {
-            throw new ControllerException(ErrorCode.ERROR100.getCode(), "计划IDID不可为NULL");
+            throw new ControllerException(ErrorCode.ERROR100.getCode(), "Plan IDID cannot beNULL");
         }
         recordPlanService.delete(planId);
     }

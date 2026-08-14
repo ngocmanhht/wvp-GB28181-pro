@@ -6,47 +6,47 @@ import lombok.Data;
 public class TalkRtpInfo {
 
     /**
-     * 应用名, 待推送给设备的流应用名
+     * Application name, the name of the streaming application to be pushed to the device
      */
     private String app;
 
     /**
-     * 流id, 待推送给设备的流id
+     * Stream id, the stream to be pushed to the deviceid
      */
     private String stream;
 
     /**
-     * rtp推流出去的ssrc
+     * rtppushed outssrc
      */
     private String ssrc;
 
     /**
-     * 对方rtp推流上来的流id
+     * The stream pushed up by the other party's rtpid
      */
     private String receiveStreamId;
 
     /**
-     * 是否推送本地MP4录像，该参数非必选参数
+     * Whether to push local MP4 recordings, this parameter is not required.
      */
     private Integer fromMp4;
 
     /**
-     * 类型： 0(ES流)、1(PS流)、2(TS流)，默认1(PS流)；该参数非必选参数
+     * Type： 0(ESflow)、1(PSflow)、2(TSflow)，Default1(PSflow)；This parameter is not required
      */
     private Integer type;
 
     /**
-     * rtp payload type，默认96；该参数非必选参数
+     * rtp payload type，Default is 96; this parameter is not required
      */
     private Integer pt;
 
     /**
-     * rtp es方式打包时，是否只打包音频；该参数非必选参数
+     * rtp esWhen packaging, whether to only package audio; this parameter is not required.
      */
     private Integer onlyAudio;
 
     /**
-     * 转发rtp(tcp模式)时，如果发送不出去，是否限制源端收流速度，此参数在多倍速rtp转发时作用较大
+     * forwardrtp(tcpmode)If the data cannot be sent out, whether to limit the source end's traffic collection speed. This parameter is more effective in multi-speed rtp forwarding.
      */
     private Integer enableOriginReceiveLimit;
 

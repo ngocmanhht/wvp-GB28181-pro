@@ -45,14 +45,14 @@ export default {
       fullscreen: false,
       loaded: false, // mute
       speed: 0,
-      performance: '', // 工作情况
+      performance: '', // work situation
       kBps: 0,
       btnDom: null,
       videoInfo: null,
       volume: 1,
       playerTime: 0,
       rotate: 0,
-      vod: true, // 点播
+      vod: true, // on demand
       forceNoOffscreen: false,
       localVideoUrl: this.videoUrl,
       showBar: true
@@ -110,7 +110,7 @@ export default {
 
         isNotMute: this.isNotMute,
         keepScreenOn: true,
-        loadingText: '请稍等, 视频加载中......',
+        loadingText: 'Please wait, the video is loading......',
         loadingTimeout: 10,
         loadingTimeoutReplay: true,
         loadingTimeoutReplayTimes: 3,
@@ -150,11 +150,11 @@ export default {
         this.isNotMute = !msg
       })
       jessibuca.on('performance', (performance) => {
-        let show = '卡顿'
+        let show = 'Caton'
         if (performance === 2) {
-          show = '非常流畅'
+          show = 'very smooth'
         } else if (performance === 1) {
-          show = '流畅'
+          show = 'Smooth'
         }
         this.performance = show
       })

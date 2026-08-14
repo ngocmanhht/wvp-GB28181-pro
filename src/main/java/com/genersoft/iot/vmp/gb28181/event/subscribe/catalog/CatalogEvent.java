@@ -17,37 +17,37 @@ public class CatalogEvent  extends ApplicationEvent {
     }
 
     /**
-     * 上线
+     * Go online
      */
     public static final String ON = "ON";
 
     /**
-     * 离线
+     * Offline
      */
     public static final String OFF = "OFF";
 
     /**
-     * 视频丢失
+     * Video lost
      */
     public static final String VLOST = "VLOST";
 
     /**
-     * 故障
+     * Failure
      */
     public static final String DEFECT = "DEFECT";
 
     /**
-     * 增加
+     * increase
      */
     public static final String ADD = "ADD";
 
     /**
-     * 删除
+     * Delete
      */
     public static final String DEL = "DEL";
 
     /**
-     * 更新
+     * update
      */
     public static final String UPDATE = "UPDATE";
 

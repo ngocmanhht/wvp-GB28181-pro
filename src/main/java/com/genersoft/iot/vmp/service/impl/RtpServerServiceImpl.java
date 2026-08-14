@@ -55,7 +55,7 @@ public class RtpServerServiceImpl implements IReceiveRtpServerService {
     private RedisTemplate<String, Object> redisTemplate;
 
     /**
-     * 流到来的处理
+     * Processing of incoming streams
      */
     @Async
     @org.springframework.context.event.EventListener
@@ -64,7 +64,7 @@ public class RtpServerServiceImpl implements IReceiveRtpServerService {
     }
 
     /**
-     * 流离开的处理
+     * Stream departure processing
      */
     @Async
     @EventListener
@@ -77,15 +77,15 @@ public class RtpServerServiceImpl implements IReceiveRtpServerService {
                                     boolean playback, boolean ssrcCheck, boolean onlyAuto, boolean disableAuto,
                                     ErrorCallback<OpenRTPServerResult> callback) {
         if (callback == null) {
-            log.warn("[开启国标RTP收流] 失败，回调为NULL");
+            log.warn("[Enable national standard RTP streaming] Failure, the callback isNULL");
             return null;
         }
         if (mediaServer == null) {
-            log.warn("[开启国标RTP收流] 失败，媒体节点为NULL");
+            log.warn("[Enable national standard RTP streaming] failed, the media node isNULL");
             return null;
         }
 
-        // 获取 mediaServer 可用的 ssrc
+        // Get mediaServer available ssrc
         final String ssrc;
         if (presetSSRC != null) {
             ssrc = presetSSRC;
@@ -96,8 +96,8 @@ public class RtpServerServiceImpl implements IReceiveRtpServerService {
             streamId = String.format("%08x", Long.parseLong(ssrc)).toUpperCase();
         }
         if (ssrcCheck && tcpMode > 0) {
-            // 目前zlm不支持 tcp模式更新ssrc，暂时关闭ssrc校验
-            log.warn("[openRTPServer] 平台对接时下级可能自定义ssrc，但是tcp模式zlm收流目前无法更新ssrc，可能收流超时，此时请使用udp收流或者关闭ssrc校验");
+            // Currently zlm does not support updating ssrc in tcp mode and temporarily turns off ssrc verification.
+            log.warn("[openRTPServer] When connecting to the platform, the lower level may customize ssrc, but zlm flow collection in tcp mode currently cannot update ssrc, and the flow collection may time out. In this case, please use udp flow collection or turn off ssrc verification.");
         }
 
         SSRCInfo ssrcInfo = new SSRCInfo(0, ssrc, MediaStreamUtil.RTP_APP, streamId);
@@ -123,15 +123,15 @@ public class RtpServerServiceImpl implements IReceiveRtpServerService {
     public SSRCInfo openGbRTPServerForPlay(MediaServer mediaServer, Device device, DeviceChannel channel,
                                            String presetSSRC, boolean record, ErrorCallback<OpenRTPServerResult> callback) {
         if (callback == null) {
-            log.warn("[开启国标点播RTP收流] 失败，回调为NULL");
+            log.warn("[Enable national standard on-demand RTP streaming] Failure, the callback isNULL");
             return null;
         }
         if (mediaServer == null) {
-            log.warn("[开启国标点播RTP收流] 失败，媒体节点为NULL");
+            log.warn("[Enable national standard on-demand RTP streaming] failed, the media node isNULL");
             return null;
         }
 
-        // 获取 mediaServer 可用的 ssrc
+        // Get mediaServer available ssrc
         final String ssrc;
         if (presetSSRC != null) {
             ssrc = presetSSRC;
@@ -145,7 +145,7 @@ public class RtpServerServiceImpl implements IReceiveRtpServerService {
         int tcpMode = device.getStreamMode().equals("TCP-ACTIVE")? 2: (device.getStreamMode().equals("TCP-PASSIVE")? 1:0);
 
         if (device.isSsrcCheck() && tcpMode > 0) {
-            log.warn("[开启国标点播RTP收流] 平台对接时下级可能自定义ssrc，但是tcp模式zlm收流目前无法更新ssrc，可能收流超时，此时请使用udp收流或者关闭ssrc校验");
+            log.warn("[Enable national standard on-demand RTP streaming] When connecting to the platform, the lower level may customize ssrc, but zlm flow collection in tcp mode currently cannot update ssrc, and the flow collection may time out. In this case, please use udp flow collection or turn off ssrc verification.");
         }
 
         SSRCInfo ssrcInfo = new SSRCInfo(0, ssrc, MediaStreamUtil.RTP_APP, streamReplace);
@@ -158,15 +158,15 @@ public class RtpServerServiceImpl implements IReceiveRtpServerService {
     public SSRCInfo openGbRTPServerForPlayback(MediaServer mediaServer, Device device, DeviceChannel channel,
                                                String startTime, String endTime, ErrorCallback<OpenRTPServerResult> callback) {
         if (callback == null) {
-            log.warn("[开启国标回放RTP收流] 失败，回调为NULL");
+            log.warn("[Enable national standard playback RTP streaming] Failure, the callback isNULL");
             return null;
         }
         if (mediaServer == null) {
-            log.warn("[开启国标回放RTP收流] 失败，媒体节点为NULL");
+            log.warn("[Enable national standard playback RTP streaming] failed, the media node isNULL");
             return null;
         }
 
-        // 获取 mediaServer 可用的 ssrc
+        // Get mediaServer available ssrc
         String ssrc = ssrcFactory.getPlayBackSsrc(mediaServer);
 
         String streamId = String.format("%08x", Long.parseLong(ssrc)).toUpperCase();
@@ -175,7 +175,7 @@ public class RtpServerServiceImpl implements IReceiveRtpServerService {
         int tcpMode = device.getStreamMode().equals("TCP-ACTIVE")? 2: (device.getStreamMode().equals("TCP-PASSIVE")? 1:0);
 
         if (device.isSsrcCheck() && tcpMode > 0) {
-            log.warn("[开启国标回放RTP收流] 平台对接时下级可能自定义ssrc，但是tcp模式zlm收流目前无法更新ssrc，可能收流超时，此时请使用udp收流或者关闭ssrc校验");
+            log.warn("[Enable national standard playback RTP streaming] When connecting to the platform, the lower level may customize ssrc, but zlm flow collection in tcp mode currently cannot update ssrc, and the flow collection may time out. In this case, please use udp flow collection or turn off ssrc verification.");
         }
 
         SSRCInfo ssrcInfo = new SSRCInfo(0, ssrc, MediaStreamUtil.RTP_APP, streamReplace);
@@ -200,17 +200,17 @@ public class RtpServerServiceImpl implements IReceiveRtpServerService {
     public SSRCInfo openGbRTPServerForDownload(MediaServer mediaServer, Device device, DeviceChannel channel,
                                                String startTime, String endTime, ErrorCallback<OpenRTPServerResult> callback) {
         if (callback == null) {
-            log.warn("[开启国标录像下载RTP收流] 失败，回调为NULL");
+            log.warn("[Enable national standard video download and RTP streaming] Failure, the callback isNULL");
             return null;
         }
         if (mediaServer == null) {
-            log.warn("[开启国标录像下载RTP收流] 失败，媒体节点为NULL");
+            log.warn("[Enable national standard video download and RTP streaming] failed, the media node isNULL");
             return null;
         }
 
         int tcpMode = device.getStreamMode().equals("TCP-ACTIVE")? 2: (device.getStreamMode().equals("TCP-PASSIVE")? 1:0);
 
-        // 获取 mediaServer 可用的 ssrc
+        // Get mediaServer available ssrc
         String ssrc = ssrcFactory.getPlayBackSsrc(mediaServer);
 
         String streamId = String.format("%08x", Long.parseLong(ssrc)).toUpperCase();
@@ -219,7 +219,7 @@ public class RtpServerServiceImpl implements IReceiveRtpServerService {
                 endTime.replace("-", "").replace(":", "").replace(" ", ""));
 
         if (device.isSsrcCheck() && tcpMode > 0) {
-            log.warn("[开启国标录像下载RTP收流] 平台对接时下级可能自定义ssrc，但是tcp模式zlm收流目前无法更新ssrc，可能收流超时，此时请使用udp收流或者关闭ssrc校验");
+            log.warn("[Enable national standard video download and RTP streaming] When connecting to the platform, the lower level may customize ssrc, but zlm flow collection in tcp mode currently cannot update ssrc, and the flow collection may time out. In this case, please use udp flow collection or turn off ssrc verification.");
         }
 
         SSRCInfo ssrcInfo = new SSRCInfo(0, ssrc, MediaStreamUtil.RTP_APP, streamReplace);
@@ -235,11 +235,11 @@ public class RtpServerServiceImpl implements IReceiveRtpServerService {
     public SSRCInfo openGbRTPServerForBroadcast(MediaServer mediaServer, Platform platform, CommonGBChannel channel,
                                                 ErrorCallback<OpenRTPServerResult> callback) {
         if (callback == null) {
-            log.warn("[开启国标喊话RTP收流] 失败，回调为NULL");
+            log.warn("[Enable national standard propaganda RTP streaming] Failure, the callback isNULL");
             return null;
         }
         if (mediaServer == null) {
-            log.warn("[开启国标喊话RTP收流] 失败，媒体节点为NULL");
+            log.warn("[Enable national standard propaganda RTP streaming] failed, the media node isNULL");
             return null;
         }
 
@@ -247,7 +247,7 @@ public class RtpServerServiceImpl implements IReceiveRtpServerService {
         if (mediaServer.isRtpEnable()) {
             streamId = String.format("%s_%s", platform.getServerGBId(), channel.getGbDeviceId());
         }
-        // 默认不进行SSRC校验， TODO 后续可改为配置
+        // SSRC verification is not performed by default. TODO can be changed to configure later.
         int tcpMode;
         if (userSetting.getBroadcastForPlatform().equalsIgnoreCase("TCP-PASSIVE")) {
             tcpMode = 1;
@@ -257,7 +257,7 @@ public class RtpServerServiceImpl implements IReceiveRtpServerService {
             tcpMode = 0;
         }
 
-        // 获取 mediaServer 可用的 ssrc
+        // Get mediaServer available ssrc
         String ssrc = ssrcFactory.getPlaySsrc(mediaServer);
 
         SSRCInfo ssrcInfo = new SSRCInfo(0, ssrc, MediaStreamUtil.RTP_APP, streamId);
@@ -293,31 +293,31 @@ public class RtpServerServiceImpl implements IReceiveRtpServerService {
     @Override
     public int openCommonRTPServer(RTPServerParam rtpServerParam, ErrorCallback<HookData> callback) {
         if (callback == null) {
-            log.warn("[开启RTP收流] 失败，回调为NULL");
+            log.warn("[Enable RTP streaming] Failure, the callback isNULL");
             return -1;
         }
         if (rtpServerParam.getMediaServer() == null) {
-            log.warn("[开启RTP收流] 失败，媒体节点为NULL");
+            log.warn("[Enable RTP streaming] failed, the media node isNULL");
             return -1;
         }
 
-        // 设置流超时的定时任务
+        // Set a scheduled task for stream timeout
         String timeOutTaskKey = String.format("%s_%s_%s_%s", TIMEOUT_TASK_KEY_PREFIX, rtpServerParam.getMediaServer().getId(), rtpServerParam.getApp(), rtpServerParam.getStreamId());
 
         Hook rtpHook = Hook.getInstance(HookType.on_media_arrival, rtpServerParam.getApp(), rtpServerParam.getStreamId(), rtpServerParam.getMediaServer().getId());
         dynamicTask.startDelay(timeOutTaskKey, () -> {
-            // 收流超时
-            // 关闭收流端口
+            // Traffic collection timeout
+            // Close the traffic port
             String closeStreamId = rtpServerParam.getMediaServer().isRtpEnable()
                     ? String.format("%08x", rtpServerParam.getSsrc()).toUpperCase() : rtpServerParam.getStreamId();
             mediaServerService.closeRTPServer(rtpServerParam.getMediaServer(), rtpServerParam.getApp(), closeStreamId);
             subscribe.removeSubscribe(rtpHook);
             callback.run(InviteErrorCode.ERROR_FOR_STREAM_TIMEOUT.getCode(), InviteErrorCode.ERROR_FOR_STREAM_TIMEOUT.getMsg(), null);
         }, userSetting.getPlayTimeout());
-        // 开启流到来的监听
+        // Enable monitoring of incoming streams
         subscribe.addSubscribe(rtpHook, (hookData) -> {
             dynamicTask.stop(timeOutTaskKey);
-            // hook响应
+            // hookresponse
             callback.run(InviteErrorCode.SUCCESS.getCode(), InviteErrorCode.SUCCESS.getMsg(), hookData);
             subscribe.removeSubscribe(rtpHook);
         });
@@ -339,7 +339,7 @@ public class RtpServerServiceImpl implements IReceiveRtpServerService {
             rtpServerPort = rtpServerParam.getMediaServer().getRtpProxyPort();
         }
         if (rtpServerPort == 0) {
-            callback.run(InviteErrorCode.ERROR_FOR_RESOURCE_EXHAUSTION.getCode(), "开启RTPServer失败", null);
+            callback.run(InviteErrorCode.ERROR_FOR_RESOURCE_EXHAUSTION.getCode(), "Failed to start RTPServer", null);
             return -1;
         }
         return rtpServerPort;
@@ -387,12 +387,12 @@ public class RtpServerServiceImpl implements IReceiveRtpServerService {
         hookResultForOnPublish.setEnable_audio(enableAudio);
         hookResultForOnPublish.setEnable_mp4(enableMp4);
         if (mp4MaxSecond != null) {
-            // mp4MaxSecond 需要比实际的流时长略长一些，避免因为流时长超过mp4MaxSecond而生成文件切片
+            // mp4MaxSecond It needs to be slightly longer than the actual stream duration to avoid generating file slices because the stream duration exceeds mp4MaxSecond.
             hookResultForOnPublish.setMp4_max_second(mp4MaxSecond + 10);
         }
 
         String key = String.format("%s:%s", VideoManagerConstants.RTP_AUTHENTICATE, streamId);
-        // 存储认证信息，过期时间为60秒， 过期则无法通过认证
+        // Stores authentication information. The expiration time is 60 seconds. If it expires, the authentication will not pass.
         redisTemplate.opsForValue().set(key, hookResultForOnPublish);
         redisTemplate.expire(key, 60, TimeUnit.SECONDS);
      }
@@ -419,9 +419,9 @@ public class RtpServerServiceImpl implements IReceiveRtpServerService {
              redisTemplate.opsForValue().set(newKey, obj);
              redisTemplate.expire(newKey, 60, TimeUnit.SECONDS);
              redisTemplate.delete(oldKey);
-             log.info("[刷新RTP鉴权信息] {} -> {}", oldStreamId, newStreamId);
+             log.info("[Refresh RTP authentication information] {} -> {}", oldStreamId, newStreamId);
          } else {
-             log.warn("[刷新RTP鉴权信息] 未找到旧key: {}", oldKey);
+             log.warn("[Refresh RTP authentication information] old not foundkey: {}", oldKey);
          }
      }
 }

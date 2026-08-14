@@ -46,15 +46,15 @@ public abstract class MessageHandlerAbstract extends SIPRequestProcessorParent i
             try {
                 responseAck((SIPRequest) evt.getRequest(), Response.OK);
             } catch (SipException | InvalidArgumentException | ParseException e) {
-                log.error("[命令发送失败] 回复200 OK: {}", e.getMessage());
+                log.error("[Command sending failed] Reply200 OK: {}", e.getMessage());
             }
             return;
         }
         IMessageHandler messageHandler = messageHandlerMap.get(cmd);
 
         if (messageHandler != null) {
-            //两个国标平台互相级联时由于上一步判断导致本该在平台处理的消息 放到了设备的处理逻辑
-            //所以对目录查询单独做了校验
+            //When two national standard platforms are cascaded to each other, due to the previous judgment, messages that should be processed on the platform are placed in the processing logic of the device.
+            //Therefore, the directory query is verified separately.
             if(messageHandler instanceof CatalogQueryMessageHandler){
                 Platform parentPlatform = platformService.queryPlatformByServerGBId(device.getDeviceId());
                 messageHandler.handForPlatform(evt, parentPlatform, element);
@@ -66,7 +66,7 @@ public abstract class MessageHandlerAbstract extends SIPRequestProcessorParent i
             try {
                 responseAck((SIPRequest) evt.getRequest(), Response.OK);
             } catch (SipException | InvalidArgumentException | ParseException e) {
-                log.error("[命令发送失败] 回复200 OK: {}", e.getMessage());
+                log.error("[Command sending failed] Reply200 OK: {}", e.getMessage());
             }
         }
     }
@@ -81,7 +81,7 @@ public abstract class MessageHandlerAbstract extends SIPRequestProcessorParent i
             try {
                 responseAck((SIPRequest) evt.getRequest(), Response.OK);
             } catch (SipException | InvalidArgumentException | ParseException e) {
-                log.error("[命令发送失败] 回复200 OK: {}", e.getMessage());
+                log.error("[Command sending failed] Reply200 OK: {}", e.getMessage());
             }
         }
     }

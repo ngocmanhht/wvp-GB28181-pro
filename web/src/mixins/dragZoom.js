@@ -57,7 +57,7 @@ export default {
       canvas.style.pointerEvents = 'none'
       console.log('this.dragGridEnabled： ' + this.dragGridEnabled)
       if (this.dragGridEnabled) {
-        console.log('加载网格背景')
+        console.log('Load grid background')
         canvas.style.backgroundImage =
           'linear-gradient(rgba(64, 158, 255, 0.3) 1px, transparent 2px),' +
           'linear-gradient(90deg, rgba(64, 158, 255, 0.3) 1px, transparent 2px)'

@@ -4,7 +4,7 @@ import com.genersoft.iot.vmp.media.bean.MediaServer;
 import org.springframework.context.ApplicationEvent;
 
 /**
- * zlm 心跳事件
+ * zlm heartbeat event
  */
 public class HookAblServerKeepaliveEvent extends ApplicationEvent {
 

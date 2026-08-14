@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-dialog
-      title="语音对讲"
+      title="Voice intercom"
       top="10vh"
       width="65vw"
       :close-on-click-modal="false"
@@ -16,7 +16,7 @@
               icon="el-icon-video-play"
               :loading="previewLoading"
               @click="startPreview"
-            >开启预览</el-button>
+            >Turn on preview</el-button>
           </div>
           <playerTabs
             v-if="showPlayer"
@@ -33,11 +33,11 @@
               Your browser is too old which doesn't support HTML5 video.
             </video>
             <el-radio-group v-model="talkMode" size="big" @change="onModeChange">
-              <el-radio-button :label="false">喊话</el-radio-button>
-              <el-radio-button :label="true">对讲</el-radio-button>
+              <el-radio-button :label="false">shout</el-radio-button>
+              <el-radio-button :label="true">intercom</el-radio-button>
             </el-radio-group>
             <p style="color: #909399; font-size: 14px; margin-top: 4px;">
-              {{ talkMode ? '双向语音交互，可听到设备声音' : '单向喊话，仅向设备发送语音' }}
+              {{ talkMode ? 'Two-way voice interaction, device sound can be heard' : 'One-way calling, only sending voice to the device' }}
             </p>
           </div>
           <div style="text-align: center;">
@@ -50,12 +50,12 @@
               @click="talkButtonClick()"
             />
             <p style="margin-top: 16px; color: #606266;">
-              <span v-if="talkStatus === -2">正在释放资源</span>
-              <span v-if="talkStatus === -1">点击开始{{ talkMode ? '对讲' : '喊话' }}</span>
-              <span v-if="talkStatus === 0">等待接通中...</span>
-              <span v-if="talkStatus === 1 && !talkMode">喊话中</span>
-              <span v-if="talkStatus === 1 && talkMode && !playConnected">等待接通中...</span>
-              <span v-if="talkStatus === 1 && talkMode && playConnected">对讲中</span>
+              <span v-if="talkStatus === -2">Releasing resources</span>
+              <span v-if="talkStatus === -1">Click to start{{ talkMode ? 'intercom' : 'shout' }}</span>
+              <span v-if="talkStatus === 0">Waiting to be connected...</span>
+              <span v-if="talkStatus === 1 && !talkMode">shouting</span>
+              <span v-if="talkStatus === 1 && talkMode && !playConnected">Waiting to be connected...</span>
+              <span v-if="talkStatus === 1 && talkMode && playConnected">Talking</span>
             </p>
             <p v-if="talkStatus === 1 && talkMode && talkAudioFailed" style="margin-top: 8px;">
               <el-button
@@ -63,7 +63,7 @@
                 size="mini"
                 icon="el-icon-refresh"
                 @click="retryTalkAudio"
-              >重试音频</el-button>
+              >Retry audio</el-button>
             </p>
           </div>
         </div>
@@ -194,35 +194,35 @@ export default {
       }
     },
     getMicrophoneErrorMessage(error) {
-      if (!error || !error.name) return '本地麦克风检测失败，请检查浏览器音频采集权限'
+      if (!error || !error.name) return 'Local microphone detection failed, please check the browser audio collection permissions'
       if (error.name === 'NotAllowedError' || error.name === 'PermissionDeniedError' || error.name === 'SecurityError') {
-        return '未授予浏览器麦克风权限，无法发起语音对讲'
+        return 'Browser microphone permission is not granted and voice intercom cannot be initiated.'
       }
       if (error.name === 'NotFoundError' || error.name === 'DevicesNotFoundError') {
-        return '未检测到可用麦克风，无法发起语音对讲'
+        return 'No available microphone is detected and voice intercom cannot be initiated.'
       }
       if (error.name === 'NotReadableError' || error.name === 'TrackStartError' || error.name === 'AbortError') {
-        return '本地麦克风被占用或暂不可用，请检查后重试'
+        return 'The local microphone is occupied or temporarily unavailable. Please check and try again.'
       }
       if (error.name === 'OverconstrainedError' || error.name === 'ConstraintNotSatisfiedError') {
-        return '当前麦克风不满足采集条件，无法发起语音对讲'
+        return 'The current microphone does not meet the collection conditions and cannot initiate voice intercom.'
       }
-      return '本地麦克风检测失败: ' + (error.message || error.name)
+      return 'Local microphone detection failed: ' + (error.message || error.name)
     },
     async checkMicrophoneAvailability() {
       if (!window.isSecureContext && location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
-        throw new Error('当前页面不是安全上下文，浏览器无法采集麦克风音频')
+        throw new Error('The current page is not a secure context and the browser cannot collect microphone audio.')
       }
       if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-        throw new Error('当前浏览器不支持麦克风采集')
+        throw new Error('The current browser does not support microphone collection')
       }
       let stream = null
       try {
         stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false })
         const audioTracks = stream.getAudioTracks()
-        if (!audioTracks.length) throw new Error('未检测到有效的麦克风音轨')
+        if (!audioTracks.length) throw new Error('No valid microphone track detected')
         if (audioTracks.every(track => track.readyState === 'ended')) {
-          throw new Error('麦克风已断开或不可用')
+          throw new Error('Microphone is disconnected or unavailable')
         }
       } finally {
         if (stream) stream.getTracks().forEach(t => t.stop())
@@ -232,7 +232,7 @@ export default {
       if (!pushStream) return
       let url = location.protocol === 'https:' ? pushStream.rtcs : (pushStream.rtc || pushStream.rtcs)
       if (!url) {
-        console.warn('[ChAudioTalk] 未找到RTC推流地址')
+        console.warn('[ChAudioTalk] RTC push address not found')
         return
       }
 
@@ -240,7 +240,7 @@ export default {
         if (user && user.pushKey) {
           url += '&sign=' + user.pushKey
         } else {
-          console.warn('[ChAudioTalk] 未获取到pushKey，推流鉴权可能失败')
+          console.warn('[ChAudioTalk] The pushKey is not obtained, and push authentication may fail.')
         }
 
         if (this.broadcastRtc) {
@@ -258,15 +258,15 @@ export default {
         })
 
         this.broadcastRtc.on(ZLMRTCClient.Events.WEBRTC_NOT_SUPPORT, () => {
-          this.$message({ showClose: true, message: '不支持WebRTC, 无法进行语音对讲', type: 'error' })
+          this.$message({ showClose: true, message: 'Does not support WebRTC and cannot perform voice intercom', type: 'error' })
           this.talkStatus = -1
         })
         this.broadcastRtc.on(ZLMRTCClient.Events.WEBRTC_ICE_CANDIDATE_ERROR, () => {
-          this.$message({ showClose: true, message: 'ICE协商出错', type: 'error' })
+          this.$message({ showClose: true, message: 'ICENegotiation error', type: 'error' })
           this.talkStatus = -1
         })
         this.broadcastRtc.on(ZLMRTCClient.Events.WEBRTC_OFFER_ANWSER_EXCHANGE_FAILED, () => {
-          this.$message({ showClose: true, message: 'offer/answer交换失败', type: 'error' })
+          this.$message({ showClose: true, message: 'offer/answerExchange failed', type: 'error' })
           this.talkStatus = -1
         })
         this.broadcastRtc.on(ZLMRTCClient.Events.WEBRTC_ON_CONNECTION_STATE_CHANGE, (e) => {
@@ -279,7 +279,7 @@ export default {
           }
         })
       }).catch(e => {
-        console.warn('[ChAudioTalk] 获取用户pushKey失败', e)
+        console.warn('[ChAudioTalk] Failed to obtain user pushKey', e)
         this.talkStatus = -1
       })
     },
@@ -293,7 +293,7 @@ export default {
 
       const url = location.protocol === 'https:' ? playStream.rtcs : playStream.rtc
       if (!url) {
-        console.warn('[ChAudioTalk] 无可用的设备音频播放地址')
+        console.warn('[ChAudioTalk] No device audio playback address available')
         return
       }
       this.talkAudioRetryTimer = setTimeout(() => {
@@ -336,8 +336,8 @@ export default {
       })
 
       this.talkAudioRtc.on(ZLMRTCClient.Events.WEBRTC_OFFER_ANWSER_EXCHANGE_FAILED, (e) => {
-        console.warn('[ChAudioTalk] 播放流offer失败:', e?.code, e?.msg)
-        if (e && e.code == -400 && e.msg == '流不存在') {
+        console.warn('[ChAudioTalk] Playback stream offer failed:', e?.code, e?.msg)
+        if (e && e.code == -400 && e.msg == 'Stream does not exist') {
           this.talkAudioRetryTimer = setTimeout(() => {
             this.startTalkAudioByRtc(url)
           }, 1000)
@@ -345,16 +345,16 @@ export default {
       })
 
       this.talkAudioRtc.on(ZLMRTCClient.Events.WEBRTC_ON_REMOTE_STREAMS, () => {
-        console.warn('[ChAudioTalk] 设备音频流到达')
+        console.warn('[ChAudioTalk] Device audio stream arrives')
         this.playConnected = true
       })
 
       this.talkAudioRtc.on(ZLMRTCClient.Events.WEBRTC_ICE_CANDIDATE_ERROR, () => {
-        console.error('[ChAudioTalk] 音频播放ICE协商失败')
+        console.error('[ChAudioTalk] Audio playback ICE negotiation failed')
       })
 
       this.talkAudioRtc.on(ZLMRTCClient.Events.WEBRTC_ON_CONNECTION_STATE_CHANGE, (s) => {
-        console.warn('[ChAudioTalk] 音频播放连接状态:', s)
+        console.warn('[ChAudioTalk] Audio playback connection status:', s)
         if (s === 'connected') {
           this.playConnected = true
         } else if (s === 'disconnected' || s === 'failed' || s === 'closed') {
@@ -395,7 +395,7 @@ export default {
       try {
         await this.$store.dispatch(storeName + '/' + actionName, this.channelId)
       } catch (e) {
-        console.warn('停止对讲失败', e)
+        console.warn('Failed to stop intercom', e)
       }
 
       this.talkStatus = -1

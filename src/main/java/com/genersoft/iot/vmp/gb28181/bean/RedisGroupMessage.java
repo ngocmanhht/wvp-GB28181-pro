@@ -7,28 +7,28 @@ public class RedisGroupMessage {
 
 
     /**
-     * 分组别名
+     * Group alias
      */
     private String groupAlias;
 
     /**
-     * 分组名称
+     * Group name
      */
     private String groupName;
 
 
     /**
-     * 分组所属父分组别名
+     * The alias of the parent group to which the group belongs
      */
     private String parentGAlias;
 
     /**
-     * 分组所属业务分组别名
+     * Alias of the business group to which the group belongs
      */
     private String topGroupGAlias;
 
     /**
-     * 分组变化消息中的消息类型，取值为 add update delete
+     * The message type in the group change message, the value is add update delete
      */
     private String messageType;
 

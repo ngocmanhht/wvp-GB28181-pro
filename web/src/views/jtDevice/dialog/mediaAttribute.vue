@@ -2,7 +2,7 @@
   <div id="configInfo">
     <el-dialog
       v-el-drag-dialog
-      title="音视频属性"
+      title="Audio and video properties"
       width="=80%"
       top="2rem"
       :close-on-click-modal="false"
@@ -11,18 +11,18 @@
       @close="close()"
     >
       <div id="shared">
-        <el-descriptions title="音频" :column="2" v-if="attributeData" style="margin-bottom: 1rem;">
-          <el-descriptions-item label="编码">{{ audioEncoderEnum[attributeData.audioEncoder - 1] }}</el-descriptions-item>
-          <el-descriptions-item label="声道数">{{ attributeData.audioChannels }}</el-descriptions-item>
-          <el-descriptions-item label="采样率">{{ audioSamplingRateEnum[attributeData.audioSamplingRate] }}</el-descriptions-item>
-          <el-descriptions-item label="采样位数">{{ audioSamplingBitsEnum[attributeData.audioSamplingBits] }}</el-descriptions-item>
-          <el-descriptions-item label="帧长度">{{ attributeData.audioFrameLength }}</el-descriptions-item>
-          <el-descriptions-item label="音频输出">{{ attributeData.audioOutputEnable === 0 ? '不支持':'支持' }}</el-descriptions-item>
-          <el-descriptions-item label="最大物理通道数量">{{ attributeData.audioChannelMax }}</el-descriptions-item>
+        <el-descriptions title="Audio" :column="2" v-if="attributeData" style="margin-bottom: 1rem;">
+          <el-descriptions-item label="encoding">{{ audioEncoderEnum[attributeData.audioEncoder - 1] }}</el-descriptions-item>
+          <el-descriptions-item label="Number of channels">{{ attributeData.audioChannels }}</el-descriptions-item>
+          <el-descriptions-item label="Sampling rate">{{ audioSamplingRateEnum[attributeData.audioSamplingRate] }}</el-descriptions-item>
+          <el-descriptions-item label="Number of sampling bits">{{ audioSamplingBitsEnum[attributeData.audioSamplingBits] }}</el-descriptions-item>
+          <el-descriptions-item label="Frame length">{{ attributeData.audioFrameLength }}</el-descriptions-item>
+          <el-descriptions-item label="audio output">{{ attributeData.audioOutputEnable === 0 ? 'Not supported':'support' }}</el-descriptions-item>
+          <el-descriptions-item label="Maximum number of physical channels">{{ attributeData.audioChannelMax }}</el-descriptions-item>
         </el-descriptions>
-        <el-descriptions title="视频" :column="2" style="margin-bottom: 1rem;">
-          <el-descriptions-item label="编码方式">{{ videoEncoderEnum[attributeData.videoEncoder] }}</el-descriptions-item>
-          <el-descriptions-item label="最大物理通道数量">{{ attributeData.videoChannelMax }}</el-descriptions-item>
+        <el-descriptions title="video" :column="2" style="margin-bottom: 1rem;">
+          <el-descriptions-item label="encoding method">{{ videoEncoderEnum[attributeData.videoEncoder] }}</el-descriptions-item>
+          <el-descriptions-item label="Maximum number of physical channels">{{ attributeData.videoChannelMax }}</el-descriptions-item>
         </el-descriptions>
       </div>
     </el-dialog>
@@ -50,7 +50,7 @@ export default {
         '8kHz', '22.05kHz', '44.1kHz', '48kHz'
       ],
       audioSamplingBitsEnum: [
-        '8位', '16位', '32位'
+        '8Bit', '16Bit', '32Bit'
       ],
       videoEncoderEnum: {
         98: 'H.264',

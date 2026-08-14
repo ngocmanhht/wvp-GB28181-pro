@@ -26,7 +26,7 @@ import org.springframework.util.ObjectUtils;
 import java.util.UUID;
 
 /**
- * 视频代理业务
+ * Video agency business
  */
 @Slf4j
 @Service
@@ -52,12 +52,12 @@ public class StreamProxyPlayServiceImpl implements IStreamProxyPlayService {
 
     @Override
     public void start(int id, Boolean record, ErrorCallback<StreamInfo> callback) {
-        log.info("[拉流代理]， 开始拉流，ID：{}", id);
+        log.info("[Streaming agent]， Start streaming，ID：{}", id);
         StreamProxy streamProxy = streamProxyMapper.select(id);
         if (streamProxy == null) {
-            throw new ControllerException(ErrorCode.ERROR404.getCode(), "代理信息未找到");
+            throw new ControllerException(ErrorCode.ERROR404.getCode(), "Agent information not found");
         }
-        log.info("[拉流代理] 类型： {}， app：{}, stream: {}, 流地址： {}", streamProxy.getType(), streamProxy.getApp(), streamProxy.getStream(), streamProxy.getSrcUrl());
+        log.info("[Streaming agent] Type： {}， app：{}, stream: {}, stream address： {}", streamProxy.getType(), streamProxy.getApp(), streamProxy.getStream(), streamProxy.getSrcUrl());
         if (record != null) {
             streamProxy.setEnableMp4(record);
         }
@@ -68,14 +68,14 @@ public class StreamProxyPlayServiceImpl implements IStreamProxyPlayService {
     @Override
     public void startProxy(@NotNull StreamProxy streamProxy, ErrorCallback<StreamInfo> callback){
         if (!streamProxy.isEnable()) {
-            callback.run(ErrorCode.ERROR100.getCode(), "代理未启用", null);
+            callback.run(ErrorCode.ERROR100.getCode(), "Proxy not enabled", null);
             return;
         }
         if (streamProxy.getServerId() == null) {
             streamProxy.setServerId(userSetting.getServerId());
         }
         if (!userSetting.getServerId().equals(streamProxy.getServerId())) {
-            log.info("[拉流代理] 由其他服务{}管理", streamProxy.getServerId());
+            log.info("[Streaming agent] by other services{}management", streamProxy.getServerId());
             redisRpcPlayService.playProxy(streamProxy.getServerId(), streamProxy.getId(), callback);
             return;
         }
@@ -96,25 +96,25 @@ public class StreamProxyPlayServiceImpl implements IStreamProxyPlayService {
             mediaServer = mediaServerService.getOne(mediaServerId);
         }
         if (mediaServer == null) {
-            throw new ControllerException(ErrorCode.ERROR100.getCode(), mediaServerId == null?"未找到可用的媒体节点":"未找到节点" + mediaServerId);
+            throw new ControllerException(ErrorCode.ERROR100.getCode(), mediaServerId == null?"No available media node found":"Node not found" + mediaServerId);
         }
 
-        // 设置流超时的定时任务
+        // Set a scheduled task for stream timeout
         String timeOutTaskKey = UUID.randomUUID().toString();
         Hook rtpHook = Hook.getInstance(HookType.on_media_arrival, streamProxy.getApp(), streamProxy.getStream(), mediaServer.getId());
         dynamicTask.startDelay(timeOutTaskKey, () -> {
-            log.info("[拉流代理] 收流超时，app：{}，stream: {}", streamProxy.getApp(), streamProxy.getStream());
-            // 收流超时
+            log.info("[Streaming agent] Traffic collection timeout，app：{}，stream: {}", streamProxy.getApp(), streamProxy.getStream());
+            // Traffic collection timeout
             subscribe.removeSubscribe(rtpHook);
             callback.run(InviteErrorCode.ERROR_FOR_STREAM_TIMEOUT.getCode(), InviteErrorCode.ERROR_FOR_STREAM_TIMEOUT.getMsg(), null);
         }, userSetting.getPlayTimeout());
 
-        // 开启流到来的监听
+        // Enable monitoring of incoming streams
         subscribe.addSubscribe(rtpHook, (hookData) -> {
-            log.info("[拉流代理] 收流成功，app：{}，stream: {}", hookData.getApp(), hookData.getStream());
+            log.info("[Streaming agent] Successfully collected traffic，app：{}，stream: {}", hookData.getApp(), hookData.getStream());
             dynamicTask.stop(timeOutTaskKey);
             StreamInfo streamInfo = mediaServerService.getStreamInfoByAppAndStream(mediaServer, hookData.getApp(), hookData.getStream(), hookData.getMediaInfo(), null);
-            // hook响应
+            // hookresponse
             callback.run(InviteErrorCode.SUCCESS.getCode(), InviteErrorCode.SUCCESS.getMsg(), streamInfo);
             subscribe.removeSubscribe(rtpHook);
             streamProxy.setPulling(true);
@@ -131,7 +131,7 @@ public class StreamProxyPlayServiceImpl implements IStreamProxyPlayService {
     public void stop(int id) {
         StreamProxy streamProxy = streamProxyMapper.select(id);
         if (streamProxy == null) {
-            throw new ControllerException(ErrorCode.ERROR404.getCode(), "代理信息未找到");
+            throw new ControllerException(ErrorCode.ERROR404.getCode(), "Agent information not found");
         }
         if (!userSetting.getServerId().equals(streamProxy.getServerId())) {
             redisRpcPlayService.stopProxy(streamProxy.getServerId(), streamProxy.getId());
@@ -144,11 +144,11 @@ public class StreamProxyPlayServiceImpl implements IStreamProxyPlayService {
     public void stopProxy(StreamProxy streamProxy){
 
         String mediaServerId = streamProxy.getMediaServerId();
-        Assert.notNull(mediaServerId, "代理节点不存在");
+        Assert.notNull(mediaServerId, "Agent node does not exist");
 
         MediaServer mediaServer = mediaServerService.getOne(mediaServerId);
         if (mediaServer == null) {
-            throw new ControllerException(ErrorCode.ERROR100.getCode(), "媒体节点不存在");
+            throw new ControllerException(ErrorCode.ERROR100.getCode(), "Media node does not exist");
         }
         if (ObjectUtils.isEmpty(streamProxy.getStreamKey())) {
             mediaServerService.closeStreams(mediaServer, streamProxy.getApp(), streamProxy.getStream());

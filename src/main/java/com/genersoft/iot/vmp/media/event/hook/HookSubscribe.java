@@ -12,14 +12,14 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * zlm hook事件的参数
+ * zlm hookevent parameters
  * @author lin
  */
 @Component
 public class HookSubscribe {
 
     /**
-     * 订阅数据过期时间
+     * Subscription data expiration time
      */
     private final long subscribeExpire = 5 * 60 * 1000;
 
@@ -30,7 +30,7 @@ public class HookSubscribe {
     }
 
     /**
-     * 流到来的处理
+     * Processing of incoming streams
      */
     @Async
     @EventListener
@@ -42,7 +42,7 @@ public class HookSubscribe {
     }
 
     /**
-     * 流结束事件
+     * stream end event
      */
     @Async
     @EventListener
@@ -53,7 +53,7 @@ public class HookSubscribe {
 
     }
     /**
-     * 推流鉴权事件
+     * Push authentication event
      */
     @Async
     @EventListener
@@ -61,7 +61,7 @@ public class HookSubscribe {
         sendNotify(HookType.on_publish, event);
     }
     /**
-     * 生成录像文件事件
+     * Generate video file event
      */
     @Async
     @EventListener
@@ -95,9 +95,9 @@ public class HookSubscribe {
     }
 
     /**
-     * 对订阅数据进行过期清理
+     * Clean up expiration of subscription data
      */
-    @Scheduled(fixedRate=subscribeExpire)   //每5分钟执行一次
+    @Scheduled(fixedRate=subscribeExpire)   //Execute every 5 minutes
     public void execute(){
         long expireTime = System.currentTimeMillis();
         for (Hook hook : allHook.values()) {

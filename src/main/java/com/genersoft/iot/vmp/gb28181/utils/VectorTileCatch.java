@@ -79,7 +79,7 @@ public class VectorTileCatch {
     }
 
 
-    // 缓存数据过期检查
+    // Cache data expiration check
     @Scheduled(fixedDelay = 30, timeUnit = TimeUnit.MINUTES)
     public void expirationCheck(){
         while (!delayQueue.isEmpty()) {
@@ -87,7 +87,7 @@ public class VectorTileCatch {
                 VectorTileSource vectorTileSource = delayQueue.take();
                 vectorTileMap.remove(vectorTileSource.getId());
             } catch (InterruptedException e) {
-                log.error("[清理过期的抽稀数据] ", e);
+                log.error("[Clean up expired thinning data] ", e);
             }
         }
     }

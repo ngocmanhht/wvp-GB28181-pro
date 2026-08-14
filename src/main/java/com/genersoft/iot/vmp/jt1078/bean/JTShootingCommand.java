@@ -9,23 +9,23 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@Schema(description = "拍摄命令参数")
+@Schema(description = "Shooting command parameters")
 public class JTShootingCommand {
 
-    @Schema(description = "通道 ID")
+    @Schema(description = "channel ID")
     private int chanelId;
 
-    @Schema(description = "0:停止拍摄；0xFFFF:录像；其他:拍照张数")
+    @Schema(description = "0:Stop shooting; 0xFFFF: video recording; others: number of photos taken")
     private int command;
 
-    @Schema(description = "拍照间隔/录像时间, 单位为秒(s) ,0 表示按最小间隔拍照或一直录像")
+    @Schema(description = "Photo interval/Recording time, unit is seconds(s) ,0 Indicates taking pictures at minimum intervals or recording videos all the time")
     private int time;
 
-    @Schema(description = "1:保存； 0:实时上传")
+    @Schema(description = "1:Save; 0: real-time upload")
     private int save;
 
-    @Schema(description = "分辨率: " +
-            "0x00:最低分辨率" +
+    @Schema(description = "resolution: " +
+            "0x00:lowest resolution" +
             "0x01:320 x240；" +
             "0x02:640 x480；" +
             "0x03:800 x600；" +
@@ -34,22 +34,22 @@ public class JTShootingCommand {
             "0x06:352 x288；" +
             "0x07:704 x288；" +
             "0x08:704 x576；" +
-            "0xff:最高分辨率")
+            "0xff:highest resolution")
     private int resolvingPower;
 
-    @Schema(description = "图像/视频质量: 取值范围为 1 ~ 10 ,1 代表质量损失最小 ,10 表示压缩 比最大")
+    @Schema(description = "image/Video quality: The value range is 1 ~ 10, 1 represents the minimum quality loss, 10 represents the maximum compression ratio")
     private int quality;
 
-    @Schema(description = "亮度, 0 ~ 255")
+    @Schema(description = "brightness, 0 ~ 255")
     private int brightness;
 
-    @Schema(description = "对比度,0 ~ 127")
+    @Schema(description = "Contrast,0 ~ 127")
     private int contrastRatio;
 
-    @Schema(description = "饱和度,0 ~ 127")
+    @Schema(description = "saturation,0 ~ 127")
     private int saturation;
 
-    @Schema(description = "色度,0 ~ 255")
+    @Schema(description = "Chroma,0 ~ 255")
     private int chroma;
 
     public ByteBuf decode() {

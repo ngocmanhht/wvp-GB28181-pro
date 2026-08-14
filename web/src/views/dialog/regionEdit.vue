@@ -1,7 +1,7 @@
 <template>
   <el-dialog
     v-el-drag-dialog
-    title="生成行政区划编码"
+    title="Generate administrative division codes"
     width="65rem"
     top="2rem"
     center
@@ -26,7 +26,7 @@
           <div style="text-align: center">{{ allVal[1].meaning }}</div>
         </div>
         <el-radio :key="-1" v-model="allVal[1].val" label="" style="line-height: 2rem" @input="deviceChange">
-          不添加
+          Do not add
         </el-radio>
         <el-radio v-for="item in regionList" :key="item.deviceId" v-model="allVal[1].val" :label="item.deviceId.substring(2)" style="line-height: 2rem" @input="deviceChange(item)">
           {{ item.name }} - {{ item.deviceId.substring(2) }}
@@ -38,14 +38,14 @@
           <div style="text-align: center">{{ allVal[2].meaning }}</div>
         </div>
         <el-radio :key="-1" v-model="allVal[2].val" label="" style="line-height: 2rem" @input="deviceChange">
-          不添加
+          Do not add
         </el-radio>
         <el-radio v-for="item in regionList" :key="item.deviceId" v-model="allVal[2].val" :label="item.deviceId.substring(4)" style="line-height: 2rem" @input="deviceChange(item)">
           {{ item.name }} - {{ item.deviceId.substring(4) }}
         </el-radio>
       </el-tab-pane>
       <el-tab-pane name="3">
-        请手动输入基层接入单位编码,两位数字
+        Please manually enter the grassroots access unit code, two digits
         <div slot="label">
           <div class="show-code-item">{{ allVal[3].val?allVal[3].val:"--" }}</div>
           <div style="text-align: center">{{ allVal[3].meaning }}</div>
@@ -53,7 +53,7 @@
         <el-input
           v-model="allVal[3].val"
           type="text"
-          placeholder="请输入内容"
+          placeholder="Please enter content"
           maxlength="2"
           :disabled="allVal[3].lock"
           show-word-limit
@@ -62,16 +62,16 @@
       </el-tab-pane>
     </el-tabs>
     <el-form ref="form" style="  display: grid; padding: 1rem 2rem 0 2rem;grid-template-columns: 1fr 1fr 1fr; gap: 1rem;">
-      <el-form-item label="名称" prop="name" size="mini">
+      <el-form-item label="Name" prop="name" size="mini">
         <el-input v-model="form.name" autocomplete="off" />
       </el-form-item>
-      <el-form-item label="编号" prop="deviceId" size="mini">
+      <el-form-item label="No." prop="deviceId" size="mini">
         <el-input v-model="form.deviceId" autocomplete="off" />
       </el-form-item>
       <el-form-item style="margin-top: 22px; margin-bottom: 0;">
         <div style="float:right;">
-          <el-button type="primary" @click="handleOk">保存</el-button>
-          <el-button @click="closeModel">取消</el-button>
+          <el-button type="primary" @click="handleOk">save</el-button>
+          <el-button @click="closeModel">Cancel</el-button>
         </div>
       </el-form-item>
     </el-form>
@@ -97,30 +97,30 @@ export default {
       allVal: [
         {
           id: [1, 2],
-          meaning: '省级编码',
+          meaning: 'Provincial code',
           val: '11',
-          type: '中心编码',
+          type: 'center coding',
           lock: false
         },
         {
           id: [3, 4],
-          meaning: '市级编码',
+          meaning: 'Municipal code',
           val: '',
-          type: '中心编码',
+          type: 'center coding',
           lock: false
         },
         {
           id: [5, 6],
-          meaning: '区级编码',
+          meaning: 'District level coding',
           val: '',
-          type: '中心编码',
+          type: 'center coding',
           lock: false
         },
         {
           id: [7, 8],
-          meaning: '基层接入单位编码',
+          meaning: 'Basic access unit code',
           val: '',
-          type: '中心编码',
+          type: 'center coding',
           lock: false
         }
       ],
@@ -141,30 +141,30 @@ export default {
       this.allVal = [
         {
           id: [1, 2],
-          meaning: '省级编码',
+          meaning: 'Provincial code',
           val: '11',
-          type: '中心编码',
+          type: 'center coding',
           lock: false
         },
         {
           id: [3, 4],
-          meaning: '市级编码',
+          meaning: 'Municipal code',
           val: '',
-          type: '中心编码',
+          type: 'center coding',
           lock: false
         },
         {
           id: [5, 6],
-          meaning: '区级编码',
+          meaning: 'District level coding',
           val: '',
-          type: '中心编码',
+          type: 'center coding',
           lock: false
         },
         {
           id: [7, 8],
-          meaning: '基层接入单位编码',
+          meaning: 'Basic access unit code',
           val: '',
-          type: '中心编码',
+          type: 'center coding',
           lock: false
         }
       ]
@@ -224,7 +224,7 @@ export default {
         if (this.activeKey !== '0' && parent === '') {
           this.$message.error({
             showClose: true,
-            message: '请先选择上级行政区划'
+            message: 'Please select the upper-level administrative division first'
           })
         }
         if (parent !== '') {

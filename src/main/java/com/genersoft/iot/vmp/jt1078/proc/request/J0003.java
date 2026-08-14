@@ -13,7 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEvent;
 
 /**
- * 终端注销
+ * Terminal logout
  */
 @Slf4j
 @Getter
@@ -24,7 +24,7 @@ public class J0003 extends Re {
 
     @Override
     protected Rs decode0(ByteBuf buf, Header header, Session session) {
-        log.info("[JT-注销] 设备： {}", header.getPhoneNumber());
+        log.info("[JT-Log out] Equipment： {}", header.getPhoneNumber());
         return null;
     }
 

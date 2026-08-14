@@ -2,72 +2,72 @@
   <div id="channelList" class="app-container" style="height: calc(100vh - 124px);">
     <div v-if="!editId && !showPtzConfig" style="height: 100%">
       <el-form :inline="true" size="mini">
-        <el-form-item label="搜索">
+        <el-form-item label="Search">
           <el-input
             v-model="searchStr"
             style="margin-right: 1rem; width: auto;"
-            placeholder="关键字"
+            placeholder="Keywords"
             prefix-icon="el-icon-search"
             clearable
             @input="search"
           />
         </el-form-item>
-        <el-form-item label="在线状态">
+        <el-form-item label="online status">
           <el-select
             v-model="online"
             style="width: 8rem; margin-right: 1rem;"
-            placeholder="请选择"
+            placeholder="Please select"
             default-first-option
             @change="search"
           >
-            <el-option label="全部" value="" />
-            <el-option label="在线" value="true" />
-            <el-option label="离线" value="false" />
+            <el-option label="All" value="" />
+            <el-option label="online" value="true" />
+            <el-option label="Offline" value="false" />
           </el-select>
         </el-form-item>
-        <el-form-item label="类型">
+        <el-form-item label="Type">
           <el-select
             v-model="channelType"
             style="width: 8rem; margin-right: 1rem;"
-            placeholder="请选择"
+            placeholder="Please select"
             default-first-option
             @change="getChannelList"
           >
-            <el-option label="全部" value="" />
+            <el-option label="All" value="" />
             <el-option v-for="item in Object.values($channelTypeList)" :key="item.id" :label="item.name" :value="item.id" />
           </el-select>
         </el-form-item>
         <el-form-item >
-          <el-input placeholder="请选择行政区划" v-model="civilCodeName" readonly style="width: 12rem; margin-right: 1rem;">
+          <el-input placeholder="Please select an administrative division" v-model="civilCodeName" readonly style="width: 12rem; margin-right: 1rem;">
             <span slot="suffix" v-show="civilCodeName" style="height: 100%; display: flex; align-items: center; width: 22px;"
                   @click="civilCodeClear">
                <i class="el-icon-circle-close" style="margin-left: 5px;cursor: pointer;"></i>
             </span>
-            <el-button slot="append" @click="civilCodeFilter">选择</el-button>
+            <el-button slot="append" @click="civilCodeFilter">Choose</el-button>
           </el-input>
         </el-form-item>
         <el-form-item >
-          <el-input placeholder="请选择业务分组" v-model="groupName" readonly style="width: 12rem; margin-right: 1rem;">
+          <el-input placeholder="Please select a business group" v-model="groupName" readonly style="width: 12rem; margin-right: 1rem;">
             <span slot="suffix" v-show="groupName" style="height: 100%; display: flex; align-items: center; width: 22px;"
                   @click="groupClear">
                <i class="el-icon-circle-close" style="margin-left: 5px;cursor: pointer;"></i>
             </span>
-            <el-button slot="append" @click="groupFilter">选择</el-button>
+            <el-button slot="append" @click="groupFilter">Choose</el-button>
           </el-input>
         </el-form-item>
         <el-form-item >
           <el-dropdown >
             <el-button type="primary">
-              批量操作<i class="el-icon-arrow-down el-icon--right"></i>
+              Batch operations<i class="el-icon-arrow-down el-icon--right"></i>
             </el-button>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item @click.native="batchChangeRegion">行政区划</el-dropdown-item>
-              <el-dropdown-item @click.native="batchChangeGroup">业务分组</el-dropdown-item>
+              <el-dropdown-item @click.native="batchChangeRegion">Administrative division</el-dropdown-item>
+              <el-dropdown-item @click.native="batchChangeGroup">business grouping</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </el-form-item>
         <el-form-item style="float: right;">
-          <el-button icon="el-icon-refresh-right" circle @click="refresh()" title="刷新表格"/>
+          <el-button icon="el-icon-refresh-right" circle @click="refresh()" title="Refresh table"/>
         </el-form-item>
       </el-form>
       <el-table
@@ -80,36 +80,36 @@
         @selection-change="handleSelectionChange"
       >
         <el-table-column type="selection" width="55" />
-        <el-table-column prop="gbName" label="名称" min-width="180" />
-        <el-table-column prop="gbDeviceId" label="编号" min-width="180" />
-        <el-table-column prop="gbManufacturer" label="厂家" min-width="100" />
-        <el-table-column label="类型" min-width="100">
+        <el-table-column prop="gbName" label="Name" min-width="180" />
+        <el-table-column prop="gbDeviceId" label="No." min-width="180" />
+        <el-table-column prop="gbManufacturer" label="Manufacturer" min-width="100" />
+        <el-table-column label="Type" min-width="100">
           <template v-slot:default="scope">
             <div slot="reference" class="name-wrapper">
               <el-tag size="medium" effect="plain" type="success" :style="$channelTypeList[scope.row.dataType].style">{{ $channelTypeList[scope.row.dataType].name }}</el-tag>
             </div>
           </template>
         </el-table-column>
-        <el-table-column label="位置信息" min-width="150">
+        <el-table-column label="location information" min-width="150">
           <template v-slot:default="scope">
             <span v-if="scope.row.gbLongitude && scope.row.gbLatitude">{{ scope.row.gbLongitude }}<br>{{ scope.row.gbLatitude }}</span>
-            <span v-if="!scope.row.gbLongitude || !scope.row.gbLatitude">无</span>
+            <span v-if="!scope.row.gbLongitude || !scope.row.gbLatitude">None</span>
           </template>
         </el-table-column>
-        <el-table-column prop="ptzType" label="摄像头类型" min-width="100">
+        <el-table-column prop="ptzType" label="Camera type" min-width="100">
           <template v-slot:default="scope">
             <div>{{ scope.row.ptzTypeText }}</div>
           </template>
         </el-table-column>
-        <el-table-column label="状态" min-width="100">
+        <el-table-column label="Status" min-width="100">
           <template v-slot:default="scope">
             <div slot="reference" class="name-wrapper">
-              <el-tag v-if="scope.row.gbStatus === 'ON'" size="medium">在线</el-tag>
-              <el-tag v-if="scope.row.gbStatus !== 'ON'" size="medium" type="info">离线</el-tag>
+              <el-tag v-if="scope.row.gbStatus === 'ON'" size="medium">online</el-tag>
+              <el-tag v-if="scope.row.gbStatus !== 'ON'" size="medium" type="info">Offline</el-tag>
             </div>
           </template>
         </el-table-column>
-        <el-table-column label="操作" min-width="210" fixed="right">
+        <el-table-column label="Operation" min-width="210" fixed="right">
           <template v-slot:default="scope">
             <el-button
               size="medium"
@@ -118,7 +118,7 @@
               type="text"
               :loading="scope.row.playLoading"
               @click="sendDevicePush(scope.row)"
-            >播放
+            >play
             </el-button>
             <el-button
               v-if="!!scope.row.streamId"
@@ -127,7 +127,7 @@
               type="text"
               style="color: #f56c6c"
               @click="stopDevicePush(scope.row)"
-            >停止
+            >stop
             </el-button>
             <el-divider direction="vertical" />
             <el-button
@@ -137,22 +137,22 @@
               v-if="$store.getters.authority !== 2"
               @click="handleEdit(scope.row)"
             >
-              编辑
+              Edit
             </el-button>
             <el-divider direction="vertical" />
             <el-dropdown @command="(command)=>{moreClick(command, scope.row)}">
               <el-button size="medium" type="text">
-                更多<i class="el-icon-arrow-down el-icon--right" />
+                More<i class="el-icon-arrow-down el-icon--right" />
               </el-button>
               <el-dropdown-menu>
                 <el-dropdown-item command="records" :disabled="scope.row.gbStatus !== 'ON'">
-                  设备录像</el-dropdown-item>
+                  Equipment video</el-dropdown-item>
                 <el-dropdown-item command="cloudRecords" :disabled="scope.row.gbStatus !== 'ON'">
-                  云端录像</el-dropdown-item>
+                  Cloud recording</el-dropdown-item>
                 <el-dropdown-item command="ptzConfig" :disabled="scope.row.gbStatus !== 'ON'">
-                  云台配置</el-dropdown-item>
+                  PTZ configuration</el-dropdown-item>
                 <el-dropdown-item command="audioTalk" :disabled="scope.row.gbStatus !== 'ON'">
-                  语音对讲</el-dropdown-item>
+                  Voice intercom</el-dropdown-item>
               </el-dropdown-menu>
 
             </el-dropdown>
@@ -211,7 +211,7 @@ export default {
   },
   computed: {
     excelName(){
-      return '通道列表-' + this.currentPage
+      return 'Channel list-' + this.currentPage
     }
   },
   data() {
@@ -219,28 +219,28 @@ export default {
       device: null,
       channelList: [],
       excelFields: {
-        名称: 'gbName',
-        编号: 'gbDeviceId',
-        厂家: 'gbManufacturer',
-        类型: {
+        Name: 'gbName',
+        No.: 'gbDeviceId',
+        Manufacturer: 'gbManufacturer',
+        Type: {
           field: 'dataType',
           callback: (value) => {
             return this.$channelTypeList[value].name
           }
         },
-        经度: 'gbLongitude',
-        纬度: 'gbLatitude',
-        摄像头类型: 'ptzTypeText',
-        状态: {
+        longitude: 'gbLongitude',
+        Latitude: 'gbLatitude',
+        Camera type: 'ptzTypeText',
+        Status: {
           field: 'gbStatus',
           callback: (value) => {
-            return value === 'ON' ? '在线' : '离线'
+            return value === 'ON' ? 'online' : 'Offline'
           }
         }
       },
       videoComponentList: [],
-      currentPlayerInfo: {}, // 当前播放对象
-      updateLooper: 0, // 数据刷新轮训标志
+      currentPlayerInfo: {}, // Current playback object
+      updateLooper: 0, // Data refresh rotation training flag
       searchStr: '',
       channelType: '',
       online: '',
@@ -306,14 +306,14 @@ export default {
           e.ptzType = e.ptzType + ''
           this.$set(e, 'playLoading', false)
         })
-        // 防止出现表格错位
+        // Prevent form misalignment
         this.$nextTick(() => {
           this.$refs.channelListTable.doLayout()
         })
       })
     },
 
-    // 通知设备上传媒体流
+    // Notify device to upload media stream
     sendDevicePush: function(itemData) {
       itemData.playLoading = true
       this.$store.dispatch('commonChanel/playChannel', itemData.gbId)
@@ -352,7 +352,7 @@ export default {
       this.$store.dispatch('commonChanel/stopPlayChannel', itemData.gbId).then(data => {
         this.initData()
       }).catch((error) => {
-        if (error.response.status === 402) { // 已经停止过
+        if (error.response.status === 402) { // has stopped
           this.initData()
         } else {
           console.log(error)
@@ -368,7 +368,7 @@ export default {
     },
     getSnapErrorEvent: function(deviceId, channelId) {
       if (typeof (this.loadSnap[deviceId + channelId]) !== 'undefined') {
-        console.log('下载截图' + this.loadSnap[deviceId + channelId])
+        console.log('Download screenshot' + this.loadSnap[deviceId + channelId])
         if (this.loadSnap[deviceId + channelId] > 5) {
           delete this.loadSnap[deviceId + channelId]
           return
@@ -388,12 +388,12 @@ export default {
     refresh: function() {
       this.initData()
     },
-    // 编辑
+    // Edit
     handleEdit(row) {
       console.log(row)
       this.editId = row.gbId
     },
-    // 结束编辑
+    // End editing
     closeEdit: function() {
       this.editId = null
       this.getChannelList()
@@ -418,7 +418,7 @@ export default {
       if (channelIds.length === 0) {
         this.$message.warning({
           showClose: true,
-          message: '请选择通道'
+          message: 'Please select channel'
         })
         return []
       }
@@ -430,9 +430,9 @@ export default {
         return
       }
       this.$refs.chooseCivilCode.openDialog((code, name) => {
-        this.$confirm(`确定添加${ids.length}个通道到${name}?`, '批量操作', {
-          confirmButtonText: '确认',
-          cancelButtonText: '取消',
+        this.$confirm(`Confirm to add${ids.length}channel to${name}?`, 'Batch operations', {
+          confirmButtonText: 'Confirm',
+          cancelButtonText: 'Cancel',
           type: 'warning'
         }).then(() => {
           this.$store.dispatch('commonChanel/addToRegion', {
@@ -442,7 +442,7 @@ export default {
             .then(data => {
               this.$message.success({
                 showClose: true,
-                message: '保存成功'
+                message: 'Saved successfully'
               })
             })
             .catch((error) => {
@@ -463,9 +463,9 @@ export default {
         return
       }
       this.$refs.chooseGroup.openDialog((code, businessGroupId, name) => {
-        this.$confirm(`确定添加${ids.length}个通道到${name}?`, '批量操作', {
-          confirmButtonText: '确认',
-          cancelButtonText: '取消',
+        this.$confirm(`Confirm to add${ids.length}channel to${name}?`, 'Batch operations', {
+          confirmButtonText: 'Confirm',
+          cancelButtonText: 'Cancel',
           type: 'warning'
         }).then(() => {
           this.$store.dispatch('commonChanel/addToGroup', {
@@ -476,7 +476,7 @@ export default {
             .then(data => {
               this.$message.success({
                 showClose: true,
-                message: '保存成功'
+                message: 'Saved successfully'
               })
               this.getChannelList()
             })

@@ -43,9 +43,9 @@ public class SourcePlaybackServiceForJTImpl implements ISourcePlaybackService {
     @Override
     public void playback(CommonGBChannel channel, Long startTime, Long stopTime, ErrorCallback<StreamInfo> callback) {
         JTChannel jtChannel = jtChannelMapper.selectChannelById(channel.getDataDeviceId());
-        Assert.notNull(channel, "通道不存在");
+        Assert.notNull(channel, "Channel does not exist");
         JTDevice device = jtDeviceMapper.getDeviceById(jtChannel.getDataDeviceId());
-        Assert.notNull(device, "设备不存在");
+        Assert.notNull(device, "Device does not exist");
         jt1078Template.checkTerminalStatus(device.getPhoneNumber());
 
         playService.playback(device.getPhoneNumber(), jtChannel.getChannelId(), DateUtil.timestampTo_yyyy_MM_dd_HH_mm_ss(startTime),
@@ -57,9 +57,9 @@ public class SourcePlaybackServiceForJTImpl implements ISourcePlaybackService {
     @Override
     public void stopPlayback(CommonGBChannel channel, String stream) {
         JTChannel jtChannel = jtChannelMapper.selectChannelById(channel.getDataDeviceId());
-        Assert.notNull(channel, "通道不存在");
+        Assert.notNull(channel, "Channel does not exist");
         JTDevice device = jtDeviceMapper.getDeviceById(jtChannel.getDataDeviceId());
-        Assert.notNull(device, "设备不存在");
+        Assert.notNull(device, "Device does not exist");
         jt1078Template.checkTerminalStatus(device.getPhoneNumber());
 
         playService.stopPlayback(device.getPhoneNumber(), jtChannel.getChannelId());
@@ -68,9 +68,9 @@ public class SourcePlaybackServiceForJTImpl implements ISourcePlaybackService {
     @Override
     public void playbackPause(CommonGBChannel channel, String stream) {
         JTChannel jtChannel = jtChannelMapper.selectChannelById(channel.getDataDeviceId());
-        Assert.notNull(channel, "通道不存在");
+        Assert.notNull(channel, "Channel does not exist");
         JTDevice device = jtDeviceMapper.getDeviceById(jtChannel.getDataDeviceId());
-        Assert.notNull(device, "设备不存在");
+        Assert.notNull(device, "Device does not exist");
         jt1078Template.checkTerminalStatus(device.getPhoneNumber());
 
         playService.playbackControl(device.getPhoneNumber(), jtChannel.getChannelId(), 1, 0, null);
@@ -79,9 +79,9 @@ public class SourcePlaybackServiceForJTImpl implements ISourcePlaybackService {
     @Override
     public void playbackResume(CommonGBChannel channel, String stream) {
         JTChannel jtChannel = jtChannelMapper.selectChannelById(channel.getDataDeviceId());
-        Assert.notNull(channel, "通道不存在");
+        Assert.notNull(channel, "Channel does not exist");
         JTDevice device = jtDeviceMapper.getDeviceById(jtChannel.getDataDeviceId());
-        Assert.notNull(device, "设备不存在");
+        Assert.notNull(device, "Device does not exist");
         jt1078Template.checkTerminalStatus(device.getPhoneNumber());
 
         playService.playbackControl(device.getPhoneNumber(), jtChannel.getChannelId(), 0, 0, null);
@@ -89,16 +89,16 @@ public class SourcePlaybackServiceForJTImpl implements ISourcePlaybackService {
 
     @Override
     public void playbackSeek(CommonGBChannel channel, String stream, long seekTime) {
-        // 因为seek是增量，比如15s处， 1078是具体的时间点，比如2025-10-10 23:21:12 这个一个绝对时间点。无法转换，故此处不做支持
-        log.warn("[JT-通用通道] 回放seek， 尚不支持");
+        // Because seek is an increment, such as 15s, and 1078 is a specific time point, such as2025-10-10 23:21:12 This is an absolute point in time. It cannot be converted, so it is not supported here.
+        log.warn("[JT-Universal channel] Playback seek, not supported yet");
     }
 
     @Override
     public void playbackSpeed(CommonGBChannel channel, String stream, Double speed) {
         JTChannel jtChannel = jtChannelMapper.selectChannelById(channel.getDataDeviceId());
-        Assert.notNull(channel, "通道不存在");
+        Assert.notNull(channel, "Channel does not exist");
         JTDevice device = jtDeviceMapper.getDeviceById(jtChannel.getDataDeviceId());
-        Assert.notNull(device, "设备不存在");
+        Assert.notNull(device, "Device does not exist");
         jt1078Template.checkTerminalStatus(device.getPhoneNumber());
 
         playService.playbackControl(device.getPhoneNumber(), jtChannel.getChannelId(), 0, (int)Math.floor(speed), null);
@@ -107,9 +107,9 @@ public class SourcePlaybackServiceForJTImpl implements ISourcePlaybackService {
     @Override
     public void queryRecord(CommonGBChannel channel, String startTime, String endTime, ErrorCallback<List<CommonRecordInfo>> callback) {
         JTChannel jtChannel = jtChannelMapper.selectChannelById(channel.getDataDeviceId());
-        Assert.notNull(channel, "通道不存在");
+        Assert.notNull(channel, "Channel does not exist");
         JTDevice device = jtDeviceMapper.getDeviceById(jtChannel.getDataDeviceId());
-        Assert.notNull(device, "设备不存在");
+        Assert.notNull(device, "Device does not exist");
         jt1078Template.checkTerminalStatus(device.getPhoneNumber());
         List<J1205.JRecordItem> recordList = playService.getRecordList(device.getPhoneNumber(), jtChannel.getChannelId(), startTime, endTime);
         if (recordList.isEmpty()) {

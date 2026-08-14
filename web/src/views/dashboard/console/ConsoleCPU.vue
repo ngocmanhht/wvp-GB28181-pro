@@ -63,7 +63,7 @@ export default {
           formatter: (data) => {
             console.log(data)
             return moment(data[0].data[0]).format('HH:mm:ss') + '</br> ' +
-              data[0].marker + '使用：' + (data[0].data[1] * 100).toFixed(2) + '%'
+              data[0].marker + 'Use：' + (data[0].data[1] * 100).toFixed(2) + '%'
           }
         },
         series: {
@@ -78,11 +78,11 @@ export default {
               x2: 0,
               y2: 1,
               colorStops: [{
-                offset: 0, color: '#50a3f8' // 0% 处的颜色
+                offset: 0, color: '#50a3f8' // 0% color
               }, {
-                offset: 1, color: '#69b0fa' // 100% 处的颜色
+                offset: 1, color: '#69b0fa' // 100% color
               }],
-              global: false // 缺省为 false
+              global: false // The default is false
             }
           }
         }

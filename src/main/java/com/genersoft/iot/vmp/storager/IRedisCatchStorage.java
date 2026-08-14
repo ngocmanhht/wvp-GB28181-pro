@@ -17,33 +17,33 @@ import java.util.Set;
 public interface IRedisCatchStorage {
 
     /**
-     * 计数器。为cseq进行计数
+     * counter. count for cseq
      *
      * @return
      */
     Long getCSEQ();
 
     /**
-     * 在redis添加wvp的信息
+     * Add wvp information in redis
      */
     void updateWVPInfo(ServerInfo serverInfo, int time);
 
     void removeOfflineWVPInfo(String serverId);
 
     /**
-     * 发送推流生成与推流消失消息
-     * @param jsonObject 消息内容
+     * Send push flow generation and push flow disappearance messages
+     * @param jsonObject Message content
      */
     void sendStreamChangeMsg(String type, JSONObject jsonObject);
 
     /**
-     * 发送报警消息
-     * @param msg 消息内容
+     * Send alarm message
+     * @param msg Message content
      */
     void sendAlarmMsg(AlarmChannelMessage msg);
 
     /**
-     * 添加流信息到redis
+     * Add flow information toredis
      * @param mediaServerItem
      * @param app
      * @param streamId
@@ -51,7 +51,7 @@ public interface IRedisCatchStorage {
     void addStream(MediaServer mediaServerItem, String type, String app, String streamId, MediaInfo item);
 
     /**
-     * 移除流信息从redis
+     * Remove flow information fromredis
      * @param mediaServerId
      * @param app
      * @param streamId
@@ -60,7 +60,7 @@ public interface IRedisCatchStorage {
 
 
     /**
-     * 移除流信息从redis
+     * Remove flow information fromredis
      * @param mediaServerId
      */
     void removeStream(String mediaServerId, String type);
@@ -68,7 +68,7 @@ public interface IRedisCatchStorage {
     List<MediaInfo> getStreams(String mediaServerId, String pull);
 
     /**
-     * 将device信息写入redis
+     * Write device informationredis
      * @param device
      */
     void updateDevice(Device device);
@@ -76,12 +76,12 @@ public interface IRedisCatchStorage {
     void removeDevice(String deviceId);
 
     /**
-     * 获取Device
+     * getDevice
      */
     Device getDevice(String deviceId);
 
     /**
-     * 获取Device
+     * getDevice
      */
     List<Device> getDeviceList(Set<String> deviceIds);
 
@@ -106,29 +106,29 @@ public interface IRedisCatchStorage {
     void sendStreamPushRequestedMsg(MessageForPushChannel messageForPushChannel);
 
     /**
-     * 判断设备状态
+     * Determine device status
      */
     boolean deviceIsOnline(String deviceId);
 
     /**
-     * 存储推流的鉴权信息
-     * @param app 应用名
-     * @param stream 流
-     * @param streamAuthorityInfo 鉴权信息
+     * Store authentication information for push streaming
+     * @param app Application name
+     * @param stream flow
+     * @param streamAuthorityInfo Authentication information
      */
     void updateStreamAuthorityInfo(String app, String stream, StreamAuthorityInfo streamAuthorityInfo);
 
     /**
-     * 移除推流的鉴权信息
-     * @param app 应用名
-     * @param streamId 流
+     * Remove authentication information for push streaming
+     * @param app Application name
+     * @param streamId flow
      */
     void removeStreamAuthorityInfo(String app, String streamId);
 
     /**
-     * 获取推流的鉴权信息
-     * @param app 应用名
-     * @param stream 流
+     * Obtain authentication information for push streaming
+     * @param app Application name
+     * @param stream flow
      * @return
      */
     StreamAuthorityInfo getStreamAuthorityInfo(String app, String stream);
@@ -136,7 +136,7 @@ public interface IRedisCatchStorage {
     List<StreamAuthorityInfo> getAllStreamAuthorityInfo();
 
     /**
-     * 发送redis消息 查询所有推流设备的状态
+     * Send a redis message to query the status of all streaming devices
      */
     void sendStreamPushRequestedMsgForStatus();
 

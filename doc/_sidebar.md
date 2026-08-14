@@ -1,32 +1,32 @@
-<!-- 侧边栏 -->
+<!-- Sidebar -->
 
-* **编译与部署**
-    * [编译](_content/introduction/compile.md)
-    * [配置](_content/introduction/config.md)
-    * [部署](_content/introduction/deployment.md)
-* **功能与使用**
-    * [接入设备](_content/ability/device.md)
-    * [国标设备](_content/ability/device_use.md)
-    * [推流列表](_content/ability/push.md)
-    * [拉流代理](_content/ability/proxy.md)
-    * [云端录像](_content/ability/cloud_record.md)
-    * [节点管理](_content/ability/node_manager.md)
-    * [通道管理](_content/ability/channel.md)
-    * [国标级联](_content/ability/cascade2.md)
-* **流程与原理**
-    * [统一编码规则](_content/theory/code.md)
-    * [注册流程](_content/theory/register.md)
-    * [点播流程](_content/theory/play.md)
-    * [级联语音喊话流程](_content/theory/broadcast_cascade.md)
-    * [语音对讲](_content/ability/continuous_broadcast.md)
-* **必备技巧**
-    * [抓包](_content/skill/tcpdump.md)
+* **Compilation and Deployment**
+* [compile](_content/introduction/compile.md) 
+* [Configuration](_content/introduction/config.md) 
+* [deploy](_content/introduction/deployment.md) 
+* **Functions and Usage**
+* [Access device](_content/ability/device.md) 
+* [National standard equipment](_content/ability/device_use.md) 
+* [Push list](_content/ability/push.md) 
+* [Streaming agent](_content/ability/proxy.md) 
+* [Cloud recording](_content/ability/cloud_record.md) 
+* [Node management](_content/ability/node_manager.md) 
+* [Channel management](_content/ability/channel.md) 
+* [National standard cascade](_content/ability/cascade2.md) 
+* **Process and Principle**
+* [unified coding rules](_content/theory/code.md) 
+* [Registration process](_content/theory/register.md) 
+* [On-demand process](_content/theory/play.md) 
+* [Cascading voice call process](_content/theory/broadcast_cascade.md) 
+* [Voice intercom](_content/ability/continuous_broadcast.md) 
+* **Essential Tips**
+* [Capture packets](_content/skill/tcpdump.md) 
 
-* **常见问答**
-    - [如何反馈BUG](_content/qa/bug.md)
-    - [如何参与开发](_content/qa/development.md)
-    - [启动报错的解决办法](_content/qa/start_error.md)
-    - [设备注册不上来的解决办法](_content/qa/regiser_error.md)
-    - [点播超时/报错的解决办法](_content/qa/play_error.md)
-* [**免责声明**](_content/disclaimers.md)
-* [**关于本文档**](_content/about_doc.md)
+* **FAQ**
+- [How to report a bug](_content/qa/bug.md) 
+- [How to participate in development](_content/qa/development.md) 
+- [Solution to startup error](_content/qa/start_error.md) 
+- [Solution to device failure to register](_content/qa/regiser_error.md) 
+- [Solution to on-demand timeout/error reporting](_content/qa/play_error.md) 
+* [**Disclaimer**](_content/disclaimers.md) 
+* [**About this document**](_content/about_doc.md) 

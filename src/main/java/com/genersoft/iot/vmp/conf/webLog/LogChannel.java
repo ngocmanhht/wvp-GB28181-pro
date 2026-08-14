@@ -20,9 +20,9 @@ public class LogChannel {
     public void onMessage(String message) {
 
         try {
-            this.session.close(new CloseReason(CloseReason.CloseCodes.TOO_BIG, "此节点不接收任何客户端信息"));
+            this.session.close(new CloseReason(CloseReason.CloseCodes.TOO_BIG, "This node does not receive any client information"));
         } catch (IOException e) {
-            log.error("[Web-Log] 连接关闭失败: id={}, err={}", this.session.getId(), e.getMessage());
+            log.error("[Web-Log] Connection close failed: id={}, err={}", this.session.getId(), e.getMessage());
         }
     }
 
@@ -32,19 +32,19 @@ public class LogChannel {
         this.session.setMaxIdleTimeout(0);
         CHANNELS.put(this.session.getId(), this);
 
-        log.info("[Web-Log] 连接已建立: id={}", this.session.getId());
+        log.info("[Web-Log] Connection established: id={}", this.session.getId());
     }
 
     @OnClose
     public void onClose(CloseReason closeReason) {
 
-        log.info("[Web-Log] 连接已断开: id={}, err={}", this.session.getId(), closeReason);
+        log.info("[Web-Log] The connection has been lost: id={}, err={}", this.session.getId(), closeReason);
         CHANNELS.remove(this.session.getId());
     }
 
     @OnError
     public void onError(Throwable throwable) throws IOException {
-        log.info("[Web-Log] 连接错误: id={}, err= {}", this.session.getId(), throwable.getMessage());
+        log.info("[Web-Log] Connection error: id={}, err= {}", this.session.getId(), throwable.getMessage());
         if (this.session.isOpen()) {
             this.session.close(new CloseReason(CloseReason.CloseCodes.UNEXPECTED_CONDITION, throwable.getMessage()));
         }

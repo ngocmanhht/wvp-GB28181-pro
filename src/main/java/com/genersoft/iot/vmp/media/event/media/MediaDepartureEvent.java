@@ -5,7 +5,7 @@ import com.genersoft.iot.vmp.media.bean.MediaServer;
 import com.genersoft.iot.vmp.media.zlm.dto.hook.OnStreamChangedHookParam;
 
 /**
- * 流离开事件
+ * stream leave event
  */
 public class MediaDepartureEvent extends MediaEvent {
     public MediaDepartureEvent(Object source) {

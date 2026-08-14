@@ -12,47 +12,47 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 /**
- * 设备相关业务处理
+ * Equipment related business processing
  * @author lin
  */
 public interface IDeviceService {
 
     /**
-     * 设备上线
-     * @param device 设备信息
+     * Device online
+     * @param device Device information
      */
     void online(Device device);
 
     /**
-     * 设备下线
+     * Equipment offline
      */
     void offline(Device device);
 
     /**
-     * 添加目录订阅
-     * @param device 设备信息
-     * @return 布尔
+     * Add directory subscription
+     * @param device Device information
+     * @return Boolean
      */
     boolean addCatalogSubscribe(Device device, SipTransactionInfo transactionInfo);
 
     /**
-     * 移除目录订阅
-     * @param device 设备信息
-     * @return 布尔
+     * Remove directory subscription
+     * @param device Device information
+     * @return Boolean
      */
     boolean removeCatalogSubscribe(Device device, CommonCallback<Boolean> callback);
 
     /**
-     * 添加移动位置订阅
-     * @param device 设备信息
-     * @return 布尔
+     * Add mobile location subscription
+     * @param device Device information
+     * @return Boolean
      */
     boolean addMobilePositionSubscribe(Device device, SipTransactionInfo transactionInfo);
 
     /**
-     * 移除移动位置订阅
-     * @param device 设备信息
-     * @return 布尔
+     * Remove mobile location subscription
+     * @param device Device information
+     * @return Boolean
      */
     boolean removeMobilePositionSubscribe(Device device, CommonCallback<Boolean> callback);
 
@@ -61,57 +61,57 @@ public interface IDeviceService {
     boolean removeAlarmSubscribe(Device device, CommonCallback<Boolean> callback);
 
     /**
-     * 移除移动位置订阅
-     * @param deviceId 设备ID
-     * @return 同步状态
+     * Remove mobile location subscription
+     * @param deviceId EquipmentID
+     * @return Sync status
      */
     SyncStatus getChannelSyncStatus(String deviceId);
 
     /**
-     * 查看是否仍在同步
-     * @param deviceId 设备ID
-     * @return 布尔
+     * Check to see if it's still syncing
+     * @param deviceId EquipmentID
+     * @return Boolean
      */
     Boolean isSyncRunning(String deviceId);
 
     /**
-     * 通道同步
-     * @param device 设备信息
+     * Channel synchronization
+     * @param device Device information
      */
     void sync(Device device);
 
     /**
-     * 查询设备信息
-     * @param deviceId 设备编号
-     * @return 设备信息
+     * Query device information
+     * @param deviceId Device number
+     * @return Device information
      */
     Device getDeviceByDeviceId(String deviceId);
 
     /**
-     * 获取所有在线设备
-     * @return 设备列表
+     * Get all online devices
+     * @return Device list
      */
     List<Device> getAllOnlineDevice(String serverId);
 
     List<Device> getAllByStatus(Boolean status);
 
     /**
-     * 检查设备状态
-     * @param device 设备信息
+     * Check device status
+     * @param device Device information
      */
     Boolean getDeviceStatus(Device device);
 
     /**
-     * 根据IP和端口获取设备信息
+     * Get device information based on IP and port
      * @param host IP
-     * @param port 端口
-     * @return 设备信息
+     * @param port port
+     * @return Device information
      */
     Device getDeviceByHostAndPort(String host, int port);
 
     /**
-     * 更新设备
-     * @param device 设备信息
+     * Update device
+     * @param device Device information
      */
     void updateDevice(Device device);
 
@@ -119,39 +119,39 @@ public interface IDeviceService {
     void updateDeviceList(List<Device> deviceList);
 
     /**
-     * 检查设备编号是否已经存在
-     * @param deviceId 设备编号
+     * Check if the device number already exists
+     * @param deviceId Device number
      * @return
      */
     boolean isExist(String deviceId);
 
     /**
-     * 添加设备
+     * Add device
      * @param device
      */
     void addCustomDevice(Device device);
 
     /**
-     * 页面表单更新设备信息
+     * Page form updates device information
      * @param device
      */
     void updateCustomDevice(Device device);
 
     /**
-     * 删除设备
+     * Remove device
      * @param deviceId
      * @return
      */
     boolean delete(String deviceId);
 
     /**
-     * 获取统计信息
+     * Get statistics
      * @return
      */
     ResourceBaseInfo getOverview();
 
     /**
-     * 获取所有设备
+     * Get all devices
      */
     List<Device> getAll();
 

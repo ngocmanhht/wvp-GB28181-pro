@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.Map;
 
-@Tag(name = "用户ApiKey管理")
+@Tag(name = "User ApiKey management")
 @RestController
 @RequestMapping("/api/userApiKey")
 public class UserApiKeyController {
@@ -34,7 +34,7 @@ public class UserApiKeyController {
     private IUserApiKeyService userApiKeyService;
 
     /**
-     * 添加用户ApiKey
+     * Add userApiKey
      *
      * @param userId
      * @param app
@@ -43,11 +43,11 @@ public class UserApiKeyController {
      * @param enable
      */
     @PostMapping("/add")
-    @Operation(summary = "添加用户ApiKey", security = @SecurityRequirement(name = JwtUtils.HEADER))
-    @Parameter(name = "userId", description = "用户Id", required = true)
-    @Parameter(name = "app", description = "应用名称", required = false)
-    @Parameter(name = "remark", description = "备注信息", required = false)
-    @Parameter(name = "expiredAt", description = "过期时间（不传代表永不过期）", required = false)
+    @Operation(summary = "Add userApiKey", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Parameter(name = "userId", description = "UserId", required = true)
+    @Parameter(name = "app", description = "Application name", required = false)
+    @Parameter(name = "remark", description = "Remarks", required = false)
+    @Parameter(name = "expiredAt", description = "Expiration time (not passed means it will never expire）", required = false)
     @Transactional
     public synchronized void add(
             @RequestParam(required = true) int userId,
@@ -58,7 +58,7 @@ public class UserApiKeyController {
     ) {
         User user = userService.getUserById(userId);
         if (user == null) {
-            throw new ControllerException(ErrorCode.ERROR400.getCode(), "用户不存在");
+            throw new ControllerException(ErrorCode.ERROR400.getCode(), "User does not exist");
         }
 
         Long expirationTime = null;
@@ -66,7 +66,7 @@ public class UserApiKeyController {
             expirationTime = DateUtil.yyyy_MM_dd_HH_mm_ssToTimestampMs(expiresAt);
             long difference = (expirationTime - System.currentTimeMillis()) / (60 * 1000);
             if (difference < 0) {
-                throw new ControllerException(ErrorCode.ERROR400.getCode(), "过期时间不能早于当前时间");
+                throw new ControllerException(ErrorCode.ERROR400.getCode(), "The expiration time cannot be earlier than the current time");
             }
         }
 
@@ -101,35 +101,35 @@ public class UserApiKeyController {
     }
 
     /**
-     * 分页查询ApiKey
+     * Page queryApiKey
      *
-     * @param page  当前页
-     * @param count 每页查询数量
-     * @return 分页ApiKey列表
+     * @param page  Current page
+     * @param count Number of queries per page
+     * @return Paginated ApiKey list
      */
     @GetMapping("/userApiKeys")
-    @Operation(summary = "分页查询用户ApiKey", security = @SecurityRequirement(name = JwtUtils.HEADER))
-    @Parameter(name = "page", description = "当前页", required = true)
-    @Parameter(name = "count", description = "每页查询数量", required = true)
+    @Operation(summary = "Query users by pageApiKey", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Parameter(name = "page", description = "Current page", required = true)
+    @Parameter(name = "count", description = "Number of queries per page", required = true)
     @Transactional
     public PageInfo<UserApiKey> userApiKeys(@RequestParam(required = true) int page, @RequestParam(required = true) int count, @RequestParam(required = false) Integer userId) {
         return userApiKeyService.getUserApiKeys(page, count, userId);
     }
 
     @PostMapping("/enable")
-    @Operation(summary = "启用用户ApiKey", security = @SecurityRequirement(name = JwtUtils.HEADER))
-    @Parameter(name = "id", description = "用户ApiKeyId", required = true)
+    @Operation(summary = "enable userApiKey", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Parameter(name = "id", description = "UserApiKeyId", required = true)
     @Transactional
     public void enable(@RequestParam(required = true) Integer id) {
-        // 获取当前登录用户id
+        // Get the currently logged in userid
         int currenRoleId = SecurityUtils.getUserInfo().getRole().getId();
         if (currenRoleId != 1) {
-            // 只用角色id为1才可以管理UserApiKey
+            // It can only be managed if the role ID is 1UserApiKey
             throw new ControllerException(ErrorCode.ERROR403);
         }
         UserApiKey userApiKey = userApiKeyService.getUserApiKeyById(id);
         if (userApiKey == null) {
-            throw new ControllerException(ErrorCode.ERROR400.getCode(), "ApiKey不存在");
+            throw new ControllerException(ErrorCode.ERROR400.getCode(), "ApiKeydoes not exist");
         }
 
         int enableResult = userApiKeyService.enable(id);
@@ -140,19 +140,19 @@ public class UserApiKeyController {
     }
 
     @PostMapping("/disable")
-    @Operation(summary = "停用用户ApiKey", security = @SecurityRequirement(name = JwtUtils.HEADER))
-    @Parameter(name = "id", description = "用户ApiKeyId", required = true)
+    @Operation(summary = "Deactivate userApiKey", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Parameter(name = "id", description = "UserApiKeyId", required = true)
     @Transactional
     public void disable(@RequestParam(required = true) Integer id) {
-        // 获取当前登录用户id
+        // Get the currently logged in userid
         int currenRoleId = SecurityUtils.getUserInfo().getRole().getId();
         if (currenRoleId != 1) {
-            // 只用角色id为1才可以管理UserApiKey
+            // It can only be managed if the role ID is 1UserApiKey
             throw new ControllerException(ErrorCode.ERROR403);
         }
         UserApiKey userApiKey = userApiKeyService.getUserApiKeyById(id);
         if (userApiKey == null) {
-            throw new ControllerException(ErrorCode.ERROR400.getCode(), "ApiKey不存在");
+            throw new ControllerException(ErrorCode.ERROR400.getCode(), "ApiKeydoes not exist");
         }
 
         int disableResult = userApiKeyService.disable(id);
@@ -163,30 +163,30 @@ public class UserApiKeyController {
     }
 
     @PostMapping("/reset")
-    @Operation(summary = "重置用户ApiKey", security = @SecurityRequirement(name = JwtUtils.HEADER))
-    @Parameter(name = "id", description = "用户ApiKeyId", required = true)
+    @Operation(summary = "reset userApiKey", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Parameter(name = "id", description = "UserApiKeyId", required = true)
     @Transactional
     public void reset(@RequestParam(required = true) Integer id) {
-        // 获取当前登录用户id
+        // Get the currently logged in userid
         int currenRoleId = SecurityUtils.getUserInfo().getRole().getId();
         if (currenRoleId != 1) {
-            // 只用角色id为1才可以管理UserApiKey
+            // It can only be managed if the role ID is 1UserApiKey
             throw new ControllerException(ErrorCode.ERROR403);
         }
         UserApiKey userApiKey = userApiKeyService.getUserApiKeyById(id);
         if (userApiKey == null) {
-            throw new ControllerException(ErrorCode.ERROR400.getCode(), "ApiKey不存在");
+            throw new ControllerException(ErrorCode.ERROR400.getCode(), "ApiKeydoes not exist");
         }
         User user = userService.getUserById(userApiKey.getUserId());
         if (user == null) {
-            throw new ControllerException(ErrorCode.ERROR400.getCode(), "用户不存在");
+            throw new ControllerException(ErrorCode.ERROR400.getCode(), "User does not exist");
         }
         Long expirationTime = null;
         if (userApiKey.getExpiredAt() > 0) {
             long timestamp = userApiKey.getExpiredAt();
             expirationTime = (timestamp - System.currentTimeMillis()) / (60 * 1000);
             if (expirationTime < 0) {
-                throw new ControllerException(ErrorCode.ERROR400.getCode(), "ApiKey已失效");
+                throw new ControllerException(ErrorCode.ERROR400.getCode(), "ApiKeyExpired");
             }
         }
         String apiKey;
@@ -204,20 +204,20 @@ public class UserApiKeyController {
     }
 
     @PostMapping("/remark")
-    @Operation(summary = "备注用户ApiKey", security = @SecurityRequirement(name = JwtUtils.HEADER))
-    @Parameter(name = "id", description = "用户ApiKeyId", required = true)
-    @Parameter(name = "remark", description = "用户ApiKey备注", required = false)
+    @Operation(summary = "Note userApiKey", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Parameter(name = "id", description = "UserApiKeyId", required = true)
+    @Parameter(name = "remark", description = "User ApiKey remarks", required = false)
     @Transactional
     public void remark(@RequestParam(required = true) Integer id, @RequestParam(required = false) String remark) {
-        // 获取当前登录用户id
+        // Get the currently logged in userid
         int currenRoleId = SecurityUtils.getUserInfo().getRole().getId();
         if (currenRoleId != 1) {
-            // 只用角色id为1才可以管理UserApiKey
+            // It can only be managed if the role ID is 1UserApiKey
             throw new ControllerException(ErrorCode.ERROR403);
         }
         UserApiKey userApiKey = userApiKeyService.getUserApiKeyById(id);
         if (userApiKey == null) {
-            throw new ControllerException(ErrorCode.ERROR400.getCode(), "ApiKey不存在");
+            throw new ControllerException(ErrorCode.ERROR400.getCode(), "ApiKeydoes not exist");
         }
         int remarkResult = userApiKeyService.remark(id, remark);
 
@@ -227,19 +227,19 @@ public class UserApiKeyController {
     }
 
     @DeleteMapping("/delete")
-    @Operation(summary = "删除用户ApiKey", security = @SecurityRequirement(name = JwtUtils.HEADER))
-    @Parameter(name = "id", description = "用户ApiKeyId", required = true)
+    @Operation(summary = "Delete userApiKey", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Parameter(name = "id", description = "UserApiKeyId", required = true)
     @Transactional
     public void delete(@RequestParam(required = true) Integer id) {
-        // 获取当前登录用户id
+        // Get the currently logged in userid
         int currenRoleId = SecurityUtils.getUserInfo().getRole().getId();
         if (currenRoleId != 1) {
-            // 只用角色id为1才可以管理UserApiKey
+            // It can only be managed if the role ID is 1UserApiKey
             throw new ControllerException(ErrorCode.ERROR403);
         }
         UserApiKey userApiKey = userApiKeyService.getUserApiKeyById(id);
         if (userApiKey == null) {
-            throw new ControllerException(ErrorCode.ERROR400.getCode(), "ApiKey不存在");
+            throw new ControllerException(ErrorCode.ERROR400.getCode(), "ApiKeydoes not exist");
         }
 
         int deleteResult = userApiKeyService.delete(id);

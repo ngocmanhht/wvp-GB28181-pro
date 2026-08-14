@@ -40,7 +40,7 @@ export default {
       deviceId: null,
       timer: null,
       errorTimer: null,
-      msg: '正在同步'
+      msg: 'Synchronizing'
     }
   },
   computed: {},
@@ -68,14 +68,14 @@ export default {
           } else {
             if (data.syncIng) {
               if (data.total === 0) {
-                this.msg = `等待同步中`
+                this.msg = `Waiting for synchronization`
                 this.timer = setTimeout(this.getProgress, 300)
               } else {
                 this.syncFlag = true
                 this.total = data.total
                 this.current = data.current
                 this.percentage = Math.floor(Number(data.current) / Number(data.total) * 10000) / 100
-                this.msg = `同步中...[${data.current}/${data.total}]`
+                this.msg = `Synchronizing...[${data.current}/${data.total}]`
                 this.timer = setTimeout(this.getProgress, 300)
               }
             } else {
@@ -85,7 +85,7 @@ export default {
               } else {
                 this.syncStatus = 'success'
                 this.percentage = 100
-                this.msg = '同步成功'
+                this.msg = 'Synchronization successful'
                 setTimeout(() => {
                   this.showDialog = false
                 }, 3000)

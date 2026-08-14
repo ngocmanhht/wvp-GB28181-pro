@@ -19,10 +19,10 @@ import java.util.concurrent.TimeUnit;
 public enum SessionManager {
     INSTANCE;
 
-    // 用与消息的缓存
+    // caching of messages
     private final Map<String, SynchronousQueue<Object>> topicSubscribers = new ConcurrentHashMap<>();
 
-    // session的缓存
+    // sessioncache
     private final Map<Object, Session> sessionMap;
 
     SessionManager() {
@@ -30,10 +30,10 @@ public enum SessionManager {
     }
 
     /**
-     * 创建新的Session
+     * create newSession
      *
-     * @param channel netty通道
-     * @return 创建的session对象
+     * @param channel nettychannel
+     * @return Created session object
      */
     public Session newSession(Channel channel) {
         return new Session(channel);
@@ -41,9 +41,9 @@ public enum SessionManager {
 
 
     /**
-     * 获取指定设备的Session
+     * Get the specified deviceSession
      *
-     * @param clientId 设备Id
+     * @param clientId EquipmentId
      * @return Session
      */
     public Session get(Object clientId) {
@@ -51,9 +51,9 @@ public enum SessionManager {
     }
 
     /**
-     * 放入新设备连接的session
+     * Put in new device connectionsession
      *
-     * @param clientId   设备ID
+     * @param clientId   EquipmentID
      * @param newSession session
      */
     void put(Object clientId, Session newSession) {
@@ -62,11 +62,11 @@ public enum SessionManager {
 
 
     /**
-     * 发送同步消息，接收响应
-     * 默认超时时间6秒
+     * Send synchronous messages and receive responses
+     * Default timeout is 6 seconds
      */
     public Object request(Cmd cmd) {
-        // 默认6秒
+        // Default 6 seconds
         int timeOut = 6000;
         return request(cmd, timeOut);
     }

@@ -26,7 +26,7 @@ public class SubscribeTaskForMobilPosition extends SubscribeTask {
     @Override
     public void expired() {
         if (super.getCallback() == null) {
-            log.info("[设备订阅到期] 移动位置订阅 未找到到期处理回调， 编号： {}", getDeviceId());
+            log.info("[Device subscription expires] Mobile location subscription expiry processing callback not found, number： {}", getDeviceId());
             return;
         }
         getCallback().run(getDeviceId(), getTransactionInfo());

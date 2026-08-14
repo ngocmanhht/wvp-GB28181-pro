@@ -49,7 +49,7 @@ public class DeviceStatusQueryMessageHandler extends SIPRequestProcessorParent i
         try {
             responseAck((SIPRequest) evt.getRequest(), Response.OK);
         } catch (SipException | InvalidArgumentException | ParseException e) {
-            log.error("[命令发送失败] 回复200 OK: {}", e.getMessage());
+            log.error("[Command sending failed] Reply200 OK: {}", e.getMessage());
         }
     }
 
@@ -58,38 +58,38 @@ public class DeviceStatusQueryMessageHandler extends SIPRequestProcessorParent i
 
         log.info("[DeviceStatus Query] \n {}", rootElement.asXML());
         FromHeader fromHeader = (FromHeader) evt.getRequest().getHeader(FromHeader.NAME);
-        // 回复200 OK
+        // Reply200 OK
         try {
             responseAck((SIPRequest) evt.getRequest(), Response.OK);
         } catch (SipException | InvalidArgumentException | ParseException e) {
-            log.error("[命令发送失败] 国标级联 DeviceStatus查询回复200OK: {}", e.getMessage());
+            log.error("[Command sending failed] National standard cascade DeviceStatus query reply200OK: {}", e.getMessage());
         }
         String sn = rootElement.element("SN").getText();
         String channelId = getText(rootElement, "DeviceID");
         if (platform.getDeviceGBId().equals(channelId)) {
-            // 上级平台查询本平台状态
+            // Check the status of this platform on the superior platform
             try {
                 cmderFroPlatform.deviceStatusResponse(platform, channelId, sn, fromHeader.getTag(), true);
             } catch (SipException | InvalidArgumentException | ParseException e) {
-                log.error("[命令发送失败] 国标级联 DeviceStatus查询回复: {}", e.getMessage());
+                log.error("[Command sending failed] National standard cascade DeviceStatus query reply: {}", e.getMessage());
             }
             return;
         }
         CommonGBChannel channel= channelService.queryOneWithPlatform(platform.getId(), channelId);
         if (channel ==null){
-            log.error("[平台没有该通道的使用权限]:platformId: {}  deviceID:{}", platform.getServerGBId(), channelId);
-            // 上级平台查询本平台状态
+            log.error("[The platform does not have permission to use this channel]:platformId: {}  deviceID:{}", platform.getServerGBId(), channelId);
+            // Check the status of this platform on the superior platform
             try {
                 cmderFroPlatform.deviceStatusResponse(platform, channelId, sn, fromHeader.getTag(), null);
             } catch (SipException | InvalidArgumentException | ParseException e) {
-                log.error("[命令发送失败] 国标级联 DeviceStatus查询回复: {}", e.getMessage());
+                log.error("[Command sending failed] National standard cascade DeviceStatus query reply: {}", e.getMessage());
             }
             return;
         }
         try {
             cmderFroPlatform.deviceStatusResponse(platform, channelId, sn, fromHeader.getTag(), "ON".equalsIgnoreCase(channel.getGbStatus()));
         } catch (SipException | InvalidArgumentException | ParseException e) {
-            log.error("[命令发送失败] 国标级联 DeviceStatus查询回复: {}", e.getMessage());
+            log.error("[Command sending failed] National standard cascade DeviceStatus query reply: {}", e.getMessage());
         }
     }
 }

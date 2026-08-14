@@ -2,32 +2,32 @@
   <div id="alarmManage" class="app-container">
     <div style="height: calc(100vh - 124px);">
       <el-form :inline="true" size="mini">
-        <el-form-item label="开始时间">
+        <el-form-item label="start time">
           <el-date-picker
             v-model="beginTime"
             type="datetime"
-            placeholder="开始时间"
+            placeholder="start time"
             value-format="yyyy-MM-dd HH:mm:ss"
             style="width: 180px;"
             clearable
           />
         </el-form-item>
-        <el-form-item label="结束时间">
+        <el-form-item label="end time">
           <el-date-picker
             v-model="endTime"
             type="datetime"
-            placeholder="结束时间"
+            placeholder="end time"
             value-format="yyyy-MM-dd HH:mm:ss"
             style="width: 180px;"
             clearable
           />
         </el-form-item>
-        <el-form-item label="报警类型">
+        <el-form-item label="Alarm type">
           <el-select
             v-model="selectedAlarmTypes"
             multiple
             collapse-tags
-            placeholder="全部类型"
+            placeholder="All types"
             style="width: 200px;"
             clearable
           >
@@ -41,7 +41,7 @@
         </el-form-item>
         <el-form-item>
           <el-button size="mini" type="primary" icon="el-icon-search" @click="search">
-            查询
+            Query
           </el-button>
         </el-form-item>
         <el-form-item>
@@ -52,7 +52,7 @@
             :disabled="selectedRows.length === 0"
             @click="deleteSelected"
           >
-            删除选中
+            Remove selected
           </el-button>
         </el-form-item>
         <el-form-item>
@@ -63,7 +63,7 @@
             icon="el-icon-delete-solid"
             @click="clearByCondition"
           >
-            清空
+            Clear
           </el-button>
         </el-form-item>
         <el-form-item style="float: right;">
@@ -81,14 +81,14 @@
       >
         <el-table-column type="selection" width="55" />
         <el-table-column prop="id" label="ID" width="80" />
-        <el-table-column prop="alarmType" label="报警类型" width="160">
+        <el-table-column prop="alarmType" label="Alarm type" width="160">
           <template v-slot:default="scope">
             <el-tag size="mini" :type="getAlarmTypeTagType(scope.row.alarmType)">
               {{ getAlarmTypeLabel(scope.row.alarmType) }}
             </el-tag>
           </template>
         </el-table-column>
-        <el-table-column label="快照" width="100">
+        <el-table-column label="Snapshot" width="100">
           <template v-slot:default="scope">
             <el-image
               v-if="scope.row.snapPath"
@@ -102,34 +102,34 @@
                 <i class="el-icon-picture-outline" />
               </div>
             </el-image>
-            <span v-else style="color: #c0c4cc; font-size: 12px;">无</span>
+            <span v-else style="color: #c0c4cc; font-size: 12px;">None</span>
           </template>
         </el-table-column>
-        <el-table-column prop="description" label="报警描述" show-overflow-tooltip />
-        <el-table-column prop="channelName" label="通道名称" width="150" />
-        <el-table-column prop="channelDeviceId" label="通道编号" width="180" />
-        <el-table-column prop="longitude" label="经度" width="110" />
-        <el-table-column prop="latitude" label="纬度" width="110" />
-        <el-table-column label="报警时间" width="170">
+        <el-table-column prop="description" label="Alarm description" show-overflow-tooltip />
+        <el-table-column prop="channelName" label="Channel name" width="150" />
+        <el-table-column prop="channelDeviceId" label="Channel number" width="180" />
+        <el-table-column prop="longitude" label="longitude" width="110" />
+        <el-table-column prop="latitude" label="Latitude" width="110" />
+        <el-table-column label="Alarm time" width="170">
           <template v-slot:default="scope">
             {{ formatTime(scope.row.alarmTime) }}
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="150" fixed="right">
+        <el-table-column label="Operation" width="150" fixed="right">
           <template v-slot:default="scope">
             <el-button
               size="medium"
               icon="el-icon-video-play"
               type="text"
               @click="openPlayback(scope.row)"
-            >回放</el-button>
+            >Playback</el-button>
             <el-button
               size="medium"
               icon="el-icon-delete"
               style="color: #f56c6c"
               type="text"
               @click="deleteSingle(scope.row)"
-            >删除</el-button>
+            >Delete</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -145,7 +145,7 @@
       />
     </div>
 
-    <!-- 录像回放对话框 -->
+    <!-- Video playback dialog box -->
     <el-dialog
       :title="playbackTitle"
       :visible.sync="playbackDialogVisible"
@@ -155,7 +155,7 @@
     >
       <div v-if="playbackLoading" style="text-align: center; padding: 40px 0;">
         <i class="el-icon-loading" style="font-size: 32px;" />
-        <div style="margin-top: 10px; color: #606266;">正在加载回放...</div>
+        <div style="margin-top: 10px; color: #606266;">Loading playback...</div>
       </div>
       <div v-else-if="playbackError" style="text-align: center; padding: 40px 0; color: #f56c6c;">
         <i class="el-icon-warning-outline" style="font-size: 32px;" />
@@ -170,7 +170,7 @@
         />
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button size="mini" @click="closePlayback">关闭</el-button>
+        <el-button size="mini" @click="closePlayback">Close</el-button>
       </span>
     </el-dialog>
   </div>
@@ -180,35 +180,35 @@
 import playerTabs from '../common/playerTabs.vue'
 
 const ALARM_TYPE_OPTIONS = [
-  { value: 'VideoLoss', label: '视频丢失报警' },
-  { value: 'DeviceTamper', label: '设备防拆报警' },
-  { value: 'StorageFull', label: '存储设备磁盘满报警' },
-  { value: 'DeviceHighTemperature', label: '设备高温报警' },
-  { value: 'DeviceLowTemperature', label: '设备低温报警' },
-  { value: 'ManualVideo', label: '人工视频报警' },
-  { value: 'MotionDetection', label: '运动目标检测报警' },
-  { value: 'LeftObjectDetection', label: '遗留物检测报警' },
-  { value: 'ObjectRemovalDetection', label: '物体移除检测报警' },
-  { value: 'TripwireDetection', label: '绊线检测报警' },
-  { value: 'IntrusionDetection', label: '入侵检测报警' },
-  { value: 'MobileDetection', label: '移动侦测报警' },
-  { value: 'VideoOcclusion', label: '视频遮挡报警' },
-  { value: 'ReverseDetection', label: '逆行检测报警' },
-  { value: 'LoiteringDetection', label: '徘徊检测报警' },
-  { value: 'FlowStatistics', label: '流量统计报警' },
-  { value: 'DensityDetection', label: '密度检测报警' },
-  { value: 'VideoAbnormal', label: '视频异常检测报警' },
-  { value: 'RapidMovement', label: '快速移动报警' },
-  { value: 'StorageFault', label: '存储设备磁盘故障报警' },
-  { value: 'StorageFanFault', label: '存储设备风扇故障报警' },
-  { value: 'SoundAbnormal', label: '声音异常报警' },
-  { value: 'SignalAbnormal', label: '信号量异常报警' },
-  { value: 'IllegalAccess', label: '非法访问报警' },
-  { value: 'Defocus', label: '虚焦报警' },
-  { value: 'SceneChange', label: '场景变更报警' },
-  { value: 'CrowdGathering', label: '人员聚集报警' },
-  { value: 'ParkingDetection', label: '停车侦测报警' },
-  { value: 'Other', label: '其他报警' }
+  { value: 'VideoLoss', label: 'Video loss alarm' },
+  { value: 'DeviceTamper', label: 'Equipment anti-tamper alarm' },
+  { value: 'StorageFull', label: 'Storage device disk full alarm' },
+  { value: 'DeviceHighTemperature', label: 'Equipment high temperature alarm' },
+  { value: 'DeviceLowTemperature', label: 'Equipment low temperature alarm' },
+  { value: 'ManualVideo', label: 'Manual video alarm' },
+  { value: 'MotionDetection', label: 'Moving target detection alarm' },
+  { value: 'LeftObjectDetection', label: 'Remaining object detection alarm' },
+  { value: 'ObjectRemovalDetection', label: 'Object removal detection alarm' },
+  { value: 'TripwireDetection', label: 'Tripwire detection alarm' },
+  { value: 'IntrusionDetection', label: 'Intrusion detection alarm' },
+  { value: 'MobileDetection', label: 'Motion detection alarm' },
+  { value: 'VideoOcclusion', label: 'Video occlusion alarm' },
+  { value: 'ReverseDetection', label: 'Retrograde detection alarm' },
+  { value: 'LoiteringDetection', label: 'Wandering detection alarm' },
+  { value: 'FlowStatistics', label: 'Traffic statistics alarm' },
+  { value: 'DensityDetection', label: 'Density detection alarm' },
+  { value: 'VideoAbnormal', label: 'Video anomaly detection and alarm' },
+  { value: 'RapidMovement', label: 'Fast moving alarm' },
+  { value: 'StorageFault', label: 'Storage device disk failure alarm' },
+  { value: 'StorageFanFault', label: 'Storage device fan failure alarm' },
+  { value: 'SoundAbnormal', label: 'Abnormal sound alarm' },
+  { value: 'SignalAbnormal', label: 'Semaphore exception alarm' },
+  { value: 'IllegalAccess', label: 'Illegal access alarm' },
+  { value: 'Defocus', label: 'Virtual focus alarm' },
+  { value: 'SceneChange', label: 'Scene change alarm' },
+  { value: 'CrowdGathering', label: 'Call the police when people gather' },
+  { value: 'ParkingDetection', label: 'Parking detection alarm' },
+  { value: 'Other', label: 'Other alarms' }
 ]
 
 function formatDatetime(ts) {
@@ -233,12 +233,12 @@ export default {
       count: 15,
       total: 0,
       selectedRows: [],
-      // 回放相关
+      // Replay related
       playbackDialogVisible: false,
       playbackLoading: false,
       playbackError: null,
       playbackStreamInfo: null,
-      playbackTitle: '录像回放',
+      playbackTitle: 'Video playback',
       currentPlaybackChannelId: null
     }
   },
@@ -285,10 +285,10 @@ export default {
     },
     openPlayback(row) {
       if (!row.channelId) {
-        this.$message({ showClose: true, message: '该报警无关联通道，无法回放', type: 'warning' })
+        this.$message({ showClose: true, message: 'This alarm has no associated channel and cannot be played back.', type: 'warning' })
         return
       }
-      this.playbackTitle = `录像回放 - ${row.channelName || row.channelDeviceId} (${this.formatTime(row.alarmTime)})`
+      this.playbackTitle = `Video playback - ${row.channelName || row.channelDeviceId} (${this.formatTime(row.alarmTime)})`
       this.playbackDialogVisible = true
       this.playbackLoading = true
       this.playbackError = null
@@ -296,7 +296,7 @@ export default {
       this.playbackVideoUrl = null
       this.currentPlaybackChannelId = row.channelId
 
-      // 开始时间：报警时间前10秒，结束时间：报警时间后10秒（共20秒）
+      // Start time: 10 seconds before the alarm time, End time: 10 seconds after the alarm time (20 seconds in total）
       const alarmTs = row.alarmTime
       const startTime = formatDatetime(alarmTs - 10 * 1000)
       const endTime = formatDatetime(alarmTs + 10 * 1000)
@@ -315,7 +315,7 @@ export default {
         })
       }).catch(err => {
         this.playbackLoading = false
-        this.playbackError = (err && err.msg) ? err.msg : '回放请求失败，请检查通道是否有该时段录像'
+        this.playbackError = (err && err.msg) ? err.msg : 'The playback request failed, please check whether the channel has recordings during this period.'
         console.log(err)
       })
     },
@@ -337,14 +337,14 @@ export default {
       this.currentPlaybackChannelId = null
     },
     deleteSingle(row) {
-      this.$confirm('确定删除该报警记录?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+      this.$confirm('Confirm to delete the alarm record?', 'Tips', {
+        confirmButtonText: 'OK',
+        cancelButtonText: 'Cancel',
         type: 'warning'
       }).then(() => {
         this.$store.dispatch('alarm/deleteAlarms', [row.id])
           .then(() => {
-            this.$message({ showClose: true, message: '删除成功', type: 'success' })
+            this.$message({ showClose: true, message: 'Delete successfully', type: 'success' })
             this.getAlarmList()
           })
           .catch(error => {
@@ -353,15 +353,15 @@ export default {
       }).catch(() => {})
     },
     deleteSelected() {
-      this.$confirm(`确定删除选中的 ${this.selectedRows.length} 条报警记录?`, '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+      this.$confirm(`Confirm to delete selected ${this.selectedRows.length} alarm records?`, 'Tips', {
+        confirmButtonText: 'OK',
+        cancelButtonText: 'Cancel',
         type: 'warning'
       }).then(() => {
         const ids = this.selectedRows.map(r => r.id)
         this.$store.dispatch('alarm/deleteAlarms', ids)
           .then(() => {
-            this.$message({ showClose: true, message: '删除成功', type: 'success' })
+            this.$message({ showClose: true, message: 'Delete successfully', type: 'success' })
             this.getAlarmList()
           })
           .catch(error => {
@@ -373,20 +373,20 @@ export default {
       const hasFilter = this.beginTime || this.endTime || this.selectedAlarmTypes.length > 0
       const filterDesc = hasFilter
         ? [
-          this.beginTime ? `开始时间：${this.beginTime}` : null,
-          this.endTime ? `结束时间：${this.endTime}` : null,
-          this.selectedAlarmTypes.length > 0 ? `报警类型：${this.selectedAlarmTypes.map(v => {
+          this.beginTime ? `start time：${this.beginTime}` : null,
+          this.endTime ? `end time：${this.endTime}` : null,
+          this.selectedAlarmTypes.length > 0 ? `Alarm type：${this.selectedAlarmTypes.map(v => {
             const opt = this.alarmTypeOptions.find(o => o.value === v)
             return opt ? opt.label : v
           }).join('、')}` : null
         ].filter(Boolean).join('；')
-        : '全部'
+        : 'All'
       this.$confirm(
-        `将删除符合当前筛选条件的所有报警记录（${filterDesc}），此操作不可恢复，确定继续？`,
-        '清空报警',
+        `All alarm records matching the current filter conditions will be deleted（${filterDesc}），This operation is irreversible, confirm to continue？`,
+        'Clear alarm',
         {
-          confirmButtonText: '确定删除',
-          cancelButtonText: '取消',
+          confirmButtonText: 'Confirm deletion',
+          cancelButtonText: 'Cancel',
           type: 'warning'
         }
       ).then(() => {
@@ -395,7 +395,7 @@ export default {
           beginTime: this.beginTime || undefined,
           endTime: this.endTime || undefined
         }).then(count => {
-          this.$message({ showClose: true, message: `已清空 ${count != null ? count : ''} 条报警记录`, type: 'success' })
+          this.$message({ showClose: true, message: `Cleared ${count != null ? count : ''} alarm records`, type: 'success' })
           this.currentPage = 1
           this.getAlarmList()
         }).catch(error => {

@@ -44,7 +44,7 @@ import java.util.List;
 import java.util.Vector;
 
 /**
- * SIP命令类型： INVITE请求
+ * SIPCommand type: INVITE request
  */
 @Slf4j
 @SuppressWarnings("rawtypes")
@@ -107,14 +107,14 @@ public class InviteRequestProcessor extends SIPRequestProcessorParent implements
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        // 添加消息处理的订阅
+        // Add message processing subscription
         sipProcessorObserver.addRequestProcessor(method, this);
     }
 
     /**
-     * 处理invite请求
+     * Handle invite requests
      *
-     * @param evt 请求消息
+     * @param evt request message
      */
     @Override
     public void process(RequestEvent evt) {
@@ -124,42 +124,42 @@ public class InviteRequestProcessor extends SIPRequestProcessorParent implements
         try {
             inviteInfo = decode(evt);
 
-            // 查询请求是否来自上级平台\设备
+            // Check whether the request comes from the upper-level platform\device
             Platform platform = platformService.queryPlatformByServerGBId(inviteInfo.getRequesterId());
             if (platform == null) {
                 inviteFromDeviceHandle(request, inviteInfo);
             } else {
-                // 查询平台下是否有该通道
+                // Check whether the channel exists under the platform
                 CommonGBChannel channel = channelService.queryOneWithPlatform(platform.getId(), inviteInfo.getTargetChannelId());
                 if (channel == null) {
-                    log.info("[上级INVITE] 通道不存在，返回404: {}", inviteInfo.getTargetChannelId());
+                    log.info("[SuperiorINVITE] The channel does not exist, return404: {}", inviteInfo.getTargetChannelId());
                     try {
-                        // 通道不存在，发404，资源不存在
+                        // The channel does not exist, 404 is sent, the resource does not exist
                         responseAck(request, Response.NOT_FOUND);
                     } catch (SipException | InvalidArgumentException | ParseException e) {
-                        log.error("[命令发送失败] invite 通道不存在: {}", e.getMessage());
+                        log.error("[Command sending failed] invite Channel does not exist: {}", e.getMessage());
                     }
                     return;
                 }
-                log.info("[上级INVITE] 平台：{}， 通道：{}({}), 收流地址：{}:{}，收流方式：{}, 点播类型：{},  SSRC：{}",
+                log.info("[SuperiorINVITE] platform：{}， channel：{}({}), Receiving address：{}:{}，Flow collection method：{}, On demand type：{},  SSRC：{}",
                         platform.getName(), channel.getGbName(), channel.getGbDeviceId(), inviteInfo.getIp(),
-                        inviteInfo.getPort(), inviteInfo.isTcp() ? (inviteInfo.isTcpActive() ? "TCP主动" : "TCP被动") : "UDP",
+                        inviteInfo.getPort(), inviteInfo.isTcp() ? (inviteInfo.isTcpActive() ? "TCPTake the initiative" : "TCPPassive") : "UDP",
                         inviteInfo.getSessionName(), inviteInfo.getSsrc());
                 if (!userSetting.getUseCustomSsrcForParentInvite() && ObjectUtils.isEmpty(inviteInfo.getSsrc())) {
-                    log.warn("[上级INVITE] 点播失败, 上级未携带SSRC, 并且本级未设置使用自定义SSRC");
-                    // 通道存在，发100，TRYING
+                    log.warn("[SuperiorINVITE] On-demand failed, the upper level did not carry SSRC, and this level was not set to use customSSRC");
+                    // Channel exists, hair100，TRYING
                     try {
                         responseAck(request, Response.BAD_REQUEST);
                     } catch (SipException | InvalidArgumentException | ParseException e) {
-                        log.error("[命令发送失败] 上级INVITE TRYING: {}", e.getMessage());
+                        log.error("[Command sending failed] SuperiorINVITE TRYING: {}", e.getMessage());
                     }
                     return;
                 }
-                // 通道存在，发100，TRYING
+                // Channel exists, hair100，TRYING
                 try {
                     responseAck(request, Response.TRYING);
                 } catch (SipException | InvalidArgumentException | ParseException e) {
-                    log.error("[命令发送失败] 上级INVITE TRYING: {}", e.getMessage());
+                    log.error("[Command sending failed] SuperiorINVITE TRYING: {}", e.getMessage());
                 }
 
                 InviteMessageInfo finalInviteInfo = inviteInfo;
@@ -168,18 +168,18 @@ public class InviteRequestProcessor extends SIPRequestProcessorParent implements
                         try {
                             responseAck(request, Response.BUSY_HERE, msg);
                         } catch (SipException | InvalidArgumentException | ParseException e) {
-                            log.error("[命令发送失败] 上级INVITE 点播失败: {}", e.getMessage());
+                            log.error("[Command sending failed] Superior INVITE on-demand failed: {}", e.getMessage());
                         }
                     } else {
-                        // 点播成功， TODO 可以在此处检测cancel命令是否存在，存在则不发送
+                        // The on-demand broadcast is successful. TODO can check whether the cancel command exists here. If it exists, it will not be sent.
                         if (userSetting.getUseCustomSsrcForParentInvite()) {
-                            // 上级平台点播时不使用上级平台指定的ssrc，使用自定义的ssrc，参考国标文档-点播外域设备媒体流SSRC处理方式
+                            // The upper-level platform does not use the ssrc specified by the upper-level platform when on-demand. Use the customized ssrc. Please refer to the national standard document.-On-demand external domain device media stream SSRC processing method
                             String sendSsrc = sendSsrcFactory.getSendSsrc(
                                     "Play".equalsIgnoreCase(finalInviteInfo.getSessionName()) ? "0" : "1");
                             finalInviteInfo.setSsrc(sendSsrc);
-                            log.info("[上级INVITE] 使用自定义SSRC: {}", sendSsrc);
+                            log.info("[SuperiorINVITE] Use customSSRC: {}", sendSsrc);
                         }
-                        // 构建sendRTP内容
+                        // Build sendRTP content
                         SendRtpInfo sendRtpItem = sendRtpServerService.createSendRtpInfo(streamInfo.getMediaServer(),
                                 finalInviteInfo.getIp(), finalInviteInfo.getPort(), finalInviteInfo.getSsrc(), platform.getServerGBId(),
                                 streamInfo.getApp(), streamInfo.getStream(),
@@ -199,7 +199,7 @@ public class InviteRequestProcessor extends SIPRequestProcessorParent implements
                         }
                         String content = createSendSdp(sendRtpItem, finalInviteInfo, sdpIp);
 
-                        // tcp主动模式，回复sdp后开启监听
+                        // tcpActive mode, turn on monitoring after replying to sdp
                         if (sendRtpItem.isTcpActive()) {
                             MediaServer mediaServer = mediaServerService.getOne(sendRtpItem.getMediaServerId());
                             try {
@@ -209,50 +209,50 @@ public class InviteRequestProcessor extends SIPRequestProcessorParent implements
                                     redisCatchStorage.sendPlatformStartPlayMsg(sendRtpItem, deviceChannel, platform);
                                 }
                             } catch (ControllerException e) {
-                                log.warn("[上级INVITE] tcp主动模式 发流失败", e);
+                                log.warn("[SuperiorINVITE] tcpActive mode streaming failed", e);
                                 sendBye(platform, finalInviteInfo.getCallId());
                             }
                         }
 
-                        // 超时未收到Ack应该回复bye,当前等待时间为10秒
+                        // If the Ack is not received after timeout, you should reply bye. The current waiting time is 10 seconds.
                         dynamicTask.startDelay(finalInviteInfo.getCallId(), () -> {
-                            log.info("[Ack ] 等待超时, {}/{}", finalInviteInfo.getCallId(), channel.getGbDeviceId());
-                            // 回复bye
+                            log.info("[Ack ] Wait timeout, {}/{}", finalInviteInfo.getCallId(), channel.getGbDeviceId());
+                            // Replybye
                             sendBye(platform, finalInviteInfo.getCallId());
                         }, 60 * 1000);
                         try {
                             responseSdpAck(request, content, platform);
                         } catch (SipException | InvalidArgumentException | ParseException e) {
-                            log.error("[命令发送失败] 上级INVITE 发送 200（SDP）: {}", e.getMessage());
+                            log.error("[Command sending failed] Superior INVITE sent 200（SDP）: {}", e.getMessage());
                         }
                     }
                 }));
             }
         } catch (SdpException e) {
-            // 参数不全， 发400，请求错误
+            // Incomplete parameters, sending 400, request error
             try {
                 responseAck(request, Response.BAD_REQUEST);
             } catch (SipException | InvalidArgumentException | ParseException sendException) {
-                log.error("[命令发送失败] invite BAD_REQUEST: {}", sendException.getMessage());
+                log.error("[Command sending failed] invite BAD_REQUEST: {}", sendException.getMessage());
             }
         } catch (InviteDecodeException e) {
             try {
                 responseAck(request, e.getCode(), e.getMsg());
             } catch (SipException | InvalidArgumentException | ParseException sendException) {
-                log.error("[命令发送失败] invite BAD_REQUEST: {}", sendException.getMessage());
+                log.error("[Command sending failed] invite BAD_REQUEST: {}", sendException.getMessage());
             }
         } catch (PlayException e) {
             try {
                 responseAck(request, e.getCode(), e.getMsg());
             } catch (SipException | InvalidArgumentException | ParseException sendException) {
-                log.error("[命令发送失败] invite 点播失败: {}", sendException.getMessage());
+                log.error("[Command sending failed] invite On-demand failed: {}", sendException.getMessage());
             }
         } catch (Exception e) {
-            log.error("[Invite处理异常] ", e);
+            log.error("[InviteHandle exceptions] ", e);
             try {
                 responseAck(request, Response.SERVER_INTERNAL_ERROR, "");
             } catch (SipException | InvalidArgumentException | ParseException sendException) {
-                log.error("[命令发送失败] invite 点播失败: {}", sendException.getMessage());
+                log.error("[Command sending failed] invite On-demand failed: {}", sendException.getMessage());
             }
         }
     }
@@ -263,7 +263,7 @@ public class InviteRequestProcessor extends SIPRequestProcessorParent implements
         SIPRequest request = (SIPRequest)evt.getRequest();
         String[] channelIdArrayFromSub = SipUtils.getChannelIdFromRequest(request);
 
-        // 解析sdp消息, 使用jainsip 自带的sdp解析方式
+        // To parse sdp messages, use jainsip’s own sdp parsing method.
         String contentString = new String(request.getRawContent());
         Gb28181Sdp gb28181Sdp = SipUtils.parseSDP(contentString);
         SessionDescription sdp = gb28181Sdp.getBaseSdb();
@@ -279,10 +279,10 @@ public class InviteRequestProcessor extends SIPRequestProcessorParent implements
         CallIdHeader callIdHeader = (CallIdHeader) request.getHeader(CallIdHeader.NAME);
 
         if (requesterId == null || channelId == null) {
-            log.warn("[解析INVITE消息] 无法从请求中获取到来源id，返回400错误");
+            log.warn("[Parse the INVITE message] Unable to obtain the source id from the request, returning a 400 error");
             throw new InviteDecodeException(Response.BAD_REQUEST, "request decode fail");
         }
-        log.info("[INVITE] 来源ID: {}, callId: {}, 来自：{}：{}",
+        log.info("[INVITE] SourceID: {}, callId: {}, from：{}：{}",
                 requesterId, callIdHeader.getCallId(), request.getRemoteAddress(), request.getRemotePort());
         inviteInfo.setRequesterId(requesterId);
         inviteInfo.setTargetChannelId(channelId);
@@ -293,7 +293,7 @@ public class InviteRequestProcessor extends SIPRequestProcessorParent implements
         inviteInfo.setSsrc(gb28181Sdp.getSsrc());
         inviteInfo.setCallId(callIdHeader.getCallId());
 
-        // 如果是录像回放，则会存在录像的开始时间与结束时间
+        // If it is video playback, there will be the start time and end time of the video.
         Long startTime = null;
         Long stopTime = null;
         if (sdp.getTimeDescriptions(false) != null && !sdp.getTimeDescriptions(false).isEmpty()) {
@@ -302,9 +302,9 @@ public class InviteRequestProcessor extends SIPRequestProcessorParent implements
             startTime = startTimeFiled.getStartTime();
             stopTime = startTimeFiled.getStopTime();
         }
-        //  获取支持的格式
+        //  Get supported formats
         Vector mediaDescriptions = sdp.getMediaDescriptions(true);
-        // 查看是否支持PS 负载96
+        // Check if PS payload is supported96
         //String ip = null;
         int port = -1;
         boolean mediaTransmissionTCP = false;
@@ -319,7 +319,7 @@ public class InviteRequestProcessor extends SIPRequestProcessorParent implements
                 //String mediaType = media.getMediaType();
                 String protocol = media.getProtocol();
 
-                // 区分TCP发流还是udp， 当前默认udp
+                // Distinguish between TCP streaming and UDP, currently the defaultudp
                 if ("TCP/RTP/AVP".equalsIgnoreCase(protocol)) {
                     String setup = mediaDescription.getAttribute("setup");
                     if (setup != null) {
@@ -335,7 +335,7 @@ public class InviteRequestProcessor extends SIPRequestProcessorParent implements
             }
         }
         if (port == -1) {
-            log.info("[解析INVITE消息]  不支持的媒体格式，返回415");
+            log.info("[Parse the INVITE message]  Unsupported media format, return415");
             throw new InviteDecodeException(Response.UNSUPPORTED_MEDIA_TYPE, "unsupported media type");
         }
         inviteInfo.setTcp(mediaTransmissionTCP);
@@ -400,39 +400,39 @@ public class InviteRequestProcessor extends SIPRequestProcessorParent implements
             }
             cmderFroPlatform.streamByeCmd(platform, sendRtpItem, channel);
         } catch (SipException | InvalidArgumentException | ParseException e) {
-            log.error("[命令发送失败] 上级INVITE 发送BYE: {}", e.getMessage());
+            log.error("[Command sending failed] Superior INVITE sentBYE: {}", e.getMessage());
         }
     }
 
     public void inviteFromDeviceHandle(SIPRequest request, InviteMessageInfo inviteInfo) {
 
         if (inviteInfo.getSourceChannelId() == null) {
-            log.warn("来自设备的Invite请求，无法从请求信息中确定请求来自的通道，已忽略，requesterId： {}", inviteInfo.getRequesterId());
+            log.warn("Invite request from the device, the channel the request came from cannot be determined from the request information, ignored，requesterId： {}", inviteInfo.getRequesterId());
             try {
                 responseAck(request, Response.FORBIDDEN);
             } catch (SipException | InvalidArgumentException | ParseException e) {
-                log.error("[命令发送失败] 来自设备的Invite请求，无法从请求信息中确定所属设备 FORBIDDEN: {}", e.getMessage());
+                log.error("[Command sending failed] Invite request from a device, the device cannot be determined from the request information FORBIDDEN: {}", e.getMessage());
             }
             return;
         }
-        // 非上级平台请求，查询是否设备请求（通常为接收语音广播的设备）
+        // Non-upper-level platform request, query whether the device requested it (usually a device that receives voice broadcasts）
         Device device = redisCatchStorage.getDevice(inviteInfo.getRequesterId());
-        // 判断requesterId是设备还是通道
+        // Determine whether requesterId is a device or channel
         if (device == null) {
             device = deviceService.getDeviceBySourceChannelDeviceId(inviteInfo.getRequesterId());
         }
         if (device == null) {
-            // 检查channelID是否可用
+            // Check if channelID is available
             device = deviceService.getDeviceBySourceChannelDeviceId(inviteInfo.getSourceChannelId());
         }
 
         if (device == null) {
-            log.warn("来自设备的Invite请求，无法从请求信息中确定所属设备，已忽略，requesterId： {}/{}", inviteInfo.getRequesterId(),
+            log.warn("Invite request from a device. The device cannot be determined from the request information and has been ignored.，requesterId： {}/{}", inviteInfo.getRequesterId(),
                     inviteInfo.getSourceChannelId());
             try {
                 responseAck(request, Response.FORBIDDEN);
             } catch (SipException | InvalidArgumentException | ParseException e) {
-                log.error("[命令发送失败] 来自设备的Invite请求，无法从请求信息中确定所属设备 FORBIDDEN: {}", e.getMessage());
+                log.error("[Command sending failed] Invite request from a device, the device cannot be determined from the request information FORBIDDEN: {}", e.getMessage());
             }
             return;
         }
@@ -440,11 +440,11 @@ public class InviteRequestProcessor extends SIPRequestProcessorParent implements
         if (deviceChannel == null) {
             List<AudioBroadcastCatch> audioBroadcastCatchList = audioBroadcastManager.getByDeviceId(device.getDeviceId());
             if (audioBroadcastCatchList.isEmpty()) {
-                log.warn("来自设备的Invite请求，无法从请求信息中确定所属通道，已忽略，requesterId： {}/{}", inviteInfo.getRequesterId(), inviteInfo.getSourceChannelId());
+                log.warn("Invite request from the device, the channel to which it belongs cannot be determined from the request information and has been ignored.，requesterId： {}/{}", inviteInfo.getRequesterId(), inviteInfo.getSourceChannelId());
                 try {
                     responseAck(request, Response.FORBIDDEN);
                 } catch (SipException | InvalidArgumentException | ParseException e) {
-                    log.error("[命令发送失败] 来自设备的Invite请求，无法从请求信息中确定所属设备 FORBIDDEN: {}", e.getMessage());
+                    log.error("[Command sending failed] Invite request from a device, the device cannot be determined from the request information FORBIDDEN: {}", e.getMessage());
                 }
                 return;
             }else {
@@ -453,15 +453,15 @@ public class InviteRequestProcessor extends SIPRequestProcessorParent implements
         }
         AudioBroadcastCatch broadcastCatch = audioBroadcastManager.get(deviceChannel.getId());
         if (broadcastCatch == null) {
-            log.warn("来自设备的Invite请求非语音广播，已忽略，requesterId： {}/{}", inviteInfo.getRequesterId(), inviteInfo.getSourceChannelId());
+            log.warn("Invite request from device, non-voice broadcast, ignored，requesterId： {}/{}", inviteInfo.getRequesterId(), inviteInfo.getSourceChannelId());
             try {
                 responseAck(request, Response.FORBIDDEN);
             } catch (SipException | InvalidArgumentException | ParseException e) {
-                log.error("[命令发送失败] 来自设备的Invite请求非语音广播 FORBIDDEN: {}", e.getMessage());
+                log.error("[Command sending failed] Invite request non-voice broadcast from device FORBIDDEN: {}", e.getMessage());
             }
             return;
         }
-        log.info("收到设备" + inviteInfo.getRequesterId() + "的语音广播Invite请求");
+        log.info("device received" + inviteInfo.getRequesterId() + "Voice Broadcast Invite Request");
         String key = VideoManagerConstants.BROADCAST_WAITE_INVITE + device.getDeviceId();
         if (!SipUtils.isFrontEnd(device.getDeviceId())) {
             key += broadcastCatch.getChannelId();
@@ -470,7 +470,7 @@ public class InviteRequestProcessor extends SIPRequestProcessorParent implements
         try {
             responseAck(request, Response.TRYING);
         } catch (SipException | InvalidArgumentException | ParseException e) {
-            log.error("[命令发送失败] invite BAD_REQUEST: {}", e.getMessage());
+            log.error("[Command sending failed] invite BAD_REQUEST: {}", e.getMessage());
             playService.stopAudioBroadcast(device, deviceChannel);
             return;
         }
@@ -482,14 +482,14 @@ public class InviteRequestProcessor extends SIPRequestProcessorParent implements
 
             if (ObjectUtils.isEmpty(gb28181Sdp.getSsrc()) ) {
                 String ssrc =  sendSsrcFactory.getSendSsrc("0");
-                log.warn("来自设备的Invite请求，未携带SSRC，生成随机ssrc: {}，requesterId： {}/{}", ssrc, inviteInfo.getRequesterId(), inviteInfo.getSourceChannelId());
+                log.warn("The Invite request from the device does not carry SSRC and generates a randomssrc: {}，requesterId： {}/{}", ssrc, inviteInfo.getRequesterId(), inviteInfo.getSourceChannelId());
                 gb28181Sdp.setSsrc(ssrc);
             }
 
-            //  获取支持的格式
+            //  Get supported formats
             Vector mediaDescriptions = sdp.getMediaDescriptions(true);
 
-            // 查看是否支持PS 负载96
+            // Check if PS payload is supported96
             int port = -1;
             boolean mediaTransmissionTCP = false;
             Boolean tcpActive = null;
@@ -501,7 +501,7 @@ public class InviteRequestProcessor extends SIPRequestProcessorParent implements
 //                    if (mediaFormats.contains("8")) {
                 port = media.getMediaPort();
                 String protocol = media.getProtocol();
-                // 区分TCP发流还是udp， 当前默认udp
+                // Distinguish between TCP streaming and UDP, currently the defaultudp
                 if ("TCP/RTP/AVP".equals(protocol)) {
                     String setup = mediaDescription.getAttribute("setup");
                     if (setup != null) {
@@ -517,34 +517,34 @@ public class InviteRequestProcessor extends SIPRequestProcessorParent implements
 //                    }
             }
             if (port == -1) {
-                log.info("不支持的媒体格式，返回415");
-                // 回复不支持的格式
+                log.info("Unsupported media format, return415");
+                // Reply to unsupported format
                 try {
-                    responseAck(request, Response.UNSUPPORTED_MEDIA_TYPE); // 不支持的格式，发415
+                    responseAck(request, Response.UNSUPPORTED_MEDIA_TYPE); // Unsupported format, send415
                 } catch (SipException | InvalidArgumentException | ParseException e) {
-                    log.error("[命令发送失败] invite 不支持的媒体格式: {}", e.getMessage());
+                    log.error("[Command sending failed] invite Unsupported media format: {}", e.getMessage());
                     playService.stopAudioBroadcast(device, deviceChannel);
                     return;
                 }
                 return;
             }
             String addressStr = sdp.getOrigin().getAddress();
-            log.info("设备{}请求语音流，地址：{}:{}，ssrc：{}, {}", inviteInfo.getRequesterId(), addressStr, port, gb28181Sdp.getSsrc(),
-                    mediaTransmissionTCP ? (tcpActive ? "TCP主动" : "TCP被动") : "UDP");
+            log.info("Equipment{}Request voice stream, address：{}:{}，ssrc：{}, {}", inviteInfo.getRequesterId(), addressStr, port, gb28181Sdp.getSsrc(),
+                    mediaTransmissionTCP ? (tcpActive ? "TCPTake the initiative" : "TCPPassive") : "UDP");
 
             MediaServer mediaServerItem = broadcastCatch.getMediaServerItem();
             if (mediaServerItem == null) {
-                log.warn("未找到语音喊话使用的zlm");
+                log.warn("The voice call was not found.zlm");
                 try {
                     responseAck(request, Response.BUSY_HERE);
                 } catch (SipException | InvalidArgumentException | ParseException e) {
-                    log.error("[命令发送失败] invite 未找到可用的zlm: {}", e.getMessage());
+                    log.error("[Command sending failed] invite Not found availablezlm: {}", e.getMessage());
                     playService.stopAudioBroadcast(device, deviceChannel);
                 }
                 return;
             }
-            log.info("设备{}请求语音流， 收流地址：{}:{}，ssrc：{}, {}, 对讲方式：{}", inviteInfo.getRequesterId(), addressStr, port, gb28181Sdp.getSsrc(),
-                    mediaTransmissionTCP ? (tcpActive ? "TCP主动" : "TCP被动") : "UDP", sdp.getSessionName().getValue());
+            log.info("Equipment{}Request voice stream, receive stream address：{}:{}，ssrc：{}, {}, Intercom mode：{}", inviteInfo.getRequesterId(), addressStr, port, gb28181Sdp.getSsrc(),
+                    mediaTransmissionTCP ? (tcpActive ? "TCPTake the initiative" : "TCPPassive") : "UDP", sdp.getSessionName().getValue());
             CallIdHeader callIdHeader = (CallIdHeader) request.getHeader(CallIdHeader.NAME);
 
             SendRtpInfo sendRtpItem = sendRtpServerService.createSendRtpInfo(mediaServerItem, addressStr, port, gb28181Sdp.getSsrc(), inviteInfo.getRequesterId(),
@@ -552,11 +552,11 @@ public class InviteRequestProcessor extends SIPRequestProcessorParent implements
                     mediaTransmissionTCP, false);
 
             if (sendRtpItem == null) {
-                log.warn("服务器端口资源不足");
+                log.warn("Insufficient server port resources");
                 try {
                     responseAck(request, Response.BUSY_HERE);
                 } catch (SipException | InvalidArgumentException | ParseException e) {
-                    log.error("[命令发送失败] invite 服务器端口资源不足: {}", e.getMessage());
+                    log.error("[Command sending failed] invite Insufficient server port resources: {}", e.getMessage());
                     playService.stopAudioBroadcast(device, deviceChannel);
                     return;
                 }
@@ -583,21 +583,21 @@ public class InviteRequestProcessor extends SIPRequestProcessorParent implements
             if (streamReady) {
                 sendOk(device, deviceChannel, sendRtpItem, sdp, request, mediaServerItem, mediaTransmissionTCP, gb28181Sdp.getSsrc());
             } else {
-                log.warn("[语音通话]， 未发现待推送的流,app={},stream={}", broadcastCatch.getApp(), broadcastCatch.getStream());
+                log.warn("[voice call]， No stream found to be pushed,app={},stream={}", broadcastCatch.getApp(), broadcastCatch.getStream());
                 try {
                     responseAck(request, Response.GONE);
                 } catch (SipException | InvalidArgumentException | ParseException e) {
-                    log.error("[命令发送失败] 语音通话 回复410失败， {}", e.getMessage());
+                    log.error("[Command sending failed] Voice call reply 410 failed， {}", e.getMessage());
                     return;
                 }
                 playService.stopAudioBroadcast(device, deviceChannel);
             }
         } catch (SdpException e) {
-            log.error("[语音通话] SDP解析异常", e);
+            log.error("[voice call] SDPparsing exception", e);
             try {
                 responseAck(request, Response.BAD_REQUEST);
             } catch (SipException | InvalidArgumentException | ParseException exception) {
-                log.error("[命令发送失败] 来自设备的Invite请求非语音广播 FORBIDDEN: {}", exception.getMessage());
+                log.error("[Command sending failed] Invite request non-voice broadcast from device FORBIDDEN: {}", exception.getMessage());
             }
             playService.stopAudioBroadcast(device, deviceChannel);
         }
@@ -652,19 +652,19 @@ public class InviteRequestProcessor extends SIPRequestProcessorParent implements
             SsrcTransaction ssrcTransaction = SsrcTransaction.buildForDevice(device.getDeviceId(), sendRtpItem.getChannelId(),
                     request.getCallIdHeader().getCallId(), sendRtpItem.getApp(), sendRtpItem.getStream(), sendRtpItem.getSsrc(), sendRtpItem.getMediaServerId(), sipResponse, InviteSessionType.BROADCAST);
             sessionManager.put(ssrcTransaction);
-            // 开启发流，大华在收到200OK后就会开始建立连接
+            // Turn on streaming, Dahua will start establishing connections after receiving 200OK
             if (sendRtpItem.isTcpActive() || !device.isBroadcastPushAfterAck()) {
                 if (sendRtpItem.isTcpActive()) {
-                    log.info("[语音喊话] 监听端口等待设备连接后推流");
+                    log.info("[Voice call] Listen to the port and wait for the device to connect before pushing the stream");
                 }else {
-                    log.info("[语音喊话] 回复200OK后发现 BroadcastPushAfterAck为False，现在开始推流");
+                    log.info("[Voice call] Found out after replying 200OK BroadcastPushAfterAckis False, start streaming now");
                 }
 
                 playService.startPushStream(sendRtpItem, channel, sipResponse, parentPlatform, request.getCallIdHeader());
             }
 
         } catch (SipException | InvalidArgumentException | ParseException | SdpParseException e) {
-            log.error("[命令发送失败] 语音喊话 回复200OK（SDP）: {}", e.getMessage());
+            log.error("[Command sending failed] Voice call reply200OK（SDP）: {}", e.getMessage());
         }
         return sipResponse;
     }

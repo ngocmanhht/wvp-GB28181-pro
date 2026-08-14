@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 存储多媒体数据检索应答
+ * Store multimedia data retrieval responses
  *
  */
 @Slf4j
@@ -30,7 +30,7 @@ public class J0802 extends Re {
         int respNo = buf.readUnsignedShort();
         int length = buf.readUnsignedShort();
         if (length == 0) {
-            log.info("[JT-存储多媒体数据检索应答]: {}", length);
+            log.info("[JT-Store multimedia data retrieval responses]: {}", length);
             SessionManager.INSTANCE.response(header.getPhoneNumber(), "0802", (long) respNo, new ArrayList<>());
             return null;
         }
@@ -38,7 +38,7 @@ public class J0802 extends Re {
         for (int i = 0; i < length; i++) {
             mediaDataInfoList.add(JTMediaDataInfo.decode(buf));
         }
-        log.info("[JT-存储多媒体数据检索应答]: {}", mediaDataInfoList.size());
+        log.info("[JT-Store multimedia data retrieval responses]: {}", mediaDataInfoList.size());
         SessionManager.INSTANCE.response(header.getPhoneNumber(), "0802", (long) respNo, mediaDataInfoList);
         return null;
     }

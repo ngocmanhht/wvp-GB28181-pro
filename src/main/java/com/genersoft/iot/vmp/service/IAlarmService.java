@@ -8,21 +8,21 @@ import com.github.pagehelper.PageInfo;
 import java.util.List;
 
 public interface IAlarmService {
-    // 保存报警信息
+    // Save alarm information
     void saveAlarmInfo(Alarm alarm);
 
-    // 分页获取报警信息
+    // Get alarm information by page
     PageInfo<Alarm> getAlarms(int page, int size, List<AlarmType> alarmType, String beginTime, String endTime);
 
-    // 删除报警信息
+    // Delete alarm information
     void deleteAlarmInfo(List<Long> ids);
 
-    // 按筛选条件清空报警信息
+    // Clear alarm information according to filter conditions
     int clearAlarmsByCondition(List<AlarmType> alarmType, String beginTime, String endTime);
 
-    // 根据ID获取报警快照
+    // Get alarm snapshot based on ID
     String getAlarmSnapById(Long id);
 
-    // 根据ID获取报警录像
+    // Get alarm video based on ID
     StreamInfo getAlarmRecordById(Long id);
 }

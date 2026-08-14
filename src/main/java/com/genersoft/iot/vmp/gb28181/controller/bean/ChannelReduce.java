@@ -4,63 +4,63 @@ import com.genersoft.iot.vmp.gb28181.bean.DeviceChannel;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 /**
- * 精简的channel信息展示，主要是选择通道的时候展示列表使用
+ * Streamlined channel information display, mainly used to display the list when selecting a channel
  */
-@Schema(description = "精简的channel信息展示")
+@Schema(description = "Streamlined channel information display")
 public class ChannelReduce {
 
     /**
-     * deviceChannel的数据库自增ID
+     * deviceChannelThe database is automatically incrementedID
      */
-    @Schema(description = "deviceChannel的数据库自增ID")
+    @Schema(description = "deviceChannelThe database is automatically incrementedID")
     private int id;
 
     /**
-     * 通道id
+     * channelid
      */
-    @Schema(description = "通道国标编号")
+    @Schema(description = "Channel national standard number")
     private String channelId;
 
     /**
-     * 设备id
+     * Equipmentid
      */
-    @Schema(description = "设备国标编号")
+    @Schema(description = "Equipment national standard number")
     private String deviceId;
 
     /**
-     * 通道名
+     * Channel name
      */
-    @Schema(description = "通道名")
+    @Schema(description = "Channel name")
     private String name;
 
     /**
-     * 生产厂商
+     * Manufacturer
      */
-    @Schema(description = "生产厂商")
+    @Schema(description = "Manufacturer")
     private String manufacturer;
 
     /**
-     * wan地址
+     * wanaddress
      */
-    @Schema(description = "wan地址")
+    @Schema(description = "wanaddress")
     private String  hostAddress;
 
     /**
-     * 子节点数
+     * Number of child nodes
      */
-    @Schema(description = "子节点数")
+    @Schema(description = "Number of child nodes")
     private int  subCount;
 
     /**
-     * 平台Id
+     * platformId
      */
-    @Schema(description = "平台上级国标编号")
+    @Schema(description = "Platform superior national standard number")
     private String  platformId;
 
     /**
-     * 目录Id
+     * DirectoryId
      */
-    @Schema(description = "目录国标编号")
+    @Schema(description = "Catalog national standard number")
     private String  catalogId;
 
     public int getId() {

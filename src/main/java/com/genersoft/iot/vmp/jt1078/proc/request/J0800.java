@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 多媒体事件信息上传
+ * Multimedia event information upload
  *
  */
 @Slf4j
@@ -28,7 +28,7 @@ public class J0800 extends Re {
     @Override
     protected Rs decode0(ByteBuf buf, Header header, Session session) {
         JTMediaEventInfo mediaEventInfo = JTMediaEventInfo.decode(buf);
-        log.info("[JT-多媒体事件信息上传]: {}", mediaEventInfo);
+        log.info("[JT-Multimedia event information upload]: {}", mediaEventInfo);
         return null;
     }
 

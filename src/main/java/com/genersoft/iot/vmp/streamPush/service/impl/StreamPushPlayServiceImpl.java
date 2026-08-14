@@ -55,7 +55,7 @@ public class StreamPushPlayServiceImpl implements IStreamPushPlayService {
     @Override
     public void start(Integer id, ErrorCallback<StreamInfo> callback, String platformDeviceId, String platformName ) {
         StreamPush streamPush = streamPushMapper.queryOne(id);
-        Assert.notNull(streamPush, "推流信息未找到");
+        Assert.notNull(streamPush, "Push information not found");
 
         if (streamPush.isPushing() && !userSetting.getServerId().equals(streamPush.getServerId())) {
             redisRpcPlayService.playPush(streamPush.getServerId(), id, callback);
@@ -80,18 +80,18 @@ public class StreamPushPlayServiceImpl implements IStreamPushPlayService {
                 return;
             }
         }
-        Assert.isTrue(streamPush.isStartOfflinePush(), "通道未推流");
-        // 发送redis消息以使设备上线，流上线后被
-        log.info("[ app={}, stream={} ]通道未推流，发送redis信息控制设备开始推流", streamPush.getApp(), streamPush.getStream());
+        Assert.isTrue(streamPush.isStartOfflinePush(), "Channel is not pushed");
+        // Send a redis message to bring the device online, and the stream will be
+        log.info("[ app={}, stream={} ]The channel is not pushing. Send redis information to control the device to start pushing.", streamPush.getApp(), streamPush.getStream());
         MessageForPushChannel messageForPushChannel = MessageForPushChannel.getInstance(1,
                 streamPush.getApp(), streamPush.getStream(), streamPush.getGbDeviceId(), platformDeviceId,
                 platformName, userSetting.getServerId(), null);
         redisCatchStorage.sendStreamPushRequestedMsg(messageForPushChannel);
-        // 设置超时
+        // Set timeout
         String timeOutTaskKey = UUID.randomUUID().toString();
         dynamicTask.startDelay(timeOutTaskKey, () -> {
             redisRpcService.unPushStreamOnlineEvent(streamPush.getApp(), streamPush.getStream());
-            log.info("[ app={}, stream={} ] 等待设备开始推流超时", streamPush.getApp(), streamPush.getStream());
+            log.info("[ app={}, stream={} ] Timeout waiting for the device to start streaming", streamPush.getApp(), streamPush.getStream());
             callback.run(ErrorCode.ERROR100.getCode(), "timeout", null);
 
         }, userSetting.getPlatformPlayTimeout());
@@ -99,14 +99,14 @@ public class StreamPushPlayServiceImpl implements IStreamPushPlayService {
         long key = redisRpcService.onStreamOnlineEvent(streamPush.getApp(), streamPush.getStream(), (streamInfo) -> {
             dynamicTask.stop(timeOutTaskKey);
             if (streamInfo == null) {
-                log.warn("等待推流得到结果未空： {}/{}", streamPush.getApp(), streamPush.getStream());
+                log.warn("Waiting for the push flow to get the result but it is not empty.： {}/{}", streamPush.getApp(), streamPush.getStream());
                 callback.run(ErrorCode.ERROR100.getCode(), "fail", null);
             }else {
                 callback.run(ErrorCode.SUCCESS.getCode(), ErrorCode.SUCCESS.getMsg(), streamInfo);
             }
         });
-        // 添加回复的拒绝或者错误的通知
-        // redis消息例如： PUBLISH VM_MSG_STREAM_PUSH_RESPONSE  '{"code":1,"msg":"失败","app":"1","stream":"2"}'
+        // Add reply rejection or error notifications
+        // redisMessages such as： PUBLISH VM_MSG_STREAM_PUSH_RESPONSE  '{"code":1,"msg":"failed","app":"1","stream":"2"}'
         redisPushStreamResponseListener.addEvent(streamPush.getApp(), streamPush.getStream(), response -> {
             if (response.getCode() != 0) {
                 dynamicTask.stop(timeOutTaskKey);
@@ -125,7 +125,7 @@ public class StreamPushPlayServiceImpl implements IStreamPushPlayService {
         }
         String mediaServerId = streamPush.getMediaServerId();
         MediaServer mediaServer = mediaServerService.getOne(mediaServerId);
-        Assert.notNull(mediaServer, "未找到使用的节点");
+        Assert.notNull(mediaServer, "Used node not found");
         mediaServerService.closeStreams(mediaServer, app, stream);
     }
 
@@ -137,7 +137,7 @@ public class StreamPushPlayServiceImpl implements IStreamPushPlayService {
         }
         String mediaServerId = streamPush.getMediaServerId();
         MediaServer mediaServer = mediaServerService.getOne(mediaServerId);
-        Assert.notNull(mediaServer, "未找到使用的节点");
+        Assert.notNull(mediaServer, "Used node not found");
         mediaServerService.closeStreams(mediaServer, streamPush.getApp(), streamPush.getStream());
     }
 }

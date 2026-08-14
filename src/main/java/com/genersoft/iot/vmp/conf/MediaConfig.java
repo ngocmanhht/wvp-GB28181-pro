@@ -19,7 +19,7 @@ import java.util.regex.Pattern;
 @Data
 public class MediaConfig{
 
-    // 修改必须配置，不再支持自动获取
+    // Modify the required configuration and no longer support automatic acquisition.
     @Value("${media.id}")
     private String id;
 
@@ -79,12 +79,12 @@ public class MediaConfig{
             if (isValidIPAddress(sdpIp)) {
                 return sdpIp;
             }else {
-                // 按照域名解析
+                // Analyze by domain name
                 String hostAddress = null;
                 try {
                     hostAddress = InetAddress.getByName(sdpIp).getHostAddress();
                 } catch (UnknownHostException e) {
-                    log.error("[获取SDP IP]: 域名解析失败");
+                    log.error("[getSDP IP]: Domain name resolution failed");
                 }
                 return hostAddress;
             }

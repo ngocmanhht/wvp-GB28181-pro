@@ -89,10 +89,10 @@ public class jt1078ServiceImpl implements Ijt1078Service {
     @Autowired
     private FtpDownloadManager downloadManager;
 
-    // 服务启动后五分钟内没有连接的设备设置为离线
+    // Devices that are not connected within five minutes of service startup are set to offline
     @EventListener(ApplicationReadyEvent.class)
     public void onApplicationReady(){
-        // 检查session与在线终端是是否对应 不对应则设置终端离线
+        // Check whether the session corresponds to the online terminal. If not, set the terminal offline.
         List<JTDevice> deviceList = jtDeviceMapper.getDeviceList(null, true);
         if (deviceList.isEmpty()) {
             return;
@@ -101,7 +101,7 @@ public class jt1078ServiceImpl implements Ijt1078Service {
             Session session = SessionManager.INSTANCE.get(device.getPhoneNumber());
             if (session == null) {
                 device.setStatus(false);
-                // 通道发送状态变化通知
+                // Channel sends status change notification
                 List<JTChannel> jtChannels = jtChannelMapper.selectAll(device.getId(), null);
                 List<CommonGBChannel> channelList = new ArrayList<>();
                 for (JTChannel jtChannel : jtChannels) {
@@ -117,7 +117,7 @@ public class jt1078ServiceImpl implements Ijt1078Service {
     }
 
     /**
-     * 流到来的处理
+     * Processing of incoming streams
      */
     @Async
     @org.springframework.context.event.EventListener
@@ -126,7 +126,7 @@ public class jt1078ServiceImpl implements Ijt1078Service {
     }
 
     /**
-     * 流离开的处理
+     * Stream departure processing
      */
     @Async
     @EventListener
@@ -135,7 +135,7 @@ public class jt1078ServiceImpl implements Ijt1078Service {
     }
 
     /**
-     * 设备更新的通知
+     * Notifications for device updates
      */
     @Async
     @EventListener
@@ -146,7 +146,7 @@ public class jt1078ServiceImpl implements Ijt1078Service {
         }
         JTDevice deviceInDb = getDevice(event.getDevice().getPhoneNumber());
         if (deviceInDb.isStatus() != device.isStatus()) {
-            // 通道发送状态变化通知
+            // Channel sends status change notification
             List<JTChannel> jtChannels = jtChannelMapper.selectAll(deviceInDb.getId(), null);
             List<CommonGBChannel> channelList = new ArrayList<>();
             for (JTChannel jtChannel : jtChannels) {
@@ -161,7 +161,7 @@ public class jt1078ServiceImpl implements Ijt1078Service {
     }
 
     /**
-     * 位置更新的通知
+     * Notifications for location updates
      */
     @Async
     @EventListener
@@ -178,7 +178,7 @@ public class jt1078ServiceImpl implements Ijt1078Service {
         device.setLatitude(event.getPositionInfo().getLatitude());
         updateDevice(device);
 
-        // 通道发送状态变化通知
+        // Channel sends status change notification
         List<JTChannel> jtChannels = jtChannelMapper.selectAll(device.getId(), null);
         List<CommonGBChannel> channelList = new ArrayList<>();
         for (JTChannel jtChannel : jtChannels) {
@@ -208,7 +208,7 @@ public class jt1078ServiceImpl implements Ijt1078Service {
 
 
     /**
-     * 校验流是否是属于部标的
+     * Verify whether the stream belongs to the target
      */
     @Override
     public JTMediaStreamType checkStreamFromJt(String stream) {
@@ -256,7 +256,7 @@ public class jt1078ServiceImpl implements Ijt1078Service {
     public void addDevice(JTDevice device) {
         JTDevice deviceInDb = jtDeviceMapper.getDevice(device.getPhoneNumber());
         if (deviceInDb != null) {
-            throw new ControllerException(ErrorCode.ERROR100.getCode(), "设备" + device.getPhoneNumber() + "已存在");
+            throw new ControllerException(ErrorCode.ERROR100.getCode(), "Equipment" + device.getPhoneNumber() + "Already exists");
         }
         device.setCreateTime(DateUtil.getNow());
         device.setUpdateTime(DateUtil.getNow());
@@ -283,15 +283,15 @@ public class jt1078ServiceImpl implements Ijt1078Service {
             fileSystemFactory.removeOutputStream(filePath);
         }, 2*60*60*1000);
         Session session = SessionManager.INSTANCE.get(phoneNumber);
-        Assert.notNull(session, "连接不存在");
+        Assert.notNull(session, "Connection does not exist");
         InetSocketAddress socketAddress = session.getLoadAddress();
         String hostName = socketAddress.getHostName();
 
         BaseUser randomUser = ftpUserManager.getRandomUser();
 
-        log.info("[JT-录像] 下载，设备:{}， 通道： {}， 开始时间： {}， 结束时间： {}  上传IP： {} 等待上传文件路径： {} 用户名： {}, 密码： {} ",
+        log.info("[JT-Video] download, device:{}， channel： {}， start time： {}， end time： {}  uploadIP： {} Waiting for upload file path： {} Username： {}, Password： {} ",
                 phoneNumber, channelId, startTime, endTime, hostName, filePath, randomUser.getName(), randomUser.getPassword());
-        // 发送停止命令
+        // Send stop command
         J9206 j92026 = new J9206();
         j92026.setChannelId(channelId);
         j92026.setStartTime(DateUtil.yyyy_MM_dd_HH_mm_ssTo1078(startTime));
@@ -319,7 +319,7 @@ public class jt1078ServiceImpl implements Ijt1078Service {
 
     @Override
     public void ptzControl(String phoneNumber, Integer channelId, String command, int speed) {
-        // 发送停止命令
+        // Send stop command
         switch (command) {
             case "left":
             case "right":
@@ -430,7 +430,7 @@ public class jt1078ServiceImpl implements Ijt1078Service {
                     if (field.isAnnotationPresent(ConfigAttribute.class)) {
                         ConfigAttribute configAttribute = field.getAnnotation(ConfigAttribute.class);
                         if (configAttribute == null) {
-                            log.warn("[查询设备配置] 获取 ConfigAttribute 失败");
+                            log.warn("[Query device configuration] get ConfigAttribute failed");
                             continue;
                         }
                         paramBytes[i] = configAttribute.id();
@@ -695,10 +695,10 @@ public class jt1078ServiceImpl implements Ijt1078Service {
         dynamicTask.stop(playKey);
         StreamInfo streamInfo = (StreamInfo) redisTemplate.opsForValue().get(playKey);
         if (streamInfo == null) {
-            log.info("[JT-切换码流类型] 未找到点播信息 phoneNumber： {}， channelId： {}, streamType: {}", phoneNumber, channelId, streamType);
+            log.info("[JT-Switch code stream type] No on-demand information found phoneNumber： {}， channelId： {}, streamType: {}", phoneNumber, channelId, streamType);
         }
-        log.info("[JT-切换码流类型] phoneNumber： {}， channelId： {}, streamType: {}", phoneNumber, channelId, streamType);
-        // 发送暂停命令
+        log.info("[JT-Switch code stream type] phoneNumber： {}， channelId： {}, streamType: {}", phoneNumber, channelId, streamType);
+        // Send pause command
         J9102 j9102 = new J9102();
         j9102.setChannel(channelId);
         j9102.setCommand(1);
@@ -712,7 +712,7 @@ public class jt1078ServiceImpl implements Ijt1078Service {
 
         JTDevice device = getDeviceById(deviceId);
         if (device == null) {
-            throw new ControllerException(ErrorCode.ERROR100.getCode(), "设备不存在");
+            throw new ControllerException(ErrorCode.ERROR100.getCode(), "Device does not exist");
         }
         PageHelper.startPage(page, count);
         List<JTChannel> all = jtChannelMapper.selectAll(deviceId, query);
@@ -746,7 +746,7 @@ public class jt1078ServiceImpl implements Ijt1078Service {
     public void addChannel(JTChannel channel) {
         JTChannel channelInDb = jtChannelMapper.selectChannelByChannelId(channel.getTerminalDbId(), channel.getChannelId());
         if (channelInDb != null) {
-            throw new ControllerException(ErrorCode.ERROR100.getCode(), "通道已存在");
+            throw new ControllerException(ErrorCode.ERROR100.getCode(), "Channel already exists");
         }
         channel.setCreateTime(DateUtil.getNow());
         channel.setUpdateTime(DateUtil.getNow());
@@ -813,15 +813,15 @@ public class jt1078ServiceImpl implements Ijt1078Service {
         String filePath = UUID.randomUUID().toString();
 
         Session session = SessionManager.INSTANCE.get(phoneNumber);
-        Assert.notNull(session, "连接不存在");
+        Assert.notNull(session, "Connection does not exist");
         InetSocketAddress socketAddress = session.getLoadAddress();
         String hostName = socketAddress.getHostName();
 
         BaseUser randomUser = ftpUserManager.getRandomUser();
 
-        log.info("[JT-录像] 下载，设备:{}， 通道： {}， 开始时间： {}， 结束时间： {}  上传IP： {} 等待上传文件路径： {} 用户名： {}, 密码： {} ",
+        log.info("[JT-Video] download, device:{}， channel： {}， start time： {}， end time： {}  uploadIP： {} Waiting for upload file path： {} Username： {}, Password： {} ",
                 phoneNumber, channelId, startTime, endTime, hostName, filePath, randomUser.getName(), randomUser.getPassword());
-        // 文件上传指令
+        // File upload command
         J9206 j9206 = new J9206();
         j9206.setChannelId(channelId);
         j9206.setStartTime(DateUtil.yyyy_MM_dd_HH_mm_ssTo1078(startTime));
@@ -852,7 +852,7 @@ public class jt1078ServiceImpl implements Ijt1078Service {
     @Override
     public void recordDownload(String filePath, ServletOutputStream outputStream) {
         JTRecordDownloadCatch downloadCatch = downloadManager.getCatch(filePath);
-        Assert.notNull(downloadCatch, "地址不存在");
+        Assert.notNull(downloadCatch, "Address does not exist");
         fileSystemFactory.addOutputStream(filePath, outputStream);
         jt1078Template.fileUpload(downloadCatch.getPhoneNumber(), downloadCatch.getJ9206(), 7200);
         downloadManager.runDownload(filePath, 2 * 60 * 60);
@@ -865,7 +865,7 @@ public class jt1078ServiceImpl implements Ijt1078Service {
     public byte[] snap(String phoneNumber, int channelId) {
         J8801 j8801 = new J8801();
 
-        // 设置抓图默认参数
+        // Set default parameters for snapshots
         JTShootingCommand shootingCommand = new JTShootingCommand();
         shootingCommand.setChanelId(channelId);
         shootingCommand.setCommand(1);
@@ -879,14 +879,14 @@ public class jt1078ServiceImpl implements Ijt1078Service {
         shootingCommand.setChroma(125);
 
         j8801.setCommand(shootingCommand);
-        log.info("[JT-抓图] 设备编号： {}， 通道编号： {}", phoneNumber, channelId);
-        // 监听文件上传， 存在设备不回复抓图请求或者回复通用回复，导致缺少抓图编号，但是直接上传文件的，此处通过监听文件上传直接获取文件
+        log.info("[JT-Snapshot] Device number： {}， Channel number： {}", phoneNumber, channelId);
+        // Monitoring file uploads. There are devices that do not reply to capture requests or reply with general replies, resulting in the lack of capture numbers, but upload files directly. Here, the files are obtained directly by monitoring file uploads.
 
         @SuppressWarnings("unchecked")
         List<Long> ids = (List<Long>) jt1078Template.shooting(phoneNumber, j8801, 300);
-        log.info("[JT-抓图] 抓图编号： {}， 设备编号： {}， 通道编号： {}", ids.get(0), phoneNumber, channelId);
+        log.info("[JT-Snapshot] Snapshot number： {}， Device number： {}， Channel number： {}", ids.get(0), phoneNumber, channelId);
 
-        log.info("[JT-抓图] 请求上传图片，抓图编号： {}， 设备编号： {}， 通道编号： {}", ids.get(0), phoneNumber, channelId);
+        log.info("[JT-Snapshot] Request to upload pictures, capture number： {}， Device number： {}， Channel number： {}", ids.get(0), phoneNumber, channelId);
         J8805 j8805 = new J8805();
         j8805.setMediaId(ids.get(0));
         j8805.setDelete(1);
@@ -895,28 +895,28 @@ public class jt1078ServiceImpl implements Ijt1078Service {
             log.info("[]");
             throw new ControllerException(ErrorCode.ERROR100.getCode(), ErrorCode.ERROR100.getMsg());
         }
-        log.info("[JT-抓图] 图片上传完成，抓图编号： {}， 设备编号： {}， 通道编号： {}", ids.get(0), phoneNumber, channelId);
+        log.info("[JT-Snapshot] Image upload completed, capture number： {}， Device number： {}， Channel number： {}", ids.get(0), phoneNumber, channelId);
         return mediaEventInfo.getMediaData();
     }
 
     @Override
     public void uploadOneMedia(String phoneNumber, Long mediaId, ServletOutputStream outputStream, boolean delete) {
-        log.info("[JT-单条存储多媒体数据上传] 媒体编号： {}， 设备编号： {}", mediaId, phoneNumber);
+        log.info("[JT-Single stored multimedia data upload] media number： {}， Device number： {}", mediaId, phoneNumber);
         J8805 j8805 = new J8805();
         j8805.setMediaId(mediaId);
         j8805.setDelete(delete ? 1 : 0);
-        log.info("[JT-单条存储多媒体数据上传] 请求上传，媒体编号： {}， 设备编号： {}", mediaId, phoneNumber);
+        log.info("[JT-Single stored multimedia data upload] Request to upload, media number： {}， Device number： {}", mediaId, phoneNumber);
         JTMediaEventInfo mediaEventInfo = (JTMediaEventInfo)jt1078Template.uploadMediaDataForSingle(phoneNumber, j8805, 600);
         if (mediaEventInfo == null) {
             throw new ControllerException(ErrorCode.ERROR100.getCode(), ErrorCode.ERROR100.getMsg());
         }
-        log.info("[JT-单条存储多媒体数据上传] 图片上传完成，媒体编号： {}， 设备编号： {}", mediaId, phoneNumber);
+        log.info("[JT-Single stored multimedia data upload] Image upload completed, media number： {}， Device number： {}", mediaId, phoneNumber);
         try {
             outputStream.write(mediaEventInfo.getMediaData());
             outputStream.flush();
         } catch (IOException e) {
-            log.info("[JT-单条存储多媒体数据上传] 数据写入异常，抓图编号： {}， 设备编号： {}", mediaId, phoneNumber, e);
-            throw new ControllerException(ErrorCode.ERROR100.getCode(), "数据写入异常");
+            log.info("[JT-Single stored multimedia data upload] Data writing exception, snapshot number： {}， Device number： {}", mediaId, phoneNumber, e);
+            throw new ControllerException(ErrorCode.ERROR100.getCode(), "Data writing exception");
         }
     }
 }

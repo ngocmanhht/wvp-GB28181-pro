@@ -2,7 +2,7 @@
   <div id="configInfo">
     <el-dialog
       v-el-drag-dialog
-      title="车门控制"
+      title="door control"
       width="=80%"
       top="2rem"
       :close-on-click-modal="false"
@@ -13,8 +13,8 @@
       <div style="padding: 0 20px 0 10px">
         <el-form >
           <el-form-item style="text-align: center">
-            <el-button @click="controlDoor(true)">开车门</el-button>
-            <el-button @click="controlDoor(false)" >关车门</el-button>
+            <el-button @click="controlDoor(true)">open the door</el-button>
+            <el-button @click="controlDoor(false)" >close car door</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -53,7 +53,7 @@ export default {
       }).then(data => {
           this.$message.success({
             showClose: true,
-            message: '发送成功'
+            message: 'Sent successfully'
           })
         })
     }

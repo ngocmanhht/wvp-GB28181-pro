@@ -5,7 +5,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 
 /**
- * 查询终端音视频属性
+ * Query terminal audio and video attributes
  */
 @MsgId(id = "9003")
 public class J9003 extends Rs {

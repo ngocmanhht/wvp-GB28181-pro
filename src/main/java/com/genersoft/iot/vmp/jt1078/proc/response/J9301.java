@@ -8,20 +8,20 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * 云台控制指令-云台旋转
+ * PTZ control instructions-PTZ rotation
  *
  */
 @Setter
 @Getter
 @MsgId(id = "9301")
 public class J9301 extends Rs {
-    // 逻辑通道号
+    // Logical channel number
     private int channel;
 
-    // 方向： 0：停止； 1：上； 2：下； 3：左； 4：右
+    // Direction: 0: Stop; 1: Up; 2: Down; 3: Left; 4: Right
     private int direction;
 
-    // 速度：0 ～ 255
+    // speed：0 ～ 255
     private int speed;
 
     @Override

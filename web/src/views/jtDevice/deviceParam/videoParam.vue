@@ -2,22 +2,22 @@
   <div style="width: 100%;">
     <div style="height: calc(100vh - 260px); overflow: auto">
       <el-form ref="form" :model="form" label-width="240px" style="width: 60%; margin: 0 auto">
-        <el-form-item label="实时流编码模式" prop="topSpeed" >
+        <el-form-item label="Live streaming encoding mode" prop="topSpeed" >
           <el-select
             v-model="form.videoParam.liveStreamCodeRateType"
             style="width: 100%"
-            placeholder="请选择实时流编码模式"
+            placeholder="Please select live streaming encoding mode"
           >
-            <el-option label="CBR( 固定码率)" :value="0" />
-            <el-option label="BR( 可变码率)" :value="1" />
-            <el-option label="ABR( 平均码率)" :value="2" />
+            <el-option label="CBR( Fixed code rate)" :value="0" />
+            <el-option label="BR( variable code rate)" :value="1" />
+            <el-option label="ABR( average code rate)" :value="2" />
           </el-select>
         </el-form-item>
-        <el-form-item label="实时流分辨率" prop="topSpeed" >
+        <el-form-item label="Live stream resolution" prop="topSpeed" >
           <el-select
             v-model="form.videoParam.liveStreamResolving"
             style="width: 100%"
-            placeholder="请选择实时流分辨率"
+            placeholder="Please select a live stream resolution"
           >
             <el-option label="QCIF( 164×144 )" :value="0" />
             <el-option label="CIF( 360×288 )" :value="1" />
@@ -28,37 +28,37 @@
             <el-option label="1080P( 1920×1080 )" :value="6" />
           </el-select>
         </el-form-item>
-        <el-form-item label="实时流关键帧间隔" prop="chroma">
+        <el-form-item label="Live stream keyframe interval" prop="chroma">
           <div style="padding: 0 0 0 5px">
             <el-slider v-model="form.videoParam.liveStreamIInterval" show-input :min="1" :max="1000" :step="1"/>
           </div>
         </el-form-item>
-        <el-form-item label="实时流目标码率" prop="liveStreamFrameRate">
+        <el-form-item label="Live streaming target bitrate" prop="liveStreamFrameRate">
           <div style="padding: 0 0 0 5px">
             <el-slider v-model="form.videoParam.liveStreamFrameRate" show-input :min="1" :max="120" :step="1"/>
           </div>
         </el-form-item>
-        <el-form-item label="实时流目标码率( kbps)" prop="liveStreamCodeRate">
+        <el-form-item label="Live streaming target bitrate( kbps)" prop="liveStreamCodeRate">
           <el-input type="number" v-model="form.videoParam.liveStreamCodeRate" />
         </el-form-item>
 
 
-        <el-form-item label="存储流编码模式" prop="topSpeed" >
+        <el-form-item label="Storage stream encoding mode" prop="topSpeed" >
           <el-select
             v-model="form.videoParam.storageStreamCodeRateType"
             style="width: 100%"
-            placeholder="请选择存储流编码模式"
+            placeholder="Please select storage stream encoding mode"
           >
-            <el-option label="CBR( 固定码率)" :value="0" />
-            <el-option label="BR( 可变码率)" :value="1" />
-            <el-option label="ABR( 平均码率)" :value="2" />
+            <el-option label="CBR( Fixed code rate)" :value="0" />
+            <el-option label="BR( variable code rate)" :value="1" />
+            <el-option label="ABR( average code rate)" :value="2" />
           </el-select>
         </el-form-item>
-        <el-form-item label="存储流分辨率" prop="topSpeed" >
+        <el-form-item label="Storage stream resolution" prop="topSpeed" >
           <el-select
             v-model="form.videoParam.storageStreamResolving"
             style="width: 100%"
-            placeholder="请选择存储流分辨率"
+            placeholder="Please select storage stream resolution"
           >
             <el-option label="QCIF( 164×144 )" :value="0" />
             <el-option label="CIF( 360×288 )" :value="1" />
@@ -69,47 +69,47 @@
             <el-option label="1080P( 1920×1080 )" :value="2" />
           </el-select>
         </el-form-item>
-        <el-form-item label="存储流关键帧间隔" prop="chroma">
+        <el-form-item label="Storage stream keyframe interval" prop="chroma">
           <div style="padding: 0 0 0 5px">
             <el-slider v-model="form.videoParam.storageStreamIInterval" show-input :min="1" :max="1000" :step="1"/>
           </div>
         </el-form-item>
-        <el-form-item label="存储流目标帧率" prop="liveStreamFrameRate">
+        <el-form-item label="Storage stream target frame rate" prop="liveStreamFrameRate">
           <div style="padding: 0 0 0 5px">
             <el-slider v-model="form.videoParam.storageStreamFrameRate" show-input :min="1" :max="120" :step="1"/>
           </div>
         </el-form-item>
-        <el-form-item label="存储流目标码率(kbps)" prop="liveStreamCodeRate">
+        <el-form-item label="Storage stream target bitrate(kbps)" prop="liveStreamCodeRate">
           <el-input type="number" v-model="form.videoParam.storageStreamCodeRate" />
         </el-form-item>
-        <el-form-item label="特殊报警录像存储阈值(百分比)" prop="storageLimit">
+        <el-form-item label="Special alarm video storage threshold(Percentage)" prop="storageLimit">
           <div style="padding: 0 0 0 5px">
             <el-slider v-model="form.alarmRecordingParam.storageLimit" show-input :min="1" :max="99" :step="1"/>
           </div>
         </el-form-item>
-        <el-form-item label="特殊报警录像持续时间(分钟)" prop="duration">
+        <el-form-item label="Special alarm recording duration(minutes)" prop="duration">
           <el-input type="number" v-model="form.videoParam.duration" />
         </el-form-item>
-        <el-form-item label="特殊报警标识起始时间(分钟)" prop="startTime">
+        <el-form-item label="Special alarm identification start time(minutes)" prop="startTime">
           <el-input type="number" v-model="form.videoParam.startTime" />
         </el-form-item>
-        <el-form-item label="音频输出" prop="startTime">
-          <el-checkbox label="启用" v-model="form.videoParam.audioEnable" ></el-checkbox>
+        <el-form-item label="audio output" prop="startTime">
+          <el-checkbox label="enable" v-model="form.videoParam.audioEnable" ></el-checkbox>
         </el-form-item>
-        <el-form-item label="OSD字幕叠加设置" prop="osd">
-          <el-checkbox label="日期和时间" v-model="form.videoParam.osd.time" ></el-checkbox>
-          <el-checkbox label="车牌号码" v-model="form.videoParam.osd.licensePlate" ></el-checkbox>
-          <el-checkbox label="逻辑通道号" v-model="form.videoParam.osd.channelId" ></el-checkbox>
-          <el-checkbox label="经纬度" v-model="form.videoParam.osd.position" ></el-checkbox>
-          <el-checkbox label="行驶记录速度" v-model="form.videoParam.osd.speed" ></el-checkbox>
-          <el-checkbox label="卫星定位速度" v-model="form.videoParam.osd.speedForGPS" ></el-checkbox>
-          <el-checkbox label="连续驾驶时间" v-model="form.videoParam.osd.drivingTime" ></el-checkbox>
+        <el-form-item label="OSDSubtitle overlay settings" prop="osd">
+          <el-checkbox label="date and time" v-model="form.videoParam.osd.time" ></el-checkbox>
+          <el-checkbox label="license plate number" v-model="form.videoParam.osd.licensePlate" ></el-checkbox>
+          <el-checkbox label="Logical channel number" v-model="form.videoParam.osd.channelId" ></el-checkbox>
+          <el-checkbox label="Latitude and longitude" v-model="form.videoParam.osd.position" ></el-checkbox>
+          <el-checkbox label="Driving record speed" v-model="form.videoParam.osd.speed" ></el-checkbox>
+          <el-checkbox label="Satellite positioning speed" v-model="form.videoParam.osd.speedForGPS" ></el-checkbox>
+          <el-checkbox label="continuous driving time" v-model="form.videoParam.osd.drivingTime" ></el-checkbox>
         </el-form-item>
       </el-form>
     </div>
     <p style="text-align: right">
-      <el-button type="primary" @click="onSubmit">确认</el-button>
-      <el-button @click="showDevice">取消</el-button>
+      <el-button type="primary" @click="onSubmit">Confirm</el-button>
+      <el-button @click="showDevice">Cancel</el-button>
     </p>
 
   </div>
@@ -131,8 +131,8 @@ export default {
     return {
       form: {},
       qualityMarks: {
-        1: '最优',
-        10: '最差'
+        1: 'optimal',
+        10: 'worst'
       },
       isLoading: false
     }

@@ -12,7 +12,7 @@ import lombok.Setter;
 import org.springframework.context.ApplicationEvent;
 
 /**
- * 数据压缩上报
+ * Data compression reporting
  */
 @Setter
 @Getter
@@ -20,12 +20,12 @@ import org.springframework.context.ApplicationEvent;
 public class J0901 extends Re {
 
     /**
-     * 平台 RSA公钥{e ,n}中的 e
+     * Platform RSA public key{e ,n}in e
      */
     private Long e;
 
     /**
-     * RSA公钥{e ,n}中的 n
+     * RSApublic key{e ,n}in n
      */
     private byte[] n;
 

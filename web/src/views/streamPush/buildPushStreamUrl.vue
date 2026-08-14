@@ -2,7 +2,7 @@
   <div id="buildPushStreamUrl">
     <el-dialog
       v-el-drag-dialog
-      title="构建推流地址"
+      title="Build push address"
       width="40%"
       top="2rem"
       :close-on-click-modal="false"
@@ -12,17 +12,17 @@
     >
       <div id="shared" style="margin-right: 20px;">
         <el-form ref="buildFrom" status-icon label-width="80px">
-          <el-form-item label="应用名" prop="app">
+          <el-form-item label="Application name" prop="app">
             <el-input v-model="app" autocomplete="off" />
           </el-form-item>
-          <el-form-item label="流ID" prop="stream">
+          <el-form-item label="flowID" prop="stream">
             <el-input v-model="stream" autocomplete="off" />
           </el-form-item>
           <el-form-item label="CallID" prop="stream">
             <el-input v-model="callId" autocomplete="off" />
           </el-form-item>
-          <el-form-item label="媒体节点" prop="mediaServerId">
-            <el-select v-model="mediaServer" placeholder="请选择" style="width: 100%">
+          <el-form-item label="media node" prop="mediaServerId">
+            <el-select v-model="mediaServer" placeholder="Please select" style="width: 100%">
               <el-option
                 v-for="item in mediaServerList"
                 :key="item.id"
@@ -31,26 +31,26 @@
               />
             </el-select>
           </el-form-item>
-          <el-form-item label="地址" prop="url">
-            <div style="width: 100%" v-if="rtc" title="点击拷贝">
+          <el-form-item label="address" prop="url">
+            <div style="width: 100%" v-if="rtc" title="Click to copy">
               <el-tag size="medium" @click="copyUrl(rtc)">
                 <i class="el-icon-document-copy"/>
                 {{ rtc }}
               </el-tag>
             </div>
-            <div style="width: 100%" v-if="rtsp" title="点击拷贝">
+            <div style="width: 100%" v-if="rtsp" title="Click to copy">
               <el-tag size="medium" @click="copyUrl(rtsp)">
                 <i class="el-icon-document-copy"/>
                 {{ rtsp }}
               </el-tag>
             </div>
-            <div style="width: 100%" v-if="rtmp" title="点击拷贝">
+            <div style="width: 100%" v-if="rtmp" title="Click to copy">
               <el-tag size="medium" @click="copyUrl(rtmp)">
                 <i class="el-icon-document-copy"/>
                 {{ rtmp }}
               </el-tag>
             </div>
-            <div style="width: 100%" v-if="rtcs" title="点击拷贝">
+            <div style="width: 100%" v-if="rtcs" title="Click to copy">
               <el-tag size="medium" @click="copyUrl(rtcs)">
                 <i class="el-icon-document-copy" />
                 {{ rtcs }}
@@ -59,7 +59,7 @@
           </el-form-item>
           <el-form-item>
             <div style="float: right;">
-              <el-button @click="close">关闭</el-button>
+              <el-button @click="close">Close</el-button>
             </div>
           </el-form-item>
         </el-form>
@@ -177,7 +177,7 @@ export default {
       this.$copyText(dropdownItem).then((e) => {
         this.$message.success({
           showClose: true,
-          message: '成功拷贝到粘贴板'
+          message: 'Successfully copied to clipboard'
         })
       }, (e) => {
 

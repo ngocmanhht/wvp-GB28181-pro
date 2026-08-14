@@ -14,42 +14,42 @@ public class FrontEndControlCodeForPTZ implements  IFrontEndControlCode {
     }
 
     /**
-     * 镜头变倍，0为缩小 1为放大
+     * Lens zoom, 0 means zoom out, 1 means zoom in
      */
     @Getter
     @Setter
     private Integer zoom;
 
     /**
-     * 云台垂直方向控制 0 为上， 1为下
+     * PTZ vertical direction control 0 means up, 1 means down
      */
     @Getter
     @Setter
     private Integer tilt;
 
     /**
-     * 云台水平方向控制 0 为左， 1为右
+     * PTZ horizontal direction control: 0 is left, 1 is right
      */
     @Getter
     @Setter
     private Integer pan;
 
     /**
-     * 水平控制速度相对值
+     * Horizontal control speed relative value
      */
     @Getter
     @Setter
     private Integer panSpeed;
 
     /**
-     * 垂直控制速度相对值
+     * Vertical control speed relative value
      */
     @Getter
     @Setter
     private Integer tiltSpeed;
 
     /**
-     * 变倍控制速度相对值
+     * Relative value of zoom control speed
      */
     @Getter
     @Setter

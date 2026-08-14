@@ -1,29 +1,29 @@
-# 原理图
+# Schematic
 
-## 使用ffmpeg测试语音对讲原理
+## Use ffmpeg to test the principle of voice intercom
 
 ```plantuml
 @startuml
-"FFMPEG" -> "ZLMediaKit": 推流到zlm
-"WVP-PRO" <- "ZLMediaKit": 通知收到语音对讲推流，携带设备和通道信息
-"WVP-PRO" -> "设备": 开始语音对讲
-"WVP-PRO" <-- "设备": 语音对讲建立成功，携带收流端口
-"WVP-PRO" -> "ZLMediaKit": 通知zlm将流推送到设备收流端口
-"ZLMediaKit" -> "设备": 向设备推流
+"FFMPEG" -> "ZLMediaKit": Push tozlm
+"WVP-PRO" <- "ZLMediaKit": Notification of receipt of voice intercom push stream, carrying device and channel information
+"WVP-PRO" -> "Device": Start voice intercom
+"WVP-PRO" <-- ""Device": Voice intercom established successfully, carrying traffic collection port
+"WVP-PRO" -> "ZLMediaKit": Notify zlm to push the stream to the device's stream port
+"ZLMediaKit" -> ""Device": push stream to device
 @enduml
 ```
 
-## 使用网页测试语音对讲原理
+## Use the web page to test the principle of voice intercom
 
 ```plantuml
 @startuml
-"前端页面" -> "WVP-PRO": 请求推流地址
-"前端页面" <-- "WVP-PRO": 返回推流地址
-"前端页面" -> "ZLMediaKit": 使用webrtc推流到zlm，以下过程相同
-"WVP-PRO" <- "ZLMediaKit": 通知收到语音对讲推流，携带设备和通道信息
-"WVP-PRO" -> "设备": 开始语音对讲
-"WVP-PRO" <-- "设备": 语音对讲建立成功，携带收流端口
-"WVP-PRO" -> "ZLMediaKit": 通知zlm将流推送到设备收流端口
-"ZLMediaKit" -> "设备": 向设备推流
+"Front-end page" -> "WVP-PRO": Request push address
+"Front-end page" <-- "WVP-PRO": Return push address
+"Front-end page" -> "ZLMediaKit": Use webrtc to push to zlm, the following process is the same
+"WVP-PRO" <- "ZLMediaKit": Notification of receipt of voice intercom push stream, carrying device and channel information
+"WVP-PRO" -> "Device": Start voice intercom
+"WVP-PRO" <-- ""Device": Voice intercom established successfully, carrying traffic collection port
+"WVP-PRO" -> "ZLMediaKit": Notify zlm to push the stream to the device's stream port
+"ZLMediaKit" -> ""Device": push stream to device
 @enduml
 ```

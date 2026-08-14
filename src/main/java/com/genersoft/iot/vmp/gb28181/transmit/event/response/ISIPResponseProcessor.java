@@ -5,9 +5,9 @@ import org.springframework.scheduling.annotation.Async;
 import javax.sip.ResponseEvent;
 
 /**    
- * @description:处理接收IPCamera发来的SIP协议响应消息
+ * @description:Process and receive the SIP protocol response message sent by IPCamera
  * @author: swwheihei
- * @date:   2020年5月3日 下午4:42:22     
+ * @date:   2020May 3rd, afternoon4:42:22     
  */
 public interface ISIPResponseProcessor {
 

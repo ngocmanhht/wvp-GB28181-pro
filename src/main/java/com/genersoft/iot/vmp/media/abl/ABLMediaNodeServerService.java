@@ -81,9 +81,9 @@ public class ABLMediaNodeServerService implements IMediaNodeServerService {
            return;
        }
         ABLResult result = ablresTfulUtils.closeStreams(mediaServer, app, stream);
-        logger.info("关闭RTP Server " +  result);
+        logger.info("CloseRTP Server " +  result);
         if (result.getCode() != 0) {
-            logger.error("[closeRtpServer] 失败: {}", result.getMemo());
+            logger.error("[closeRtpServer] failed: {}", result.getMemo());
         }
     }
 
@@ -99,9 +99,9 @@ public class ABLMediaNodeServerService implements IMediaNodeServerService {
 //            return;
 //        }
 //        ABLResult result = ablresTfulUtils.closeStreams(mediaServer, MediaApp.JT1078, streamId);
-//        logger.info("关闭JT-RTP Server " +  result);
+//        logger.info("CloseJT-RTP Server " +  result);
 //        if (result.getCode() != 0) {
-//            logger.error("[JT-closeRtpServer] 失败: {}", result.getMemo());
+//            logger.error("[JT-closeRtpServer] failed: {}", result.getMemo());
 //        }
 //    }
 
@@ -109,7 +109,7 @@ public class ABLMediaNodeServerService implements IMediaNodeServerService {
     public void closeStreams(MediaServer mediaServer, String app, String streamId) {
         ABLResult result = ablresTfulUtils.closeStreams(mediaServer, app, streamId);
         if (result.getCode() != 0) {
-            logger.error("[closeStreams] 失败: {}", result.getMemo());
+            logger.error("[closeStreams] failed: {}", result.getMemo());
         }
     }
 
@@ -120,13 +120,13 @@ public class ABLMediaNodeServerService implements IMediaNodeServerService {
 
     @Override
     public boolean checkNodeId(MediaServer mediaServerItem) {
-        logger.warn("[abl-checkNodeId] 未实现");
+        logger.warn("[abl-checkNodeId] Not implemented");
         return false;
     }
 
     @Override
     public void online(MediaServer mediaServerItem) {
-        logger.warn("[abl-online] 未实现");
+        logger.warn("[abl-online] Not implemented");
     }
 
     @Override
@@ -148,15 +148,15 @@ public class ABLMediaNodeServerService implements IMediaNodeServerService {
 
     @Override
     public boolean stopSendRtp(MediaServer mediaInfo, String app, String stream, String ssrc) {
-        // TODO 需要记录开始发流返回的KEY，暂不做实现
-        logger.warn("[abl-stopSendRtp] 未实现");
+        // TODO It is necessary to record the KEY returned when the stream is started, and it will not be implemented yet.
+        logger.warn("[abl-stopSendRtp] Not implemented");
 //        ablresTfulUtils.stopSendRtp()
         return false;
     }
 
     @Override
     public boolean deleteRecordDirectory(MediaServer mediaServerItem, String app, String stream, String date, String fileName) {
-        logger.warn("[abl-deleteRecordDirectory] 未实现");
+        logger.warn("[abl-deleteRecordDirectory] Not implemented");
         return false;
     }
 
@@ -223,20 +223,20 @@ public class ABLMediaNodeServerService implements IMediaNodeServerService {
 
         String flvFile = String.format("%s/%s.flv%s", app, stream, callIdParam);
         if ((mediaServer.getFlvPort() & 1) == 1) {
-            // 奇数端口 默认ssl端口
+            // Odd port default ssl port
             streamInfoResult.setFlv(addr, null, mediaServer.getFlvPort(), flvFile);
         }else {
             streamInfoResult.setFlv(addr, mediaServer.getFlvPort(),null,  flvFile);
         }
         if ((mediaServer.getWsFlvPort() & 1) == 1) {
-            // 奇数端口 默认ssl端口
+            // Odd port default ssl port
             streamInfoResult.setWsFlv(addr, null, mediaServer.getWsFlvPort(), flvFile);
         }else {
             streamInfoResult.setWsFlv(addr, mediaServer.getWsFlvPort(),null,  flvFile);
         }
         String mp4File = String.format("%s/%s.mp4%s", app, stream, callIdParam);
         if ((mediaServer.getMp4Port() & 1) == 1) {
-            // 奇数端口 默认ssl端口
+            // Odd port default ssl port
             streamInfoResult.setFmp4(addr, null, mediaServer.getMp4Port(), mp4File);
         }else {
             streamInfoResult.setFmp4(addr, mediaServer.getMp4Port(), null, mp4File);
@@ -259,7 +259,7 @@ public class ABLMediaNodeServerService implements IMediaNodeServerService {
 
     @Override
     public Boolean connectRtpServer(MediaServer mediaServerItem, String address, int port, String app, String stream) {
-        logger.warn("[abl-connectRtpServer] 未实现");
+        logger.warn("[abl-connectRtpServer] Not implemented");
         return null;
     }
 
@@ -314,7 +314,7 @@ public class ABLMediaNodeServerService implements IMediaNodeServerService {
         return new HashMap<>();
     }
 
-    // 接受进度通知
+    // Accept progress notifications
 //    @EventListener
 //    public void onApplicationEvent(MediaRecordProcessEvent event) {
 //        CloudRecordItem cloudRecordItem = cloudRecordServiceMapper.getListByFileName(event.getApp(), event.getStream(), event.getFileName());
@@ -383,19 +383,19 @@ public class ABLMediaNodeServerService implements IMediaNodeServerService {
 
     @Override
     public Integer startSendRtpPassive(MediaServer mediaServer, SendRtpInfo sendRtpItem, Integer timeout) {
-        logger.warn("[abl-startSendRtpPassive] 未实现");
+        logger.warn("[abl-startSendRtpPassive] Not implemented");
         return 0;
     }
 
     @Override
     public Integer startSendRtpTalk(MediaServer mediaServer, TalkRtpInfo talkRtpInfo, Integer timeout) {
-        logger.warn("[abl-startSendRtpTalk] 未实现");
+        logger.warn("[abl-startSendRtpTalk] Not implemented");
         return 0;
     }
 
     @Override
     public void startSendRtpStream(MediaServer mediaServer, SendRtpInfo sendRtpItem) {
-        logger.warn("[abl-startSendRtpStream] 未实现");
+        logger.warn("[abl-startSendRtpStream] Not implemented");
     }
 
     @Override
@@ -423,7 +423,7 @@ public class ABLMediaNodeServerService implements IMediaNodeServerService {
         }else {
             String key = ablResult.getKey();
             if (key == null) {
-                throw new ControllerException(ablResult.getCode(), "代理结果异常： " + ablResult);
+                throw new ControllerException(ablResult.getCode(), "Agent result is abnormal： " + ablResult);
             }else {
                 return key;
             }
@@ -469,7 +469,7 @@ public class ABLMediaNodeServerService implements IMediaNodeServerService {
 
     @Override
     public void loadMP4FileForDate(MediaServer mediaServer, String app, String stream, String date, String dateDir, ErrorCallback<StreamInfo> callback) {
-        // 解析为 LocalDate
+        // parsed as LocalDate
         LocalDate localDate = LocalDate.parse(date, DateUtil.DateFormatter);
         LocalDateTime startOfDay = localDate.atStartOfDay();
         LocalDateTime endOfDay = localDate.atTime(23, 59,59, 999);
@@ -493,7 +493,7 @@ public class ABLMediaNodeServerService implements IMediaNodeServerService {
     public void seekRecordStamp(MediaServer mediaServer, String app, String stream, Double stamp, String schema) {
         ABLResult ablResult = ablresTfulUtils.controlRecordPlay(mediaServer, app, stream, "seek", stamp/1000 + "");
         if (ablResult.getCode() != 0) {
-            log.warn("[abl-seek] 失败：{}", ablResult.getMemo());
+            log.warn("[abl-seek] failed：{}", ablResult.getMemo());
         }
     }
 
@@ -501,13 +501,13 @@ public class ABLMediaNodeServerService implements IMediaNodeServerService {
     public void setRecordSpeed(MediaServer mediaServer, String app, String stream, Integer speed, String schema) {
         ABLResult ablResult = ablresTfulUtils.controlRecordPlay(mediaServer, app, stream, "scale", speed + "");
         if (ablResult.getCode() != 0) {
-            log.warn("[abl-倍速] 失败：{}", ablResult.getMemo());
+            log.warn("[abl-Double speed] failed：{}", ablResult.getMemo());
         }
     }
 
     @Override
     public DownloadFileInfo getDownloadFilePath(MediaServer mediaServer, RecordInfo recordInfo) {
-        // 将filePath作为独立参数传入，避免%符号解析问题
+        // Pass in filePath as an independent parameter to avoid % symbol resolution problems
         String pathTemplate = "%s://%s:%s/%s/%s__ReplayFMP4RecordFile__%s?download_speed=16";
 
         DownloadFileInfo info = new DownloadFileInfo();

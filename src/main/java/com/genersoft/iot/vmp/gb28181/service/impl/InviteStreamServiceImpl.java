@@ -45,7 +45,7 @@ public class InviteStreamServiceImpl implements IInviteStreamService {
     private DeviceChannelMapper deviceChannelMapper;
 
     /**
-     * 流离开的处理
+     * Stream departure processing
      */
     @Async
     @EventListener
@@ -60,7 +60,7 @@ public class InviteStreamServiceImpl implements IInviteStreamService {
                         deviceChannelMapper.stopPlayById(inviteInfo.getChannelId());
                     }
                 } catch (Exception e) {
-                    log.error("[流离开] 清理Invite异常: deviceId={}, channelId={}, stream={}",
+                    log.error("[flow away] Clean up Invite exception: deviceId={}, channelId={}, stream={}",
                             inviteInfo.getDeviceId(), inviteInfo.getChannelId(), inviteInfo.getStream(), e);
                 }
             }
@@ -79,7 +79,7 @@ public class InviteStreamServiceImpl implements IInviteStreamService {
     @Override
     public void updateInviteInfo(InviteInfo inviteInfo, Long time) {
         if (inviteInfo == null || (inviteInfo.getDeviceId() == null || inviteInfo.getChannelId() == null)) {
-            log.warn("[更新Invite信息]，参数不全： {}", JSON.toJSON(inviteInfo));
+            log.warn("[Update Invite information]，Incomplete parameters： {}", JSON.toJSON(inviteInfo));
             return;
         }
         InviteInfo inviteInfoForUpdate;
@@ -94,7 +94,7 @@ public class InviteStreamServiceImpl implements IInviteStreamService {
         } else {
             InviteInfo inviteInfoInRedis = getInviteInfo(inviteInfo.getType(), inviteInfo.getChannelId(), inviteInfo.getStream());
             if (inviteInfoInRedis == null) {
-                log.warn("[更新Invite信息]，未从缓存中读取到Invite信息： deviceId: {}, channel: {}, stream: {}",
+                log.warn("[Update Invite information]，Invite information not read from cache： deviceId: {}, channel: {}, stream: {}",
                         inviteInfo.getDeviceId(), inviteInfo.getChannelId(), inviteInfo.getStream());
                 return;
             }
@@ -173,12 +173,12 @@ public class InviteStreamServiceImpl implements IInviteStreamService {
                 if (entry.getValue() instanceof InviteInfo) {
                     return (InviteInfo) entry.getValue();
                 } else {
-                    log.warn("[Redis-InviteInfo] 发现脏数据并清理: key={}, value={}", entry.getKey(), entry.getValue());
+                    log.warn("[Redis-InviteInfo] Find dirty data and clean it: key={}, value={}", entry.getKey(), entry.getValue());
                     redisTemplate.opsForHash().delete(key, entry.getKey());
                 }
             }
         } catch (Exception e) {
-            log.error("[Redis-InviteInfo] 查询异常: ", e);
+            log.error("[Redis-InviteInfo] Query exception: ", e);
         }
         return null;
     }
@@ -243,7 +243,7 @@ public class InviteStreamServiceImpl implements IInviteStreamService {
 
     private String buildKey(InviteSessionType type, Integer channelId, String stream) {
         String key = type + ":" + channelId;
-        // 如果ssrc未null那么可以实现一个通道只能一次操作，ssrc不为null则可以支持一个通道多次invite
+        // If ssrc is not null, then one channel can only be operated once. If ssrc is not null, one channel can be supported multiple times.invite
         if (stream != null) {
             key += (":" + stream);
         }
@@ -340,7 +340,7 @@ public class InviteStreamServiceImpl implements IInviteStreamService {
         return inviteInfoInDb;
     }
 
-    @Scheduled(fixedRate = 10000)   //定时检测,清理错误的redis数据,防止因为错误数据导致的点播不可用
+    @Scheduled(fixedRate = 10000)   //Regularly detect and clean up erroneous redis data to prevent on-demand unavailability due to erroneous data
     public void execute(){
         String key = VideoManagerConstants.INVITE_PREFIX;
         if(redisTemplate.opsForHash().size(key) == 0) {
@@ -362,7 +362,7 @@ public class InviteStreamServiceImpl implements IInviteStreamService {
                     removeInviteInfo(inviteInfo);
                 }
             } catch (Exception e) {
-                log.error("[定时清理Invite] 处理异常，尝试删除该数据: {}", value, e);
+                log.error("[Clean regularlyInvite] Handle the exception and try to delete the data: {}", value, e);
                 removeInviteInfoByValue(value);
             }
         }

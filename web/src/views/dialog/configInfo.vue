@@ -2,7 +2,7 @@
   <div id="configInfo">
     <el-dialog
       v-el-drag-dialog
-      title="接入信息"
+      title="access information"
       width="=80%"
       top="2rem"
       :close-on-click-modal="false"
@@ -11,18 +11,18 @@
       @close="close()"
     >
       <div id="shared" style="margin-top: 1rem;margin-right: 100px;">
-        <el-descriptions v-if="(!key || key === 'sip') && configInfoData.sip" title="国标服务信息" :span="2">
-          <el-descriptions-item label="编号">{{ configInfoData.sip.id }}</el-descriptions-item>
-          <el-descriptions-item label="域">{{ configInfoData.sip.domain }}</el-descriptions-item>
+        <el-descriptions v-if="(!key || key === 'sip') && configInfoData.sip" title="National standard service information" :span="2">
+          <el-descriptions-item label="No.">{{ configInfoData.sip.id }}</el-descriptions-item>
+          <el-descriptions-item label="domain">{{ configInfoData.sip.domain }}</el-descriptions-item>
           <el-descriptions-item label="IP">{{ configInfoData.sip.showIp }}</el-descriptions-item>
-          <el-descriptions-item label="端口">{{ configInfoData.sip.port }}</el-descriptions-item>
-          <el-descriptions-item label="密码">
+          <el-descriptions-item label="port">{{ configInfoData.sip.port }}</el-descriptions-item>
+          <el-descriptions-item label="Password">
             <el-tag size="small">{{ configInfoData.sip.password }}</el-tag>
           </el-descriptions-item>
         </el-descriptions>
-        <el-descriptions v-if="key === 'jt1078Config' && configInfoData.jt1078Config" title="部标服务信息" :span="2">
-          <el-descriptions-item label="端口">{{ configInfoData.jt1078Config.port }}</el-descriptions-item>
-          <el-descriptions-item label="密码">
+        <el-descriptions v-if="key === 'jt1078Config' && configInfoData.jt1078Config" title="Ministry standard service information" :span="2">
+          <el-descriptions-item label="port">{{ configInfoData.jt1078Config.port }}</el-descriptions-item>
+          <el-descriptions-item label="Password">
             <el-tag size="small">{{ configInfoData.jt1078Config.password }}</el-tag>
           </el-descriptions-item>
         </el-descriptions>

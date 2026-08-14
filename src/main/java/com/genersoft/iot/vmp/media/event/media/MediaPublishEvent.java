@@ -4,7 +4,7 @@ import com.genersoft.iot.vmp.media.bean.MediaServer;
 import com.genersoft.iot.vmp.media.zlm.dto.hook.OnPublishHookParam;
 
 /**
- * 推流鉴权事件
+ * Push authentication event
  */
 public class MediaPublishEvent extends MediaEvent {
     public MediaPublishEvent(Object source) {

@@ -64,7 +64,7 @@ public class MediaServiceImpl implements IMediaService {
             return receiveRtpServerService.getAuthenticateInfo(stream);
         }else {
             ResultForOnPublish result = new ResultForOnPublish();
-            // app 非 RTP_APP 的流， 如果是国标对讲或者广播则默认获取声音并且不录制， 其他的流先查询是否有代理配置，如果没有代理配置再进行鉴权
+            // app For non-RTP_APP streams, if it is national standard intercom or broadcast, the sound will be obtained by default and will not be recorded. For other streams, first check whether there is a proxy configuration. If there is no proxy configuration, then authenticate.
             if (MediaStreamUtil.GB28181_TALK.equals(app) || MediaStreamUtil.GB28181_BROADCAST.equals(app) || MediaStreamUtil.JT_TALK.equals(app)) {
                 result.setEnable_mp4(false);
                 result.setEnable_audio(true);
@@ -82,31 +82,31 @@ public class MediaServiceImpl implements IMediaService {
                 return result;
             }
             if (userSetting.getPushAuthority()) {
-                // 对于推流进行鉴权
+                // Authentication for push streaming
                 Map<String, String> paramMap = MediaServerUtils.urlParamToMap(params);
-                // 推流鉴权
+                // Push authentication
                 if (params == null) {
-                    log.info("推流鉴权失败： 缺少必要参数：sign=md5(user表的pushKey)");
+                    log.info("Push authentication failed: Missing necessary parameters：sign=md5(usertablepushKey)");
                     throw new ControllerException(ErrorCode.ERROR401.getCode(), "Unauthorized");
                 }
 
                 String sign = paramMap.get("sign");
                 if (sign == null) {
-                    log.info("推流鉴权失败： 缺少必要参数：sign=md5(user表的pushKey)");
+                    log.info("Push authentication failed: Missing necessary parameters：sign=md5(usertablepushKey)");
                     throw new ControllerException(ErrorCode.ERROR401.getCode(), "Unauthorized");
                 }
-                // 推流自定义播放鉴权码
+                // Push custom playback authentication code
                 String callId = paramMap.get("callId");
-                // 鉴权配置
+                // Authentication configuration
                 boolean hasAuthority = userService.checkPushAuthority(callId, sign);
                 if (!hasAuthority) {
-                    log.info("推流鉴权失败： sign 无权限: callId={}. sign={}", callId, sign);
+                    log.info("Push authentication failed: sign does not have permission: callId={}. sign={}", callId, sign);
                     throw new ControllerException(ErrorCode.ERROR401.getCode(), "Unauthorized");
                 }
                 StreamAuthorityInfo streamAuthorityInfo = StreamAuthorityInfo.getInstanceByHook(app, stream, mediaServer.getId());
                 streamAuthorityInfo.setCallId(callId);
                 streamAuthorityInfo.setSign(sign);
-                // 鉴权通过
+                // Authentication passed
                 redisCatchStorage.updateStreamAuthorityInfo(app, stream, streamAuthorityInfo);
             }
             result.setEnable_audio(true);
@@ -121,7 +121,7 @@ public class MediaServiceImpl implements IMediaService {
             return false;
         }
         if (MediaStreamUtil.LOAD_MP4_APP.equals(app)) {
-            // mp4点播流， 无人观看不关闭
+            // mp4On-demand streaming, will not be closed if no one is watching
             return true;
         }
 
@@ -132,20 +132,20 @@ public class MediaServiceImpl implements IMediaService {
                     return result;
                 }
             }catch (Exception e) {
-                log.error("调用其他服务关闭无人观看流失败， app={}, stream={}, schema={}", app, stream, schema, e);
+                log.error("Failed to call other services to close unattended streams， app={}, stream={}, schema={}", app, stream, schema, e);
             }
         }
 
-        // 拉流代理
+        // Streaming agent
         StreamProxy streamProxy = streamProxyService.getStreamProxyByAppAndStream(app, stream);
         if (streamProxy != null) {
             if (streamProxy.isEnableDisableNoneReader()) {
-                // 无人观看停用
-                // 修改数据
+                // No one watching disabled
+                // Modify data
                 streamProxyService.stopByAppAndStream(app, stream);
                 return true;
             } else {
-                // 无人观看不做处理
+                // No one is watching and no processing is done
                 return false;
             }
         } else {

@@ -58,13 +58,13 @@ public class BroadcastResponseMessageHandler extends SIPRequestProcessorParent i
                 channel = deviceChannelService.getBroadcastChannel(device.getId());
             }
             if (channel == null) {
-                log.info("[语音广播]回复： 未找到通道{}/{}", device.getDeviceId(), channelId );
-                // 回复410
+                log.info("[voice broadcast]Reply: Channel not found{}/{}", device.getDeviceId(), channelId );
+                // Reply410
                 responseAck((SIPRequest) evt.getRequest(), Response.NOT_FOUND);
                 return;
             }
             if (!audioBroadcastManager.exit(channel.getId())) {
-                // 回复410
+                // Reply410
                 responseAck((SIPRequest) evt.getRequest(), Response.BUSY_HERE);
                 return;
             }
@@ -74,9 +74,9 @@ public class BroadcastResponseMessageHandler extends SIPRequestProcessorParent i
             if (infoElement != null) {
                 reason = getText(infoElement, "Reason");
             }
-            log.info("[语音广播]回复：{}, {}/{}", reason == null? result : result + ": " + reason, device.getDeviceId(), channelId );
+            log.info("[voice broadcast]Reply：{}, {}/{}", reason == null? result : result + ": " + reason, device.getDeviceId(), channelId );
 
-            // 回复200 OK
+            // Reply200 OK
             responseAck(request, Response.OK);
             if (result.equalsIgnoreCase("OK")) {
                 AudioBroadcastCatch audioBroadcastCatch = audioBroadcastManager.get(channel.getId());
@@ -86,7 +86,7 @@ public class BroadcastResponseMessageHandler extends SIPRequestProcessorParent i
                 playService.stopAudioBroadcast(device, channel);
             }
         } catch (ParseException | SipException | InvalidArgumentException e) {
-            log.error("[命令发送失败] 国标级联 语音喊话: {}", e.getMessage());
+            log.error("[Command sending failed] National standard cascade voice announcement: {}", e.getMessage());
         }
     }
 

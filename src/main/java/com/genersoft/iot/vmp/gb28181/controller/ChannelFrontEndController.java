@@ -24,7 +24,7 @@ import org.springframework.web.context.request.async.DeferredResult;
 import java.util.List;
 
 
-@Tag(name  = "全局通道前端控制")
+@Tag(name  = "Global channel front-end control")
 @RestController
 @Slf4j
 @RequestMapping(value = "/api/common/channel/front-end")
@@ -37,36 +37,36 @@ public class ChannelFrontEndController {
     private IGbChannelControlService channelControlService;
 
 
-    @Operation(summary = "云台控制", security = @SecurityRequirement(name = JwtUtils.HEADER))
-    @Parameter(name = "channelId", description = "通道ID", required = true)
-    @Parameter(name = "command", description = "控制指令,允许值: left, right, up, down, upleft, upright, downleft, downright, zoomin, zoomout, stop", required = true)
-    @Parameter(name = "panSpeed", description = "水平速度(0-100)", required = true)
-    @Parameter(name = "tiltSpeed", description = "垂直速度(0-100)", required = true)
-    @Parameter(name = "zoomSpeed", description = "缩放速度(0-100)", required = true)
+    @Operation(summary = "PTZ control", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Parameter(name = "channelId", description = "channelID", required = true)
+    @Parameter(name = "command", description = "control instructions, allowable values: left, right, up, down, upleft, upright, downleft, downright, zoomin, zoomout, stop", required = true)
+    @Parameter(name = "panSpeed", description = "horizontal speed(0-100)", required = true)
+    @Parameter(name = "tiltSpeed", description = "vertical speed(0-100)", required = true)
+    @Parameter(name = "zoomSpeed", description = "Zoom speed(0-100)", required = true)
     @GetMapping("/ptz")
     public DeferredResult<WVPResult<String>> ptz(Integer channelId, String command, Integer panSpeed, Integer tiltSpeed, Integer zoomSpeed){
 
         if (log.isDebugEnabled()) {
-            log.debug("[通用通道]云台控制 API调用，channelId：{} ，command：{} ，panSpeed：{} ，tiltSpeed：{} ，zoomSpeed：{}",channelId, command, panSpeed, tiltSpeed, zoomSpeed);
+            log.debug("[Universal channel]PTZ control API call，channelId：{} ，command：{} ，panSpeed：{} ，tiltSpeed：{} ，zoomSpeed：{}",channelId, command, panSpeed, tiltSpeed, zoomSpeed);
         }
 
         CommonGBChannel channel = channelService.getOne(channelId);
-        Assert.notNull(channel, "通道不存在");
+        Assert.notNull(channel, "Channel does not exist");
 
         if (panSpeed == null) {
             panSpeed = 50;
         }else if (panSpeed < 0 || panSpeed > 100) {
-            throw new ControllerException(ErrorCode.ERROR100.getCode(), "panSpeed 为 0-100的数字");
+            throw new ControllerException(ErrorCode.ERROR100.getCode(), "panSpeed for 0-100number");
         }
         if (tiltSpeed == null) {
             tiltSpeed = 50;
         }else if (tiltSpeed < 0 || tiltSpeed > 100) {
-            throw new ControllerException(ErrorCode.ERROR100.getCode(), "tiltSpeed 为 0-100的数字");
+            throw new ControllerException(ErrorCode.ERROR100.getCode(), "tiltSpeed for 0-100number");
         }
         if (zoomSpeed == null) {
             zoomSpeed = 50;
         }else if (zoomSpeed < 0 || zoomSpeed > 100) {
-            throw new ControllerException(ErrorCode.ERROR100.getCode(), "zoomSpeed 为 0-100的数字");
+            throw new ControllerException(ErrorCode.ERROR100.getCode(), "zoomSpeed for 0-100number");
         }
 
         FrontEndControlCodeForPTZ controlCode = new FrontEndControlCodeForPTZ();
@@ -115,7 +115,7 @@ public class ChannelFrontEndController {
         DeferredResult<WVPResult<String>> result = new DeferredResult<>();
 
         result.onTimeout(()->{
-            WVPResult<String> wvpResult = WVPResult.fail(ErrorCode.ERROR100.getCode(), "请求超时");
+            WVPResult<String> wvpResult = WVPResult.fail(ErrorCode.ERROR100.getCode(), "Request timeout");
             result.setResult(wvpResult);
         });
 
@@ -130,24 +130,24 @@ public class ChannelFrontEndController {
     }
 
 
-    @Operation(summary = "光圈控制", security = @SecurityRequirement(name = JwtUtils.HEADER))
-    @Parameter(name = "channelId", description = "通道国标编号", required = true)
-    @Parameter(name = "command", description = "控制指令,允许值: in, out, stop", required = true)
-    @Parameter(name = "speed", description = "光圈速度(0-100)", required = true)
+    @Operation(summary = "Aperture control", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Parameter(name = "channelId", description = "Channel national standard number", required = true)
+    @Parameter(name = "command", description = "control instructions, allowable values: in, out, stop", required = true)
+    @Parameter(name = "speed", description = "aperture speed(0-100)", required = true)
     @GetMapping("/fi/iris")
     public DeferredResult<WVPResult<String>> iris(Integer channelId, String command, Integer speed){
 
         if (log.isDebugEnabled()) {
-            log.debug("[通用通道]光圈控制 API调用，channelId：{} ，command：{} ，speed：{} ",channelId, command, speed);
+            log.debug("[Universal channel]Aperture control API call，channelId：{} ，command：{} ，speed：{} ",channelId, command, speed);
         }
 
         CommonGBChannel channel = channelService.getOne(channelId);
-        Assert.notNull(channel, "通道不存在");
+        Assert.notNull(channel, "Channel does not exist");
 
         if (speed == null) {
             speed = 50;
         }else if (speed < 0 || speed > 100) {
-            throw new ControllerException(ErrorCode.ERROR100.getCode(), "speed 为 0-100的数字");
+            throw new ControllerException(ErrorCode.ERROR100.getCode(), "speed for 0-100number");
         }
 
         FrontEndControlCodeForFI controlCode = new FrontEndControlCodeForFI();
@@ -167,7 +167,7 @@ public class ChannelFrontEndController {
         DeferredResult<WVPResult<String>> result = new DeferredResult<>();
 
         result.onTimeout(()->{
-            WVPResult<String> wvpResult = WVPResult.fail(ErrorCode.ERROR100.getCode(), "请求超时");
+            WVPResult<String> wvpResult = WVPResult.fail(ErrorCode.ERROR100.getCode(), "Request timeout");
             result.setResult(wvpResult);
         });
 
@@ -184,25 +184,25 @@ public class ChannelFrontEndController {
         return result;
     }
 
-    @Operation(summary = "聚焦控制", security = @SecurityRequirement(name = JwtUtils.HEADER))
-    @Parameter(name = "channelId", description = "通道国标编号", required = true)
-    @Parameter(name = "command", description = "控制指令,允许值: near, far, stop", required = true)
-    @Parameter(name = "speed", description = "聚焦速度(0-100)", required = true)
+    @Operation(summary = "focus control", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Parameter(name = "channelId", description = "Channel national standard number", required = true)
+    @Parameter(name = "command", description = "control instructions, allowable values: near, far, stop", required = true)
+    @Parameter(name = "speed", description = "focus speed(0-100)", required = true)
     @GetMapping("/fi/focus")
     public DeferredResult<WVPResult<String>> focus(Integer channelId, String command, Integer speed){
 
         if (log.isDebugEnabled()) {
-            log.debug("[通用通道]聚焦控制 API调用，channelId：{} ，command：{} ，speed：{} ", channelId, command, speed);
+            log.debug("[Universal channel]Focus control API calls，channelId：{} ，command：{} ，speed：{} ", channelId, command, speed);
         }
 
         if (speed == null) {
             speed = 50;
         }else if (speed < 0 || speed > 100) {
-            throw new ControllerException(ErrorCode.ERROR100.getCode(), "speed 为 0-100的数字");
+            throw new ControllerException(ErrorCode.ERROR100.getCode(), "speed for 0-100number");
         }
 
         CommonGBChannel channel = channelService.getOne(channelId);
-        Assert.notNull(channel, "通道不存在");
+        Assert.notNull(channel, "Channel does not exist");
 
         FrontEndControlCodeForFI controlCode = new FrontEndControlCodeForFI();
         controlCode.setFocusSpeed(speed);
@@ -220,7 +220,7 @@ public class ChannelFrontEndController {
         DeferredResult<WVPResult<String>> result = new DeferredResult<>();
 
         result.onTimeout(()->{
-            WVPResult<String> wvpResult = WVPResult.fail(ErrorCode.ERROR100.getCode(), "请求超时");
+            WVPResult<String> wvpResult = WVPResult.fail(ErrorCode.ERROR100.getCode(), "Request timeout");
             result.setResult(wvpResult);
         });
 
@@ -236,21 +236,21 @@ public class ChannelFrontEndController {
         return result;
     }
 
-    @Operation(summary = "查询预置位", security = @SecurityRequirement(name = JwtUtils.HEADER))
-    @Parameter(name = "channelId", description = "通道国标编号", required = true)
+    @Operation(summary = "Query preset position", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Parameter(name = "channelId", description = "Channel national standard number", required = true)
     @GetMapping("/preset/query")
     public DeferredResult<WVPResult<List<Preset>>> queryPreset(Integer channelId) {
         if (log.isDebugEnabled()) {
-            log.debug("[通用通道] 预置位查询API调用, {}", channelId);
+            log.debug("[Universal channel] Preset position query API call, {}", channelId);
         }
 
         CommonGBChannel channel = channelService.getOne(channelId);
-        Assert.notNull(channel, "通道不存在");
+        Assert.notNull(channel, "Channel does not exist");
 
         DeferredResult<WVPResult<List<Preset>>> result = new DeferredResult<>();
 
         result.onTimeout(()->{
-            WVPResult<List<Preset>> wvpResult = WVPResult.fail(ErrorCode.ERROR100.getCode(), "请求超时");
+            WVPResult<List<Preset>> wvpResult = WVPResult.fail(ErrorCode.ERROR100.getCode(), "Request timeout");
             result.setResult(wvpResult);
         });
 
@@ -269,13 +269,13 @@ public class ChannelFrontEndController {
 
     private DeferredResult<WVPResult<String>> controlPreset(Integer channelId, FrontEndControlCodeForPreset controlCode) {
         CommonGBChannel channel = channelService.getOne(channelId);
-        Assert.notNull(channel, "通道不存在");
+        Assert.notNull(channel, "Channel does not exist");
 
 
         DeferredResult<WVPResult<String>> result = new DeferredResult<>();
 
         result.onTimeout(()->{
-            WVPResult<String> wvpResult = WVPResult.fail(ErrorCode.ERROR100.getCode(), "请求超时");
+            WVPResult<String> wvpResult = WVPResult.fail(ErrorCode.ERROR100.getCode(), "Request timeout");
             result.setResult(wvpResult);
         });
 
@@ -291,10 +291,10 @@ public class ChannelFrontEndController {
         return result;
     }
 
-    @Operation(summary = "预置位指令-设置预置位", security = @SecurityRequirement(name = JwtUtils.HEADER))
-    @Parameter(name = "channelId", description = "通道国标编号", required = true)
-    @Parameter(name = "presetId", description = "预置位编号", required = true)
-    @Parameter(name = "presetName", description = "预置位名称", required = true)
+    @Operation(summary = "Preset command-Set preset position", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Parameter(name = "channelId", description = "Channel national standard number", required = true)
+    @Parameter(name = "presetId", description = "Preset number", required = true)
+    @Parameter(name = "presetName", description = "Preset position name", required = true)
     @GetMapping("/preset/add")
     public DeferredResult<WVPResult<String>> addPreset(Integer channelId, Integer presetId, String presetName) {
         FrontEndControlCodeForPreset controlCode = new FrontEndControlCodeForPreset();
@@ -305,9 +305,9 @@ public class ChannelFrontEndController {
         return controlPreset(channelId, controlCode);
     }
 
-    @Operation(summary = "预置位指令-调用预置位", security = @SecurityRequirement(name = JwtUtils.HEADER))
-    @Parameter(name = "channelId", description = "通道国标编号", required = true)
-    @Parameter(name = "presetId", description = "预置位编号(1-100)", required = true)
+    @Operation(summary = "Preset command-Call preset position", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Parameter(name = "channelId", description = "Channel national standard number", required = true)
+    @Parameter(name = "presetId", description = "Preset number(1-100)", required = true)
     @GetMapping("/preset/call")
     public DeferredResult<WVPResult<String>> callPreset(Integer channelId, Integer presetId) {
         FrontEndControlCodeForPreset controlCode = new FrontEndControlCodeForPreset();
@@ -317,9 +317,9 @@ public class ChannelFrontEndController {
         return controlPreset(channelId, controlCode);
     }
 
-    @Operation(summary = "预置位指令-删除预置位", security = @SecurityRequirement(name = JwtUtils.HEADER))
-    @Parameter(name = "channelId", description = "通道国标编号", required = true)
-    @Parameter(name = "presetId", description = "预置位编号(1-100)", required = true)
+    @Operation(summary = "Preset command-Delete preset position", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Parameter(name = "channelId", description = "Channel national standard number", required = true)
+    @Parameter(name = "presetId", description = "Preset number(1-100)", required = true)
     @GetMapping("/preset/delete")
     public DeferredResult<WVPResult<String>> deletePreset(Integer channelId, Integer presetId) {
 
@@ -332,12 +332,12 @@ public class ChannelFrontEndController {
 
     private DeferredResult<WVPResult<String>> tourControl(Integer channelId, FrontEndControlCodeForTour controlCode) {
         CommonGBChannel channel = channelService.getOne(channelId);
-        Assert.notNull(channel, "通道不存在");
+        Assert.notNull(channel, "Channel does not exist");
 
         DeferredResult<WVPResult<String>> result = new DeferredResult<>();
 
         result.onTimeout(()->{
-            WVPResult<String> wvpResult = WVPResult.fail(ErrorCode.ERROR100.getCode(), "请求超时");
+            WVPResult<String> wvpResult = WVPResult.fail(ErrorCode.ERROR100.getCode(), "Request timeout");
             result.setResult(wvpResult);
         });
 
@@ -353,10 +353,10 @@ public class ChannelFrontEndController {
         return result;
     }
 
-    @Operation(summary = "巡航指令-加入巡航点", security = @SecurityRequirement(name = JwtUtils.HEADER))
-    @Parameter(name = "channelId", description = "通道国标编号", required = true)
-    @Parameter(name = "tourId", description = "巡航组号", required = true)
-    @Parameter(name = "presetId", description = "预置位编号", required = true)
+    @Operation(summary = "cruise command-Join a cruise spot", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Parameter(name = "channelId", description = "Channel national standard number", required = true)
+    @Parameter(name = "tourId", description = "Cruise group number", required = true)
+    @Parameter(name = "presetId", description = "Preset number", required = true)
     @GetMapping("/tour/point/add")
     public DeferredResult<WVPResult<String>> addTourPoint(Integer channelId, Integer tourId, Integer presetId) {
 
@@ -368,10 +368,10 @@ public class ChannelFrontEndController {
         return tourControl(channelId, controlCode);
     }
 
-    @Operation(summary = "巡航指令-删除一个巡航点", security = @SecurityRequirement(name = JwtUtils.HEADER))
-    @Parameter(name = "channelId", description = "通道国标编号", required = true)
-    @Parameter(name = "tourId", description = "巡航组号(1-100)", required = true)
-    @Parameter(name = "presetId", description = "预置位编号(0-100, 为0时删除整个巡航)", required = true)
+    @Operation(summary = "cruise command-Delete a cruise point", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Parameter(name = "channelId", description = "Channel national standard number", required = true)
+    @Parameter(name = "tourId", description = "Cruise group number(1-100)", required = true)
+    @Parameter(name = "presetId", description = "Preset number(0-100, When 0, delete the entire cruise)", required = true)
     @GetMapping("/tour/point/delete")
     public DeferredResult<WVPResult<String>> deleteCruisePoint(Integer channelId, Integer tourId, Integer presetId) {
         FrontEndControlCodeForTour controlCode = new FrontEndControlCodeForTour();
@@ -382,11 +382,11 @@ public class ChannelFrontEndController {
         return tourControl(channelId, controlCode);
     }
 
-    @Operation(summary = "巡航指令-设置巡航速度", security = @SecurityRequirement(name = JwtUtils.HEADER))
-    @Parameter(name = "channelId", description = "通道国标编号", required = true)
-    @Parameter(name = "tourId", description = "巡航组号(0-100)", required = true)
-    @Parameter(name = "speed", description = "巡航速度(1-4095)", required = true)
-    @Parameter(name = "presetId", description = "预置位编号", required = true)
+    @Operation(summary = "cruise command-Set cruise speed", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Parameter(name = "channelId", description = "Channel national standard number", required = true)
+    @Parameter(name = "tourId", description = "Cruise group number(0-100)", required = true)
+    @Parameter(name = "speed", description = "cruising speed(1-4095)", required = true)
+    @Parameter(name = "presetId", description = "Preset number", required = true)
     @GetMapping("/tour/speed")
     public DeferredResult<WVPResult<String>> setCruiseSpeed(Integer channelId, Integer tourId, Integer speed, Integer presetId) {
         FrontEndControlCodeForTour controlCode = new FrontEndControlCodeForTour();
@@ -397,11 +397,11 @@ public class ChannelFrontEndController {
         return tourControl(channelId, controlCode);
     }
 
-    @Operation(summary = "巡航指令-设置巡航停留时间", security = @SecurityRequirement(name = JwtUtils.HEADER))
-    @Parameter(name = "channelId", description = "通道国标编号", required = true)
-    @Parameter(name = "tourId", description = "巡航组号", required = true)
-    @Parameter(name = "time", description = "巡航停留时间(1-4095)", required = true)
-    @Parameter(name = "presetId", description = "预置位编号", required = true)
+    @Operation(summary = "cruise command-Set cruise stop time", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Parameter(name = "channelId", description = "Channel national standard number", required = true)
+    @Parameter(name = "tourId", description = "Cruise group number", required = true)
+    @Parameter(name = "time", description = "Cruise stop time(1-4095)", required = true)
+    @Parameter(name = "presetId", description = "Preset number", required = true)
     @GetMapping("/tour/time")
     public DeferredResult<WVPResult<String>> setCruiseTime(Integer channelId, Integer tourId, Integer time, Integer presetId) {
         FrontEndControlCodeForTour controlCode = new FrontEndControlCodeForTour();
@@ -412,9 +412,9 @@ public class ChannelFrontEndController {
         return tourControl(channelId, controlCode);
     }
 
-    @Operation(summary = "巡航指令-开始巡航", security = @SecurityRequirement(name = JwtUtils.HEADER))
-    @Parameter(name = "channelId", description = "通道国标编号", required = true)
-    @Parameter(name = "tourId", description = "巡航组号)", required = true)
+    @Operation(summary = "cruise command-start cruise", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Parameter(name = "channelId", description = "Channel national standard number", required = true)
+    @Parameter(name = "tourId", description = "Cruise group number)", required = true)
     @GetMapping("/tour/start")
     public DeferredResult<WVPResult<String>> startCruise(Integer channelId, Integer tourId) {
         FrontEndControlCodeForTour controlCode = new FrontEndControlCodeForTour();
@@ -423,9 +423,9 @@ public class ChannelFrontEndController {
         return tourControl(channelId, controlCode);
     }
 
-    @Operation(summary = "巡航指令-停止巡航", security = @SecurityRequirement(name = JwtUtils.HEADER))
-    @Parameter(name = "channelId", description = "通道国标编号", required = true)
-    @Parameter(name = "tourId", description = "巡航组号", required = true)
+    @Operation(summary = "cruise command-Stop cruising", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Parameter(name = "channelId", description = "Channel national standard number", required = true)
+    @Parameter(name = "tourId", description = "Cruise group number", required = true)
     @GetMapping("/tour/stop")
     public DeferredResult<WVPResult<String>> stopCruise(Integer channelId, Integer tourId) {
         FrontEndControlCodeForTour controlCode = new FrontEndControlCodeForTour();
@@ -437,11 +437,11 @@ public class ChannelFrontEndController {
     private DeferredResult<WVPResult<String>> scanControl(Integer channelId, FrontEndControlCodeForScan controlCode) {
 
         CommonGBChannel channel = channelService.getOne(channelId);
-        Assert.notNull(channel, "通道不存在");
+        Assert.notNull(channel, "Channel does not exist");
         DeferredResult<WVPResult<String>> result = new DeferredResult<>();
 
         result.onTimeout(()->{
-            WVPResult<String> wvpResult = WVPResult.fail(ErrorCode.ERROR100.getCode(), "请求超时");
+            WVPResult<String> wvpResult = WVPResult.fail(ErrorCode.ERROR100.getCode(), "Request timeout");
             result.setResult(wvpResult);
         });
 
@@ -458,9 +458,9 @@ public class ChannelFrontEndController {
 
     }
 
-    @Operation(summary = "扫描指令-开始自动扫描", security = @SecurityRequirement(name = JwtUtils.HEADER))
-    @Parameter(name = "channelId", description = "通道国标编号", required = true)
-    @Parameter(name = "scanId", description = "扫描组号(0-100)", required = true)
+    @Operation(summary = "scan command-Start automatic scan", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Parameter(name = "channelId", description = "Channel national standard number", required = true)
+    @Parameter(name = "scanId", description = "Scan group number(0-100)", required = true)
     @GetMapping("/scan/start")
     public DeferredResult<WVPResult<String>> startScan(Integer channelId, Integer scanId) {
         FrontEndControlCodeForScan controlCode = new FrontEndControlCodeForScan();
@@ -470,9 +470,9 @@ public class ChannelFrontEndController {
 
     }
 
-    @Operation(summary = "扫描指令-停止自动扫描", security = @SecurityRequirement(name = JwtUtils.HEADER))
-    @Parameter(name = "channelId", description = "通道国标编号", required = true)
-    @Parameter(name = "scanId", description = "扫描组号(0-100)", required = true)
+    @Operation(summary = "scan command-Stop automatic scanning", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Parameter(name = "channelId", description = "Channel national standard number", required = true)
+    @Parameter(name = "scanId", description = "Scan group number(0-100)", required = true)
     @GetMapping("/scan/stop")
     public DeferredResult<WVPResult<String>> stopScan(Integer channelId, Integer scanId) {
         FrontEndControlCodeForScan controlCode = new FrontEndControlCodeForScan();
@@ -481,9 +481,9 @@ public class ChannelFrontEndController {
         return scanControl(channelId, controlCode);
     }
 
-    @Operation(summary = "扫描指令-设置自动扫描左边界", security = @SecurityRequirement(name = JwtUtils.HEADER))
-    @Parameter(name = "channelId", description = "通道国标编号", required = true)
-    @Parameter(name = "scanId", description = "扫描组号(0-100)", required = true)
+    @Operation(summary = "scan command-Set up automatic scanning of the left border", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Parameter(name = "channelId", description = "Channel national standard number", required = true)
+    @Parameter(name = "scanId", description = "Scan group number(0-100)", required = true)
     @GetMapping("/scan/set/left")
     public DeferredResult<WVPResult<String>> setScanLeft(Integer channelId, Integer scanId) {
         FrontEndControlCodeForScan controlCode = new FrontEndControlCodeForScan();
@@ -492,9 +492,9 @@ public class ChannelFrontEndController {
         return scanControl(channelId, controlCode);
     }
 
-    @Operation(summary = "扫描指令-设置自动扫描右边界", security = @SecurityRequirement(name = JwtUtils.HEADER))
-    @Parameter(name = "channelId", description = "通道国标编号", required = true)
-    @Parameter(name = "scanId", description = "扫描组号(0-100)", required = true)
+    @Operation(summary = "scan command-Set up automatic scanning of the right border", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Parameter(name = "channelId", description = "Channel national standard number", required = true)
+    @Parameter(name = "scanId", description = "Scan group number(0-100)", required = true)
     @GetMapping("/scan/set/right")
     public DeferredResult<WVPResult<String>> setScanRight(Integer channelId, Integer scanId) {
         FrontEndControlCodeForScan controlCode = new FrontEndControlCodeForScan();
@@ -504,10 +504,10 @@ public class ChannelFrontEndController {
     }
 
 
-    @Operation(summary = "扫描指令-设置自动扫描速度", security = @SecurityRequirement(name = JwtUtils.HEADER))
-    @Parameter(name = "channelId", description = "通道国标编号", required = true)
-    @Parameter(name = "scanId", description = "扫描组号(0-100)", required = true)
-    @Parameter(name = "speed", description = "自动扫描速度(1-4095)", required = true)
+    @Operation(summary = "scan command-Set automatic scan speed", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Parameter(name = "channelId", description = "Channel national standard number", required = true)
+    @Parameter(name = "scanId", description = "Scan group number(0-100)", required = true)
+    @Parameter(name = "speed", description = "Auto scan speed(1-4095)", required = true)
     @GetMapping("/scan/set/speed")
     public DeferredResult<WVPResult<String>> setScanSpeed(Integer channelId, Integer scanId, Integer speed) {
         FrontEndControlCodeForScan controlCode = new FrontEndControlCodeForScan();
@@ -518,14 +518,14 @@ public class ChannelFrontEndController {
     }
 
 
-    @Operation(summary = "辅助开关控制指令-雨刷控制", security = @SecurityRequirement(name = JwtUtils.HEADER))
-    @Parameter(name = "channelId", description = "通道国标编号", required = true)
-    @Parameter(name = "command", description = "控制指令,允许值: on, off", required = true)
+    @Operation(summary = "Auxiliary switch control instructions-Wiper control", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Parameter(name = "channelId", description = "Channel national standard number", required = true)
+    @Parameter(name = "command", description = "control instructions, allowable values: on, off", required = true)
     @GetMapping("/wiper")
     public DeferredResult<WVPResult<String>> wiper(Integer channelId, String command){
 
         CommonGBChannel channel = channelService.getOne(channelId);
-        Assert.notNull(channel, "通道不存在");
+        Assert.notNull(channel, "Channel does not exist");
 
         FrontEndControlCodeForWiper controlCode = new FrontEndControlCodeForWiper();
 
@@ -542,7 +542,7 @@ public class ChannelFrontEndController {
         DeferredResult<WVPResult<String>> result = new DeferredResult<>();
 
         result.onTimeout(()->{
-            WVPResult<String> wvpResult = WVPResult.fail(ErrorCode.ERROR100.getCode(), "请求超时");
+            WVPResult<String> wvpResult = WVPResult.fail(ErrorCode.ERROR100.getCode(), "Request timeout");
             result.setResult(wvpResult);
         });
 
@@ -559,16 +559,16 @@ public class ChannelFrontEndController {
         return result;
     }
 
-    @Operation(summary = "辅助开关控制指令", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Operation(summary = "Auxiliary switch control instructions", security = @SecurityRequirement(name = JwtUtils.HEADER))
 
-    @Parameter(name = "channelId", description = "通道国标编号", required = true)
-    @Parameter(name = "command", description = "控制指令,允许值: on, off", required = true)
-    @Parameter(name = "auxiliaryId", description = "开关编号", required = true)
+    @Parameter(name = "channelId", description = "Channel national standard number", required = true)
+    @Parameter(name = "command", description = "control instructions, allowable values: on, off", required = true)
+    @Parameter(name = "auxiliaryId", description = "Switch number", required = true)
     @GetMapping("/auxiliary")
     public DeferredResult<WVPResult<String>> auxiliarySwitch(Integer channelId, String command, Integer auxiliaryId){
 
         CommonGBChannel channel = channelService.getOne(channelId);
-        Assert.notNull(channel, "通道不存在");
+        Assert.notNull(channel, "Channel does not exist");
 
         FrontEndControlCodeForAuxiliary controlCode = new FrontEndControlCodeForAuxiliary();
         controlCode.setAuxiliaryId(auxiliaryId);
@@ -585,7 +585,7 @@ public class ChannelFrontEndController {
         DeferredResult<WVPResult<String>> result = new DeferredResult<>();
 
         result.onTimeout(()->{
-            WVPResult<String> wvpResult = WVPResult.fail(ErrorCode.ERROR100.getCode(), "请求超时");
+            WVPResult<String> wvpResult = WVPResult.fail(ErrorCode.ERROR100.getCode(), "Request timeout");
             result.setResult(wvpResult);
         });
 
@@ -600,27 +600,27 @@ public class ChannelFrontEndController {
         return result;
     }
 
-    @Operation(summary = "看守位设置", security = @SecurityRequirement(name = JwtUtils.HEADER))
-    @Parameter(name = "channelId", description = "通道ID", required = true)
-    @Parameter(name = "enabled", description = "是否开启看守位", required = true)
-    @Parameter(name = "resetTime", description = "自动归位时间间隔（秒）")
-    @Parameter(name = "presetIndex", description = "调用预置位编号")
+    @Operation(summary = "Watch bit setting", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Parameter(name = "channelId", description = "channelID", required = true)
+    @Parameter(name = "enabled", description = "Whether to enable guard position", required = true)
+    @Parameter(name = "resetTime", description = "Automatic homing time interval (seconds）")
+    @Parameter(name = "presetIndex", description = "Call preset number")
     @GetMapping("/home_position")
     public DeferredResult<WVPResult<String>> homePosition(Integer channelId, Boolean enabled,
                                                            @RequestParam(required = false) Integer resetTime,
                                                            @RequestParam(required = false) Integer presetIndex){
 
         if (log.isDebugEnabled()) {
-            log.debug("[通用通道]看守位设置 API调用，channelId：{} ，enabled：{} ，resetTime：{} ，presetIndex：{}", channelId, enabled, resetTime, presetIndex);
+            log.debug("[Universal channel]Guard bit setting API call，channelId：{} ，enabled：{} ，resetTime：{} ，presetIndex：{}", channelId, enabled, resetTime, presetIndex);
         }
 
         CommonGBChannel channel = channelService.getOne(channelId);
-        Assert.notNull(channel, "通道不存在");
+        Assert.notNull(channel, "Channel does not exist");
 
         DeferredResult<WVPResult<String>> result = new DeferredResult<>();
 
         result.onTimeout(()->{
-            WVPResult<String> wvpResult = WVPResult.fail(ErrorCode.ERROR100.getCode(), "请求超时");
+            WVPResult<String> wvpResult = WVPResult.fail(ErrorCode.ERROR100.getCode(), "Request timeout");
             result.setResult(wvpResult);
         });
 
@@ -636,23 +636,23 @@ public class ChannelFrontEndController {
         return result;
     }
 
-    @Operation(summary = "拉框放大", security = @SecurityRequirement(name = JwtUtils.HEADER))
-    @Parameter(name = "channelId", description = "通道ID", required = true)
-    @Parameter(name = "length", description = "播放窗口长度像素值", required = true)
-    @Parameter(name = "width", description = "播放窗口宽度像素值", required = true)
-    @Parameter(name = "midPointX", description = "拉框中心的横轴坐标像素值", required = true)
-    @Parameter(name = "midPointY", description = "拉框中心的纵轴坐标像素值", required = true)
-    @Parameter(name = "lengthX", description = "拉框长度像素值", required = true)
-    @Parameter(name = "lengthY", description = "拉框宽度像素值", required = true)
+    @Operation(summary = "Scroll down to enlarge", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Parameter(name = "channelId", description = "channelID", required = true)
+    @Parameter(name = "length", description = "Play window length pixel value", required = true)
+    @Parameter(name = "width", description = "Play window width pixel value", required = true)
+    @Parameter(name = "midPointX", description = "The horizontal axis coordinate pixel value of the center of the pull box", required = true)
+    @Parameter(name = "midPointY", description = "The vertical axis coordinate pixel value of the center of the pull box", required = true)
+    @Parameter(name = "lengthX", description = "Frame length in pixels", required = true)
+    @Parameter(name = "lengthY", description = "Pull box width pixel value", required = true)
     @GetMapping("/drag_zoom_in")
     public DeferredResult<WVPResult<String>> dragZoomIn(Integer channelId, int length, int width, int midPointX, int midPointY, int lengthX, int lengthY){
 
         if (log.isDebugEnabled()) {
-            log.debug("[通用通道]拉框放大 API调用，channelId：{} ，length：{} ，width：{} ，midPointX：{} ，midPointY：{} ，lengthX：{} ，lengthY：{}",channelId, length, width, midPointX, midPointY, lengthX, lengthY);
+            log.debug("[Universal channel]Pull box to enlarge API call，channelId：{} ，length：{} ，width：{} ，midPointX：{} ，midPointY：{} ，lengthX：{} ，lengthY：{}",channelId, length, width, midPointX, midPointY, lengthX, lengthY);
         }
 
         CommonGBChannel channel = channelService.getOne(channelId);
-        Assert.notNull(channel, "通道不存在");
+        Assert.notNull(channel, "Channel does not exist");
 
         FrontEndControlCodeForDragZoom controlCode = new FrontEndControlCodeForDragZoom();
         controlCode.setCode(1);
@@ -666,7 +666,7 @@ public class ChannelFrontEndController {
         DeferredResult<WVPResult<String>> result = new DeferredResult<>();
 
         result.onTimeout(()->{
-            WVPResult<String> wvpResult = WVPResult.fail(ErrorCode.ERROR100.getCode(), "请求超时");
+            WVPResult<String> wvpResult = WVPResult.fail(ErrorCode.ERROR100.getCode(), "Request timeout");
             result.setResult(wvpResult);
         });
 
@@ -681,23 +681,23 @@ public class ChannelFrontEndController {
         return result;
     }
 
-    @Operation(summary = "拉框缩小", security = @SecurityRequirement(name = JwtUtils.HEADER))
-    @Parameter(name = "channelId", description = "通道ID", required = true)
-    @Parameter(name = "length", description = "播放窗口长度像素值", required = true)
-    @Parameter(name = "width", description = "播放窗口宽度像素值", required = true)
-    @Parameter(name = "midPointX", description = "拉框中心的横轴坐标像素值", required = true)
-    @Parameter(name = "midPointY", description = "拉框中心的纵轴坐标像素值", required = true)
-    @Parameter(name = "lengthX", description = "拉框长度像素值", required = true)
-    @Parameter(name = "lengthY", description = "拉框宽度像素值", required = true)
+    @Operation(summary = "Zoom out", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Parameter(name = "channelId", description = "channelID", required = true)
+    @Parameter(name = "length", description = "Play window length pixel value", required = true)
+    @Parameter(name = "width", description = "Play window width pixel value", required = true)
+    @Parameter(name = "midPointX", description = "The horizontal axis coordinate pixel value of the center of the pull box", required = true)
+    @Parameter(name = "midPointY", description = "The vertical axis coordinate pixel value of the center of the pull box", required = true)
+    @Parameter(name = "lengthX", description = "Frame length in pixels", required = true)
+    @Parameter(name = "lengthY", description = "Pull box width pixel value", required = true)
     @GetMapping("/drag_zoom_out")
     public DeferredResult<WVPResult<String>> dragZoomOut(Integer channelId, Integer length, Integer width, Integer midPointX, Integer midPointY, Integer lengthX, Integer lengthY){
 
         if (log.isDebugEnabled()) {
-            log.debug("[通用通道]拉框缩小 API调用，channelId：{} ，length：{} ，width：{} ，midPointX：{} ，midPointY：{} ，lengthX：{} ，lengthY：{}",channelId, length, width, midPointX, midPointY, lengthX, lengthY);
+            log.debug("[Universal channel]Zoom out API call，channelId：{} ，length：{} ，width：{} ，midPointX：{} ，midPointY：{} ，lengthX：{} ，lengthY：{}",channelId, length, width, midPointX, midPointY, lengthX, lengthY);
         }
 
         CommonGBChannel channel = channelService.getOne(channelId);
-        Assert.notNull(channel, "通道不存在");
+        Assert.notNull(channel, "Channel does not exist");
 
         FrontEndControlCodeForDragZoom controlCode = new FrontEndControlCodeForDragZoom();
         controlCode.setCode(2);
@@ -711,7 +711,7 @@ public class ChannelFrontEndController {
         DeferredResult<WVPResult<String>> result = new DeferredResult<>();
 
         result.onTimeout(()->{
-            WVPResult<String> wvpResult = WVPResult.fail(ErrorCode.ERROR100.getCode(), "请求超时");
+            WVPResult<String> wvpResult = WVPResult.fail(ErrorCode.ERROR100.getCode(), "Request timeout");
             result.setResult(wvpResult);
         });
 

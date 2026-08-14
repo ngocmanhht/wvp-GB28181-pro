@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Tag(name  = "角色管理")
+@Tag(name  = "role management")
 
 @RestController
 @RequestMapping("/api/role")
@@ -26,15 +26,15 @@ public class RoleController {
     private IRoleService roleService;
 
     @PostMapping("/add")
-    @Operation(summary = "添加角色", security = @SecurityRequirement(name = JwtUtils.HEADER))
-    @Parameter(name = "name", description = "角色名", required = true)
-    @Parameter(name = "authority", description = "权限（自行定义内容，目前未使用）", required = true)
+    @Operation(summary = "Add role", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Parameter(name = "name", description = "Character name", required = true)
+    @Parameter(name = "authority", description = "Permissions (self-defined content, currently not used)）", required = true)
     public void add(@RequestParam String name,
                                                   @RequestParam(required = false) String authority){
-        // 获取当前登录用户id
+        // Get the currently logged in userid
         int currenRoleId = SecurityUtils.getUserInfo().getRole().getId();
         if (currenRoleId != 1) {
-            // 只用角色id为0才可以删除和添加用户
+            // Users can only be deleted and added with a role ID of 0
             throw new ControllerException(ErrorCode.ERROR403);
         }
 
@@ -51,13 +51,13 @@ public class RoleController {
     }
 
     @DeleteMapping("/delete")
-    @Operation(summary = "删除角色", security = @SecurityRequirement(name = JwtUtils.HEADER))
-    @Parameter(name = "id", description = "用户Id", required = true)
+    @Operation(summary = "Delete role", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Parameter(name = "id", description = "UserId", required = true)
     public void delete(@RequestParam Integer id){
-        // 获取当前登录用户id
+        // Get the currently logged in userid
         int currenRoleId = SecurityUtils.getUserInfo().getRole().getId();
         if (currenRoleId != 1) {
-            // 只用角色id为0才可以删除和添加用户
+            // Users can only be deleted and added with a role ID of 0
             throw new ControllerException(ErrorCode.ERROR403);
         }
         int deleteResult = roleService.delete(id);
@@ -68,9 +68,9 @@ public class RoleController {
     }
 
     @GetMapping("/all")
-    @Operation(summary = "查询角色", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Operation(summary = "Query roles", security = @SecurityRequirement(name = JwtUtils.HEADER))
     public List<Role> all(){
-        // 获取当前登录用户id
+        // Get the currently logged in userid
         return roleService.getAll();
     }
 }

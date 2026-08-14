@@ -1,7 +1,7 @@
 <template>
   <div>
-    <el-button size="small" :loading="loading" :disabled="loading" @click="control('on')">开启</el-button>
-    <el-button size="small" :loading="loading" :disabled="loading" @click="control('off')">关闭</el-button>
+    <el-button size="small" :loading="loading" :disabled="loading" @click="control('on')">turn on</el-button>
+    <el-button size="small" :loading="loading" :disabled="loading" @click="control('off')">Close</el-button>
   </div>
 </template>
 
@@ -22,7 +22,7 @@ export default {
       this.loading = true
       this.$store.dispatch('frontEnd/wiper', [this.deviceId, this.channelDeviceId, command])
         .then(() => {
-          this.$message({ showClose: true, message: command === 'on' ? '雨刷已开启' : '雨刷已关闭', type: 'success' })
+          this.$message({ showClose: true, message: command === 'on' ? 'Wipers are on' : 'Wipers are off', type: 'success' })
         }).catch(error => {
           this.$message({ showClose: true, message: error, type: 'error' })
         }).finally(() => {

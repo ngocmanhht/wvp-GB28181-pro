@@ -2,7 +2,7 @@
   <div id="ChannelEdit" v-loading="locading" style="width: 100%">
     <div class="page-header">
       <div class="page-title">
-        <el-page-header content="编辑通道" @back="close" />
+        <el-page-header content="Edit channel" @back="close" />
       </div>
     </div>
     <CommonChannelEdit :id="id" ref="commonChannelEdit" :showCancel="true" @submitSuccess="close" @cancel="close" />

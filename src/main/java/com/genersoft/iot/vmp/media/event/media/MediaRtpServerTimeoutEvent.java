@@ -4,7 +4,7 @@ import com.genersoft.iot.vmp.media.bean.MediaServer;
 import com.genersoft.iot.vmp.media.zlm.dto.hook.OnStreamChangedHookParam;
 
 /**
- * RtpServer收流超时事件
+ * RtpServerStreaming timeout event
  */
 public class MediaRtpServerTimeoutEvent extends MediaEvent {
     public MediaRtpServerTimeoutEvent(Object source) {

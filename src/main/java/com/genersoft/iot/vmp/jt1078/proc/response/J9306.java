@@ -7,17 +7,17 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * 云台控制指令-云台变倍控制
+ * PTZ control instructions-PTZ zoom control
  *
  */
 @Setter
 @Getter
 @MsgId(id = "9306")
 public class J9306 extends Rs {
-    // 逻辑通道号
+    // Logical channel number
     private int channel;
 
-    // 0：调大； 1：调小
+    // 0：Turn up; 1: Turn down
     private int zoom;
 
     @Override

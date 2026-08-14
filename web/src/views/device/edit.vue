@@ -2,7 +2,7 @@
   <div id="deviceEdit" v-loading="isLoging">
     <el-dialog
       v-el-drag-dialog
-      title="设备编辑"
+      title="Device editing"
       width="40%"
       top="2rem"
       :close-on-click-modal="false"
@@ -12,23 +12,23 @@
     >
       <div id="shared" style="margin-right: 50px;">
         <el-form ref="form" :rules="rules" :model="form" label-width="100px">
-          <el-form-item label="设备编号" prop="deviceId">
+          <el-form-item label="Device number" prop="deviceId">
             <el-input v-if="isEdit" v-model="form.deviceId" disabled />
             <el-input v-if="!isEdit" v-model="form.deviceId" clearable />
           </el-form-item>
 
-          <el-form-item label="设备名称" prop="name">
+          <el-form-item label="Device name" prop="name">
             <el-input v-model="form.name" clearable />
           </el-form-item>
-          <el-form-item label="密码" prop="password">
+          <el-form-item label="Password" prop="password">
             <el-input v-model="form.password" clearable />
           </el-form-item>
-          <el-form-item label="收流IP" prop="sdpIp">
+          <el-form-item label="collect flowIP" prop="sdpIp">
             <el-input v-model="form.sdpIp" type="sdpIp" clearable />
           </el-form-item>
-          <el-form-item label="流媒体ID" prop="mediaServerId">
+          <el-form-item label="streaming mediaID" prop="mediaServerId">
             <el-select v-model="form.mediaServerId" style="float: left; width: 100%">
-              <el-option key="auto" label="自动负载最小" value="auto" />
+              <el-option key="auto" label="Automatic load minimum" value="auto" />
               <el-option
                 v-for="item in mediaServerList"
                 :key="item.id"
@@ -38,27 +38,27 @@
             </el-select>
           </el-form-item>
 
-          <el-form-item label="字符集" prop="charset">
+          <el-form-item label="character set" prop="charset">
             <el-select v-model="form.charset" style="float: left; width: 100%">
               <el-option key="GB2312" label="GB2312" value="gb2312" />
               <el-option key="UTF-8" label="UTF-8" value="utf-8" />
             </el-select>
           </el-form-item>
-          <el-form-item label="坐标系" prop="geoCoordSys">
+          <el-form-item label="coordinate system" prop="geoCoordSys">
             <el-select v-model="form.geoCoordSys" style="float: left; width: 100%">
               <el-option key="WGS84" label="WGS84" value="gb2312" />
               <el-option key="GCJ02" label="GCJ02" value="utf-8" />
             </el-select>
           </el-form-item>
-          <el-form-item label="其他选项">
-            <el-checkbox v-model="form.ssrcCheck" label="SSRC校验" style="float: left" />
-            <el-checkbox v-model="form.asMessageChannel" label="作为消息通道" style="float: left" />
-            <el-checkbox v-model="form.broadcastPushAfterAck" label="收到ACK后发流" style="float: left" />
+          <el-form-item label="Other options">
+            <el-checkbox v-model="form.ssrcCheck" label="SSRCVerification" style="float: left" />
+            <el-checkbox v-model="form.asMessageChannel" label="as a message channel" style="float: left" />
+            <el-checkbox v-model="form.broadcastPushAfterAck" label="Send stream after receiving ACK" style="float: left" />
           </el-form-item>
           <el-form-item>
             <div style="float: right;">
-              <el-button type="primary" @click="onSubmit">确认</el-button>
-              <el-button @click="close">取消</el-button>
+              <el-button type="primary" @click="onSubmit">Confirm</el-button>
+              <el-button @click="close">Cancel</el-button>
             </div>
 
           </el-form-item>
@@ -81,11 +81,11 @@ export default {
       showDialog: false,
       isLoging: false,
       hostNames: [],
-      mediaServerList: [], // 滅体节点列表
+      mediaServerList: [], // List of dead nodes
       form: {},
       isEdit: false,
       rules: {
-        deviceId: [{ required: true, message: '请输入设备编号', trigger: 'blur' }]
+        deviceId: [{ required: true, message: 'Please enter the device number', trigger: 'blur' }]
       }
     }
   },

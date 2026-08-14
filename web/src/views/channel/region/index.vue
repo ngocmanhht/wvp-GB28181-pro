@@ -15,53 +15,53 @@
           <el-breadcrumb v-if="regionParents.length > 0" separator="/" style="display: ruby">
             <el-breadcrumb-item v-for="key in regionParents" :key="key">{{ key }}</el-breadcrumb-item>
           </el-breadcrumb>
-          <div v-else style="color: #00c6ff">未选择行政区划</div>
+          <div v-else style="color: #00c6ff">No administrative division selected</div>
         </el-form-item>
         <div style="float: right;">
-          <el-form-item label="搜索">
+          <el-form-item label="Search">
             <el-input
               v-model="searchStr"
               style="width: 10rem; margin-right: 1rem;"
-              placeholder="关键字"
+              placeholder="Keywords"
               prefix-icon="el-icon-search"
               clearable
               @input="search"
             />
           </el-form-item>
-          <el-form-item label="在线状态">
+          <el-form-item label="online status">
             <el-select
               v-model="online"
               style="width: 8rem; margin-right: 1rem;"
-              placeholder="请选择"
+              placeholder="Please select"
               default-first-option
               @change="search"
             >
-              <el-option label="全部" value="" />
-              <el-option label="在线" value="true" />
-              <el-option label="离线" value="false" />
+              <el-option label="All" value="" />
+              <el-option label="online" value="true" />
+              <el-option label="Offline" value="false" />
             </el-select>
           </el-form-item>
-          <el-form-item label="类型" >
+          <el-form-item label="Type" >
             <el-select
               v-model="channelType"
               style="width: 8rem; margin-right: 1rem;"
-              placeholder="请选择"
+              placeholder="Please select"
               default-first-option
               @change="getChannelList"
             >
-              <el-option label="全部" value="" />
+              <el-option label="All" value="" />
               <el-option v-for="item in Object.values($channelTypeList)" :key="item.id" :label="item.name" :value="item.id" />
             </el-select>
           </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="add()">
-              添加通道
+              add channel
             </el-button>
             <el-button :disabled="multipleSelection.length === 0" type="danger" @click="remove()">
-              移除通道
+              Remove channel
             </el-button>
             <el-button plain type="warning" @click="showUnusualChanel()">
-              异常挂载通道
+              Abnormal mount channel
             </el-button>
           </el-form-item>
           <el-form-item >
@@ -80,27 +80,27 @@
         @row-dblclick="rowDblclick"
       >
         <el-table-column type="selection" width="55" />
-        <el-table-column prop="gbName" label="名称" min-width="180" />
-        <el-table-column prop="gbDeviceId" label="编号" min-width="180" />
-        <el-table-column prop="gbManufacturer" label="厂家" min-width="100" />
-        <el-table-column label="类型" min-width="100">
+        <el-table-column prop="gbName" label="Name" min-width="180" />
+        <el-table-column prop="gbDeviceId" label="No." min-width="180" />
+        <el-table-column prop="gbManufacturer" label="Manufacturer" min-width="100" />
+        <el-table-column label="Type" min-width="100">
           <template v-slot:default="scope">
             <div slot="reference" class="name-wrapper">
               <el-tag size="medium" effect="plain" type="success" :style="$channelTypeList[scope.row.dataType].style">{{ $channelTypeList[scope.row.dataType].name }}</el-tag>
             </div>
           </template>
         </el-table-column>
-        <el-table-column label="位置信息" min-width="150">
+        <el-table-column label="location information" min-width="150">
           <template v-slot:default="scope">
             <span v-if="scope.row.gbLongitude && scope.row.gbLatitude">{{ scope.row.gbLongitude }}<br>{{ scope.row.gbLatitude }}</span>
-            <span v-if="!scope.row.gbLongitude || !scope.row.gbLatitude">无</span>
+            <span v-if="!scope.row.gbLongitude || !scope.row.gbLatitude">None</span>
           </template>
         </el-table-column>
-        <el-table-column label="状态" min-width="100">
+        <el-table-column label="Status" min-width="100">
           <template v-slot:default="scope">
             <div slot="reference" class="name-wrapper">
-              <el-tag v-if="scope.row.gbStatus === 'ON'" size="medium">在线</el-tag>
-              <el-tag v-if="scope.row.gbStatus !== 'ON'" size="medium" type="info">离线</el-tag>
+              <el-tag v-if="scope.row.gbStatus === 'ON'" size="medium">online</el-tag>
+              <el-tag v-if="scope.row.gbStatus !== 'ON'" size="medium" type="info">Offline</el-tag>
             </div>
           </template>
         </el-table-column>
@@ -182,7 +182,7 @@ export default {
         .then(data => {
           this.total = data.total
           this.channelList = data.list
-          // 防止出现表格错位
+          // Prevent form misalignment
           this.$nextTick(() => {
             this.$refs.channelListTable.doLayout()
           })
@@ -200,12 +200,12 @@ export default {
       if (this.regionDeviceId === '') {
         this.$message.info({
           showClose: true,
-          message: '请选择左侧行政区划'
+          message: 'Please select the administrative division on the left'
         })
         return
       }
       this.$refs.gbChannelSelect.openDialog((data) => {
-        console.log('选择的数据')
+        console.log('selected data')
         console.log(data)
         this.addChannelToCivilCode(this.regionDeviceId, data)
       })
@@ -226,7 +226,7 @@ export default {
         .then(data => {
           this.$message.success({
             showClose: true,
-            message: '保存成功'
+            message: 'Saved successfully'
           })
           this.getChannelList()
         })
@@ -248,7 +248,7 @@ export default {
       if (channels.length === 0) {
         this.$message.info({
           showClose: true,
-          message: '请选择通道'
+          message: 'Please select channel'
         })
         return
       }
@@ -257,10 +257,10 @@ export default {
         .then(data => {
           this.$message.success({
             showClose: true,
-            message: '保存成功'
+            message: 'Saved successfully'
           })
           this.getChannelList()
-          // 刷新树节点
+          // Refresh tree nodes
           this.$refs.regionTree.refresh(this.regionDeviceId)
         })
         .catch((error) => {

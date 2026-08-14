@@ -40,13 +40,13 @@ public class Jt808Decoder extends ByteToMessageDecoder {
         Session session = ctx.channel().attr(Session.KEY).get();
         log.info("> {} hex: 7e{}7e", session, ByteBufUtil.hexDump(in));
         try {
-            // 按照部标定义执行校验和转义
+            // Perform checksum escaping according to the part definition
             ByteBuf buf = unEscapeAndCheck(in);
             buf.retain();
             Header header = new Header();
             header.setMsgId(ByteBufUtil.hexDump(buf.readSlice(2)));
             header.setMsgPro(buf.readUnsignedShort());
-            // 从消息属性中读取是否存在分包
+            // Read whether subcontracting exists from message properties
             boolean isSubpackage = (header.getMsgPro() >>> 13 & 1) == 1;
             if (header.is2019Version()) {
                 header.setVersion(buf.readUnsignedByte());
@@ -59,8 +59,8 @@ public class Jt808Decoder extends ByteToMessageDecoder {
             if (isSubpackage) {
                 int packageCount = buf.readUnsignedShort();
                 int packageNumber = buf.readUnsignedShort();
-                log.debug("[分包消息] header: {}, 序号: {}, 总数: {}", header, packageNumber, packageCount);
-                // 缓存带合并的分包消息
+                log.debug("[subcontract message] header: {}, serial number: {}, total: {}", header, packageNumber, packageCount);
+                // Caching subpackaged messages with merging
                 ByteBuf intactBuf = MultiPacketManager.INSTANCE.add(header, packageCount, buf);
                 if (intactBuf == null) {
                     return;
@@ -91,10 +91,10 @@ public class Jt808Decoder extends ByteToMessageDecoder {
 
 
     /**
-     * 转义与验证校验码
+     * Escape and verify check codes
      *
-     * @param byteBuf 转义Buf
-     * @return 转义好的数据
+     * @param byteBuf escapeBuf
+     * @return escaped data
      */
     public ByteBuf unEscapeAndCheck(ByteBuf byteBuf) throws Exception {
         int low = byteBuf.readerIndex();
@@ -104,9 +104,9 @@ public class Jt808Decoder extends ByteToMessageDecoder {
 
         byte aByte = byteBuf.getByte(high - 2);
         byte protocolEscapeFlag7d = 0x7d;
-        //0x7d转义
+        //0x7descape
         byte protocolEscapeFlag01 = 0x01;
-        //0x7e转义
+        //0x7eescape
         byte protocolEscapeFlag02 = 0x02;
         if (aByte == protocolEscapeFlag7d) {
             byte b2 = byteBuf.getByte(high - 1);
@@ -115,8 +115,8 @@ public class Jt808Decoder extends ByteToMessageDecoder {
             } else if (b2 == protocolEscapeFlag02) {
                 checkSum = 0x7e;
             } else {
-                log.error("转义1异常:{}", ByteBufUtil.hexDump(byteBuf));
-                throw new Exception("转义错误");
+                log.error("Escape 1 exception:{}", ByteBufUtil.hexDump(byteBuf));
+                throw new Exception("Escape error");
             }
             high = high - 2;
         } else {
@@ -138,8 +138,8 @@ public class Jt808Decoder extends ByteToMessageDecoder {
                     bufList.add(slice);
                     b = 0x7e;
                 } else {
-                    log.error("转义2异常:{}", ByteBufUtil.hexDump(byteBuf));
-                    throw new Exception("转义错误");
+                    log.error("Escape2Exception:{}", ByteBufUtil.hexDump(byteBuf));
+                    throw new Exception("Escape error");
                 }
                 index += 2;
                 low = index;
@@ -157,8 +157,8 @@ public class Jt808Decoder extends ByteToMessageDecoder {
                 return new CompositeByteBuf(UnpooledByteBufAllocator.DEFAULT, false, bufList.size(), bufList);
             }
         } else {
-            log.info("{} 解析校验码:{}--计算校验码:{}", ByteBufUtil.hexDump(byteBuf), checkSum, calculationCheckSum);
-            throw new Exception("校验码错误!");
+            log.info("{} Parse check code:{}--Calculate check code:{}", ByteBufUtil.hexDump(byteBuf), checkSum, calculationCheckSum);
+            throw new Exception("Check code error!");
         }
     }
 

@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-// 部标设备API
+// Ministry standard equipmentAPI
 
 export function queryDevices({ page, count, query, online }) {
   return request({

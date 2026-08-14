@@ -1,32 +1,32 @@
 <template>
   <div id="app" style="height: calc(100vh - 124px);">
     <el-form :inline="true" size="mini">
-      <el-form-item label="搜索">
+      <el-form-item label="Search">
         <el-input
           v-model="searchStr"
           style="margin-right: 1rem; width: auto;"
-          placeholder="关键字"
+          placeholder="Keywords"
           prefix-icon="el-icon-search"
           clearable
           @input="initData"
         />
       </el-form-item>
-      <el-form-item label="在线状态">
+      <el-form-item label="online status">
         <el-select
           v-model="online"
           style="width: 8rem; margin-right: 1rem;"
-          placeholder="请选择"
+          placeholder="Please select"
           default-first-option
           @change="initData"
         >
-          <el-option label="全部" value="" />
-          <el-option label="在线" value="true" />
-          <el-option label="离线" value="false" />
+          <el-option label="All" value="" />
+          <el-option label="online" value="true" />
+          <el-option label="Offline" value="false" />
         </el-select>
       </el-form-item>
       <el-form-item>
-        <el-button icon="el-icon-plus" size="mini" style="margin-right: 1rem;" type="primary" @click="add">新设备</el-button>
-        <el-button icon="el-icon-info" style="margin-right: 1rem;" @click="showInfo()">接入信息</el-button>
+        <el-button icon="el-icon-plus" size="mini" style="margin-right: 1rem;" type="primary" @click="add">new equipment</el-button>
+        <el-button icon="el-icon-info" style="margin-right: 1rem;" @click="showInfo()">access information</el-button>
       </el-form-item>
       <el-form-item style="float: right;">
         <el-button
@@ -37,54 +37,54 @@
         />
       </el-form-item>
     </el-form>
-    <!--设备列表-->
+    <!--Device list-->
     <el-table
       size="small"
       :data="deviceList"
       height="calc(100% - 64px)"
       header-row-class-name="table-header"
     >
-      <el-table-column prop="phoneNumber" label="终端手机号" min-width="120" />
-      <el-table-column prop="terminalId" label="终端ID" min-width="120" />
-      <el-table-column label="省域" min-width="120" >
+      <el-table-column prop="phoneNumber" label="Terminal mobile phone number" min-width="120" />
+      <el-table-column prop="terminalId" label="terminalID" min-width="120" />
+      <el-table-column label="Provincial area" min-width="120" >
         <template slot-scope="scope">
           {{scope.row.provinceText || scope.row.provinceId}}
         </template>
       </el-table-column>
-      <el-table-column label="市县域" min-width="120" >
+      <el-table-column label="City and county" min-width="120" >
         <template slot-scope="scope">
           {{scope.row.cityText || scope.row.cityId}}
         </template>
       </el-table-column>
-      <el-table-column prop="makerId" label="制造商" min-width="120" />
-      <el-table-column prop="model" label="型号" min-width="120" />
-      <el-table-column label="车牌颜色" min-width="120">
+      <el-table-column prop="makerId" label="manufacturer" min-width="120" />
+      <el-table-column prop="model" label="Model" min-width="120" />
+      <el-table-column label="license plate color" min-width="120">
         <template slot-scope="scope">
           <div slot="reference" class="name-wrapper">
-            <span v-if="scope.row.plateColor === 1">蓝色</span>
-            <span v-else-if="scope.row.plateColor === 2">黄色</span>
-            <span v-else-if="scope.row.plateColor === 3">黑色</span>
-            <span v-else-if="scope.row.plateColor === 4">白色</span>
-            <span v-else-if="scope.row.plateColor === 5">绿色</span>
-            <span v-else-if="scope.row.plateColor === 91">农黄色</span>
-            <span v-else-if="scope.row.plateColor === 92">农绿色</span>
-            <span v-else-if="scope.row.plateColor === 93">黄绿色</span>
-            <span v-else-if="scope.row.plateColor === 94">渐变绿</span>
-            <span v-else>未上牌</span>
+            <span v-if="scope.row.plateColor === 1">blue</span>
+            <span v-else-if="scope.row.plateColor === 2">yellow</span>
+            <span v-else-if="scope.row.plateColor === 3">black</span>
+            <span v-else-if="scope.row.plateColor === 4">white</span>
+            <span v-else-if="scope.row.plateColor === 5">green</span>
+            <span v-else-if="scope.row.plateColor === 91">Farm yellow</span>
+            <span v-else-if="scope.row.plateColor === 92">Farm green</span>
+            <span v-else-if="scope.row.plateColor === 93">Yellow-green</span>
+            <span v-else-if="scope.row.plateColor === 94">gradient green</span>
+            <span v-else>Not listed</span>
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="plateNo" label="车牌" min-width="120" />
-      <el-table-column prop="registerTime" label="注册时间" min-width="160" />
-      <el-table-column label="状态" min-width="120">
+      <el-table-column prop="plateNo" label="license plate" min-width="120" />
+      <el-table-column prop="registerTime" label="Registration time" min-width="160" />
+      <el-table-column label="Status" min-width="120">
         <template slot-scope="scope">
           <div slot="reference" class="name-wrapper">
-            <el-tag v-if="scope.row.status" size="medium">在线</el-tag>
-            <el-tag v-if="!scope.row.status" size="medium" type="info">离线</el-tag>
+            <el-tag v-if="scope.row.status" size="medium">online</el-tag>
+            <el-tag v-if="!scope.row.status" size="medium" type="info">Offline</el-tag>
           </div>
         </template>
       </el-table-column>
-      <el-table-column label="操作" min-width="340" fixed="right">
+      <el-table-column label="Operation" min-width="340" fixed="right">
         <template slot-scope="scope">
           <el-divider direction="vertical" />
           <el-button
@@ -92,10 +92,10 @@
             size="medium"
             icon="el-icon-video-camera"
             @click="showChannelList(scope.row)"
-          >通道
+          >channel
           </el-button>
           <el-divider direction="vertical" />
-          <el-button size="medium" icon="el-icon-edit" type="text" @click="edit(scope.row)">编辑</el-button>
+          <el-button size="medium" icon="el-icon-edit" type="text" @click="edit(scope.row)">Edit</el-button>
           <el-divider direction="vertical" />
           <el-button
             size="medium"
@@ -103,44 +103,44 @@
             type="text"
             style="color: #f56c6c"
             @click="deleteDevice(scope.row)"
-          >删除
+          >Delete
           </el-button>
           <el-divider direction="vertical" />
           <el-dropdown @command="(command)=>{moreClick(command, scope.row)}">
             <el-button size="medium" type="text">
-              更多功能<i class="el-icon-arrow-down el-icon--right" />
+              More features<i class="el-icon-arrow-down el-icon--right" />
             </el-button>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item command="params" :disabled="!scope.row.status">
-                终端参数</el-dropdown-item>
+                Terminal parameters</el-dropdown-item>
               <el-dropdown-item command="attribute" v-bind:disabled="!scope.row.status">
-                终端属性</el-dropdown-item>
+                terminal properties</el-dropdown-item>
               <el-dropdown-item command="mediaAttribute" v-bind:disabled="!scope.row.status">
-                音视频属性</el-dropdown-item>
+                Audio and video properties</el-dropdown-item>
               <el-dropdown-item command="linkDetection" v-bind:disabled="!scope.row.status" >
-                链路检测</el-dropdown-item>
+                Link detection</el-dropdown-item>
               <el-dropdown-item command="position" v-bind:disabled="!scope.row.status" >
-                位置信息</el-dropdown-item>
+                location information</el-dropdown-item>
               <el-dropdown-item command="textMsg" v-bind:disabled="!scope.row.status" >
-                文本下发</el-dropdown-item>
+                Text delivery</el-dropdown-item>
               <el-dropdown-item command="telephoneCallback" v-bind:disabled="!scope.row.status" >
-                电话回拨</el-dropdown-item>
+                Call back</el-dropdown-item>
               <el-dropdown-item command="setPhoneBook" v-bind:disabled="!scope.row.status" >
-                设置电话本</el-dropdown-item>
+                Set up phone book</el-dropdown-item>
               <el-dropdown-item command="driverInfo" v-bind:disabled="!scope.row.status" >
-                驾驶员信息</el-dropdown-item>
+                driver information</el-dropdown-item>
               <el-dropdown-item command="reset" v-bind:disabled="!scope.row.status" >
-                终端复位</el-dropdown-item>
+                terminal reset</el-dropdown-item>
               <el-dropdown-item command="factoryReset" v-bind:disabled="!scope.row.status" >
-                恢复出厂</el-dropdown-item>
+                Factory reset</el-dropdown-item>
               <el-dropdown-item command="connection" v-bind:disabled="!scope.row.status" >
-                连接指定服务器</el-dropdown-item>
+                Connect to the specified server</el-dropdown-item>
               <el-dropdown-item command="door" v-bind:disabled="!scope.row.status" >
-                车门控制</el-dropdown-item>
+                door control</el-dropdown-item>
               <el-dropdown-item command="shooting" v-bind:disabled="!scope.row.status" >
-                立即拍摄</el-dropdown-item>
+                Shoot now</el-dropdown-item>
               <el-dropdown-item command="queryMediaList" v-bind:disabled="!scope.row.status" >
-                多媒体检索</el-dropdown-item>
+                multimedia search</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </template>
@@ -195,8 +195,8 @@ export default {
   },
   data() {
     return {
-      deviceList: [], // 设备列表
-      updateLooper: 0, // 数据刷新轮训标志
+      deviceList: [], // Device list
+      updateLooper: 0, // Data refresh rotation training flag
       winHeight: window.innerHeight - 200,
       searchStr: '',
       online: '',
@@ -245,10 +245,10 @@ export default {
         })
     },
     deleteDevice: function(row) {
-      this.$confirm('确定删除此设备？', '提示', {
+      this.$confirm('Confirm to delete this device？', 'Tips', {
         dangerouslyUseHTMLString: true,
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+        confirmButtonText: 'OK',
+        cancelButtonText: 'Cancel',
         center: true,
         type: 'warning'
       }).then(() => {
@@ -272,7 +272,7 @@ export default {
         this.$refs.deviceEdit.close()
         this.$message({
           showClose: true,
-          message: '设备修改成功，通道字符集将在下次更新生效',
+          message: 'The device modification is successful and the channel character set will take effect in the next update.',
           type: 'success'
         })
         setTimeout(this.getList, 200)
@@ -290,7 +290,7 @@ export default {
         this.$refs.deviceEdit.close()
         this.$message({
           showClose: true,
-          message: '添加成功',
+          message: 'Added successfully',
           type: 'success'
         })
         setTimeout(this.getList, 200)
@@ -328,7 +328,7 @@ export default {
       } else if (command === 'shooting') {
          this.shootingNow(itemData)
       } else {
-        this.$message.info('尚不支持')
+        this.$message.info('Not supported yet')
       }
     },
     showInfo: function() {
@@ -370,17 +370,17 @@ export default {
           })
     },
     factoryReset: function(itemData) {
-      this.$confirm('确定恢复出厂设置', '提示', {
+      this.$confirm('Confirm to restore factory settings', 'Tips', {
         dangerouslyUseHTMLString: true,
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+        confirmButtonText: 'OK',
+        cancelButtonText: 'Cancel',
         type: 'warning'
       }).then(() => {
         this.$store.dispatch('jtDevice/factoryReset', itemData.phoneNumber)
             .then(data => {
               this.$message.success({
                 showClose: true,
-                message: '消息已经下发'
+                message: 'The message has been sent'
               })
             })
       }).catch(() => {
@@ -388,17 +388,17 @@ export default {
       })
     },
     reset: function(itemData) {
-      this.$confirm('确定开始终端复位', '提示', {
+      this.$confirm('OK to start terminal reset', 'Tips', {
         dangerouslyUseHTMLString: true,
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+        confirmButtonText: 'OK',
+        cancelButtonText: 'Cancel',
         type: 'warning'
       }).then(() => {
         this.$store.dispatch('jtDevice/reset', itemData.phoneNumber)
             .then(data => {
               this.$message.success({
                 showClose: true,
-                message: '消息已经下发'
+                message: 'The message has been sent'
               })
             })
       }).catch(() => {
@@ -432,22 +432,22 @@ export default {
           if (data === 0) {
             this.$message.success({
               showClose: true,
-              message: '成功'
+              message: 'success'
             })
           }else if (data === 1) {
             this.$message.error({
               showClose: true,
-              message: '失败'
+              message: 'failed'
             })
           }else if (data === 2) {
             this.$message.error({
               showClose: true,
-              message: '消息有误'
+              message: 'The message is wrong'
             })
           }else if (data === 3) {
             this.$message.error({
               showClose: true,
-              message: '不支持此消息'
+              message: 'This message is not supported'
             })
           }
         })

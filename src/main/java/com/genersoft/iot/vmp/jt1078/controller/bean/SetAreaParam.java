@@ -9,29 +9,29 @@ import java.util.List;
 
 @Setter
 @Getter
-@Schema(description = "设置区域参数")
+@Schema(description = "Set zone parameters")
 public class SetAreaParam {
 
-    @Schema(description = "终端手机号")
+    @Schema(description = "Terminal mobile phone number")
     private String phoneNumber;
 
-    @Schema(description = "圆形区域项")
+    @Schema(description = "circular area item")
     private List<JTCircleArea> circleAreaList;
 
-    @Schema(description = "矩形区域项")
+    @Schema(description = "Rectangular area item")
     private List<JTRectangleArea> rectangleAreas;
 
-    @Schema(description = "多边形区域")
+    @Schema(description = "polygon area")
     private JTPolygonArea polygonArea;
 
-    @Schema(description = "路线")
+    @Schema(description = "route")
     private JTRoute route;
 
 
     @Override
     public String toString() {
         return "SetAreaParam{" +
-                "设备手机号='" + phoneNumber + '\'' +
+                "Device mobile phone number='" + phoneNumber + '\'' +
                 ", circleAreaList=" + circleAreaList +
                 ", rectangleAreas=" + rectangleAreas +
                 ", polygonArea=" + polygonArea +

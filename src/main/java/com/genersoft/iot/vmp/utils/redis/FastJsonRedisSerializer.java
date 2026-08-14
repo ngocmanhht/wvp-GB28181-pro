@@ -9,9 +9,9 @@ import org.springframework.data.redis.serializer.SerializationException;
 import java.nio.charset.Charset;
 
 /**    
- * @description:使用fastjson实现redis的序列化   
+ * @description:Using fastjson to implement redis serialization   
  * @author: swwheihei
- * @date:   2020年5月6日 下午8:40:11     
+ * @date:   2020May 6, 2018, afternoon8:40:11     
  */
 public class FastJsonRedisSerializer<T> implements RedisSerializer<T> {
 

@@ -20,25 +20,25 @@ public class ZLMServerFactory {
 
 
     /**
-     * 开启rtpServer
-     * @param mediaServerItem zlm服务实例
-     * @param streamId 流Id
+     * turn onrtpServer
+     * @param mediaServerItem zlmService instance
+     * @param streamId flowId
      * @param ssrc ssrc
-     * @param port 端口， 0/null为使用随机
-     * @param reUsePort 是否重用端口
-     * @param tcpMode 0/null udp 模式，1 tcp 被动模式, 2 tcp 主动模式。
+     * @param port port， 0/nullto use random
+     * @param reUsePort Whether to reuse ports
+     * @param tcpMode 0/null udp Mode, 1 tcp passive mode, 2 tcp active mode。
      * @return
      */
     public int createRTPServer(MediaServer mediaServerItem, String app, String streamId, long ssrc, Integer port, Boolean onlyAuto, Boolean disableAudio, Boolean reUsePort, Integer tcpMode) {
         int result = -1;
-        // 查询此rtp server 是否已经存在
+        // Check whether this rtp server already exists
         ZLMResult<?> rtpInfoResult = zlmresTfulUtils.getRtpInfo(mediaServerItem, streamId);
         if(rtpInfoResult.getCode() == 0){
             if (rtpInfoResult.getExist() != null && rtpInfoResult.getExist()) {
                 result = rtpInfoResult.getLocal_port();
                 if (result == 0) {
-                    // 此时说明rtpServer已经创建但是流还没有推上来
-                    // 此时重新打开rtpServer
+                    // At this point, it means that rtpServer has been created but the stream has not been pushed up yet.
+                    // Re-open at this timertpServer
                     Map<String, Object> param = new HashMap<>();
                     param.put("stream_id", streamId);
                     ZLMResult<?> zlmResult = zlmresTfulUtils.closeRtpServer(mediaServerItem, param);
@@ -46,7 +46,7 @@ public class ZLMServerFactory {
                         if (zlmResult.getCode() == 0) {
                             return createRTPServer(mediaServerItem, app, streamId, ssrc, port, onlyAuto, disableAudio, reUsePort, tcpMode);
                         }else {
-                            log.warn("[开启rtpServer], 重启RtpServer错误");
+                            log.warn("[turn onrtpServer], Restart RtpServer error");
                         }
                     }
                 }
@@ -71,7 +71,7 @@ public class ZLMServerFactory {
         if (reUsePort != null) {
             param.put("re_use_port", reUsePort?"1":"0");
         }
-        // 推流端口设置0则使用随机端口
+        // If the push port is set to 0, a random port will be used.
         if (port == null) {
             param.put("port", 0);
         }else {
@@ -89,11 +89,11 @@ public class ZLMServerFactory {
             if (zlmResult.getCode() == 0) {
                 result= zlmResult.getPort();
             }else {
-                log.error("创建RTP Server 失败 {}: ", zlmResult.getMsg());
+                log.error("Failed to create RTP Server {}: ", zlmResult.getMsg());
             }
         }else {
-            //  检查ZLM状态
-            log.error("创建RTP Server 失败 {}: 请检查ZLM服务", param.get("port"));
+            //  Check ZLM status
+            log.error("Failed to create RTP Server {}: Please check ZLM service", param.get("port"));
         }
         return result;
     }
@@ -109,11 +109,11 @@ public class ZLMServerFactory {
                 if (zlmResult.getCode() == 0) {
                     result = zlmResult.getHit() >= 1;
                 }else {
-                    log.error("关闭RTP Server 失败: " + zlmResult.getMsg());
+                    log.error("Failed to close RTP Server: " + zlmResult.getMsg());
                 }
             }else {
-                //  检查ZLM状态
-                log.error("关闭RTP Server 失败: 请检查ZLM服务");
+                //  Check ZLM status
+                log.error("Failed to close RTP Server: Please check the ZLM service");
             }
         }
         return result;
@@ -136,7 +136,7 @@ public class ZLMServerFactory {
                 }
                 return;
             }else {
-                log.error("关闭RTP Server 失败: " + zlmResult.getMsg());
+                log.error("Failed to close RTP Server: " + zlmResult.getMsg());
             }
             if (callback != null) {
                 callback.run(false);
@@ -146,14 +146,14 @@ public class ZLMServerFactory {
 
 
     /**
-     * 调用zlm RESTFUL API —— startSendRtp
+     * callzlm RESTFUL API —— startSendRtp
      */
     public ZLMResult<?> startSendRtpStream(MediaServer mediaServerItem, Map<String, Object>param) {
         return zlmresTfulUtils.startSendRtp(mediaServerItem, param);
     }
 
     /**
-     * 调用zlm RESTFUL API —— startSendRtpPassive
+     * callzlm RESTFUL API —— startSendRtpPassive
      */
     public ZLMResult<?> startSendRtpPassive(MediaServer mediaServerItem, Map<String, Object>param) {
         return zlmresTfulUtils.startSendRtpPassive(mediaServerItem, param);
@@ -168,7 +168,7 @@ public class ZLMServerFactory {
     }
 
     /**
-     * 查询待转推的流是否就绪
+     * Query whether the stream to be retweeted is ready
      */
     public Boolean isStreamReady(MediaServer mediaServerItem, String app, String streamId) {
         ZLMResult<?> zlmResult = zlmresTfulUtils.getMediaList(mediaServerItem, app, streamId);
@@ -183,7 +183,7 @@ public class ZLMServerFactory {
 
     public ZLMResult<?> startSendRtp(MediaServer mediaInfo, SendRtpInfo sendRtpItem) {
         String is_Udp = sendRtpItem.isTcp() ? "0" : "1";
-        log.info("rtp/{}开始推流, 目标={}:{}，SSRC={}", sendRtpItem.getStream(), sendRtpItem.getIp(), sendRtpItem.getPort(), sendRtpItem.getSsrc());
+        log.info("rtp/{}Start pushing, target={}:{}，SSRC={}", sendRtpItem.getStream(), sendRtpItem.getIp(), sendRtpItem.getPort(), sendRtpItem.getSsrc());
         Map<String, Object> param = new HashMap<>(12);
         param.put("vhost","__defaultVhost__");
         param.put("app",sendRtpItem.getApp());
@@ -194,14 +194,14 @@ public class ZLMServerFactory {
         param.put("use_ps", sendRtpItem.isUsePs() ? "1" : "0");
         param.put("only_audio", sendRtpItem.isOnlyAudio() ? "1" : "0");
         if (!sendRtpItem.isTcp()) {
-            // udp模式下开启rtcp保活
+            // udpEnable rtcp keepalive in mode
             param.put("udp_rtcp_timeout", sendRtpItem.isRtcp()? "1":"0");
         }
 
         if (mediaInfo == null) {
             return null;
         }
-        // 如果是非严格模式，需要关闭端口占用
+        // If it is non-strict mode, you need to turn off port occupation.
         ZLMResult<?> zlmResult = null;
         if (sendRtpItem.getLocalPort() != 0) {
             if (sendRtpItem.isTcpActive()) {
@@ -230,9 +230,9 @@ public class ZLMServerFactory {
         ZLMResult<?> zlmResult = zlmresTfulUtils.updateRtpServerSSRC(mediaServerItem, app, streamId, ssrc);
         if (zlmResult.getCode() == 0) {
             result= true;
-            log.info("[更新RTPServer] 成功");
+            log.info("[updateRTPServer] success");
         } else {
-            log.error("[更新RTPServer] 失败: {}, streamId：{}，ssrc：{}", zlmResult.getMsg(),
+            log.error("[updateRTPServer] failed: {}, streamId：{}，ssrc：{}", zlmResult.getMsg(),
                     streamId, ssrc);
         }
         return result;

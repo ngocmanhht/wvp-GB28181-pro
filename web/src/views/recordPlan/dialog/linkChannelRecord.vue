@@ -1,59 +1,59 @@
 <template>
   <div id="linkChannelRecord" style="width: 100%;  background-color: #FFFFFF;">
-    <el-dialog v-el-drag-dialog v-if="showDialog" v-loading="dialogLoading" title="通道关联" top="2rem" width="80%" :close-on-click-modal="false" :visible.sync="showDialog" :destroy-on-close="true" @close="close()">
+    <el-dialog v-el-drag-dialog v-if="showDialog" v-loading="dialogLoading" title="Channel association" top="2rem" width="80%" :close-on-click-modal="false" :visible.sync="showDialog" :destroy-on-close="true" @close="close()">
       <div style="display: grid; grid-template-columns: 100px minmax(0, 1fr);">
         <el-tabs v-model="hasLink" tab-position="left" style="" @tab-click="search">
-          <el-tab-pane label="未关联" name="false" />
-          <el-tab-pane label="已关联" name="true" />
+          <el-tab-pane label="Not associated" name="false" />
+          <el-tab-pane label="Already linked" name="true" />
         </el-tabs>
         <div>
           <el-form :inline="true" size="mini">
-            <el-form-item label="搜索">
+            <el-form-item label="Search">
               <el-input
                 v-model="searchStr"
                 style="margin-right: 1rem; width: auto;"
-                placeholder="关键字"
+                placeholder="Keywords"
                 prefix-icon="el-icon-search"
                 clearable
                 @input="search"
               />
             </el-form-item>
-            <el-form-item label="在线状态">
+            <el-form-item label="online status">
               <el-select
                 v-model="online"
                 size="mini"
                 style="width: 8rem; margin-right: 1rem;"
-                placeholder="请选择"
+                placeholder="Please select"
                 default-first-option
                 @change="search"
               >
-                <el-option label="全部" value="" />
-                <el-option label="在线" value="true" />
-                <el-option label="离线" value="false" />
+                <el-option label="All" value="" />
+                <el-option label="online" value="true" />
+                <el-option label="Offline" value="false" />
               </el-select>
             </el-form-item>
-            <el-form-item label="类型">
+            <el-form-item label="Type">
               <el-select
                 v-model="channelType"
                 style="width: 8rem; margin-right: 1rem;"
-                placeholder="请选择"
+                placeholder="Please select"
                 default-first-option
                 @change="search"
               >
-                <el-option label="全部" value="" />
+                <el-option label="All" value="" />
                 <el-option v-for="item in Object.values($channelTypeList)" :key="item.id" :label="item.name" :value="item.id" />
               </el-select>
             </el-form-item>
             <el-form-item>
               <div v-if="hasLink !=='true'">
-                <el-button size="mini" type="primary" @click="add()">添加</el-button>
-                <el-button v-if="hasLink !=='true'" size="mini" @click="addByDevice()">按设备添加</el-button>
-                <el-button v-if="hasLink !=='true'" size="mini" @click="addAll()">添加所有通道</el-button>
+                <el-button size="mini" type="primary" @click="add()">add</el-button>
+                <el-button v-if="hasLink !=='true'" size="mini" @click="addByDevice()">Add by device</el-button>
+                <el-button v-if="hasLink !=='true'" size="mini" @click="addAll()">Add all channels</el-button>
               </div>
               <div v-else>
-                <el-button v-if="hasLink ==='true'" size="mini" type="danger" @click="remove()">移除</el-button>
-                <el-button v-if="hasLink ==='true'" size="mini" @click="removeByDevice()">按设备移除</el-button>
-                <el-button v-if="hasLink ==='true'" size="mini" @click="removeAll()">移除所有通道</el-button>
+                <el-button v-if="hasLink ==='true'" size="mini" type="danger" @click="remove()">Remove</el-button>
+                <el-button v-if="hasLink ==='true'" size="mini" @click="removeByDevice()">Remove by device</el-button>
+                <el-button v-if="hasLink ==='true'" size="mini" @click="removeAll()">Remove all channels</el-button>
               </div>
             </el-form-item>
             <el-form-item style="float: right;">
@@ -69,21 +69,21 @@
             @selection-change="handleSelectionChange"
           >
             <el-table-column type="selection" width="55" />
-            <el-table-column prop="gbName" label="名称" min-width="180" />
-            <el-table-column prop="gbDeviceId" label="编号" min-width="180" />
-            <el-table-column prop="gbManufacturer" label="厂家" min-width="100" />
-            <el-table-column label="类型" min-width="100">
+            <el-table-column prop="gbName" label="Name" min-width="180" />
+            <el-table-column prop="gbDeviceId" label="No." min-width="180" />
+            <el-table-column prop="gbManufacturer" label="Manufacturer" min-width="100" />
+            <el-table-column label="Type" min-width="100">
               <template v-slot:default="scope">
                 <div slot="reference" class="name-wrapper">
                   <el-tag size="medium" effect="plain" type="success" :style="$channelTypeList[scope.row.dataType].style">{{ $channelTypeList[scope.row.dataType].name }}</el-tag>
                 </div>
               </template>
             </el-table-column>
-            <el-table-column label="状态" min-width="100">
+            <el-table-column label="Status" min-width="100">
               <template v-slot:default="scope">
                 <div slot="reference" class="name-wrapper">
-                  <el-tag v-if="scope.row.gbStatus === 'ON'" size="medium">在线</el-tag>
-                  <el-tag v-if="scope.row.gbStatus !== 'ON'" size="medium" type="info">离线</el-tag>
+                  <el-tag v-if="scope.row.gbStatus === 'ON'" size="medium">online</el-tag>
+                  <el-tag v-if="scope.row.gbStatus !== 'ON'" size="medium" type="info">Offline</el-tag>
                 </div>
               </template>
             </el-table-column>
@@ -170,7 +170,7 @@ export default {
         .then(data => {
           this.total = data.total
           this.channelList = data.list
-          // 防止出现表格错位
+          // Prevent form misalignment
           this.$nextTick(() => {
             this.$refs.channelListTable.doLayout()
           })
@@ -189,7 +189,7 @@ export default {
         .then(data => {
           this.$message.success({
             showClose: true,
-            message: '保存成功'
+            message: 'Saved successfully'
           })
           this.getChannelList()
         })
@@ -212,7 +212,7 @@ export default {
       if (channels.length === 0) {
         this.$message.info({
           showClose: true,
-          message: '请选择通道'
+          message: 'Please select channel'
         })
         return
       }
@@ -222,10 +222,10 @@ export default {
       })
     },
     addAll: function(row) {
-      this.$confirm('添加所有通道将包括已经添加到其他计划的通道，确定添加所有通道？', '提示', {
+      this.$confirm('Adding all channels will include channels that have been added to other plans, be sure to add all channels？', 'Tips', {
         dangerouslyUseHTMLString: true,
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+        confirmButtonText: 'OK',
+        cancelButtonText: 'Cancel',
         type: 'warning'
       }).then(() => {
         this.linkPlan({
@@ -268,7 +268,7 @@ export default {
       if (channels.length === 0) {
         this.$message.info({
           showClose: true,
-          message: '请选择通道'
+          message: 'Please select channel'
         })
         return
       }
@@ -278,10 +278,10 @@ export default {
       })
     },
     removeAll: function(row) {
-      this.$confirm('确定移除所有通道？', '提示', {
+      this.$confirm('Confirm to remove all channels？', 'Tips', {
         dangerouslyUseHTMLString: true,
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+        confirmButtonText: 'OK',
+        cancelButtonText: 'Cancel',
         type: 'warning'
       }).then(() => {
         this.linkPlan({

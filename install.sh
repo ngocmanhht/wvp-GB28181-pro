@@ -3,31 +3,31 @@
 WORD_DIR=$(cd $(dirname $0); pwd)
 SERVICE_NAME="wvp"
 
-# 检查是否为 root 用户
+# Check if you are the root user
 if [ "$(id -u)" -ne 0 ]; then
-  echo "提示: 建议使用 root 用户执行此脚本，否则可能权限不足！"
-  read -p "继续？(y/n) " -n 1 -r
+  echo "Tip: It is recommended to use the root user to execute this script, otherwise the permissions may be insufficient.！"
+  read -p "continue？(y/n) " -n 1 -r
   if [[ ! $REPLY =~ ^[Yy]$ ]]; then
     exit 1
   fi
   echo
 fi
 
-# 当前目录直接搜索（不含子目录） bugfix： 这里使用了需要bash才可以支持的内容
+# Direct search in the current directory (excluding subdirectories) bugfix: This uses content that requires bash to support
 jar_files=(*.jar)
 
 if [ ${#jar_files[@]} -eq 0 ]; then
-  echo "当前目录无 JAR 文件！"
+  echo "There is no JAR file in the current directory！"
   exit 1
 fi
 
-# 遍历结果
+# Traverse results
 for jar in "${jar_files[@]}"; do
-  echo "找到 JAR 文件: $jar"
+  echo "Find the JAR file: $jar"
 done
 
-# 写文件
-# 生成 Systemd 服务文件内容
+# write file
+# Generate Systemd service file contents
 SERVICE_FILE="/etc/systemd/system/${SERVICE_NAME}.service"
 cat << EOF | sudo tee "$SERVICE_FILE" > /dev/null
 [Unit]
@@ -47,11 +47,11 @@ Environment=SPRING_PROFILES_ACTIVE=prod
 WantedBy=multi-user.target
 EOF
 
-# 重载 Systemd 并启动服务
+# Reload Systemd and start the service
 sudo systemctl daemon-reload
 sudo systemctl enable "$SERVICE_NAME"
 sudo systemctl start "$SERVICE_NAME"
 
-# 验证服务状态
-echo "服务已安装！执行以下命令查看状态:"
+# Verify service status
+echo "The service is installed! Execute the following command to check the status:"
 echo "sudo systemctl status $SERVICE_NAME"

@@ -13,7 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEvent;
 
 /**
- * 位置信息汇报
+ * Location information reporting
  *
  */
 @Slf4j
@@ -26,13 +26,13 @@ public class J0200 extends Re {
     protected Rs decode0(ByteBuf buf, Header header, Session session) {
         positionInfo = JTPositionBaseInfo.decode(buf);
         if (log.isDebugEnabled()) {
-            log.debug("[JT-位置汇报]: phoneNumber={}  {}", header.getPhoneNumber(), positionInfo.toSimpleString());
+            log.debug("[JT-location report]: phoneNumber={}  {}", header.getPhoneNumber(), positionInfo.toSimpleString());
         }
-        // 读取附加信息
+        // Read additional information
 //        JTPositionAdditionalInfo positionAdditionalInfo = new JTPositionAdditionalInfo();
 //        Map<Integer, byte[]> additionalMsg = new HashMap<>();
 //        getAdditionalMsg(buf, positionAdditionalInfo);
-//        log.info("[JT-位置汇报]: phoneNumber={}  {}", header.getPhoneNumber(), positionInfo.toSimpleString());
+//        log.info("[JT-location report]: phoneNumber={}  {}", header.getPhoneNumber(), positionInfo.toSimpleString());
         return null;
     }
 
@@ -44,44 +44,44 @@ public class J0200 extends Re {
             ByteBuf byteBuf = buf.readBytes(length);
             switch (msgId) {
                 case 1:
-                    // 里程
+                    // mileage
                     long mileage = byteBuf.readUnsignedInt();
-                    log.info("[JT-位置汇报]: 里程： {} km", (double)mileage/10);
+                    log.info("[JT-location report]: mileage： {} km", (double)mileage/10);
                     break;
                 case 2:
-                    // 油量
+                    // Oil volume
                     int oil = byteBuf.readUnsignedShort();
-                    log.info("[JT-位置汇报]: 油量： {} L", (double)oil/10);
+                    log.info("[JT-location report]: Oil volume： {} L", (double)oil/10);
                     break;
                 case 3:
-                    // 速度
+                    // speed
                     int speed = byteBuf.readUnsignedShort();
-                    log.info("[JT-位置汇报]: 速度： {} km/h", (double)speed/10);
+                    log.info("[JT-location report]: speed： {} km/h", (double)speed/10);
                     break;
                 case 4:
-                    // 需要人工确认报警事件的 ID
+                    // Alarm events need to be manually confirmed ID
                     int alarmId = byteBuf.readUnsignedShort();
-                    log.info("[JT-位置汇报]: 需要人工确认报警事件的 ID： {}", alarmId);
+                    log.info("[JT-location report]: Alarm events need to be manually confirmed ID： {}", alarmId);
                     break;
                 case 5:
                     byte[] tirePressureBytes = new byte[30];
-                    // 胎压
+                    // tire pressure
                     byteBuf.readBytes(tirePressureBytes);
-                    log.info("[JT-位置汇报]: 胎压 {}", tirePressureBytes);
+                    log.info("[JT-location report]: tire pressure {}", tirePressureBytes);
                     break;
                 case 6:
-                    // 车厢温度
+                    // Cabin temperature
                     short carriageTemperature = byteBuf.readShort();
-                    log.info("[JT-位置汇报]: 车厢温度 {}摄氏度", carriageTemperature);
+                    log.info("[JT-location report]: Cabin temperature {}degrees celsius", carriageTemperature);
                     break;
                 case 11:
-                    // 超速报警
+                    // speed alarm
                     short positionType = byteBuf.readUnsignedByte();
                     long positionId = byteBuf.readUnsignedInt();
-                    log.info("[JT-位置汇报]: 超速报警, 位置类型: {}, 区域或路段 ID: {}", positionType, positionId);
+                    log.info("[JT-location report]: Speed alarm, location type: {}, area or segment ID: {}", positionType, positionId);
                     break;
                 default:
-                    log.info("[JT-位置汇报]: 附加消息ID： {}， 消息长度： {}", msgId, length);
+                    log.info("[JT-location report]: additional messageID： {}， Message length： {}", msgId, length);
                     break;
 
             }

@@ -7,7 +7,7 @@ import com.genersoft.iot.vmp.media.bean.MediaServer;
 import com.genersoft.iot.vmp.media.zlm.dto.hook.OnRecordMp4HookParam;
 
 /**
- * 录像文件生成事件
+ * Video file generation event
  */
 public class MediaRecordMp4Event extends MediaEvent {
     public MediaRecordMp4Event(Object source) {

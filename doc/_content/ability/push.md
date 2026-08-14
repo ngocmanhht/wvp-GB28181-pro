@@ -1,56 +1,56 @@
-<!-- 推流列表 -->
+<!-- Push list -->
 
-# 推流列表
+# Push list
 
-## 功能说明
+## Function description
 
-WVP支持三种图像输入方式，直播，[拉流代理](_content/ability/proxy.md)，[国标](_content/ability/device.md)，直播设备接入流程如下
+WVP supports three image input methods, live broadcast, [Streaming agent](_content/ability/proxy.md) , [National standard](_content/ability/device.md) . The live broadcast device access process is as follows
 
 ```plantuml
 @startuml
-"直播设备"  -> "ZLMediaKit": 1. 发起推流
-"ZLMediaKit"  -> "WVP-PRO": 2. 收到hook通知得到流信息
-"上级国标平台"  -> "WVP-PRO": 3. 点播这路视频
-"WVP-PRO" -> "ZLMediaKit": 4. 通知推流到上级国标平台
+"Live broadcast equipment" -> "ZLMediaKit": 1. Initiate push streaming
+"ZLMediaKit"  -> "WVP-PRO": 2. Get the flow information after receiving the hook notification
+"Superior national standard platform" -> "WVP-PRO": 3. Watch this video on demand
+"WVP-PRO" -> "ZLMediaKit": 4. Notifications are pushed to the superior national standard platform
 @enduml
 ```
 
-1. 默认情况下WVP收到推流信息后，列表中出现这条推流信息，如果你需要共享推流信息到其他国标平台，那么你需要编辑/国标通道配置，配置国标编码。
-2. WVP也支持推流前导入大量通道直接推送给上级，点击“下载模板”按钮，根据示例修改模板后，点击“通道导入”按钮导入通道数据.
+1. By default, after WVP receives push information, this push information appears in the list. If you need to share push information to other national standard platforms, then you need to edit/national standard channel configuration and configure national standard encoding.
+2. WVP also supports importing a large number of channels before pushing and pushing directly to superiors. Click the "Download Template" button. After modifying the template according to the example, click the "Channel Import" button to import the channel data.
 
-## 生成推流地址
-可以在推流列表里点击‘生成推流地址’按钮，得到新地址后直接复制到推流设备。
+## Generate push address
+You can click the 'Generate push address' button in the push list and copy the new address directly to the push device.
 
-## 推拉流鉴权规则
+## Push and pull flow authentication rules
 
-为了保护服务器的WVP默认开启推流鉴权（目前不支持关闭此功能）
+In order to protect the server, WVP turns on push authentication by default (it is currently not supported to turn off this function)
 
-### 推流规则
+### Push rules
 
-推流时需要携带推流鉴权的签名sign，sign=md5(pushKey),pushKey来自用户表，每个用户会有一个不同的pushKey.
-例如app=test，stream=live，pushKey=1000，ip=192.168.1.4, port=10554 那么推流地址为：
+When pushing, you need to carry the signature sign for push authentication, sign=md5(pushKey), the pushKey comes from the user table, and each user will have a different pushKey.
+For example, app=test, stream=live, pushKey=1000, ip=192.168.1.4, port=10554, then the push address is:
 
 ```
 rtsp://192.168.1.4:10554/test/live?sign=a9b7ba70783b617e9998dc4dd82eb3c5
 ```
 
-支持推流时自定义播放鉴权Id，参数名为callId，此时sign=md5(callId_pushKey)
-例如app=test，stream=live，pushKey=1000，callId=12345678, ip=192.168.1.4, port=10554 那么推流地址为：
+Supports customizing the playback authentication Id when pushing streams. The parameter name is callId. In this case, sign=md5(callId_pushKey)
+For example, app=test, stream=live, pushKey=1000, callId=12345678, ip=192.168.1.4, port=10554, then the push address is:
 
 ```
 rtsp://192.168.1.4:10554/test/live?callId=12345678&sign=c8e6e01dde2d60c66dcea8d2498ffef1
 ```
 
-### 播放规则
+### Play rules
 
-默认情况播放不需要鉴权，但是如果推流时携带了callId，那么播放时必须携带callId
-例如app=test，stream=live，无callId, ip=192.168.1.4, port=10554 那么播放地址为：
+By default, authentication is not required for playback, but if the callId is carried when pushing the stream, the callId must be carried when playing.
+For example, app=test, stream=live, no callId, ip=192.168.1.4, port=10554, then the playback address is:
 
 ```
 rtsp://192.168.1.4:10554/test/live
 ```
 
-例如app=test，stream=live，callId=12345678, ip=192.168.1.4, port=10554 那么播放地址为：
+For example, app=test, stream=live, callId=12345678, ip=192.168.1.4, port=10554 then the playback address is:
 
 ```
 rtsp://192.168.1.4:10554/test/live?callId=12345678

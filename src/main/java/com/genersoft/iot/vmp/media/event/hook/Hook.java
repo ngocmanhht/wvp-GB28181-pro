@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * zlm hook事件的参数
+ * zlm hookevent parameters
  * @author lin
  */
 @Getter
@@ -30,7 +30,7 @@ public class Hook {
     }
 
     public static Hook getInstance(HookType hookType, String app, String stream, String mediaServer) {
-        // TODO 后续修改所有方法
+        // TODO All subsequent modification methods
         return Hook.getInstance(hookType, app, stream);
     }
 

@@ -40,11 +40,11 @@ public class AlarmResponseMessageHandler extends SIPRequestProcessorParent imple
 
     @Override
     public void handForDevice(RequestEvent evt, Device device, Element rootElement) {
-        // 回复200 OK
+        // Reply200 OK
         try {
             responseAckAsync((SIPRequest) evt.getRequest(), Response.OK);
         } catch (SipException | InvalidArgumentException | ParseException e) {
-            log.error("[命令发送失败] 目录查询回复: {}", e.getMessage());
+            log.error("[Command sending failed] Directory Query Reply: {}", e.getMessage());
         }
         JSONObject json = new JSONObject();
         XmlUtil.node2Json(rootElement, json);

@@ -26,9 +26,9 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 /**
- * @description: 平台命令request创造器 TODO 冗余代码太多待优化
+ * @description: Platform command request creator TODO Too much redundant code needs to be optimized
  * @author: panll
- * @date: 2020年5月6日 上午9:29:02
+ * @date: 2020May 6, 2019, morning9:29:02
  */
 @Component
 public class SIPRequestHeaderPlarformProvider {
@@ -48,7 +48,7 @@ public class SIPRequestHeaderPlarformProvider {
 	public Request createRegisterRequest(@NotNull Platform parentPlatform, long CSeq, String fromTag, String toTag, CallIdHeader callIdHeader, int expires) throws ParseException, InvalidArgumentException, PeerUnavailableException {
 		Request request = null;
 		String sipAddress = parentPlatform.getDeviceIp() + ":" + parentPlatform.getDevicePort();
-		//请求行
+		//request line
 		SipURI requestLine = SipFactory.getInstance().createAddressFactory().createSipURI(parentPlatform.getServerGBId(),
 				parentPlatform.getServerIp() + ":" + parentPlatform.getServerPort());
 		//via
@@ -110,16 +110,16 @@ public class SIPRequestHeaderPlarformProvider {
 		String nonce = www.getNonce();
 		String scheme = www.getScheme();
 
-		// 参考 https://blog.csdn.net/y673533511/article/details/88388138
-		// qop 保护质量 包含auth（默认的）和auth-int（增加了报文完整性检测）两种策略
+		// Reference https://blog.csdn.net/y673533511/article/details/88388138
+		// qop Protection quality includes auth (default) andauth-int（Added message integrity detection) two strategies
 		String qop = www.getQop();
 
 		String cNonce = null;
 		String nc = "00000001";
 		if (qop != null) {
 			if ("auth".equalsIgnoreCase(qop)) {
-				// 客户端随机数，这是一个不透明的字符串值，由客户端提供，并且客户端和服务器都会使用，以避免用明文文本。
-				// 这使得双方都可以查验对方的身份，并对消息的完整性提供一些保护
+				// Client-side nonce, which is an opaque string value provided by the client and used by both the client and the server to avoid clear text。
+				// This allows both parties to verify the identity of the other party and provides some protection for the integrity of the message
 				cNonce = UUID.randomUUID().toString();
 
 			}else if ("auth-int".equalsIgnoreCase(qop)){
@@ -200,7 +200,7 @@ public class SIPRequestHeaderPlarformProvider {
 		// ceq
 		CSeqHeader cSeqHeader = SipFactory.getInstance().createHeaderFactory().createCSeqHeader(redisCatchStorage.getCSEQ(), Request.MESSAGE);
 		MessageFactoryImpl messageFactory = (MessageFactoryImpl) SipFactory.getInstance().createMessageFactory();
-		// 设置编码， 防止中文乱码
+		// Set encoding to prevent Chinese garbled characters
 		messageFactory.setDefaultContentEncodingCharset(parentPlatform.getCharacterSet());
 		request = messageFactory.createRequest(requestURI, Request.MESSAGE, callIdHeader, cSeqHeader, fromHeader,
 				toHeader, viaHeaders, maxForwards);
@@ -237,7 +237,7 @@ public class SIPRequestHeaderPlarformProvider {
 		// ceq
 		CSeqHeader cSeqHeader = SipFactory.getInstance().createHeaderFactory().createCSeqHeader(redisCatchStorage.getCSEQ(), Request.NOTIFY);
 		MessageFactoryImpl messageFactory = (MessageFactoryImpl) SipFactory.getInstance().createMessageFactory();
-		// 设置编码， 防止中文乱码
+		// Set encoding to prevent Chinese garbled characters
 		messageFactory.setDefaultContentEncodingCharset("gb2312");
 
 		CallIdHeader callIdHeader = SipFactory.getInstance().createHeaderFactory().createCallIdHeader(subscribeInfo.getTransactionInfo() != null ? subscribeInfo.getTransactionInfo().getCallId(): subscribeInfo.getSimulatedCallId());
@@ -315,7 +315,7 @@ public class SIPRequestHeaderPlarformProvider {
 
     public Request createInviteRequest(Platform platform,String sourceId, String channelId, String content, String viaTag, String fromTag, String ssrc, CallIdHeader callIdHeader) throws PeerUnavailableException, ParseException, InvalidArgumentException {
 		Request request = null;
-		//请求行
+		//request line
 		String platformHostAddress = platform.getServerIp() + ":" + platform.getServerPort();
 		String localHostAddress = sipLayer.getLocalIp(platform.getDeviceIp())+":"+ platform.getDevicePort();
 		SipURI requestLine = SipFactory.getInstance().createAddressFactory().createSipURI(sourceId, platformHostAddress);
@@ -328,7 +328,7 @@ public class SIPRequestHeaderPlarformProvider {
 		//from
 		SipURI fromSipURI = SipFactory.getInstance().createAddressFactory().createSipURI(platform.getDeviceGBId(), sipConfig.getDomain());
 		Address fromAddress = SipFactory.getInstance().createAddressFactory().createAddress(fromSipURI);
-		FromHeader fromHeader = SipFactory.getInstance().createHeaderFactory().createFromHeader(fromAddress, fromTag); //必须要有标记，否则无法创建会话，无法回应ack
+		FromHeader fromHeader = SipFactory.getInstance().createHeaderFactory().createFromHeader(fromAddress, fromTag); //There must be a mark, otherwise the session cannot be created and the response cannot be made.ack
 		//to
 		SipURI toSipURI = SipFactory.getInstance().createAddressFactory().createSipURI(sourceId, platformHostAddress);
 		Address toAddress = SipFactory.getInstance().createAddressFactory().createAddress(toSipURI);

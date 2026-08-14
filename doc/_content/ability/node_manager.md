@@ -1,20 +1,20 @@
-<!-- 节点管理 -->
+<!-- Node management -->
 
-# 节点管理
+# Node management
 
-![节点管理](_media/img_26.png)
+! [Node management](_media/img_26.png) 
 
-WVP支持单个WVP多个ZLM的方案来扩展WVP的视频并发能力，并发点播是因为带宽和性能的原因，单个ZLM节点能支持的路数有限，所以WVP增加了ZLM集群来扩展并发并且保证ZLM的高可用。
+WVP supports a single WVP multiple ZLM solution to expand WVP's video concurrency capabilities. Concurrent on-demand video is due to bandwidth and performance reasons. A single ZLM node can support a limited number of channels, so WVP adds a ZLM cluster to expand concurrency and ensure the high availability of ZLM.
 
-## 默认节点
+##Default node
 
-WVP中为了保证功能的完整性，ZLM节点至少要有一个默认节点，这个节点不是在管理页面添加的，而是在WVP的配置文件中配置的，这个节点不可在页面删除。每次启动会自动从配置文件中读取配置写入数据库备用。
+In order to ensure the integrity of functions in WVP, the ZLM node must have at least one default node. This node is not added on the management page, but configured in the WVP configuration file. This node cannot be deleted on the page. Each startup will automatically read the configuration from the configuration file and write it to the standby database.
 
-## 新增节点
+## Add new node
 
-启动你要添加的zlm节点，然后点击“添加节点”按钮输入zlm的ip，
-http端口，SECRET。点击测试测试完成则开始对节点进行详细的设置，如果你的zlm是使用docker启动的，可能存在zlm使用的端口与宿主机端口不一致的情况，需要在这里一一配置。
+Start the zlm node you want to add, then click the "Add Node" button to enter the zlm's IP.
+http port, SECRET. Click Test to complete the test and start detailed settings for the node. If your zlm is started using docker, the port used by zlm may be inconsistent with the host port, and you need to configure them one by one here.
 
-## wvp使用多个节点的原理
+## The principle of wvp using multiple nodes
 
-wvp会把连接的节点统一记录在redis中，并记录zlm的负载情况，当新的请求到来时，会取出负载最低的那个zlm进行使用。以此保证节点负载均衡。
+WVP will uniformly record the connected nodes in redis and record the load of zlm. When a new request arrives, the zlm with the lowest load will be taken out for use. This ensures node load balancing.

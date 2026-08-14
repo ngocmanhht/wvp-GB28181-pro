@@ -4,22 +4,22 @@ public class ABLHookParam {
     private String mediaServerId;
 
     /**
-     * 应用名
+     * Application name
      */
     private String app;
 
     /**
-     * 流id
+     * flowid
      */
     private String stream;
 
     /**
-     * 媒体流来源编号，可以根据这个key进行关闭流媒体 可以调用delMediaStream或close_streams 函数进行关闭
+     * The source number of the media stream. You can close the streaming media based on this key. You can call the delMediaStream or close_streams function to close it.
      */
     private String key;
 
     /**
-     * 媒体流来源网络编号，可参考附表
+     * Media stream source network number, please refer to the attached table
      */
     private Integer networkType;
 

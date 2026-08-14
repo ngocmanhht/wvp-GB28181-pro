@@ -26,7 +26,7 @@ public class SubscribeTaskForCatalog extends SubscribeTask {
     @Override
     public void expired() {
         if (super.getCallback() == null) {
-            log.info("[设备订阅到期] 目录订阅 未找到到期处理回调， 编号： {}", getDeviceId());
+            log.info("[Device subscription expires] Directory subscription expiry processing callback not found, number： {}", getDeviceId());
             return;
         }
         getCallback().run(getDeviceId(), getTransactionInfo());

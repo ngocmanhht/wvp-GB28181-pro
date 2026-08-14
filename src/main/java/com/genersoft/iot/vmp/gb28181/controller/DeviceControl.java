@@ -1,8 +1,8 @@
 /**
- * 设备控制命令API接口
+ * Device control command API interface
  *
  * @author lawrencehj
- * @date 2021年2月1日
+ * @date 2021February 1
  */
 
 package com.genersoft.iot.vmp.gb28181.controller;
@@ -22,7 +22,7 @@ import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.async.DeferredResult;
 
-@Tag(name  = "国标设备控制")
+@Tag(name  = "National standard equipment control")
 @Slf4j
 @RestController
 @RequestMapping("/api/device/control")
@@ -32,143 +32,143 @@ public class DeviceControl {
     private IDeviceService deviceService;
 
 
-	@Operation(summary = "远程启动", security = @SecurityRequirement(name = JwtUtils.HEADER))
-	@Parameter(name = "deviceId", description = "设备国标编号", required = true)
+	@Operation(summary = "remote start", security = @SecurityRequirement(name = JwtUtils.HEADER))
+	@Parameter(name = "deviceId", description = "Equipment national standard number", required = true)
     @GetMapping("/teleboot/{deviceId}")
     public void teleBootApi(@PathVariable String deviceId) {
         if (log.isDebugEnabled()) {
-            log.debug("设备远程启动API调用");
+            log.debug("Device remote start API call");
         }
         Device device = deviceService.getDeviceByDeviceId(deviceId);
-		Assert.notNull(device, "设备不存在");
+		Assert.notNull(device, "Device does not exist");
 		deviceService.teleboot(device);
     }
 
 
-	@Operation(summary = "录像控制", security = @SecurityRequirement(name = JwtUtils.HEADER))
-	@Parameter(name = "deviceId", description = "设备国标编号", required = true)
-	@Parameter(name = "channelId", description = "通道国标编号", required = true)
-	@Parameter(name = "recordCmdStr", description = "命令， 可选值：Record（手动录像），StopRecord（停止手动录像）", required = true)
+	@Operation(summary = "Video control", security = @SecurityRequirement(name = JwtUtils.HEADER))
+	@Parameter(name = "deviceId", description = "Equipment national standard number", required = true)
+	@Parameter(name = "channelId", description = "Channel national standard number", required = true)
+	@Parameter(name = "recordCmdStr", description = "Command, optional values: Record (manual recording), StopRecord (stop manual recording)）", required = true)
     @GetMapping("/record")
     public DeferredResult<WVPResult<String>> recordApi(String deviceId, String recordCmdStr, String channelId) {
         if (log.isDebugEnabled()) {
-            log.debug("开始/停止录像API调用");
+            log.debug("start/Stop recording API call");
         }
         Device device = deviceService.getDeviceByDeviceId(deviceId);
-		Assert.notNull(device, "设备不存在");
+		Assert.notNull(device, "Device does not exist");
 		DeferredResult<WVPResult<String>> deferredResult = new DeferredResult<>();
 
 		deviceService.record(device, channelId, recordCmdStr, (code, msg, data) -> {
 			deferredResult.setResult(new WVPResult<>(code, msg, data));
 		});
 		deferredResult.onTimeout(() -> {
-			log.warn("[开始/停止录像] 操作超时, 设备未返回应答指令, {}", deviceId);
-			deferredResult.setResult(WVPResult.fail(ErrorCode.ERROR100.getCode(), "操作超时, 设备未应答"));
+			log.warn("[start/Stop recording] The operation timed out and the device did not return a response command., {}", deviceId);
+			deferredResult.setResult(WVPResult.fail(ErrorCode.ERROR100.getCode(), "The operation timed out and the device did not respond."));
 		});
 		return deferredResult;
 	}
 
-	@Operation(summary = "布防/撤防", security = @SecurityRequirement(name = JwtUtils.HEADER))
-	@Parameter(name = "deviceId", description = "设备国标编号", required = true)
-	@Parameter(name = "guardCmd", description = "命令， 可选值：SetGuard（布防），ResetGuard（撤防）", required = true)
+	@Operation(summary = "arm/disarm", security = @SecurityRequirement(name = JwtUtils.HEADER))
+	@Parameter(name = "deviceId", description = "Equipment national standard number", required = true)
+	@Parameter(name = "guardCmd", description = "Command, optional values: SetGuard (arm), ResetGuard (disarm)）", required = true)
 	@GetMapping("/guard")
 	public DeferredResult<WVPResult<String>> guardApi(String deviceId, String guardCmd) {
-		log.info("[布防/撤防] API调用, deviceId: {}, guardCmd: {}", deviceId, guardCmd);
+		log.info("[arm/disarm] APIcall, deviceId: {}, guardCmd: {}", deviceId, guardCmd);
 		Device device = deviceService.getDeviceByDeviceId(deviceId);
-		Assert.notNull(device, "设备不存在");
+		Assert.notNull(device, "Device does not exist");
 		DeferredResult<WVPResult<String>> result = new DeferredResult<>();
 		deviceService.guard(device, guardCmd, (code, msg, data) -> {
 			result.setResult(new WVPResult<>(code, msg, data));
 		});
 		result.onTimeout(() -> {
-			log.warn("[布防/撤防] 操作超时, 设备未返回应答指令, {}", deviceId);
-			result.setResult(WVPResult.fail(ErrorCode.ERROR100.getCode(), "操作超时, 设备未应答"));
+			log.warn("[arm/disarm] The operation timed out and the device did not return a response command., {}", deviceId);
+			result.setResult(WVPResult.fail(ErrorCode.ERROR100.getCode(), "The operation timed out and the device did not respond."));
 		});
 		return result;
 	}
 
-	@Operation(summary = "报警复位", security = @SecurityRequirement(name = JwtUtils.HEADER))
-	@Parameter(name = "deviceId", description = "设备国标编号", required = true)
-	@Parameter(name = "channelId", description = "通道国标编号", required = true)
-	@Parameter(name = "alarmMethod", description = "报警方式, 报警方式条件(可选),取值0为全部,1为电话报警,2为设备报警,3为短信报警,4为\n" +
-			"GPS报警,5为视频报警,6为设备故障报警,7其他报警;可以为直接组合如12为电话报警或设备报警")
-	@Parameter(name = "alarmType", description = "报警类型, " +
-			"报警类型。" +
-			"报警方式为2时,不携带 AlarmType为默认的报警设备报警," +
-			"携带 AlarmType取值及对应报警类型如下:" +
-			"1-视频丢失报警;2-设备防拆报警;3-存储设备磁盘满报警;4-设备高温报警;5-设备低温报警。" +
-			"报警方式为5时,取值如下:" +
-			"1-人工视频报警;2-运动目标检测报警;3-遗留物检测报警;4-物体移除检测报警;5-绊线检测报警;" +
-			"6-入侵检测报警;7-逆行检测报警;8-徘徊检测报警;9-流量统计报警;10-密度检测报警;" +
-			"11-视频异常检测报警;12-快速移动报警。" +
-			"报警方式为6时,取值如下:" +
-			"1-存储设备磁盘故障报警;2-存储设备风扇故障报警")
+	@Operation(summary = "Alarm reset", security = @SecurityRequirement(name = JwtUtils.HEADER))
+	@Parameter(name = "deviceId", description = "Equipment national standard number", required = true)
+	@Parameter(name = "channelId", description = "Channel national standard number", required = true)
+	@Parameter(name = "alarmMethod", description = "alarm mode, alarm mode conditions(Optional),The value 0 is all, 1 is phone alarm, 2 is device alarm, 3 is text message alarm, 4 is\n" +
+			"GPSAlarm, 5 is video alarm, 6 is equipment failure alarm, 7 is other alarm;It can be a direct combination such as 12 for telephone alarm or equipment alarm.")
+	@Parameter(name = "alarmType", description = "Alarm type, " +
+			"Alarm type。" +
+			"When the alarm mode is 2, if AlarmType is not carried, it is the default alarm device alarm.," +
+			"The value of AlarmType carried and the corresponding alarm type are as follows::" +
+			"1-Video loss alarm;2-Equipment anti-tamper alarm;3-Storage device disk full alarm;4-Equipment high temperature alarm;5-Equipment low temperature alarm。" +
+			"When the alarm mode is 5, the values are as follows:" +
+			"1-Manual video alarm;2-Moving target detection alarm;3-Remaining object detection alarm;4-Object removal detection alarm;5-Tripwire detection alarm;" +
+			"6-Intrusion detection alarm;7-Retrograde detection alarm;8-Wandering detection alarm;9-Traffic statistics alarm;10-Density detection alarm;" +
+			"11-Video anomaly detection and alarm;12-Fast moving alarm。" +
+			"When the alarm mode is 6, the values are as follows:" +
+			"1-Storage device disk failure alarm;2-Storage device fan failure alarm")
 	@GetMapping("/reset_alarm")
 	public DeferredResult<WVPResult<String>> resetAlarm(String deviceId, String channelId,
 																@RequestParam(required = false) String alarmMethod,
 																@RequestParam(required = false) String alarmType) {
-		log.info("[报警复位] deviceId: {}, channelId: {}, alarmMethod: {}, alarmType: {}", deviceId, channelId, alarmMethod, alarmType);
+		log.info("[Alarm reset] deviceId: {}, channelId: {}, alarmMethod: {}, alarmType: {}", deviceId, channelId, alarmMethod, alarmType);
 		Device device = deviceService.getDeviceByDeviceId(deviceId);
-		Assert.notNull(device, "设备不存在");
+		Assert.notNull(device, "Device does not exist");
 		DeferredResult<WVPResult<String>> result = new DeferredResult<>();
 		deviceService.resetAlarm(device, channelId, alarmMethod, alarmType, (code, msg, data) -> {
 			result.setResult(new WVPResult<>(code, msg, data));
 		});
 		result.onTimeout(() -> {
-			log.warn("[布防/撤防] 操作超时, 设备未返回应答指令, {}", deviceId);
-			result.setResult(WVPResult.fail(ErrorCode.ERROR100.getCode(), "操作超时, 设备未应答"));
+			log.warn("[arm/disarm] The operation timed out and the device did not return a response command., {}", deviceId);
+			result.setResult(WVPResult.fail(ErrorCode.ERROR100.getCode(), "The operation timed out and the device did not respond."));
 		});
 		return result;
 	}
 
-	@Operation(summary = "强制关键帧", security = @SecurityRequirement(name = JwtUtils.HEADER))
-	@Parameter(name = "deviceId", description = "设备国标编号", required = true)
-	@Parameter(name = "channelId", description = "通道国标编号")
+	@Operation(summary = "Force keyframe", security = @SecurityRequirement(name = JwtUtils.HEADER))
+	@Parameter(name = "deviceId", description = "Equipment national standard number", required = true)
+	@Parameter(name = "channelId", description = "Channel national standard number")
 	@GetMapping("/i_frame")
 	public void iFrame(String deviceId, @RequestParam(required = false) String channelId) {
 		if (log.isDebugEnabled()) {
-			log.debug("强制关键帧API调用");
+			log.debug("Force keyframe API call");
 		}
 		Device device = deviceService.getDeviceByDeviceId(deviceId);
-		Assert.notNull(device, "设备不存在");
+		Assert.notNull(device, "Device does not exist");
 		deviceService.iFrame(device, channelId);
 	}
 
-	@Operation(summary = "看守位设置", security = @SecurityRequirement(name = JwtUtils.HEADER))
-	@Parameter(name = "deviceId", description = "设备国标编号", required = true)
-	@Parameter(name = "channelId", description = "通道国标编号", required = true)
-	@Parameter(name = "enabled", description = "是否开启看守位", required = true)
-	@Parameter(name = "presetIndex", description = "调用预置位编号")
-	@Parameter(name = "resetTime", description = "自动归位时间间隔 单位：秒")
+	@Operation(summary = "Watch bit setting", security = @SecurityRequirement(name = JwtUtils.HEADER))
+	@Parameter(name = "deviceId", description = "Equipment national standard number", required = true)
+	@Parameter(name = "channelId", description = "Channel national standard number", required = true)
+	@Parameter(name = "enabled", description = "Whether to enable guard position", required = true)
+	@Parameter(name = "presetIndex", description = "Call preset number")
+	@Parameter(name = "resetTime", description = "Automatic homing time interval unit: seconds")
 	@GetMapping("/home_position")
 	public DeferredResult<WVPResult<String>> homePositionApi(String deviceId, String channelId, Boolean enabled,
 												  @RequestParam(required = false) Integer resetTime,
 												  @RequestParam(required = false) Integer presetIndex) {
         if (log.isDebugEnabled()) {
-			log.debug("看守位设置API调用");
+			log.debug("Guard bit setting API call");
 		}
 		Device device = deviceService.getDeviceByDeviceId(deviceId);
-		Assert.notNull(device, "设备不存在");
+		Assert.notNull(device, "Device does not exist");
 		DeferredResult<WVPResult<String>> result = new DeferredResult<>();
 		deviceService.homePosition(device, channelId, enabled, resetTime, presetIndex, (code, msg, data) -> {
 			result.setResult(new WVPResult<>(code, msg, data));
 		});
 		result.onTimeout(() -> {
-			log.warn("[看守位设置] 操作超时, 设备未返回应答指令, {}", deviceId);
-			result.setResult(WVPResult.fail(ErrorCode.ERROR100.getCode(), "操作超时, 设备未应答"));
+			log.warn("[Watch bit setting] The operation timed out and the device did not return a response command., {}", deviceId);
+			result.setResult(WVPResult.fail(ErrorCode.ERROR100.getCode(), "The operation timed out and the device did not respond."));
 		});
 		return result;
 	}
 
-	@Operation(summary = "拉框放大", security = @SecurityRequirement(name = JwtUtils.HEADER))
-	@Parameter(name = "deviceId", description = "设备国标编号", required = true)
-	@Parameter(name = "channelId", description = "通道国标编号", required = true)
-	@Parameter(name = "length", description = "播放窗口长度像素值", required = true)
-	@Parameter(name = "width", description = "播放窗口宽度像素值", required = true)
-	@Parameter(name = "midPointX", description = "拉框中心的横轴坐标像素值", required = true)
-	@Parameter(name = "midPointY", description = "拉框中心的纵轴坐标像素值", required = true)
-	@Parameter(name = "lengthX", description = "拉框长度像素值", required = true)
-	@Parameter(name = "lengthY", description = "拉框宽度像素值", required = true)
+	@Operation(summary = "Scroll down to enlarge", security = @SecurityRequirement(name = JwtUtils.HEADER))
+	@Parameter(name = "deviceId", description = "Equipment national standard number", required = true)
+	@Parameter(name = "channelId", description = "Channel national standard number", required = true)
+	@Parameter(name = "length", description = "Play window length pixel value", required = true)
+	@Parameter(name = "width", description = "Play window width pixel value", required = true)
+	@Parameter(name = "midPointX", description = "The horizontal axis coordinate pixel value of the center of the pull box", required = true)
+	@Parameter(name = "midPointY", description = "The vertical axis coordinate pixel value of the center of the pull box", required = true)
+	@Parameter(name = "lengthX", description = "Frame length in pixels", required = true)
+	@Parameter(name = "lengthY", description = "Pull box width pixel value", required = true)
 	@GetMapping("drag_zoom/zoom_in")
 	public void dragZoomIn(@RequestParam String deviceId, String channelId,
 											 @RequestParam int length,
@@ -178,22 +178,22 @@ public class DeviceControl {
 											 @RequestParam int lengthX,
 											 @RequestParam int lengthY) {
 		if (log.isDebugEnabled()) {
-			log.debug(String.format("设备拉框放大 API调用，deviceId：%s ，channelId：%s ，length：%d ，width：%d ，midPointX：%d ，midPointY：%d ，lengthX：%d ，lengthY：%d",deviceId, channelId, length, width, midPointX, midPointY,lengthX, lengthY));
+			log.debug(String.format("Device pull box zoom API call，deviceId：%s ，channelId：%s ，length：%d ，width：%d ，midPointX：%d ，midPointY：%d ，lengthX：%d ，lengthY：%d",deviceId, channelId, length, width, midPointX, midPointY,lengthX, lengthY));
 		}
 		Device device = deviceService.getDeviceByDeviceId(deviceId);
-		Assert.notNull(device, "设备不存在");
+		Assert.notNull(device, "Device does not exist");
 		deviceService.dragZoomIn(device, channelId, length, width, midPointX, midPointY, lengthX, lengthY);
 	}
 
-	@Operation(summary = "拉框缩小", security = @SecurityRequirement(name = JwtUtils.HEADER))
-	@Parameter(name = "deviceId", description = "设备国标编号", required = true)
-	@Parameter(name = "channelId", description = "通道国标编号")
-	@Parameter(name = "length", description = "播放窗口长度像素值", required = true)
-	@Parameter(name = "width", description = "播放窗口宽像素值", required = true)
-	@Parameter(name = "midPointX", description = "拉框中心的横轴坐标像素值", required = true)
-	@Parameter(name = "midPointY", description = "拉框中心的纵轴坐标像素值", required = true)
-	@Parameter(name = "lengthX", description = "拉框长度像素值", required = true)
-	@Parameter(name = "lengthY", description = "拉框宽度像素值", required = true)
+	@Operation(summary = "Zoom out", security = @SecurityRequirement(name = JwtUtils.HEADER))
+	@Parameter(name = "deviceId", description = "Equipment national standard number", required = true)
+	@Parameter(name = "channelId", description = "Channel national standard number")
+	@Parameter(name = "length", description = "Play window length pixel value", required = true)
+	@Parameter(name = "width", description = "Play window width pixel value", required = true)
+	@Parameter(name = "midPointX", description = "The horizontal axis coordinate pixel value of the center of the pull box", required = true)
+	@Parameter(name = "midPointY", description = "The vertical axis coordinate pixel value of the center of the pull box", required = true)
+	@Parameter(name = "lengthX", description = "Frame length in pixels", required = true)
+	@Parameter(name = "lengthY", description = "Pull box width pixel value", required = true)
 	@GetMapping("/drag_zoom/zoom_out")
 	public void dragZoomOut(@RequestParam String deviceId,
 											  @RequestParam(required = false) String channelId,
@@ -205,10 +205,10 @@ public class DeviceControl {
 											  @RequestParam int lengthY){
 
 		if (log.isDebugEnabled()) {
-			log.debug(String.format("设备拉框缩小 API调用，deviceId：%s ，channelId：%s ，length：%d ，width：%d ，midPointX：%d ，midPointY：%d ，lengthX：%d ，lengthY：%d",deviceId, channelId, length, width, midPointX, midPointY,lengthX, lengthY));
+			log.debug(String.format("Device pull box shrink API call，deviceId：%s ，channelId：%s ，length：%d ，width：%d ，midPointX：%d ，midPointY：%d ，lengthX：%d ，lengthY：%d",deviceId, channelId, length, width, midPointX, midPointY,lengthX, lengthY));
 		}
 		Device device = deviceService.getDeviceByDeviceId(deviceId);
-		Assert.notNull(device, "设备不存在");
+		Assert.notNull(device, "Device does not exist");
 		deviceService.dragZoomOut(device, channelId, length, width, midPointX, midPointY, lengthX,lengthY);
 	}
 }

@@ -7,127 +7,127 @@ import lombok.Data;
  * @author lin
  */
 @Data
-@Schema(description = "平台信息")
+@Schema(description = "Platform information")
 public class Platform {
 
-    @Schema(description = "ID(数据库中)")
+    @Schema(description = "ID(in database)")
     private Integer id;
 
-    @Schema(description = "是否启用")
+    @Schema(description = "Whether to enable")
     private boolean enable;
 
-    @Schema(description = "名称")
+    @Schema(description = "Name")
     private String name;
 
-    @Schema(description = "SIP服务国标编码")
+    @Schema(description = "SIPService national standard code")
     private String serverGBId;
 
-    @Schema(description = "SIP服务国标域")
+    @Schema(description = "SIPService national standard domain")
     private String serverGBDomain;
 
-    @Schema(description = "SIP服务IP")
+    @Schema(description = "SIPserviceIP")
     private String serverIp;
 
-    @Schema(description = "SIP服务端口")
+    @Schema(description = "SIPservice port")
     private int serverPort;
 
-    @Schema(description = "设备国标编号")
+    @Schema(description = "Equipment national standard number")
     private String deviceGBId;
 
-    @Schema(description = "设备ip")
+    @Schema(description = "Equipmentip")
     private String deviceIp;
 
-    @Schema(description = "设备端口")
+    @Schema(description = "Device port")
     private int devicePort;
 
-    @Schema(description = "SIP认证用户名(默认使用设备国标编号)")
+    @Schema(description = "SIPAuthentication username(The equipment national standard number is used by default.)")
     private String username;
 
-    @Schema(description = "SIP认证密码")
+    @Schema(description = "SIPAuthentication password")
     private String password;
 
-    @Schema(description = "注册周期 (秒)")
+    @Schema(description = "Registration cycle (seconds)")
     private int expires;
 
-    @Schema(description = "心跳周期(秒)")
+    @Schema(description = "heartbeat cycle(seconds)")
     private int keepTimeout;
 
-    @Schema(description = "传输协议")
+    @Schema(description = "transport protocol")
     private String transport;
 
-    @Schema(description = "字符集")
+    @Schema(description = "character set")
     private String characterSet;
 
-    @Schema(description = "允许云台控制")
+    @Schema(description = "Allow PTZ control")
     private boolean ptz;
 
-    @Schema(description = "RTCP流保活")
+    @Schema(description = "RTCPSurvival of refugees")
     private boolean rtcp;
 
-    @Schema(description = "在线状态")
+    @Schema(description = "online status")
     private boolean status;
 
-    @Schema(description = "通道数量")
+    @Schema(description = "Number of channels")
     private int channelCount;
 
-    @Schema(description = "已被订阅目录信息")
+    @Schema(description = "Directory information has been subscribed")
     private boolean catalogSubscribe;
 
-    @Schema(description = "已被订阅报警信息")
+    @Schema(description = "Already subscribed to alarm information")
     private boolean alarmSubscribe;
 
-    @Schema(description = "已被订阅移动位置信息")
+    @Schema(description = "has been subscribed to mobile location information")
     private boolean mobilePositionSubscribe;
 
-    @Schema(description = "目录分组-每次向上级发送通道信息时单个包携带的通道数量，取值1,2,4,8")
+    @Schema(description = "directory grouping-The number of channels carried in a single packet each time channel information is sent to the superior, value1,2,4,8")
     private int catalogGroup;
 
-    @Schema(description = "更新时间")
+    @Schema(description = "Update time")
     private String updateTime;
 
-    @Schema(description = "创建时间")
+    @Schema(description = "creation time")
     private String createTime;
 
-    @Schema(description = "是否作为消息通道")
+    @Schema(description = "Whether to serve as a message channel")
     private boolean asMessageChannel;
 
-    @Schema(description = "点播回复200OK使用的IP")
+    @Schema(description = "Used for on-demand reply 200OKIP")
     private String sendStreamIp;
 
-    @Schema(description = "是否自动推送通道变化")
+    @Schema(description = "Whether to automatically push channel changes")
     private Boolean autoPushChannel;
 
-    @Schema(description = "目录信息包含平台信息, 0：关闭，1：打开")
+    @Schema(description = "Directory information contains platform information, 0: closed, 1: open")
     private int catalogWithPlatform;
 
-    @Schema(description = "目录信息包含分组信息, 0：关闭，1：打开")
+    @Schema(description = "Directory information contains grouping information, 0: closed, 1: open")
     private int catalogWithGroup;
 
-    @Schema(description = "目录信息包含行政区划, 0：关闭，1：打开")
+    @Schema(description = "Directory information includes administrative division, 0: closed, 1: open")
     private int catalogWithRegion;
 
-    @Schema(description = "行政区划")
+    @Schema(description = "Administrative division")
     private String civilCode;
 
-    @Schema(description = "平台厂商")
+    @Schema(description = "Platform vendors")
     private String manufacturer;
 
-    @Schema(description = "平台型号")
+    @Schema(description = "Platform model")
     private String model;
 
-    @Schema(description = "平台安装地址")
+    @Schema(description = "Platform installation address")
     private String address;
 
-    @Schema(description = "注册方式（必选）缺省为1； " +
-            "1-符合IETF RFC 3261标准的认证注册模式；" +
-            "2-基于口令的双向认证注册模式；" +
-            "3-基于数字证书的双向认证注册模式(高安全级别要求)；" +
-            "4-基于数字证书的单向认证注册模式（高安全级别要求）")
+    @Schema(description = "Registration method (required), the default is1； " +
+            "1-Certification registration model compliant with IETF RFC 3261 standard；" +
+            "2-Password-based two-way authentication registration mode；" +
+            "3-Two-way authentication registration mode based on digital certificate(High security level requirements)；" +
+            "4-One-way authentication registration mode based on digital certificate (high security level requirements）")
     private int registerWay = 1;
 
-    @Schema(description = "保密属性（必选）缺省为0；0-不涉密，1-涉密")
+    @Schema(description = "Confidentiality attribute (required) defaults to0；0-Not confidential，1-Confidential")
     private int secrecy = 0;
 
-    @Schema(description = "执行注册的服务ID")
+    @Schema(description = "Execute registered servicesID")
     private String serverId;
 }

@@ -1,9 +1,9 @@
 package com.genersoft.iot.vmp.common;
 
 /**
- * @description: 定义常量
+ * @description: Define constants
  * @author: swwheihei
- * @date:   2019年5月30日 下午3:04:04
+ * @date:   2019May 30, 2019, afternoon3:04:04
  *
  */
 public class VideoManagerConstants {
@@ -58,93 +58,93 @@ public class VideoManagerConstants {
 
 
 
-	//************************** redis 消息*********************************
+	//************************** redis news*********************************
 
 	/**
-	 * 流变化的通知
+	 * Stream change notifications
 	 */
 	public static final String WVP_MSG_STREAM_CHANGE_PREFIX = "WVP_MSG_STREAM_CHANGE_";
 
 	/**
-	 * 接收推流设备的GPS变化通知
+	 * Receive notifications of GPS changes for streaming devices
 	 */
 	public static final String VM_MSG_GPS = "VM_MSG_GPS";
 
 	/**
-	 * 接收推流设备的GPS变化通知
+	 * Receive notifications of GPS changes for streaming devices
 	 */
 	public static final String VM_MSG_PUSH_STREAM_STATUS_CHANGE = "VM_MSG_PUSH_STREAM_STATUS_CHANGE";
 	/**
-	 * 接收推流设备列表更新变化通知
+	 * Receive notifications of updates and changes to the streaming device list
 	 */
 	public static final String VM_MSG_PUSH_STREAM_LIST_CHANGE = "VM_MSG_PUSH_STREAM_LIST_CHANGE";
 
     /**
-     * 同步三方组织结构回复
+     * Synchronize tripartite organizational structure reply
      */
     public static final String VM_MSG_GROUP_LIST_RESPONSE = "VM_MSG_GROUP_LIST_RESPONSE";
 
     /**
-     * 同步三方组织结构回复
+     * Synchronize tripartite organizational structure reply
      */
     public static final String VM_MSG_GROUP_LIST_CHANGE = "VM_MSG_GROUP_LIST_CHANGE";
 
 	/**
-	 * redis 消息通知设备推流到平台
+	 * redis Message notification device is pushed to the platform
 	 */
 	public static final String VM_MSG_STREAM_PUSH_REQUESTED = "VM_MSG_STREAM_PUSH_REQUESTED";
 
 	/**
-	 * redis 消息通知上级平台开始观看流
+	 * redis The message notifies the superior platform to start watching the stream
 	 */
 	public static final String VM_MSG_STREAM_START_PLAY_NOTIFY = "VM_MSG_STREAM_START_PLAY_NOTIFY";
 
 	/**
-	 * redis 消息通知上级平台停止观看流
+	 * redis The message notifies the superior platform to stop watching the stream.
 	 */
 	public static final String VM_MSG_STREAM_STOP_PLAY_NOTIFY = "VM_MSG_STREAM_STOP_PLAY_NOTIFY";
 
 	/**
-	 * redis 消息接收关闭一个推流
+	 * redis Message reception closes a push stream
 	 */
 	public static final String VM_MSG_STREAM_PUSH_CLOSE_REQUESTED = "VM_MSG_STREAM_PUSH_CLOSE_REQUESTED";
 
 
 	/**
-	 * redis 消息通知平台通知设备推流结果
+	 * redis The message notification platform notifies the device of the streaming results
 	 */
 	public static final String VM_MSG_STREAM_PUSH_RESPONSE = "VM_MSG_STREAM_PUSH_RESPONSE";
 
 	/**
-	 * redis 通知平台关闭推流
+	 * redis Notify the platform to shut down push streaming
 	 */
 	public static final String VM_MSG_STREAM_PUSH_CLOSE = "VM_MSG_STREAM_PUSH_CLOSE";
 
 	/**
-	 * redis 消息请求所有的在线通道
+	 * redis Message requests for all online channels
 	 */
 	public static final String VM_MSG_GET_ALL_ONLINE_REQUESTED = "VM_MSG_GET_ALL_ONLINE_REQUESTED";
 
 	/**
-	 * 报警订阅的通知（收到报警向redis发出通知）
+	 * Notification of alarm subscription (notification to redis upon receipt of alarm）
 	 */
 	public static final String VM_MSG_SUBSCRIBE_ALARM = "alarm";
 
 
 	/**
-	 * 报警通知的发送 （收到redis发出的通知，转发给其他平台）
+	 * Sending of alarm notifications (receiving notifications from redis and forwarding them to other platforms）
 	 */
 	public static final String VM_MSG_SUBSCRIBE_ALARM_RECEIVE= "alarm_receive";
 
 	/**
-	 * 设备状态订阅的通知
+	 * Notifications for device status subscriptions
 	 */
 	public static final String VM_MSG_SUBSCRIBE_DEVICE_STATUS = "device";
 
 
 
 
-	//**************************    第三方  ****************************************
+	//**************************    third party  ****************************************
 
 	public static final String WVP_STREAM_GB_ID_PREFIX = "memberNo_";
 	public static final String WVP_STREAM_GPS_MSG_PREFIX = "WVP_STREAM_GPS_MSG_";
@@ -155,12 +155,12 @@ public class VideoManagerConstants {
 
 	/**
 	 * Redis Const
-	 * 设备录像信息结果前缀
+	 * Device recording information result prefix
 	 */
 	public static final String REDIS_RECORD_INFO_RES_PRE = "GB_RECORD_INFO_RES_";
 	/**
 	 * Redis Const
-	 * 设备录像信息结果前缀
+	 * Device recording information result prefix
 	 */
 	public static final String REDIS_RECORD_INFO_RES_COUNT_PRE = "GB_RECORD_INFO_RES_COUNT:";
 

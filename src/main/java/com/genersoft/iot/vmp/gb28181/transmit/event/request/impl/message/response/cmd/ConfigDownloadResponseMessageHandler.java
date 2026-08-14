@@ -42,7 +42,7 @@ public class ConfigDownloadResponseMessageHandler extends SIPRequestProcessorPar
         try {
             responseAck((SIPRequest) evt.getRequest(), Response.OK);
         } catch (SipException | InvalidArgumentException | ParseException e) {
-            log.error("[命令发送失败] 设备配置查询: {}", e.getMessage());
+            log.error("[Command sending failed] Device configuration query: {}", e.getMessage());
         }
 
         responseMessageHandler.handMessageEvent(element, element);

@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 文件上传完成通知
+ * File upload completion notification
  *
  */
 @Setter
@@ -28,7 +28,7 @@ public class J1206 extends Re {
 
     Integer respNo;
 
-    // 0：成功； 1：失败
+    // 0：Success; 1: Failure
     private int result;
 
     @Override

@@ -15,48 +15,48 @@ import java.util.*;
 public class StreamPushUploadFileHandler extends AnalysisEventListener<StreamPushExcelDto> {
 
     /**
-     * 错误数据的回调，用于将错误数据发送给页面
+     * Error data callback, used to send error data to the page
      */
     private final ErrorDataHandler errorDataHandler;
 
     /**
-     * 推流的业务类用于存储数据
+     * The push business class is used to store data
      */
     private final IStreamPushService pushService;
 
     /**
-     * 默认流媒体节点ID
+     * Default streaming nodeID
      */
     private final String defaultMediaServerId;
 
     /**
-     * 用于存储更具APP+Stream过滤后的数据，可以直接存入stream_push表与gb_stream表
+     * Used to store moreAPP+StreamThe filtered data can be directly stored in the stream_push table and gb_stream table
      */
     private final Map<String, StreamPush> streamPushItemForSave = new HashMap<>();
 
     /**
-     * 用于存储APP+Stream->国标ID 的数据结构, 数据一一对应，全局判断APP+Stream->国标ID是否存在不对应
+     * for storageAPP+Stream->The data structure of the national standard ID, one-to-one data correspondence, global judgmentAPP+Stream->Does the national standard ID exist or not?
      */
     private final BiMap<String,String> gBMap = HashBiMap.create();
 
     /**
-     * 用于存储APP+Stream-> 在数据库中的数据
+     * for storageAPP+Stream-> data in database
      */
     private final BiMap<String,String> pushMapInDb = HashBiMap.create();
 
     /**
-     * 记录错误的APP+Stream
+     * Record wrongAPP+Stream
      */
     private final List<String> errorStreamList = new ArrayList<>();
 
 
     /**
-     * 记录错误的国标ID
+     * Recording wrong national standardID
      */
     private final List<String> errorInfoList = new ArrayList<>();
 
     /**
-     * 读取数量计数器
+     * Read quantity counter
      */
     private int loadedSize = 0;
 
@@ -64,7 +64,7 @@ public class StreamPushUploadFileHandler extends AnalysisEventListener<StreamPus
         this.pushService = pushService;
         this.defaultMediaServerId = defaultMediaServerId;
         this.errorDataHandler = errorDataHandler;
-        // 获取数据库已有的数据，已经存在的则忽略
+        // Get the existing data in the database, ignore the existing data
         List<String> allAppAndStreams = pushService.getAllAppAndStream();
         if (!allAppAndStreams.isEmpty()) {
             for (String allAppAndStream : allAppAndStreams) {
@@ -90,12 +90,12 @@ public class StreamPushUploadFileHandler extends AnalysisEventListener<StreamPus
             try {
                 gBMap.put(streamPushExcelDto.getApp() + streamPushExcelDto.getStream(), streamPushExcelDto.getGbDeviceId());
             }catch (IllegalArgumentException e) {
-                errorInfoList.add("行：" + rowIndex + ", " + streamPushExcelDto.getGbDeviceId() + " 国标ID重复使用");
+                errorInfoList.add("OK：" + rowIndex + ", " + streamPushExcelDto.getGbDeviceId() + " National standard ID reuse");
                 return;
             }
         }else {
             if (!gBMap.get(streamPushExcelDto.getApp() + streamPushExcelDto.getStream()).equals(streamPushExcelDto.getGbDeviceId())) {
-                errorInfoList.add("行：" + rowIndex + ", " + streamPushExcelDto.getGbDeviceId() + " 同样的应用名和流ID使用了不同的国标ID");
+                errorInfoList.add("OK：" + rowIndex + ", " + streamPushExcelDto.getGbDeviceId() + " The same application name and stream ID use different national standardsID");
                 return;
             }
         }
@@ -124,7 +124,7 @@ public class StreamPushUploadFileHandler extends AnalysisEventListener<StreamPus
 
     @Override
     public void doAfterAllAnalysed(AnalysisContext analysisContext) {
-        // 这里也要保存数据，确保最后遗留的数据也存储到数据库
+        // The data must also be saved here to ensure that the last remaining data is also stored in the database.
         saveData();
         streamPushItemForSave.clear();
         gBMap.clear();
@@ -133,7 +133,7 @@ public class StreamPushUploadFileHandler extends AnalysisEventListener<StreamPus
 
     private void saveData(){
         if (!streamPushItemForSave.isEmpty()) {
-            // 向数据库查询是否存在重复的app
+            // Query the database to see if there are duplicatesapp
             pushService.batchAdd(new ArrayList<>(streamPushItemForSave.values()));
         }
     }

@@ -3,7 +3,7 @@ package com.genersoft.iot.vmp.media.zlm.dto.hook;
 import lombok.Data;
 
 /**
- * zlm hook事件的参数
+ * zlm hookevent parameters
  * @author lin
  */
 @Data

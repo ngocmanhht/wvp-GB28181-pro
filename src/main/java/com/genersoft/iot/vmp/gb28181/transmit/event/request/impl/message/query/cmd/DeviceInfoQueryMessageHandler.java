@@ -58,83 +58,83 @@ public class DeviceInfoQueryMessageHandler extends SIPRequestProcessorParent imp
         try {
             responseAck((SIPRequest) evt.getRequest(), Response.OK);
         } catch (SipException | InvalidArgumentException | ParseException e) {
-            log.error("[命令发送失败] 回复200 OK: {}", e.getMessage());
+            log.error("[Command sending failed] Reply200 OK: {}", e.getMessage());
         }
     }
 
     @Override
     public void handForPlatform(RequestEvent evt, Platform platform, Element rootElement) {
-        log.info("[DeviceInfo查询]消息");
+        log.info("[DeviceInfoQuery]news");
         SIPRequest request = (SIPRequest) evt.getRequest();
         FromHeader fromHeader = (FromHeader) evt.getRequest().getHeader(FromHeader.NAME);
 
         String sn = rootElement.element("SN").getText();
 
-        /*根据WVP原有的数据结构，设备和通道是分开放置，设备信息都是存放在设备表里，通道表里的设备信息不可作为真实信息处理
-        大部分NVR/IPC设备对他的通道信息实现都是返回默认的值没有什么参考价值。NVR/IPC通道我们统一使用设备表的设备信息来作为返回。
-        我们这里使用查询数据库的方式来实现这个设备信息查询的功能，在其他地方对设备信息更新达到正确的目的。*/
+        /*According to the original data structure of WVP, devices and channels are placed separately, and device information is stored in the device table. The device information in the channel table cannot be processed as real information.
+        most ofNVR/IPCThe device returns the default value for its channel information implementation, which has no reference value.。NVR/IPCFor channels, we uniformly use the device information in the device table as return。
+        Here we use the method of querying the database to realize the function of querying device information, and update the device information in other places to achieve the correct purpose.。*/
 
         String channelId = getText(rootElement, "DeviceID");
-        // 查询这是通道id还是设备id
+        // Query whether this is a channel id or a deviceid
         if (platform.getDeviceGBId().equals(channelId)) {
-            // id指向平台的国标编号，那么就是查询平台的信息
+            // idPoint to the national standard number of the platform, then query the platform information
             try {
                 cmderFroPlatform.deviceInfoResponse(platform, null, sn, fromHeader.getTag());
             } catch (SipException | InvalidArgumentException | ParseException e) {
-                log.error("[命令发送失败] 国标级联 DeviceInfo查询回复: {}", e.getMessage());
+                log.error("[Command sending failed] National standard cascade DeviceInfo query reply: {}", e.getMessage());
             }
             return;
         }
         CommonGBChannel channel = channelService.queryOneWithPlatform(platform.getId(), channelId);
         if (channel == null) {
-            // 不存在则回复404
-            log.warn("[DeviceInfo] 通道不存在： 通道编号： {}", channelId);
+            // Reply if it does not exist404
+            log.warn("[DeviceInfo] Channel does not exist: channel number： {}", channelId);
             try {
                 responseAck(request, Response.NOT_FOUND, "channel not found or offline");
             } catch (SipException | InvalidArgumentException | ParseException e) {
-                log.error("[命令发送失败] DeviceInfo查询回复: {}", e.getMessage());
+                log.error("[Command sending failed] DeviceInfoInquiry reply: {}", e.getMessage());
                 return;
             }
             return;
         }
-        // 判断通道类型
+        // Determine channel type
         if (channel.getDataType() != ChannelDataType.GB28181) {
-            // 非国标通道不支持录像回放控制
-            log.warn("[DeviceInfo] 非国标通道不支持录像回放控制： 通道ID： {}", channel.getGbId());
+            // Non-national standard channels do not support video playback control
+            log.warn("[DeviceInfo] Non-national standard channels do not support video playback control: ChannelID： {}", channel.getGbId());
             try {
                 responseAck(request, Response.FORBIDDEN, "");
             } catch (SipException | InvalidArgumentException | ParseException e) {
-                log.error("[命令发送失败] DeviceInfo查询回复: {}", e.getMessage());
+                log.error("[Command sending failed] DeviceInfoInquiry reply: {}", e.getMessage());
                 return;
             }
             return;
         }
 
-        // 根据通道ID，获取所属设备
+        // Get the device according to the channel ID
         Device device = deviceService.getDevice(channel.getDataDeviceId());
         if (device == null) {
-            // 不存在则回复404
-            log.warn("[DeviceInfo] 通道所属设备不存在， 通道ID： {}", channel.getDataDeviceId());
+            // Reply if it does not exist404
+            log.warn("[DeviceInfo] The device to which the channel belongs does not exist, channelID： {}", channel.getDataDeviceId());
 
             try {
                 responseAck(request, Response.NOT_FOUND, "device not found ");
             } catch (SipException | InvalidArgumentException | ParseException e) {
-                log.error("[命令发送失败] DeviceInfo查询回复: {}", e.getMessage());
+                log.error("[Command sending failed] DeviceInfoInquiry reply: {}", e.getMessage());
                 return;
             }
             return;
         }
         try {
-            // 回复200 OK
+            // Reply200 OK
             responseAck((SIPRequest) evt.getRequest(), Response.OK);
         } catch (SipException | InvalidArgumentException | ParseException e) {
-            log.error("[命令发送失败] DeviceInfo查询回复: {}", e.getMessage());
+            log.error("[Command sending failed] DeviceInfoInquiry reply: {}", e.getMessage());
             return;
         }
         try {
             cmderFroPlatform.deviceInfoResponse(platform, device, sn, fromHeader.getTag());
         } catch (SipException | InvalidArgumentException | ParseException e) {
-            log.error("[命令发送失败] 国标级联 DeviceInfo查询回复: {}", e.getMessage());
+            log.error("[Command sending failed] National standard cascade DeviceInfo query reply: {}", e.getMessage());
         }
     }
 }

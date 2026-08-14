@@ -19,9 +19,9 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * @description: SIP信令处理类观察者
+ * @description: SIPSignaling processing observer
  * @author: panlinlin
- * @date:   2021年11月5日 下午15：32
+ * @date:   2021November 5, afternoon15：32
  */
 @Slf4j
 @Component
@@ -37,26 +37,26 @@ public class SIPProcessorObserver implements ISIPProcessorObserver {
     private EventPublisher eventPublisher;
 
     /**
-     * 添加 request订阅
-     * @param method 方法名
-     * @param processor 处理程序
+     * Add request subscription
+     * @param method method name
+     * @param processor handler
      */
     public void addRequestProcessor(String method, ISIPRequestProcessor processor) {
         requestProcessorMap.put(method, processor);
     }
 
     /**
-     * 添加 response订阅
-     * @param method 方法名
-     * @param processor 处理程序
+     * Add response subscription
+     * @param method method name
+     * @param processor handler
      */
     public void addResponseProcessor(String method, ISIPResponseProcessor processor) {
         responseProcessorMap.put(method, processor);
     }
 
     /**
-     * 分发RequestEvent事件
-     * @param requestEvent RequestEvent事件
+     * Distribute the RequestEvent event
+     * @param requestEvent RequestEventevent
      */
     @Override
     @Async
@@ -64,8 +64,8 @@ public class SIPProcessorObserver implements ISIPProcessorObserver {
         String method = requestEvent.getRequest().getMethod();
         ISIPRequestProcessor sipRequestProcessor = requestProcessorMap.get(method);
         if (sipRequestProcessor == null) {
-            log.warn("不支持方法{}的request", method);
-            // TODO 回复错误玛
+            log.warn("Method not supported{}ofrequest", method);
+            // TODO Reply to error
             return;
         }
         requestProcessorMap.get(method).process(requestEvent);
@@ -73,8 +73,8 @@ public class SIPProcessorObserver implements ISIPProcessorObserver {
     }
 
     /**
-     * 分发ResponseEvent事件
-     * @param responseEvent responseEvent事件
+     * Distribute ResponseEvent events
+     * @param responseEvent responseEventevent
      */
     @Override
     @Async
@@ -102,11 +102,11 @@ public class SIPProcessorObserver implements ISIPProcessorObserver {
                 }
             }
         } else if ((status >= Response.TRYING) && (status < Response.OK)) {
-            // 增加其它无需回复的响应，如101、180等
-            // 更新sip订阅的时间
+            // Add other responses that do not require a reply, such as 101, 180, etc.
+            // Time to update sip subscription
 //            sipSubscribe.updateTimeout(response.getCallIdHeader().getCallId());
         } else {
-            log.warn("接收到失败的response响应！status：" + status + ",message:" + response.getReasonPhrase());
+            log.warn("Failed response received！status：" + status + ",message:" + response.getReasonPhrase());
             if (responseEvent.getResponse() != null && !sipSubscribe.isEmpty() ) {
                 CallIdHeader callIdHeader = response.getCallIdHeader();
                 CSeqHeader cSeqHeader = response.getCSeqHeader();
@@ -130,22 +130,22 @@ public class SIPProcessorObserver implements ISIPProcessorObserver {
     }
 
     /**
-     * 向超时订阅发送消息
-     * @param timeoutEvent timeoutEvent事件
+     * Send a message to a timeout subscription
+     * @param timeoutEvent timeoutEventevent
      */
     @Override
     public void processTimeout(TimeoutEvent timeoutEvent) {
-        log.info("[消息发送超时]");
+        log.info("[Message sending timeout]");
 //        ClientTransaction clientTransaction = timeoutEvent.getClientTransaction();
 //
 //        if (clientTransaction != null) {
-//            log.info("[发送错误订阅] clientTransaction != null");
+//            log.info("[Sending wrong subscription] clientTransaction != null");
 //            Request request = clientTransaction.getRequest();
 //            if (request != null) {
-//                log.info("[发送错误订阅] request != null");
+//                log.info("[Sending wrong subscription] request != null");
 //                CallIdHeader callIdHeader = (CallIdHeader) request.getHeader(CallIdHeader.NAME);
 //                if (callIdHeader != null) {
-//                    log.info("[发送错误订阅]");
+//                    log.info("[Sending wrong subscription]");
 //                    SipSubscribe.Event subscribe = sipSubscribe.getErrorSubscribe(callIdHeader.getCallId());
 //                    SipSubscribe.EventResult eventResult = new SipSubscribe.EventResult(timeoutEvent);
 //                    if (subscribe != null){

@@ -3,10 +3,10 @@
     <div :style="boxStyle">
       <div>
         <div v-if="this.$route.query.mediaServerId" class="page-header-btn" style="padding-right: 1rem">
-          <b>节点：</b> {{ mediaServerId }}
+          <b>node：</b> {{ mediaServerId }}
         </div>
         <div v-if="this.$route.params.mediaServerId">
-          <span>流媒体：{{ this.$route.params.mediaServerId }}</span>
+          <span>streaming media：{{ this.$route.params.mediaServerId }}</span>
         </div>
         <div class="record-list-box-box">
           <div v-if="showSidebar">
@@ -16,11 +16,11 @@
               :picker-options="pickerOptions"
               type="date"
               value-format="yyyy-MM-dd"
-              placeholder="日期"
+              placeholder="Date"
               style="width: 190px"
               @change="dateChange()"
             />
-            <!--            <el-button :disabled="!mediaServerId" size="mini" type="primary" icon="fa fa-cloud-download" style="margin: auto; margin-left: 12px " title="裁剪合并" @click="drawerOpen"></el-button>-->
+            <!--            <el-button :disabled="!mediaServerId" size="mini" type="primary" icon="fa fa-cloud-download" style="margin: auto; margin-left: 12px " title="Crop and merge" @click="drawerOpen"></el-button>-->
           </div>
           <div class="record-list-box" style="height: calc(100vh - 170px); overflow: auto">
             <ul v-if="detailFiles.length >0" class="infinite-list record-list">
@@ -45,7 +45,7 @@
                 />
               </li>
             </ul>
-            <div v-if="detailFiles.length === 0" class="record-list-no-val">暂无数据</div>
+            <div v-if="detailFiles.length === 0" class="record-list-no-val">No data yet</div>
           </div>
         </div>
       </div>
@@ -59,7 +59,7 @@
             style="position: relative; left: calc(50% - 32px); top: 43%; z-index: 100;color: #fff;float: left; text-align: center;"
           >
             <div class="el-icon-loading" />
-            <div style="width: 100%; line-height: 2rem">正在加载</div>
+            <div style="width: 100%; line-height: 2rem">Loading</div>
           </div>
           <playerTabs
             ref="recordVideoPlayer"
@@ -92,22 +92,22 @@
                 <a
                   target="_blank"
                   class="record-play-control-item iconfont icon-list"
-                  title="列表"
+                  title="list"
                   @click="sidebarControl()"
                 />
                 <a
                   target="_blank"
                   class="record-play-control-item iconfont icon-camera1196054easyiconnet"
-                  title="截图"
+                  title="screenshot"
                   @click="snap()"
                 />
                 <a
                   target="_blank"
                   class="record-play-control-item iconfont icon-xiazai1"
-                  title="下载录像"
+                  title="Download video"
                   @click="chooseTimeForRecord()"
                 />
-                <!--              <a target="_blank" class="record-play-control-item iconfont icon-xiazai011" title="下载" @click="gbPause()" />-->
+                <!--              <a target="_blank" class="record-play-control-item iconfont icon-xiazai011" title="Download" @click="gbPause()" />-->
               </div>
             </div>
             <div style="text-align: center;">
@@ -116,7 +116,7 @@
                   v-if="chooseFileIndex > 0"
                   target="_blank"
                   class="record-play-control-item iconfont icon-diyigeshipin"
-                  title="上一个"
+                  title="Previous"
                   @click="playLast()"
                 />
                 <a
@@ -124,40 +124,40 @@
                   style="color: #acacac; cursor: not-allowed"
                   target="_blank"
                   class="record-play-control-item iconfont icon-diyigeshipin"
-                  title="上一个"
+                  title="Previous"
                 />
                 <a
                   target="_blank"
                   class="record-play-control-item iconfont icon-kuaijin"
-                  title="快退五秒"
+                  title="Go back five seconds"
                   @click="seekBackward()"
                 />
                 <a
                   target="_blank"
                   class="record-play-control-item iconfont icon-stop1"
                   style="font-size: 14px"
-                  title="停止"
+                  title="stop"
                   @click="stopPLay()"
                 />
                 <a
                   v-if="playing"
                   target="_blank"
                   class="record-play-control-item iconfont icon-zanting"
-                  title="暂停"
+                  title="pause"
                   @click="pausePlay()"
                 />
-                <a v-if="!playing" target="_blank" class="record-play-control-item iconfont icon-kaishi" title="播放" @click="play()" />
+                <a v-if="!playing" target="_blank" class="record-play-control-item iconfont icon-kaishi" title="play" @click="play()" />
                 <a
                   target="_blank"
                   class="record-play-control-item iconfont icon-houtui"
-                  title="快进五秒"
+                  title="Fast forward five seconds"
                   @click="seekForward()"
                 />
                 <a
                   v-if="chooseFileIndex < detailFiles.length - 1"
                   target="_blank"
                   class="record-play-control-item iconfont icon-zuihouyigeshipin"
-                  title="下一个"
+                  title="next"
                   @click="playNext()"
                 />
                 <a
@@ -165,14 +165,14 @@
                   style="color: #acacac; cursor: not-allowed"
                   target="_blank"
                   class="record-play-control-item iconfont icon-zuihouyigeshipin"
-                  title="下一个"
+                  title="next"
                   @click="playNext()"
                 />
                 <el-dropdown @command="changePlaySpeed" placement="top">
                   <a
                     target="_blank"
                     class="record-play-control-item record-play-control-speed"
-                    title="倍速播放"
+                    title="Play at double speed"
                   >{{ playSpeed }}X</a>
                   <el-dropdown-menu slot="dropdown" :append-to-body="false">
                     <el-dropdown-item
@@ -192,7 +192,7 @@
                   <a
                     target="_blank"
                     class="record-play-control-item record-play-control-speed"
-                    title="选择播放器"
+                    title="Select player"
                   >{{ playerLabel }}</a>
                   <el-dropdown-menu slot="dropdown" :append-to-body="false">
                     <el-dropdown-item v-for="p in playerList" :key="p.key" :command="p.key">{{ p.label }}</el-dropdown-item>
@@ -203,14 +203,14 @@
                   v-if="!isFullScreen"
                   target="_blank"
                   class="record-play-control-item iconfont icon-fangdazhanshi"
-                  title="全屏"
+                  title="full screen"
                   @click="fullScreen()"
                 />
                 <a
                   v-else
                   target="_blank"
                   class="record-play-control-item iconfont icon-suoxiao1"
-                  title="全屏"
+                  title="full screen"
                   @click="fullScreen()"
                 />
               </div>
@@ -257,7 +257,7 @@ export default {
       chooseFileIndex: null,
       queryDate: new Date(),
       currentPage: 1,
-      count: 1000000, // TODO 分页导致滑轨视频有效值无法获取完全
+      count: 1000000, // TODO Pagination causes the slide rail video to fail to obtain all valid values
       total: 0,
       playLoading: false,
       showTime: true,
@@ -275,7 +275,7 @@ export default {
       playerLabel: 'Jessibuca',
       pickerOptions: {
         cellClassName: (date) => {
-          // 通过显示一个点标识这一天有录像
+          // Indicates that there is video recording on this day by displaying a dot
           const time = moment(date).format('YYYY-MM-DD')
           if (this.dateFilesObj[time]) {
             return 'data-picker-true'
@@ -311,7 +311,7 @@ export default {
     }
   },
   mounted() {
-    // 查询当年有视频的日期
+    // Query the date of video in the current year
     this.chooseDate = moment().format('YYYY-MM-DD')
     this.dateChange()
     this.getDownloadSpeedArray()
@@ -370,14 +370,14 @@ export default {
       })
     },
     playLast() {
-      // 播放上一个
+      // Play previous
       if (this.chooseFileIndex === 0) {
         return
       }
       this.chooseFile(this.chooseFileIndex - 1)
     },
     playNext() {
-      // 播放上一个
+      // Play previous
       if (this.chooseFileIndex === this.detailFiles.length - 1) {
         return
       }
@@ -386,7 +386,7 @@ export default {
     changePlaySpeed(speed) {
       console.log(this.streamInfo)
       console.log(speed)
-      // 倍速播放
+      // Play at double speed
       this.playSpeed = speed
       this.$store.dispatch('playback/setSpeed', [this.streamInfo.stream, speed])
         .then(data => {
@@ -397,21 +397,21 @@ export default {
         })
     },
     seekBackward() {
-      // 快退五秒
+      // Go back five seconds
       this.playSeekValue -= 5 * 1000
       this.play()
     },
     seekForward() {
-      // 快进五秒
+      // Fast forward five seconds
       this.playSeekValue += 5 * 1000
       this.play()
     },
     stopPLay() {
-      // 停止
+      // stop
       this.$refs.recordVideoPlayer.destroy()
     },
     pausePlay() {
-      // 暂停
+      // pause
       this.$refs.recordVideoPlayer.pause()
     },
     play() {
@@ -445,7 +445,7 @@ export default {
       this.detailFiles = []
       this.$store.dispatch('gbRecord/query', [this.deviceId, this.channelId, this.startTime, this.endTime])
         .then(data => {
-          // 处理时间信息
+          // Processing time information
           if (data.recordList.length === 0) {
             return
           }
@@ -485,7 +485,7 @@ export default {
         })
     },
     stopPlayRecord(callback) {
-      console.log('停止录像回放')
+      console.log('Stop video playback')
       if (this.streamInfo !== null) {
         if (this.$refs.recordVideoPlayer) {
           this.$refs.recordVideoPlayer.pause()
@@ -541,7 +541,7 @@ export default {
       } else {
         const loading = this.$loading({
           lock: true,
-          text: '正在请求录像',
+          text: 'Requesting video recording',
           spinner: 'el-icon-loading',
           background: 'rgba(0, 0, 0, 0.7)'
         })

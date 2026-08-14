@@ -31,7 +31,7 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * 目录查询的回复
+ * Directory Query Replies
  */
 @Slf4j
 @Component
@@ -64,25 +64,25 @@ public class CatalogResponseMessageHandler extends SIPRequestProcessorParent imp
 
     @Override
     public void handForDevice(RequestEvent evt, Device device, Element element) {
-        // 回复200 OK
+        // Reply200 OK
         try {
             responseAckAsync((SIPRequest) evt.getRequest(), Response.OK);
         } catch (SipException | InvalidArgumentException | ParseException e) {
-            log.error("[命令发送失败] 目录查询回复: {}", e.getMessage());
+            log.error("[Command sending failed] Directory Query Reply: {}", e.getMessage());
         }
 
         int sn = 0;
-        // 全局异常捕获，保证下一条可以得到处理
+        // Global exception capture to ensure that the next one can be handled
         try {
             Element rootElement = null;
             try {
                 rootElement = getRootElement(evt, device.getCharset());
             } catch (DocumentException e) {
-                log.error("[xml解析] 失败： ", e);
+                log.error("[xmlparse] failed： ", e);
                 return;
             }
             if (rootElement == null) {
-                log.warn("[ 收到通道 ] content cannot be null, {}", evt.getRequest());
+                log.warn("[ receive channel ] content cannot be null, {}", evt.getRequest());
                 return;
             }
             Element deviceListElement = rootElement.element("DeviceList");
@@ -93,10 +93,10 @@ public class CatalogResponseMessageHandler extends SIPRequestProcessorParent imp
             int sumNum = Integer.parseInt(sumNumElement.getText());
 
             if (sumNum == 0) {
-                log.info("[收到通道]设备:{}的: 0个", device.getDeviceId());
-                // 数据已经完整接收
+                log.info("[receive channel]Equipment:{}of: 0", device.getDeviceId());
+                // The data has been completely received
                 deviceChannelService.cleanChannelsForDevice(device.getId());
-                // 推送空数据，不然无法及时结束
+                // Push empty data, otherwise it will not end in time
                 catalogDataCatch.put(device.getDeviceId(), sn, 0, device,
                         Collections.emptyList(), Collections.emptyList(), Collections.emptyList());
                 catalogDataCatch.setChannelSyncEnd(device.getDeviceId(), sn, null);
@@ -107,32 +107,32 @@ public class CatalogResponseMessageHandler extends SIPRequestProcessorParent imp
                     List<DeviceChannel> channelList = new ArrayList<>();
                     List<Region> regionList = new ArrayList<>();
                     List<Group> groupList = new ArrayList<>();
-                    // 遍历DeviceList
+                    // TraverseDeviceList
                     while (deviceListIterator.hasNext()) {
                         Element itemDevice = deviceListIterator.next();
                         Element channelDeviceElement = itemDevice.element("DeviceID");
                         if (channelDeviceElement == null) {
-                            // 总数减一， 避免最后总数不对 无法确定问题
+                            // Decrease the total by one to avoid incorrect final total and inability to determine the problem.
                             continue;
                         }
-                        // 从xml解析内容到 DeviceChannel 对象
+                        // Parse content from xml to DeviceChannel object
                         DeviceChannel channel = DeviceChannel.decode(itemDevice);
                         if (channel.getDeviceId() == null) {
-                            log.info("[收到目录订阅]：但是解析失败 {}", new String(evt.getRequest().getRawContent()));
+                            log.info("[Receive catalog subscription]：But parsing failed {}", new String(evt.getRequest().getRawContent()));
                             continue;
                         }
                         channel.setDataDeviceId(device.getId());
                         if (channel.getParentId() != null && channel.getParentId().equals(sipConfig.getId())) {
                             channel.setParentId(null);
                         }
-                        // 解析通道类型
+                        // Parse channel type
                         if (channel.getDeviceId().length() <= 8) {
-                            // 行政区划
+                            // Administrative division
                             Region region = Region.getInstance(channel);
                             regionList.add(region);
                             channel.setChannelType(1);
                         }else if (channel.getDeviceId().length() == 20){
-                            // 业务分组/虚拟组织
+                            // business grouping/virtual organization
                             Group group = Group.getInstance(channel);
                             if (group != null) {
                                 channel.setParental(1);
@@ -150,13 +150,13 @@ public class CatalogResponseMessageHandler extends SIPRequestProcessorParent imp
 
                     catalogDataCatch.put(device.getDeviceId(), sn, sumNum, device,
                             channelList, regionList, groupList);
-                    log.info("[收到通道]设备: {} -> {}个，{}/{}", device.getDeviceId(), channelList.size(), catalogDataCatch.size(device.getDeviceId(), sn), sumNum);
+                    log.info("[receive channel]Equipment: {} -> {}a，{}/{}", device.getDeviceId(), channelList.size(), catalogDataCatch.size(device.getDeviceId(), sn), sumNum);
 
                     if (catalogDataCatch.size(device.getDeviceId(), sn) > 0
                             && catalogDataCatch.size(device.getDeviceId(), sn) == catalogDataCatch.sumNum(device.getDeviceId(), sn)) {
                         ReentrantLock lock = catalogDataCatch.getDeviceWriteLock(device.getDeviceId());
                         if (!lock.tryLock()) {
-                            log.info("[同步通道] 设备 {} 正在入库中，跳过重复写入", device.getDeviceId());
+                            log.info("[sync channel] Equipment {} Incoming to database, skip repeated writing", device.getDeviceId());
                             return;
                         }
                         try {
@@ -177,7 +177,7 @@ public class CatalogResponseMessageHandler extends SIPRequestProcessorParent imp
                             }
                             catalogDataCatch.setChannelSyncEnd(device.getDeviceId(), sn, null);
                         } catch (Exception e) {
-                            log.warn("[同步通道] 直接入库失败，交由定时器兜底", e);
+                            log.warn("[sync channel] If the direct storage fails, the timer will take care of the problem.", e);
                             catalogDataCatch.setComplete(device.getDeviceId(), sn);
                         } finally {
                             lock.unlock();
@@ -186,8 +186,8 @@ public class CatalogResponseMessageHandler extends SIPRequestProcessorParent imp
                 }
             }
         } catch (Exception e) {
-            log.warn("[收到通道] 发现未处理的异常, \r\n{}", evt.getRequest());
-            log.error("[收到通道] 异常内容： ", e);
+            log.warn("[receive channel] Unhandled exception found, \r\n{}", evt.getRequest());
+            log.error("[receive channel] Unusual content： ", e);
         }
     }
 

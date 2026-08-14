@@ -3,48 +3,48 @@ package com.genersoft.iot.vmp.vmanager.bean;
 public class OtherPsSendInfo {
 
     /**
-     * 发流IP
+     * FlowIP
      */
     private String sendLocalIp;
 
     /**
-     * 发流端口
+     * Streaming port
      */
     private int sendLocalPort;
 
     /**
-     * 收流IP
+     * collect flowIP
      */
     private String receiveIp;
 
     /**
-     * 收流端口
+     * Flow collection port
      */
     private int receivePort;
 
 
     /**
-     * 会话ID
+     * sessionID
      */
     private String callId;
 
     /**
-     * 流ID
+     * flowID
      */
     private String stream;
 
     /**
-     * 推流应用名
+     * Push application name
      */
     private String pushApp;
 
     /**
-     * 推流流ID
+     * Push flowID
      */
     private String pushStream;
 
     /**
-     * 推流SSRC
+     * Push streamingSSRC
      */
     private String pushSSRC;
 

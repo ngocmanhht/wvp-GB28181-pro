@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 终端上传音视频资源列表
+ * Terminal upload audio and video resource list
  *
  * @author QingtaiJiang
  * @date 2023/4/28 10:36
@@ -70,28 +70,28 @@ public class J1205 extends Re {
     @Getter
     public static class JRecordItem {
 
-        // 逻辑通道号
+        // Logical channel number
         private int channelId;
 
-        // 开始时间
+        // start time
         private String startTime;
 
-        // 结束时间
+        // end time
         private String endTime;
 
-        // 报警标志
+        // Alarm sign
         private long alarmSign;
 
-        // 音视频资源类型
+        // Audio and video resource types
         private int mediaType;
 
-        // 码流类型
+        // Stream type
         private int streamType = 1;
 
-        // 存储器类型
+        // memory type
         private int storageType;
 
-        // 文件大小
+        // file size
         private long size;
 
         @Override

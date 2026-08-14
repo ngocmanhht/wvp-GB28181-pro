@@ -33,11 +33,11 @@ public class SourceBroadcastServiceForGbImpl implements ISourceBroadcastService 
     public AudioTalkResult startBroadcast(CommonGBChannel channel) {
         Device device = deviceService.getDevice(channel.getDataDeviceId());
         if (device == null) {
-            throw new ControllerException(ErrorCode.ERROR400.getCode(), "未找到设备");
+            throw new ControllerException(ErrorCode.ERROR400.getCode(), "Device not found");
         }
         DeviceChannel deviceChannel = deviceChannelService.getOneForSourceById(channel.getGbId());
         if (deviceChannel == null) {
-            throw new ControllerException(ErrorCode.ERROR400.getCode(), "未找到通道");
+            throw new ControllerException(ErrorCode.ERROR400.getCode(), "Channel not found");
         }
         AudioBroadcastResult abResult = playService.audioBroadcast(
                 device.getDeviceId(), deviceChannel.getDeviceId(), true);
@@ -60,11 +60,11 @@ public class SourceBroadcastServiceForGbImpl implements ISourceBroadcastService 
     public AudioTalkResult startTalk(CommonGBChannel channel) {
         Device device = deviceService.getDevice(channel.getDataDeviceId());
         if (device == null) {
-            throw new ControllerException(ErrorCode.ERROR400.getCode(), "未找到设备");
+            throw new ControllerException(ErrorCode.ERROR400.getCode(), "Device not found");
         }
         DeviceChannel deviceChannel = deviceChannelService.getOneForSourceById(channel.getGbId());
         if (deviceChannel == null) {
-            throw new ControllerException(ErrorCode.ERROR400.getCode(), "未找到通道");
+            throw new ControllerException(ErrorCode.ERROR400.getCode(), "Channel not found");
         }
         AudioBroadcastResult abResult = playService.audioBroadcast(
                 device.getDeviceId(), deviceChannel.getDeviceId(), false);

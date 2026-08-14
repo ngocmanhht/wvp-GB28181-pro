@@ -7,24 +7,24 @@ import lombok.Data;
 @Data
 public class StreamPushExcelDto {
 
-    @ExcelProperty("名称")
+    @ExcelProperty("Name")
     private String name;
 
-    @ExcelProperty("应用名")
+    @ExcelProperty("Application name")
     private String app;
 
-    @ExcelProperty("流ID")
+    @ExcelProperty("flowID")
     private String stream;
 
-    @ExcelProperty("国标ID")
+    @ExcelProperty("National standardID")
     private String gbDeviceId;
 
-    @ExcelProperty("在线状态")
+    @ExcelProperty("online status")
     private boolean status;
 
-    @Schema(description = "经度 WGS-84坐标系")
+    @Schema(description = "longitude WGS-84coordinate system")
     private Double longitude;
 
-    @Schema(description = "纬度 WGS-84坐标系")
+    @Schema(description = "Latitude WGS-84coordinate system")
     private Double latitude;
 }

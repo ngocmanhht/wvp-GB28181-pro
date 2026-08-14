@@ -12,37 +12,37 @@ import static com.genersoft.iot.vmp.gb28181.utils.XmlUtil.*;
 /**
  * @author lin
  */
-@Schema(description = "报警通知")
+@Schema(description = "Alarm notification")
 @Data
 public class DeviceAlarmNotify {
 
-    @Schema(description = "设备的国标编号")
+    @Schema(description = "National standard number of equipment")
     private String deviceId;
 
-	@Schema(description = "设备名称")
+	@Schema(description = "Device name")
 	private String deviceName;
 
     /**
-     * 通道Id
+     * channelId
      */
-    @Schema(description = "通道的国标编号")
+    @Schema(description = "The national standard number of the channel")
     private String channelId;
 
     /**
-     * 报警级别, 1为一级警情, 2为二级警情, 3为三级警情, 4为四级警情
+     * Alarm level, 1 is the first level alarm, 2 is the second level alarm, 3 is the third level alarm, 4 is the fourth level alarm
      */
-    @Schema(description = "报警级别, 1为一级警情, 2为二级警情, 3为三级警情, 4为四级警情")
+    @Schema(description = "Alarm level, 1 is the first level alarm, 2 is the second level alarm, 3 is the third level alarm, 4 is the fourth level alarm")
     private String alarmPriority;
 
-    @Schema(description = "报警级别, 1为一级警情, 2为二级警情, 3为三级警情, 4为四级警情")
+    @Schema(description = "Alarm level, 1 is the first level alarm, 2 is the second level alarm, 3 is the third level alarm, 4 is the fourth level alarm")
     private String alarmPriorityDescription;
 
     /**
-     * 报警方式 , 1为电话报警, 2为设备报警, 3为短信报警, 4为 GPS报警, 5为视频报警, 6为设备故障报警,
-     * 7其他报警;可以为直接组合如12为电话报警或 设备报警-
+     * Alarm mode, 1 is phone alarm, 2 is equipment alarm, 3 is SMS alarm, 4 is GPS alarm, 5 is video alarm, 6 is equipment failure alarm,
+     * 7Other alarms;It can be a direct combination such as 12 for telephone alarm or equipment alarm.-
      */
-    @Schema(description = "报警方式 , 1为电话报警, 2为设备报警, 3为短信报警, 4为 GPS报警, 5为视频报警, 6为设备故障报警,\n" +
-            "\t * 7其他报警;可以为直接组合如12为电话报警或设备报警")
+    @Schema(description = "Alarm mode, 1 is phone alarm, 2 is equipment alarm, 3 is SMS alarm, 4 is GPS alarm, 5 is video alarm, 6 is equipment failure alarm,\n" +
+            "\t * 7Other alarms;It can be a direct combination such as 12 for telephone alarm or equipment alarm.")
     private Integer alarmMethod;
 
 
@@ -50,59 +50,59 @@ public class DeviceAlarmNotify {
 
 
     /**
-     * 报警时间
+     * Alarm time
      */
-    @Schema(description = "报警时间")
+    @Schema(description = "Alarm time")
     private String alarmTime;
 
     /**
-     * 报警内容描述
+     * Alarm content description
      */
-    @Schema(description = "报警内容描述")
+    @Schema(description = "Alarm content description")
     private String alarmDescription;
 
     /**
-     * 经度
+     * longitude
      */
-    @Schema(description = "经度")
+    @Schema(description = "longitude")
     private double longitude;
 
     /**
-     * 纬度
+     * Latitude
      */
-    @Schema(description = "纬度")
+    @Schema(description = "Latitude")
     private double latitude;
 
     /**
-     * 报警类型,
-     * 报警方式为2时,不携带 AlarmType为默认的报警设备报警,
-     * 携带 AlarmType取值及对应报警类型如下:
-     * 1-视频丢失报警;
-     * 2-设备防拆报警;
-     * 3-存储设备磁盘满报警;
-     * 4-设备高温报警;
-     * 5-设备低温报警。
-     * 报警方式为5时,取值如下:
-     * 1-人工视频报警;
-     * 2-运动目标检测报警;
-     * 3-遗留物检测报警;
-     * 4-物体移除检测报警;
-     * 5-绊线检测报警;
-     * 6-入侵检测报警;
-     * 7-逆行检测报警;
-     * 8-徘徊检测报警;
-     * 9-流量统计报警;
-     * 10-密度检测报警;
-     * 11-视频异常检测报警;
-     * 12-快速移动报警。
-     * 报警方式为6时,取值下:
-     * 1-存储设备磁盘故障报警;
-     * 2-存储设备风扇故障报警。
+     * Alarm type,
+     * When the alarm mode is 2, if AlarmType is not carried, it is the default alarm device alarm.,
+     * The value of AlarmType carried and the corresponding alarm type are as follows::
+     * 1-Video loss alarm;
+     * 2-Equipment anti-tamper alarm;
+     * 3-Storage device disk full alarm;
+     * 4-Equipment high temperature alarm;
+     * 5-Equipment low temperature alarm。
+     * When the alarm mode is 5, the values are as follows:
+     * 1-Manual video alarm;
+     * 2-Moving target detection alarm;
+     * 3-Remaining object detection alarm;
+     * 4-Object removal detection alarm;
+     * 5-Tripwire detection alarm;
+     * 6-Intrusion detection alarm;
+     * 7-Retrograde detection alarm;
+     * 8-Wandering detection alarm;
+     * 9-Traffic statistics alarm;
+     * 10-Density detection alarm;
+     * 11-Video anomaly detection and alarm;
+     * 12-Fast moving alarm。
+     * When the alarm mode is 6, the value is:
+     * 1-Storage device disk failure alarm;
+     * 2-Storage device fan failure alarm。
      */
-    @Schema(description = "报警类型")
+    @Schema(description = "Alarm type")
     private Integer alarmType;
 
-    @Schema(description = "事件类型, 在入侵检测报警时可携带")
+    @Schema(description = "Event type, portable when intrusion detection alarm occurs")
     private Integer eventType;
 
 	public AlarmType getAlarmTypeEnum() {
@@ -111,11 +111,11 @@ public class DeviceAlarmNotify {
 		}
 
 		if (alarmMethod == DeviceAlarmMethod.Device.getVal()) {
-			// 2为设备报警,
-			// 报警方式为2时,
-			// 不携带 AlarmType为默认的报警设备报警,
-			// 携带 AlarmType取值及对应报警类型如下:
-			// 1-视频丢失报警;2-设备防拆报警;3-存储设备磁盘满报警;4-设备高温报警;5-设备低温报警
+			// 2Alarm the device,
+			// When the alarm mode is 2,
+			// If AlarmType is not carried, it is the default alarm device alarm.,
+			// The value of AlarmType carried and the corresponding alarm type are as follows::
+			// 1-Video loss alarm;2-Equipment anti-tamper alarm;3-Storage device disk full alarm;4-Equipment high temperature alarm;5-Equipment low temperature alarm
 			switch (alarmType) {
 				case 1:
 					return AlarmType.VideoLoss;
@@ -130,12 +130,12 @@ public class DeviceAlarmNotify {
 			}
 		}
 		if (alarmMethod == DeviceAlarmMethod.Video.getVal()) {
-			// 5为视频报警
-			// 报警方式为5时,
-			// 取值如下:
-			// 1-人工视频报警;2-运动目标检测报警;3-遗留物检测报警;4-物体移除检测报警;5-绊线检测报警;
-			// 6-入侵检测报警;7-逆行检测报警;8-徘徊检测报警;9-流量统计报警;
-			// 10-密度检测报警;11-视频异常检测报警;12-快速移动报警。
+			// 5Alarm for video
+			// Alarm mode is 5 hours,
+			// The values are as follows:
+			// 1-Manual video alarm;2-Moving target detection alarm;3-Remaining object detection alarm;4-Object removal detection alarm;5-Tripwire detection alarm;
+			// 6-Intrusion detection alarm;7-Retrograde detection alarm;8-Wandering detection alarm;9-Traffic statistics alarm;
+			// 10-Density detection alarm;11-Video anomaly detection and alarm;12-Fast moving alarm。
 			switch (alarmType) {
 				case 1:
 					return AlarmType.ManualVideo;
@@ -174,10 +174,10 @@ public class DeviceAlarmNotify {
 		return null;
 	}
 
-	@Schema(description = "报警类型描述")
+	@Schema(description = "Alarm type description")
     private String alarmTypeDescription;
 
-    @Schema(description = "创建时间")
+    @Schema(description = "creation time")
     private String createTime;
 
 

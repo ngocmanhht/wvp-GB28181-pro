@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Tag(name = "区域管理")
+@Tag(name = "Area management")
 @RestController
 @RequestMapping("/api/region")
 public class RegionController {
@@ -28,7 +28,7 @@ public class RegionController {
     @Autowired
     private IRegionService regionService;
 
-    @Operation(summary = "添加区域")
+    @Operation(summary = "Add area")
     @Parameter(name = "region", description = "Region", required = true)
     @ResponseBody
     @PostMapping("/add")
@@ -36,10 +36,10 @@ public class RegionController {
         regionService.add(region);
     }
 
-    @Operation(summary = "查询区域")
-    @Parameter(name = "query", description = "要搜索的内容", required = true)
-    @Parameter(name = "page", description = "当前页", required = true)
-    @Parameter(name = "count", description = "每页查询数量", required = true)
+    @Operation(summary = "Query area")
+    @Parameter(name = "query", description = "What to search for", required = true)
+    @Parameter(name = "page", description = "Current page", required = true)
+    @Parameter(name = "count", description = "Number of queries per page", required = true)
     @ResponseBody
     @GetMapping("/page/list")
     public PageInfo<Region> query(
@@ -50,10 +50,10 @@ public class RegionController {
         return regionService.query(query, page, count);
     }
 
-    @Operation(summary = "查询区域节点")
-    @Parameter(name = "query", description = "要搜索的内容", required = true)
-    @Parameter(name = "parent", description = "所属行政区划编号", required = true)
-    @Parameter(name = "hasChannel", description = "是否查询通道", required = true)
+    @Operation(summary = "Query area node")
+    @Parameter(name = "query", description = "What to search for", required = true)
+    @Parameter(name = "parent", description = "Administrative division number", required = true)
+    @Parameter(name = "hasChannel", description = "Whether to query the channel", required = true)
     @ResponseBody
     @GetMapping("/tree/list")
     public List<RegionTree> queryForTree(
@@ -64,9 +64,9 @@ public class RegionController {
     }
 
 
-    @Operation(summary = "查询区域")
-    @Parameter(name = "query", description = "要搜索的内容", required = true)
-    @Parameter(name = "channel", description = "true为查询通道，false为查询节点", required = true)
+    @Operation(summary = "Query area")
+    @Parameter(name = "query", description = "What to search for", required = true)
+    @Parameter(name = "channel", description = "trueis the query channel, false is the query node", required = true)
     @ResponseBody
     @GetMapping("/tree/query")
     public PageInfo<Region> queryTree(Integer page, Integer count,
@@ -75,7 +75,7 @@ public class RegionController {
         return regionService.queryList(page, count, query);
     }
 
-    @Operation(summary = "更新区域")
+    @Operation(summary = "update area")
     @Parameter(name = "region", description = "Region", required = true)
     @ResponseBody
     @PostMapping("/update")
@@ -83,20 +83,20 @@ public class RegionController {
         regionService.update(region);
     }
 
-    @Operation(summary = "删除区域")
-    @Parameter(name = "id", description = "区域ID", required = true)
+    @Operation(summary = "delete area")
+    @Parameter(name = "id", description = "areaID", required = true)
     @ResponseBody
     @DeleteMapping("/delete")
     public void delete(Integer id){
-        Assert.notNull(id, "区域ID需要存在");
+        Assert.notNull(id, "Region ID needs to exist");
         boolean result = regionService.deleteByDeviceId(id);
         if (!result) {
-            throw new ControllerException(ErrorCode.ERROR100.getCode(), "移除失败");
+            throw new ControllerException(ErrorCode.ERROR100.getCode(), "Removal failed");
         }
     }
 
-    @Operation(summary = "根据区域Id查询区域")
-    @Parameter(name = "regionDeviceId", description = "行政区划节点编号", required = true)
+    @Operation(summary = "Query area based on area ID")
+    @Parameter(name = "regionDeviceId", description = "Administrative division node number", required = true)
     @ResponseBody
     @GetMapping("/one")
     public Region queryRegionByDeviceId(
@@ -108,8 +108,8 @@ public class RegionController {
         return regionService.queryRegionByDeviceId(regionDeviceId);
     }
 
-    @Operation(summary = "获取所属的行政区划下的行政区划")
-    @Parameter(name = "parent", description = "所属的行政区划", required = false)
+    @Operation(summary = "Get the administrative division under the administrative division to which it belongs")
+    @Parameter(name = "parent", description = "Administrative division to which it belongs", required = false)
     @ResponseBody
     @GetMapping("/base/child/list")
     public List<Region> getAllChild(@RequestParam(required = false) String parent){
@@ -119,29 +119,29 @@ public class RegionController {
         return regionService.getAllChild(parent);
     }
 
-    @Operation(summary = "获取所属的行政区划下的行政区划")
-    @Parameter(name = "deviceId", description = "当前的行政区划", required = false)
+    @Operation(summary = "Get the administrative division under the administrative division to which it belongs")
+    @Parameter(name = "deviceId", description = "Current administrative divisions", required = false)
     @ResponseBody
     @GetMapping("/path")
     public List<Region> getPath(String deviceId){
         return regionService.getPath(deviceId);
     }
 
-    @Operation(summary = "从通道中同步行政区划")
+    @Operation(summary = "Synchronize administrative divisions from channels")
     @ResponseBody
     @GetMapping("/sync")
     public void sync(){
         regionService.syncFromChannel();
     }
 
-    @Operation(summary = "根据行政区划编号从文件中查询层级和描述")
+    @Operation(summary = "Query the level and description from the file based on the administrative division number")
     @ResponseBody
     @GetMapping("/description")
     public String getDescription(String civilCode){
         return regionService.getDescription(civilCode);
     }
 
-    @Operation(summary = "根据行政区划编号从文件中查询层级并添加")
+    @Operation(summary = "Query the level from the file based on the administrative division number and add")
     @ResponseBody
     @GetMapping("/addByCivilCode")
     public void addByCivilCode(String civilCode){

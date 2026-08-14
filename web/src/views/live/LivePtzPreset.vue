@@ -2,9 +2,9 @@
   <div class="live-ptz-preset">
     <div v-for="item in presetList" :key="item.presetId" class="preset-item" @click="gotoPreset(item)">
       <span class="preset-idx">{{ item.presetId }}</span>
-      <span class="preset-name">{{ item.presetName || '预置位 ' + item.presetId }}</span>
+      <span class="preset-name">{{ item.presetName || 'Preset position ' + item.presetId }}</span>
     </div>
-    <div v-if="!presetList.length" class="preset-empty">暂无预置位</div>
+    <div v-if="!presetList.length" class="preset-empty">No preset position yet</div>
   </div>
 </template>
 

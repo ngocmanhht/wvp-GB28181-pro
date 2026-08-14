@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationEvent;
 
 /**
- * 驾驶员身份信息采集上报
+ * Driver identity information collection and reporting
  *
  */
 @Slf4j
@@ -25,7 +25,7 @@ public class J0702 extends Re {
     @Override
     protected Rs decode0(ByteBuf buf, Header header, Session session) {
         JTDriverInformation driverInformation = JTDriverInformation.decode(buf, header.is2019Version());
-        log.info("[JT-驾驶员身份信息采集上报]: {}", driverInformation.toString());
+        log.info("[JT-Driver identity information collection and reporting]: {}", driverInformation.toString());
         SessionManager.INSTANCE.response(header.getPhoneNumber(), "0702", null, driverInformation);
         return null;
     }

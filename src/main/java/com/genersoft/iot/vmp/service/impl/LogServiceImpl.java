@@ -25,7 +25,7 @@ public class LogServiceImpl implements ILogService {
     public List<LogFileInfo> queryList(String query, String startTime, String endTime) {
         File logFile = getLogDir();
         if (logFile == null || !logFile.exists()) {
-            throw new ControllerException(ErrorCode.ERROR100.getCode(), "获取日志文件目录失败");
+            throw new ControllerException(ErrorCode.ERROR100.getCode(), "Failed to obtain log file directory");
         }
         File[] files = logFile.listFiles();
         List<LogFileInfo> result = new ArrayList<>();
@@ -33,7 +33,7 @@ public class LogServiceImpl implements ILogService {
             return result;
         }
 
-        // 读取文件创建时间作为开始时间，修改时间为结束时间
+        // Read the file creation time as the start time and the modification time as the end time
         Long startTimestamp = null;
         if (startTime != null) {
             startTimestamp = DateUtil.yyyy_MM_dd_HH_mm_ssToTimestampMs(startTime);
@@ -65,7 +65,7 @@ public class LogServiceImpl implements ILogService {
                     continue;
                 }
             } catch (IOException e) {
-                log.error("[读取日志文件列表] 获取创建时间和修改时间失败", e);
+                log.error("[Read log file list] Failed to get creation time and modification time", e);
                 continue;
             }
             result.add(logFileInfo);
@@ -90,7 +90,7 @@ public class LogServiceImpl implements ILogService {
         }
         String startTime = startLine.substring(0, 19);
 
-        // 最后一行的开头不一定是时间
+        // The last line does not necessarily start with the time
 //        String lastLine = "";
 //        try (ReversedLinesFileReader reversedLinesReader = new ReversedLinesFileReader(file, Charset.defaultCharset())) {
 //            lastLine = reversedLinesReader.readLine();

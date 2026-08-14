@@ -7,23 +7,23 @@ public enum SyTokenManager {
     INSTANCE;
 
     /**
-     * 普通用户 app Key 和 secret
+     * Ordinary user app Key and secret
      */
     public final Map<String, String> appMap = new HashMap<>();
 
 
     /**
-     * 管理员专属token
+     * Administrator onlytoken
      */
     public String adminToken;
 
     /**
-     * sm4密钥
+     * sm4key
      */
     public String sm4Key;
 
     /**
-     * 接口有效时长，单位分钟
+     * Interface validity period, in minutes
      */
     public Long expires;
 

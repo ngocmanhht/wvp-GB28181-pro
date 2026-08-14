@@ -43,51 +43,51 @@ public class SourcePlaybackServiceForGbImpl implements ISourcePlaybackService {
 
     @Override
     public void stopPlayback(CommonGBChannel channel, String stream) {
-        // 国标通道
+        // National standard channel
         try {
             playService.stop(InviteSessionType.PLAYBACK, channel, stream);
         }  catch (Exception e) {
-            log.error("[停止点播失败] {}({})", channel.getGbName(), channel.getGbDeviceId(), e);
+            log.error("[Failed to stop on demand] {}({})", channel.getGbName(), channel.getGbDeviceId(), e);
         }
     }
 
     @Override
     public void playbackPause(CommonGBChannel channel, String stream) {
-        // 国标通道
+        // National standard channel
         try {
             playService.playbackPause(stream);
         }  catch (Exception e) {
-            log.error("[停止点播失败] {}({})", channel.getGbName(), channel.getGbDeviceId(), e);
+            log.error("[Failed to stop on demand] {}({})", channel.getGbName(), channel.getGbDeviceId(), e);
         }
     }
 
     @Override
     public void playbackResume(CommonGBChannel channel, String stream) {
-        // 国标通道
+        // National standard channel
         try {
             playService.playbackPause(stream);
         }  catch (Exception e) {
-            log.error("[停止点播失败] {}({})", channel.getGbName(), channel.getGbDeviceId(), e);
+            log.error("[Failed to stop on demand] {}({})", channel.getGbName(), channel.getGbDeviceId(), e);
         }
     }
 
     @Override
     public void playbackSeek(CommonGBChannel channel, String stream, long seekTime) {
-        // 国标通道
+        // National standard channel
         try {
             playService.playbackPause(stream);
         }  catch (Exception e) {
-            log.error("[停止点播失败] {}({})", channel.getGbName(), channel.getGbDeviceId(), e);
+            log.error("[Failed to stop on demand] {}({})", channel.getGbName(), channel.getGbDeviceId(), e);
         }
     }
 
     @Override
     public void playbackSpeed(CommonGBChannel channel, String stream, Double speed) {
-        // 国标通道
+        // National standard channel
         try {
             playService.playbackSpeed(stream, speed);
         }  catch (Exception e) {
-            log.error("[停止点播失败] {}({})", channel.getGbName(), channel.getGbDeviceId(), e);
+            log.error("[Failed to stop on demand] {}({})", channel.getGbName(), channel.getGbDeviceId(), e);
         }
     }
 

@@ -1,6 +1,6 @@
 module.exports = {
 
-  title: 'WVP视频平台',
+  title: 'WVPVideo platform',
 
   /**
    * @type {boolean} true | false

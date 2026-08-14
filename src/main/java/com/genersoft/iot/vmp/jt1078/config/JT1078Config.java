@@ -18,8 +18,8 @@ public class JT1078Config {
     private Boolean record = false;
 
     /**
-     * IDLE状态超时时间，单位：秒，默认0表示不启用，启用后当连接进入IDLE状态超过该时间时将被断开连接
-       连接进入IDLE状态的条件是：在readerIdleTime时间内没有收到任何数据包，并且在writerIdleTime时间内没有发送任何数据包
+     * IDLEStatus timeout time, unit: seconds, default 0 means not enabled. After enabling, the connection will be disconnected when it enters the IDLE state and exceeds this time.
+       The conditions for the connection to enter the IDLE state are: no data packets are received within the readerIdleTime time, and no data packets are sent within the writerIdleTime time
      */
     private Integer readerIdleTime = 0;
 }

@@ -7,46 +7,46 @@ import lombok.Data;
  * @author lin
  */
 @Data
-@Schema(description = "拉流代理的信息")
+@Schema(description = "Streaming agent information")
 public class StreamProxyParam {
 
-    @Schema(description = "类型，取值，default： 流媒体直接拉流（默认），ffmpeg： ffmpeg实现拉流")
+    @Schema(description = "Type, value, default: Streaming media pulls streams directly (default），ffmpeg： ffmpegRealize pull flow")
     private String type;
 
-    @Schema(description = "应用名")
+    @Schema(description = "Application name")
     private String app;
 
-    @Schema(description = "名称")
+    @Schema(description = "Name")
     private String name;
 
-    @Schema(description = "流ID")
+    @Schema(description = "flowID")
     private String stream;
 
-    @Schema(description = "流媒体服务ID")
+    @Schema(description = "streaming servicesID")
     private String mediaServerId;
 
-    @Schema(description = "拉流地址")
+    @Schema(description = "Pull address")
     private String url;
 
-    @Schema(description = "超时时间:秒")
+    @Schema(description = "Timeout: seconds")
     private int timeoutMs;
 
-    @Schema(description = "ffmpeg模板KEY")
+    @Schema(description = "ffmpegTemplateKEY")
     private String ffmpegCmdKey;
 
-    @Schema(description = "rtsp拉流时，拉流方式，0：tcp，1：udp，2：组播")
+    @Schema(description = "rtspWhen pulling streams, stream pulling method, 0: tcp, 1: udp, 2: multicast")
     private String rtpType;
 
-    @Schema(description = "是否启用")
+    @Schema(description = "Whether to enable")
     private boolean enable;
 
-    @Schema(description = "是否启用音频")
+    @Schema(description = "Whether to enable audio")
     private boolean enableAudio;
 
-    @Schema(description = "是否启用MP4")
+    @Schema(description = "Whether to enableMP4")
     private boolean enableMp4;
 
-    @Schema(description = "是否 无人观看时自动停用")
+    @Schema(description = "Whether to automatically deactivate when no one is watching")
     private boolean enableDisableNoneReader;
 
 

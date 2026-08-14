@@ -49,30 +49,30 @@ public class RecordPlanServiceImpl implements IRecordPlanService {
 
 
     /**
-     * 流离开的处理
+     * Stream departure processing
      */
     @Async
     @EventListener
     public void onApplicationEvent(MediaDepartureEvent event) {
-        // 流断开，检查是否还处于录像状态， 如果是则继续录像
+        // The stream is disconnected, check whether it is still in the recording state, if so, continue recording.
         Integer channelId = recording(event.getApp(), event.getStream());
         if(channelId == null) {
             return;
         }
-        // 重新拉起
+        // Pull up again
         CommonGBChannel channel = channelMapper.queryById(channelId);
         if (channel == null) {
-            log.warn("[录制计划] 流离开时拉起需要录像的流时, 发现通道不存在, id: {}", channelId);
+            log.warn("[Recording plan] When the stream that needs to be recorded is pulled up when the stream is leaving, it is found that the channel does not exist., id: {}", channelId);
             return;
         }
-        // 开启点播,
+        // Turn on on-demand,
         channelPlayService.play(channel, null, true, ((code, msg, streamInfo) -> {
             if (code == InviteErrorCode.SUCCESS.getCode() && streamInfo != null) {
-                log.info("[录像] 流离开时拉起需要录像的流, 开启成功, 通道ID: {}", channel.getGbId());
+                log.info("[Video] When the stream leaves, pull up the stream that needs to be recorded, open successfully, channelID: {}", channel.getGbId());
                 recordStreamMap.put(channel.getGbId(), streamInfo);
             } else {
                 recordStreamMap.remove(channelId);
-                log.info("[录像] 流离开时拉起需要录像的流, 开启失败, 十分钟后重试,  通道ID: {}", channel.getGbId());
+                log.info("[Video] Pull up the stream that needs to be recorded when the stream leaves. Failed to start. Try again after ten minutes. ChannelID: {}", channel.getGbId());
             }
         }));
     }
@@ -81,60 +81,60 @@ public class RecordPlanServiceImpl implements IRecordPlanService {
 
     @Scheduled(fixedRate = 1, timeUnit = TimeUnit.MINUTES)
     public void execution() {
-        // 查询现在需要录像的通道Id
+        // Query the channel that needs to be recorded nowId
         List<Integer> startChannelIdList = queryCurrentChannelRecord();
 
         if (startChannelIdList == null || startChannelIdList.isEmpty()) {
-            // 当前没有录像任务, 如果存在旧的正在录像的就移除
+            // There is currently no recording task. If there is an old recording task, remove it.
             if(!recordStreamMap.isEmpty()) {
                 Set<Integer> recordStreamSet = new HashSet<>(recordStreamMap.keySet());
                 stopStreams(recordStreamSet, recordStreamMap);
                 recordStreamMap.clear();
             }
         }else {
-            // 当前存在录像任务, 获取正在录像中存在但是当前录制列表不存在的内容,进行停止; 获取正在录像中没有但是当前需录制的列表中存在的进行开启.
+            // There is currently a recording task. Get the content that is currently recording but does not exist in the current recording list and stop it.; Get the recording that is not currently being recorded but exists in the list that currently needs to be recorded and open it..
             Set<Integer> recordStreamSet = new HashSet<>(recordStreamMap.keySet());
             startChannelIdList.forEach(recordStreamSet::remove);
             if (!recordStreamSet.isEmpty()) {
-                // 正在录像中存在但是当前录制列表不存在的内容,进行停止;
+                // Stop the content that is being recorded but does not exist in the current recording list.;
                 stopStreams(recordStreamSet, recordStreamMap);
             }
 
-            // 移除startChannelIdList中已经在录像的部分, 剩下的都是需要新添加的(正在录像中没有但是当前需录制的列表中存在的进行开启)
+            // RemovestartChannelIdListThe parts that are already being recorded, the rest need to be added newly.(Open the recording that is not currently being recorded but exists in the list that currently needs to be recorded.)
             recordStreamMap.keySet().forEach(startChannelIdList::remove);
             if (!startChannelIdList.isEmpty()) {
-                // 获取所有的关联的通道
+                // Get all associated channels
                 List<CommonGBChannel> channelList = channelMapper.queryByIds(startChannelIdList);
                 if (!channelList.isEmpty()) {
-                    // 查找是否已经开启录像, 如果没有则开启录像
+                    // Check whether recording has been turned on, if not, turn on recording
                     for (CommonGBChannel channel : channelList) {
-                        // 开启点播,
+                        // Turn on on-demand,
                         channelPlayService.play(channel, null, true, ((code, msg, streamInfo) -> {
                             if (code == InviteErrorCode.SUCCESS.getCode() && streamInfo != null) {
-                                log.info("[录像] 开启成功, 通道ID: {}", channel.getGbId());
+                                log.info("[Video] Opened successfully, channelID: {}", channel.getGbId());
                                 recordStreamMap.put(channel.getGbId(), streamInfo);
                             } else {
-                                log.info("[录像] 开启失败, 十分钟后重试,  通道ID: {}", channel.getGbId());
+                                log.info("[Video] Failed to open, try again in ten minutes, channelID: {}", channel.getGbId());
                             }
                         }));
                     }
                 } else {
-                    log.error("[录制计划] 数据异常, 这些关联的通道已经不存在了: {}", Joiner.on(",").join(startChannelIdList));
+                    log.error("[Recording plan] Data anomaly, these associated channels no longer exist: {}", Joiner.on(",").join(startChannelIdList));
                 }
             }
         }
     }
 
     /**
-     * 获取当前时间段应该录像的通道Id列表
+     * Get the list of channel IDs that should be recorded in the current time period
      */
     private List<Integer> queryCurrentChannelRecord(){
-        // 获取当前时间在一周内的序号, 数据库存储的从第几个30分钟开始, 0-47, 包括首尾
+        // Get the serial number of the current time within a week, starting from the 30th minute stored in the database, 0-47, including beginning and end
         LocalDateTime now = LocalDateTime.now();
         int week = now.getDayOfWeek().getValue();
         int index = now.getHour() * 60 + now.getMinute();
 
-        // 查询现在需要录像的通道Id
+        // Query the channel that needs to be recorded nowId
         return recordPlanMapper.queryRecordIng(week, index);
     }
 
@@ -145,14 +145,14 @@ public class RecordPlanServiceImpl implements IRecordPlanService {
                 if (streamInfo == null) {
                     continue;
                 }
-                // 查看是否有人观看,存在则不做处理,等待后续自然处理,如果无人观看,则关闭该流
+                // Check if anyone is watching. If there is, no processing will be done, waiting for subsequent natural processing. If no one is watching, close the stream.
                 MediaInfo mediaInfo = mediaServerService.getMediaInfo(streamInfo.getMediaServer(), streamInfo.getApp(), streamInfo.getStream());
                 if (mediaInfo.getReaderCount() == null ||  mediaInfo.getReaderCount() == 0) {
                     mediaServerService.closeStreams(streamInfo.getMediaServer(), streamInfo.getApp(), streamInfo.getStream());
-                    log.info("[录制计划] 停止, 通道ID: {}", channelId);
+                    log.info("[Recording plan] stop channelID: {}", channelId);
                 }
             }catch (Exception e) {
-                log.error("[录制计划] 停止时异常", e);
+                log.error("[Recording plan] Exception while stopping", e);
             }finally {
                 recordStreamMap.remove(channelId);
             }
@@ -182,7 +182,7 @@ public class RecordPlanServiceImpl implements IRecordPlanService {
             }
             recordPlanMapper.batchAddItem(plan.getId(), plan.getPlanItemList());
         }
-        // TODO  更新录像队列
+        // TODO  Update recording queue
     }
 
     @Override
@@ -219,7 +219,7 @@ public class RecordPlanServiceImpl implements IRecordPlanService {
                 recordPlanMapper.batchAddItem(plan.getId(), planItemList);
             }
         }
-        // TODO  更新录像队列
+        // TODO  Update recording queue
 
     }
 
@@ -228,13 +228,13 @@ public class RecordPlanServiceImpl implements IRecordPlanService {
     public void delete(Integer planId) {
         RecordPlan recordPlan = recordPlanMapper.get(planId);
         if (recordPlan == null) {
-            throw new ControllerException(ErrorCode.ERROR100.getCode(), "录制计划不存在");
+            throw new ControllerException(ErrorCode.ERROR100.getCode(), "The recording plan does not exist");
         }
-        // 清理关联的通道
+        // Clear associated channels
         channelMapper.removeRecordPlanByPlanId(recordPlan.getId());
         recordPlanMapper.cleanItems(planId);
         recordPlanMapper.delete(planId);
-        // TODO  更新录像队列
+        // TODO  Update recording queue
     }
 
     @Override
@@ -252,15 +252,15 @@ public class RecordPlanServiceImpl implements IRecordPlanService {
     @Override
     public void link(List<Integer> channelIds, Integer planId) {
         if (channelIds == null || channelIds.isEmpty()) {
-            log.info("[录制计划] 关联/移除关联时, 通道编号必须存在");
-            throw new ControllerException(ErrorCode.ERROR100.getCode(), "通道编号必须存在");
+            log.info("[Recording plan] association/When removing an association, the channel number must exist");
+            throw new ControllerException(ErrorCode.ERROR100.getCode(), "Channel number must exist");
         }
         if (planId == null) {
             channelMapper.removeRecordPlan(channelIds);
         }else {
             channelMapper.addRecordPlan(channelIds, planId);
         }
-        // 查看当前的待录制列表是否变化,如果变化,则调用录制计划马上开始录制
+        // Check whether the current to-be-recorded list has changed. If so, call the recording plan to start recording immediately.
         execution();
     }
 

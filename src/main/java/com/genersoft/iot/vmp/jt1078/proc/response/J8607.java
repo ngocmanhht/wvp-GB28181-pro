@@ -9,7 +9,7 @@ import lombok.Setter;
 import java.util.List;
 
 /**
- * 删除路线
+ * Delete route
  */
 @Setter
 @Getter
@@ -18,7 +18,7 @@ public class J8607 extends Rs {
 
 
     /**
-     * 待删除的路线ID
+     * Routes to be deletedID
      */
     private List<Long> idList;
 

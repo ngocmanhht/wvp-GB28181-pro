@@ -10,8 +10,8 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 
 /**
- * 自定义请求包装器，用于缓存请求体内容
- * 解决流只能读取一次的问题
+ * Custom request wrapper for caching request body content
+ * Solve the problem that the stream can only be read once
  */
 @Slf4j
 public class CachedBodyHttpServletRequest extends HttpServletRequestWrapper {
@@ -43,7 +43,7 @@ public class CachedBodyHttpServletRequest extends HttpServletRequestWrapper {
     }
 
     /**
-     * 获取缓存的请求体内容
+     * Get the cached request body content
      */
     public String getCachedBody() {
         if (cachedBodyString == null) {
@@ -51,7 +51,7 @@ public class CachedBodyHttpServletRequest extends HttpServletRequestWrapper {
                 try {
                     cacheInputStream();
                 } catch (IOException e) {
-                    log.warn("缓存请求体失败: {}", e.getMessage());
+                    log.warn("Failed to cache request body: {}", e.getMessage());
                     return "";
                 }
             }
@@ -65,14 +65,14 @@ public class CachedBodyHttpServletRequest extends HttpServletRequestWrapper {
     }
 
     /**
-     * 获取缓存的请求体字节数组
+     * Get the cached request body byte array
      */
     public byte[] getCachedBodyBytes() {
         if (cachedBody == null) {
             try {
                 cacheInputStream();
             } catch (IOException e) {
-                log.warn("缓存请求体失败: {}", e.getMessage());
+                log.warn("Failed to cache request body: {}", e.getMessage());
                 return new byte[0];
             }
         }
@@ -89,21 +89,21 @@ public class CachedBodyHttpServletRequest extends HttpServletRequestWrapper {
                 baos.write(buffer, 0, bytesRead);
             }
             cachedBody = baos.toByteArray();
-            log.debug("成功缓存请求体，长度: {}", cachedBody.length);
+            log.debug("Successfully cached request body, length: {}", cachedBody.length);
         } catch (Exception e) {
-            log.error("缓存请求体时发生异常: ", e);
+            log.error("An exception occurred while caching the request body: ", e);
             cachedBody = new byte[0];
         }
     }
 
     /**
-     * 自定义 ServletInputStream 实现
+     * Customize ServletInputStream realize
      */
     private static class CachedBodyServletInputStream extends ServletInputStream {
         private final ByteArrayInputStream inputStream;
 
         public CachedBodyServletInputStream(byte[] body) {
-            // 处理null值情况
+            // Handling null value situations
             this.inputStream = new ByteArrayInputStream(body != null ? body : new byte[0]);
         }
 
@@ -119,7 +119,7 @@ public class CachedBodyHttpServletRequest extends HttpServletRequestWrapper {
 
         @Override
         public void setReadListener(ReadListener readListener) {
-            // 不需要实现
+            // No need to implement
         }
 
         @Override

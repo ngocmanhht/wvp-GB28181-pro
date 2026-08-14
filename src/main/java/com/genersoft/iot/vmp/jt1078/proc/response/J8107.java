@@ -5,7 +5,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 
 /**
- * 查询终端属性
+ * Query terminal properties
  */
 @MsgId(id = "8107")
 public class J8107 extends Rs {

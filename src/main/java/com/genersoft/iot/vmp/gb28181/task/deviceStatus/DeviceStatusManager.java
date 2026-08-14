@@ -36,22 +36,22 @@ public class DeviceStatusManager {
     }
 
     /**
-     *  状态过期检查, 每秒检查一次， 系统启动10秒后开始检查
+     *  Status expiration check, once every second, starts checking 10 seconds after system startup
      */
     @Scheduled(fixedDelay = 1, initialDelay = 10, timeUnit = TimeUnit.SECONDS)
     public void expirationCheck(){
         long now = System.currentTimeMillis();
-        // 获取已过期的 deviceId (Score 介于 0 到 现在之间)
+        // Get expired deviceId (Score between 0 and now)
         Set<String> expiredIds = redisTemplate.opsForZSet().rangeByScore(redisKey(), 0, now);
 
         if (expiredIds != null && !expiredIds.isEmpty()) {
             redisTemplate.opsForZSet().remove(redisKey(), expiredIds.toArray());
-            // 使用 JDK 21 虚拟线程异步分发事件
+            // Dispatching events asynchronously using JDK 21 virtual threads
             Thread.startVirtualThread(() -> {
-                // 获取详情后删除缓存
+                // Delete cache after getting details
 //                    Device device = redisCatchStorage.getDevice(deviceId);
 //                    redisCatchStorage.removeDevice(deviceId);
-                // 发送 Spring 异步事件
+                // Send Spring asynchronous events
                 eventPublisher.deviceOfflineEventPublish(expiredIds);
             });
         }

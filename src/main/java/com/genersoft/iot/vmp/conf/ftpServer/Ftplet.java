@@ -52,7 +52,7 @@ public class Ftplet extends DefaultFtplet {
 
     private void sendEvent(String filePath){
         FtpUploadEvent event = new FtpUploadEvent(this);
-        logger.info("[文件已上传]: {}", filePath);
+        logger.info("[File uploaded]: {}", filePath);
         event.setFileName(filePath);
         applicationEventPublisher.publishEvent(event);
     }

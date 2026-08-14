@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-// 服务API
+// serviceAPI
 
 export function getOnlineMediaServerList() {
   return request({

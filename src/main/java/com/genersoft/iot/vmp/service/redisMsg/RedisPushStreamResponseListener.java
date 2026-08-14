@@ -16,10 +16,10 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
- * 接收redis返回的推流结果
+ * Receive push results returned by redis
  *
  * @author lin
- * PUBLISH VM_MSG_STREAM_PUSH_RESPONSE '{"code":0,"msg":"失败","app":"1000","stream":"10000022"}'
+ * PUBLISH VM_MSG_STREAM_PUSH_RESPONSE '{"code":0,"msg":"failed","app":"1000","stream":"10000022"}'
  */
 @Slf4j
 @Component
@@ -36,7 +36,7 @@ public class RedisPushStreamResponseListener implements MessageListener {
 
     @Override
     public void onMessage(Message message, byte[] bytes) {
-        log.info("[REDIS: 推流结果]： {}", new String(message.getBody()));
+        log.info("[REDIS: Push results]： {}", new String(message.getBody()));
         taskQueue.offer(message);
     }
 
@@ -60,16 +60,16 @@ public class RedisPushStreamResponseListener implements MessageListener {
             try {
                 MessageForPushChannelResponse response = JSON.parseObject(new String(msg.getBody()), MessageForPushChannelResponse.class);
                 if (response == null || ObjectUtils.isEmpty(response.getApp()) || ObjectUtils.isEmpty(response.getStream())) {
-                    log.info("[REDIS消息-请求推流结果]：参数不全");
+                    log.info("[REDISnews-Request push results]：Incomplete parameters");
                     continue;
                 }
-                // 查看正在等待的invite消息
+                // View pending invite messages
                 if (responseEvents.get(response.getApp() + response.getStream()) != null) {
                     responseEvents.get(response.getApp() + response.getStream()).run(response);
                 }
             } catch (Exception e) {
-                log.warn("[REDIS消息-请求推流结果] 发现未处理的异常, \r\n{}", JSON.toJSONString(msg));
-                log.error("[REDIS消息-请求推流结果] 异常内容： ", e);
+                log.warn("[REDISnews-Request push results] Unhandled exception found, \r\n{}", JSON.toJSONString(msg));
+                log.error("[REDISnews-Request push results] Unusual content： ", e);
             }
         }
     }

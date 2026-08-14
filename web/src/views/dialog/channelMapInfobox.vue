@@ -2,16 +2,16 @@
   <div id="channelMapInfobox" style="display: none">
     <div >
       <el-descriptions class="margin-top" title="channel.name" :column="4" direction="vertical">
-        <el-descriptions-item label="生产厂商">{{channel.manufacture}}</el-descriptions-item>
-        <el-descriptions-item label="型号">{{channel.model}}</el-descriptions-item>
-        <el-descriptions-item label="设备归属" >{{channel.owner}}</el-descriptions-item>
-        <el-descriptions-item label="行政区域" >{{channel.civilCode}}</el-descriptions-item>
-        <el-descriptions-item label="安装地址" >{{channel.address}}</el-descriptions-item>
-        <el-descriptions-item label="摄像头类型" >{{channel.ptzTypeText}}</el-descriptions-item>
-        <el-descriptions-item label="经纬度" >{{channel.longitude}},{{channel.latitude}}</el-descriptions-item>
-        <el-descriptions-item label="状态">
-          <el-tag size="small" v-if="channel.status === 1">在线</el-tag>
-          <el-tag size="small" v-if="channel.status === 0">离线</el-tag>
+        <el-descriptions-item label="Manufacturer">{{channel.manufacture}}</el-descriptions-item>
+        <el-descriptions-item label="Model">{{channel.model}}</el-descriptions-item>
+        <el-descriptions-item label="Equipment ownership" >{{channel.owner}}</el-descriptions-item>
+        <el-descriptions-item label="Administrative region" >{{channel.civilCode}}</el-descriptions-item>
+        <el-descriptions-item label="Installation address" >{{channel.address}}</el-descriptions-item>
+        <el-descriptions-item label="Camera type" >{{channel.ptzTypeText}}</el-descriptions-item>
+        <el-descriptions-item label="Latitude and longitude" >{{channel.longitude}},{{channel.latitude}}</el-descriptions-item>
+        <el-descriptions-item label="Status">
+          <el-tag size="small" v-if="channel.status === 1">online</el-tag>
+          <el-tag size="small" v-if="channel.status === 0">Offline</el-tag>
         </el-descriptions-item>
       </el-descriptions>
     </div>
@@ -40,7 +40,7 @@ export default {
       let deviceId = this.channel.deviceId;
       this.isLoging = true;
       let channelId = this.channel.channelId;
-      console.log("通知设备推流1：" + deviceId + " : " + channelId);
+      console.log("Notification device push1：" + deviceId + " : " + channelId);
       let that = this;
       this.$axios({
         method: 'get',

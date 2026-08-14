@@ -10,7 +10,7 @@ import lombok.Setter;
 import java.util.List;
 
 /**
- * 删除圆形区域
+ * Delete circular area
  */
 @Setter
 @Getter
@@ -19,7 +19,7 @@ public class J8601 extends Rs {
 
 
     /**
-     * 待删除的区域ID
+     * Area to be deletedID
      */
     private List<Long> idList;
 

@@ -1,29 +1,29 @@
 spring:
-  # 设置接口超时时间
+  # Set interface timeout
   mvc:
     async:
       request-timeout: 20000
   thymeleaf:
     cache: false
-  # [可选]上传文件大小限制
+  # [Optional]Upload file size limit
   servlet:
     multipart:
       max-file-size: 10MB
       max-request-size: 100MB
   data:
-    # REDIS数据库配置
+    # REDISDatabase configuration
     redis:
-      # [必须修改] Redis服务器IP, REDIS安装在本机的,使用127.0.0.1
+      # [Must be modified] RedisServer IP, REDIS is installed on this machine, use127.0.0.1
       host: 127.0.0.1
-      # [必须修改] 端口号
+      # [Must be modified] port number
       port: 6379
-      # [可选] 数据库 DB
+      # [Optional] database DB
       database: 1
-      # [可选] 访问密码,若你的redis服务器没有设置密码，就不需要用密码去连接
+      # [Optional] Access password. If your redis server does not have a password set, you do not need to use a password to connect.
       password:
-      # [可选] 超时时间
+      # [Optional] timeout
       timeout: 30000
-  # mysql数据源
+  # mysqldata source
   datasource:
     dynamic:
       type: com.zaxxer.hikari.HikariDataSource
@@ -31,53 +31,53 @@ spring:
       url: jdbc:mysql://127.0.0.1:3306/wvp?useUnicode=true&characterEncoding=UTF8&rewriteBatchedStatements=true&serverTimezone=PRC&useSSL=false&allowMultiQueries=true
       username: root
       password: root
-#[可选] 监听的HTTP端口, 网页和接口调用都是这个端口
+#[Optional] The listening HTTP port, web pages and interface calls are all on this port
 server:
   port: 18978
   ssl:
-    # [可选] 是否开启HTTPS访问
+    # [Optional] Whether to enable HTTPS access
     enabled: false
-# 作为28181服务器的配置
+# Configuration as 28181 server
 sip:
-  # [必须修改] 本机的IP
+  # [Must be modified] nativeIP
   ip: 127.0.0.1
-  # [可选]
+  # [Optional]
   port: 8116
-  # [可选]
+  # [Optional]
   domain: 3402000000
-  # [可选]
+  # [Optional]
   id: 34020000002000000001
   password:
   alarm: true
 
-# 默认服务器配置
+# Default server configuration
 media:
   id: polaris
-  # [必须修改]内网IP
+  # [Must be modified]IntranetIP
   ip: 127.0.0.1
   http-port: 6080
-  # [可选] 返回流地址时的ip，置空使用 media.ip
+  # [Optional] IP when returning the flow address, leave it blank and use it media.ip
   stream-ip: 127.0.0.1
-  # [可选] wvp在国标信令中使用的ip，此ip为摄像机可以访问到的ip， 置空使用 media.ip
+  # [Optional] wvpThe IP used in national standard signaling. This IP is the IP that the camera can access. Leave it blank. media.ip
   sdp-ip: 127.0.0.1
-  # [可选] Hook IP, 默认使用sip.ip
+  # [Optional] Hook IP, Used by defaultsip.ip
   hook-ip: 127.0.0.1
-  # [可选] sslport
+  # [Optional] sslport
   http-ssl-port: 4443
   rtp-proxy-port: 10000
   rtmp-port: 10935
   rtmp-ssl-port: 41935
   rtsp-port: 5540
   rtsp-ssl-port: 45540
-  # [可选] 
+  # [Optional] 
   secret: su6TiedN2rVAmBbIDX0aa0QTiBJLBdcf
-  # 启用多端口模式, 多端口模式使用端口区分每路流，兼容性更好。 单端口使用流的ssrc区分， 点播超时建议使用多端口测试
+  # Enable multi-port mode. Multi-port mode uses ports to distinguish each flow for better compatibility. Single port uses the ssrc of the flow to distinguish. For on-demand timeout, it is recommended to use multi-port testing.
   rtp:
-    # [可选] 是否启用多端口模式, 开启后会在portRange范围内选择端口用于媒体流传输
+    # [Optional] Whether to enable multi-port mode. When enabled, the port will be selected within the portRange range for media streaming.
     enable: false
-    # [可选] 
+    # [Optional] 
     port-range: 30000,30500 
-    # [可选] 
+    # [Optional] 
     send-port-range: 50502,50506 
 
   record-path: /opt/media/record

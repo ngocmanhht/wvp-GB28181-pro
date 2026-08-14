@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.async.DeferredResult;
 
 @Slf4j
-@Tag(name = "国标设备配置")
+@Tag(name = "National standard equipment configuration")
 @RestController
 @RequestMapping("/api/device/config")
 public class DeviceConfig {
@@ -25,16 +25,16 @@ public class DeviceConfig {
     private IDeviceService deviceService;
 
     @GetMapping("/set/basicParam")
-    @Operation(summary = "设置基本配置", security = @SecurityRequirement(name = JwtUtils.HEADER))
-    @Parameter(name = "basicParam", description = "基础配置参数", required = true)
+    @Operation(summary = "Set up basic configuration", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Parameter(name = "basicParam", description = "Basic configuration parameters", required = true)
     public DeferredResult<WVPResult<String>> homePositionApi(BasicParam basicParam) {
         if (log.isDebugEnabled()) {
-            log.debug("基本配置设置命令API调用");
+            log.debug("Basic configuration setting command API call");
         }
-        Assert.notNull(basicParam.getDeviceId(), "设备ID必须存在");
+        Assert.notNull(basicParam.getDeviceId(), "Device ID must exist");
 
         Device device = deviceService.getDeviceByDeviceId(basicParam.getDeviceId());
-        Assert.notNull(device, "设备不存在");
+        Assert.notNull(device, "Device does not exist");
 
         DeferredResult<WVPResult<String>> deferredResult = new DeferredResult<>();
         deviceService.deviceBasicConfig(device, basicParam, (code, msg, data) -> {
@@ -42,23 +42,23 @@ public class DeviceConfig {
         });
 
         deferredResult.onTimeout(() -> {
-            log.warn("[设备配置] 超时, {}", device.getDeviceId());
-            deferredResult.setResult(WVPResult.fail(ErrorCode.ERROR100.getCode(), "超时"));
+            log.warn("[Device configuration] timeout, {}", device.getDeviceId());
+            deferredResult.setResult(WVPResult.fail(ErrorCode.ERROR100.getCode(), "timeout"));
         });
         return deferredResult;
     }
 
     @GetMapping("/set/videoParamOpt")
-    @Operation(summary = "设置视频参数", security = @SecurityRequirement(name = JwtUtils.HEADER))
-    @Parameter(name = "videoParamOpt", description = "视频参数", required = true)
+    @Operation(summary = "Set video parameters", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Parameter(name = "videoParamOpt", description = "Video parameters", required = true)
     public DeferredResult<WVPResult<String>> setVideoParamOpt(VideoParamOpt videoParamOpt) {
         if (log.isDebugEnabled()) {
-            log.debug("视频参数设置命令API调用");
+            log.debug("Video parameter setting command API call");
         }
-        Assert.notNull(videoParamOpt.getDeviceId(), "设备ID必须存在");
+        Assert.notNull(videoParamOpt.getDeviceId(), "Device ID must exist");
 
         Device device = deviceService.getDeviceByDeviceId(videoParamOpt.getDeviceId());
-        Assert.notNull(device, "设备不存在");
+        Assert.notNull(device, "Device does not exist");
 
         DeferredResult<WVPResult<String>> deferredResult = new DeferredResult<>();
         deviceService.deviceVideoParamConfig(device, videoParamOpt, (code, msg, data) -> {
@@ -66,20 +66,20 @@ public class DeviceConfig {
         });
 
         deferredResult.onTimeout(() -> {
-            log.warn("[设备配置] 超时, {}", device.getDeviceId());
-            deferredResult.setResult(WVPResult.fail(ErrorCode.ERROR100.getCode(), "超时"));
+            log.warn("[Device configuration] timeout, {}", device.getDeviceId());
+            deferredResult.setResult(WVPResult.fail(ErrorCode.ERROR100.getCode(), "timeout"));
         });
         return deferredResult;
     }
 
-    @Operation(summary = "查询基本参数配置", security = @SecurityRequirement(name = JwtUtils.HEADER))
-    @Parameter(name = "deviceId", description = "设备国标编号", required = true)
-    @Parameter(name = "channelId", description = "通道国标编号")
+    @Operation(summary = "Query basic parameter configuration", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Parameter(name = "deviceId", description = "Equipment national standard number", required = true)
+    @Parameter(name = "channelId", description = "Channel national standard number")
     @GetMapping("/query/basicParam")
     public DeferredResult<WVPResult<BasicParam>> queryBasicParam(String deviceId,
                                                                   @RequestParam(required = false) String channelId) {
         Device device = deviceService.getDeviceByDeviceId(deviceId);
-        Assert.notNull(device, "设备不存在");
+        Assert.notNull(device, "Device does not exist");
         DeferredResult<WVPResult<BasicParam>> deferredResult = new DeferredResult<>();
         deviceService.deviceConfigQuery(device, channelId, BasicParam.class, (code, msg, data) -> {
             data.setDeviceId(deviceId);
@@ -87,65 +87,65 @@ public class DeviceConfig {
             deferredResult.setResult(new WVPResult<>(code, msg, data));
         });
         deferredResult.onTimeout(() -> {
-            log.warn("[获取设备配置] 超时, {}", device.getDeviceId());
-            deferredResult.setResult(WVPResult.fail(ErrorCode.ERROR100.getCode(), "超时"));
+            log.warn("[Get device configuration] timeout, {}", device.getDeviceId());
+            deferredResult.setResult(WVPResult.fail(ErrorCode.ERROR100.getCode(), "timeout"));
         });
         return deferredResult;
     }
 
-    @Operation(summary = "查询视频参数范围", security = @SecurityRequirement(name = JwtUtils.HEADER))
-    @Parameter(name = "deviceId", description = "设备国标编号", required = true)
-    @Parameter(name = "channelId", description = "通道国标编号")
+    @Operation(summary = "Query video parameter range", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Parameter(name = "deviceId", description = "Equipment national standard number", required = true)
+    @Parameter(name = "channelId", description = "Channel national standard number")
     @GetMapping("/query/videoParamOpt")
     public DeferredResult<WVPResult<VideoParamOpt>> queryVideoParamOpt(String deviceId,
                                                                         @RequestParam(required = false) String channelId) {
         Device device = deviceService.getDeviceByDeviceId(deviceId);
-        Assert.notNull(device, "设备不存在");
+        Assert.notNull(device, "Device does not exist");
         DeferredResult<WVPResult<VideoParamOpt>> deferredResult = new DeferredResult<>();
         deviceService.deviceConfigQuery(device, channelId, VideoParamOpt.class, (code, msg, data) -> {
             deferredResult.setResult(new WVPResult<>(code, msg, data));
         });
         deferredResult.onTimeout(() -> {
-            log.warn("[获取设备配置] 超时, {}", device.getDeviceId());
-            deferredResult.setResult(WVPResult.fail(ErrorCode.ERROR100.getCode(), "超时"));
+            log.warn("[Get device configuration] timeout, {}", device.getDeviceId());
+            deferredResult.setResult(WVPResult.fail(ErrorCode.ERROR100.getCode(), "timeout"));
         });
         return deferredResult;
     }
 
-    @Operation(summary = "查询SVAC编码配置", security = @SecurityRequirement(name = JwtUtils.HEADER))
-    @Parameter(name = "deviceId", description = "设备国标编号", required = true)
-    @Parameter(name = "channelId", description = "通道国标编号")
+    @Operation(summary = "Query SVAC encoding configuration", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Parameter(name = "deviceId", description = "Equipment national standard number", required = true)
+    @Parameter(name = "channelId", description = "Channel national standard number")
     @GetMapping("/query/svacEncodeConfig")
     public DeferredResult<WVPResult<SVACEncodeConfig>> querySVACEncodeConfig(String deviceId,
                                                                               @RequestParam(required = false) String channelId) {
         Device device = deviceService.getDeviceByDeviceId(deviceId);
-        Assert.notNull(device, "设备不存在");
+        Assert.notNull(device, "Device does not exist");
         DeferredResult<WVPResult<SVACEncodeConfig>> deferredResult = new DeferredResult<>();
         deviceService.deviceConfigQuery(device, channelId, SVACEncodeConfig.class, (code, msg, data) -> {
             deferredResult.setResult(new WVPResult<>(code, msg, data));
         });
         deferredResult.onTimeout(() -> {
-            log.warn("[获取设备配置] 超时, {}", device.getDeviceId());
-            deferredResult.setResult(WVPResult.fail(ErrorCode.ERROR100.getCode(), "超时"));
+            log.warn("[Get device configuration] timeout, {}", device.getDeviceId());
+            deferredResult.setResult(WVPResult.fail(ErrorCode.ERROR100.getCode(), "timeout"));
         });
         return deferredResult;
     }
 
-    @Operation(summary = "查询SVAC解码配置", security = @SecurityRequirement(name = JwtUtils.HEADER))
-    @Parameter(name = "deviceId", description = "设备国标编号", required = true)
-    @Parameter(name = "channelId", description = "通道国标编号")
+    @Operation(summary = "Query SVAC decoding configuration", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Parameter(name = "deviceId", description = "Equipment national standard number", required = true)
+    @Parameter(name = "channelId", description = "Channel national standard number")
     @GetMapping("/query/svacDecodeConfig")
     public DeferredResult<WVPResult<SVACDecodeConfig>> querySVACDecodeConfig(String deviceId,
                                                                               @RequestParam(required = false) String channelId) {
         Device device = deviceService.getDeviceByDeviceId(deviceId);
-        Assert.notNull(device, "设备不存在");
+        Assert.notNull(device, "Device does not exist");
         DeferredResult<WVPResult<SVACDecodeConfig>> deferredResult = new DeferredResult<>();
         deviceService.deviceConfigQuery(device, channelId, SVACDecodeConfig.class, (code, msg, data) -> {
             deferredResult.setResult(new WVPResult<>(code, msg, data));
         });
         deferredResult.onTimeout(() -> {
-            log.warn("[获取设备配置] 超时, {}", device.getDeviceId());
-            deferredResult.setResult(WVPResult.fail(ErrorCode.ERROR100.getCode(), "超时"));
+            log.warn("[Get device configuration] timeout, {}", device.getDeviceId());
+            deferredResult.setResult(WVPResult.fail(ErrorCode.ERROR100.getCode(), "timeout"));
         });
         return deferredResult;
     }

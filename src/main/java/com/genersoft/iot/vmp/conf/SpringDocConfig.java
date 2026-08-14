@@ -36,25 +36,25 @@ public class SpringDocConfig {
                         .addSecuritySchemes(JwtUtils.HEADER, new SecurityScheme()
                                 .type(SecurityScheme.Type.HTTP)
                                 .bearerFormat("JWT")))
-                .info(new Info().title("WVP-PRO 接口文档")
+                .info(new Info().title("WVP-PRO Interface documentation")
                         .contact(contact)
-                        .description("开箱即用的28181协议视频平台。 <br/>" +
-                                "1. 打开<a href='/doc.html#/1.%20全部/用户管理/login'>登录</a>接口" +
-                                " 登录成功后返回AccessToken。 <br/>" +
-                                "2. 填写到AccessToken到参数值 <a href='/doc.html#/Authorize/1.%20全部'>Token配置</a>  <br/>" +
-                                "后续接口就可以直接测试了")
+                        .description("Out-of-the-box 28181 protocol video platform。 <br/>" +
+                                "1. open<a href='/doc.html#/1.%20All/User management/login'>Login</a>interface" +
+                                " Return after successful loginAccessToken。 <br/>" +
+                                "2. Fill in the AccessToken to the parameter value <a href='/doc.html#/Authorize/1.%20All'>TokenConfiguration</a>  <br/>" +
+                                "Subsequent interfaces can be tested directly")
                         .version("v3.1.0")
                         .license(new License().name("Apache 2.0").url("http://springdoc.org")));
     }
 
     /**
-     * 添加分组
+     * Add group
      * @return
      */
     @Bean
     public GroupedOpenApi publicApi() {
         return GroupedOpenApi.builder()
-                .group("1. 全部")
+                .group("1. All")
                 .packagesToScan("com.genersoft.iot.vmp")
                 .build();
     }
@@ -62,7 +62,7 @@ public class SpringDocConfig {
     @Bean
     public GroupedOpenApi publicApi2() {
         return GroupedOpenApi.builder()
-                .group("2. 国标28181")
+                .group("2. National standard28181")
                 .packagesToScan("com.genersoft.iot.vmp.gb28181")
                 .build();
     }
@@ -70,7 +70,7 @@ public class SpringDocConfig {
     @Bean
     public GroupedOpenApi publicApi3() {
         return GroupedOpenApi.builder()
-                .group("3. 拉流转发")
+                .group("3. Pull and forward")
                 .packagesToScan("com.genersoft.iot.vmp.streamProxy")
                 .build();
     }
@@ -78,7 +78,7 @@ public class SpringDocConfig {
     @Bean
     public GroupedOpenApi publicApi4() {
         return GroupedOpenApi.builder()
-                .group("4. 推流管理")
+                .group("4. Push management")
                 .packagesToScan("com.genersoft.iot.vmp.streamPush")
                 .build();
     }
@@ -86,7 +86,7 @@ public class SpringDocConfig {
     @Bean
     public GroupedOpenApi publicApi5() {
         return GroupedOpenApi.builder()
-                .group("4. 服务管理")
+                .group("4. Service management")
                 .packagesToScan("com.genersoft.iot.vmp.server")
                 .build();
     }
@@ -94,7 +94,7 @@ public class SpringDocConfig {
     @Bean
     public GroupedOpenApi publicApi6() {
         return GroupedOpenApi.builder()
-                .group("5. 用户管理")
+                .group("5. User management")
                 .packagesToScan("com.genersoft.iot.vmp.user")
                 .build();
     }
@@ -102,7 +102,7 @@ public class SpringDocConfig {
     @Bean
     public GroupedOpenApi publicApi7() {
         return GroupedOpenApi.builder()
-                .group("6. 部标设备")
+                .group("6. Ministry standard equipment")
                 .packagesToScan("com.genersoft.iot.vmp.jt1078.controller")
                 .build();
     }
@@ -110,7 +110,7 @@ public class SpringDocConfig {
     @Bean
     public GroupedOpenApi publicApi99() {
         return GroupedOpenApi.builder()
-                .group("99. 第三方接口")
+                .group("99. Third-party interface")
                 .packagesToScan("com.genersoft.iot.vmp.web.custom")
                 .build();
     }

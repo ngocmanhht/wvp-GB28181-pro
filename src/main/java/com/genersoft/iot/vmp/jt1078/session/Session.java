@@ -22,30 +22,30 @@ public class Session {
 
     public static final AttributeKey<Session> KEY = AttributeKey.newInstance(Session.class.getName());
 
-    // Netty的channel
+    // Nettyofchannel
     protected final Channel channel;
 
-    // 原子类的自增ID
+    // increment of atomic classID
     private final AtomicInteger serialNo = new AtomicInteger(0);
 
-    // 是否注册成功
+    // Is the registration successful?
     @Getter
     private boolean registered = false;
 
-    // 设备手机号
+    // Device mobile phone number
     @Getter
     private String phoneNumber;
 
-    // 设备手机号
+    // Device mobile phone number
     @Setter
     @Getter
     private String authenticationCode;
 
-    // 创建时间
+    // creation time
     @Getter
     private final long creationTime;
 
-    // 协议版本号
+    // Protocol version number
     @Getter
     private Integer protocolVersion;
 
@@ -63,9 +63,9 @@ public class Session {
     }
 
     /**
-     * 获得下一个流水号
+     * Get the next serial number
      *
-     * @return 流水号
+     * @return serial number
      */
     public int nextSerialNo() {
         int current;
@@ -78,9 +78,9 @@ public class Session {
     }
 
     /**
-     * 注册session
+     * Registersession
      *
-     * @param devId 设备ID
+     * @param devId EquipmentID
      */
     public void register(String devId, Integer version, Header header) {
         this.phoneNumber = devId;

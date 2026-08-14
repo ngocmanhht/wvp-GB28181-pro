@@ -1,12 +1,12 @@
 <template>
   <div style="width: 100%;">
-    <el-checkbox label="视频信号丢失报警" v-model="form.lossSignal" @change="change"></el-checkbox>
-    <el-checkbox label="视频信号遮挡报警" v-model="form.occlusionSignal" @change="change"></el-checkbox>
-    <el-checkbox label="存储单元故障报警" v-model="form.storageFault" @change="change"></el-checkbox>
-    <el-checkbox label="其他视频设备故障报警" v-model="form.otherDeviceFailure" @change="change"></el-checkbox>
-    <el-checkbox label="客车超员报警" v-model="form.overcrowding" @change="change"></el-checkbox>
-    <el-checkbox label="异常驾驶行为报警" v-model="form.abnormalDriving" @change="change"></el-checkbox>
-    <el-checkbox label="特殊报警录像达到存储阈值报警" v-model="form.storageLimit" @change="change"></el-checkbox>
+    <el-checkbox label="Video signal loss alarm" v-model="form.lossSignal" @change="change"></el-checkbox>
+    <el-checkbox label="Video signal blocking alarm" v-model="form.occlusionSignal" @change="change"></el-checkbox>
+    <el-checkbox label="Storage unit failure alarm" v-model="form.storageFault" @change="change"></el-checkbox>
+    <el-checkbox label="Other video equipment failure alarms" v-model="form.otherDeviceFailure" @change="change"></el-checkbox>
+    <el-checkbox label="Bus overcrowding alarm" v-model="form.overcrowding" @change="change"></el-checkbox>
+    <el-checkbox label="Abnormal driving behavior alarm" v-model="form.abnormalDriving" @change="change"></el-checkbox>
+    <el-checkbox label="Special alarm: The recording reaches the storage threshold alarm." v-model="form.storageLimit" @change="change"></el-checkbox>
   </div>
 </template>
 

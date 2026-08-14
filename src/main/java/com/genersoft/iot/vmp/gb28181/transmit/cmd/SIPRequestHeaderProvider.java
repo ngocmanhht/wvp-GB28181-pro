@@ -26,9 +26,9 @@ import java.text.ParseException;
 import java.util.ArrayList;
 
 /**
- * @description:摄像头命令request创造器 TODO 冗余代码太多待优化
+ * @description:Camera command request creator TODO Too much redundant code needs to be optimized
  * @author: swwheihei
- * @date: 2020年5月6日 上午9:29:02
+ * @date: 2020May 6, 2019, morning9:29:02
  */
 @Component
 public class SIPRequestHeaderProvider {
@@ -81,7 +81,7 @@ public class SIPRequestHeaderProvider {
 
 	public Request createInviteRequest(Device device, String channelId, String content, String viaTag, String fromTag, String toTag, String ssrc, CallIdHeader callIdHeader) throws ParseException, InvalidArgumentException, PeerUnavailableException {
 		Request request = null;
-		//请求行
+		//request line
 		SipURI requestLine = SipFactory.getInstance().createAddressFactory().createSipURI(channelId, device.getHostAddress());
 		//via
 		ArrayList<ViaHeader> viaHeaders = new ArrayList<ViaHeader>();
@@ -93,7 +93,7 @@ public class SIPRequestHeaderProvider {
 		//from
 		SipURI fromSipURI = SipFactory.getInstance().createAddressFactory().createSipURI(sipConfig.getId(), sipConfig.getDomain());
 		Address fromAddress = SipFactory.getInstance().createAddressFactory().createAddress(fromSipURI);
-		FromHeader fromHeader = SipFactory.getInstance().createHeaderFactory().createFromHeader(fromAddress, fromTag); //必须要有标记，否则无法创建会话，无法回应ack
+		FromHeader fromHeader = SipFactory.getInstance().createHeaderFactory().createFromHeader(fromAddress, fromTag); //There must be a mark, otherwise the session cannot be created and the response cannot be made.ack
 		//to
 		SipURI toSipURI = SipFactory.getInstance().createAddressFactory().createSipURI(channelId, device.getHostAddress());
 		Address toAddress = SipFactory.getInstance().createAddressFactory().createAddress(toSipURI);
@@ -121,7 +121,7 @@ public class SIPRequestHeaderProvider {
 
 	public Request createPlaybackInviteRequest(Device device, String channelId, String content, String viaTag, String fromTag, String toTag, CallIdHeader callIdHeader, String ssrc) throws ParseException, InvalidArgumentException, PeerUnavailableException {
 		Request request = null;
-		//请求行
+		//request line
 		SipURI requestLine = SipFactory.getInstance().createAddressFactory().createSipURI(channelId, device.getHostAddress());
 		// via
 		ArrayList<ViaHeader> viaHeaders = new ArrayList<ViaHeader>();
@@ -131,7 +131,7 @@ public class SIPRequestHeaderProvider {
 		//from
 		SipURI fromSipURI = SipFactory.getInstance().createAddressFactory().createSipURI(sipConfig.getId(), sipConfig.getDomain());
 		Address fromAddress = SipFactory.getInstance().createAddressFactory().createAddress(fromSipURI);
-		FromHeader fromHeader = SipFactory.getInstance().createHeaderFactory().createFromHeader(fromAddress, fromTag); //必须要有标记，否则无法创建会话，无法回应ack
+		FromHeader fromHeader = SipFactory.getInstance().createHeaderFactory().createFromHeader(fromAddress, fromTag); //There must be a mark, otherwise the session cannot be created and the response cannot be made.ack
 		//to
 		SipURI toSipURI = SipFactory.getInstance().createAddressFactory().createSipURI(channelId, device.getHostAddress());
 		Address toAddress = SipFactory.getInstance().createAddressFactory().createAddress(toSipURI);
@@ -161,7 +161,7 @@ public class SIPRequestHeaderProvider {
 
 	public Request createByteRequest(Device device, String channelId, SipTransactionInfo transactionInfo) throws ParseException, InvalidArgumentException, PeerUnavailableException {
 		Request request = null;
-		//请求行
+		//request line
 		SipURI requestLine = SipFactory.getInstance().createAddressFactory().createSipURI(channelId, device.getHostAddress());
 //		SipURI requestLine = SipFactory.getInstance().createAddressFactory().createSipURI(device.getDeviceId(), device.getHostAddress());
 		// via
@@ -201,7 +201,7 @@ public class SIPRequestHeaderProvider {
 
 	public Request createByteRequestForDeviceInvite(Device device, String channelId, SipTransactionInfo transactionInfo) throws ParseException, InvalidArgumentException, PeerUnavailableException {
 		Request request = null;
-		//请求行
+		//request line
 		SipURI requestLine = SipFactory.getInstance().createAddressFactory().createSipURI(channelId, device.getHostAddress());
 		// via
 		ArrayList<ViaHeader> viaHeaders = new ArrayList<ViaHeader>();
@@ -294,7 +294,7 @@ public class SIPRequestHeaderProvider {
 			return null;
 		}
 		SIPRequest request = null;
-		//请求行
+		//request line
 		SipURI requestLine = SipFactory.getInstance().createAddressFactory().createSipURI(channelId, device.getHostAddress());
 		// via
 		ArrayList<ViaHeader> viaHeaders = new ArrayList<ViaHeader>();

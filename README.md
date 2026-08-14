@@ -1,5 +1,5 @@
 ![logo](doc/_media/logo.png)
-# 开箱即用的国标28181和部标808+1078协议视频平台
+# Out of the box national standard 28181 and ministry standard 808+1078 protocol video platform
 
 [![Build Status](https://travis-ci.org/xia-chu/ZLMediaKit.svg?branch=master)](https://travis-ci.org/xia-chu/ZLMediaKit)
 [![license](http://img.shields.io/badge/license-MIT-green.svg)](https://github.com/xia-chu/ZLMediaKit/blob/master/LICENSE)
@@ -8,231 +8,231 @@
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-yellow.svg)](https://github.com/xia-chu/ZLMediaKit/pulls)
 
 
-WEB VIDEO PLATFORM是一个基于GB28181-2016、部标808、部标1078标准实现的开箱即用的网络视频平台，负责实现核心信令与设备管理后台部分，支持NAT穿透，支持海康、大华、宇视等品牌的IPC、NVR接入。支持国标级联，支持将不带国标功能的摄像机/直播流/直播推流转发到其他国标平台。
+WEB VIDEO PLATFORM is an out-of-the-box network video platform based on GB28181-2016, Ministry of Industry and Commerce 808, and Ministry of Industry and Commerce 1078 standards. It is responsible for implementing the core signaling and device management backend parts, supports NAT penetration, and supports IPC and NVR access from brands such as Hikvision, Dahua, and Uniview. Supports national standard cascading and supports forwarding cameras/live streams/live push streams without national standard functions to other national standard platforms.
 
-流媒体服务基于@夏楚 ZLMediaKit [https://github.com/ZLMediaKit/ZLMediaKit](https://github.com/ZLMediaKit/ZLMediaKit)   
-播放器使用@dexter jessibuca [https://github.com/langhuihui/jessibuca/tree/v3](https://github.com/langhuihui/jessibuca/tree/v3)  
-播放器使用@Numberwolf-Yanlong h265web.js [https://github.com/numberwolf/h265web.js](https://github.com/numberwolf/h265web.js)  
-前端页面基于vue-admin-template构建 [https://github.com/PanJiaChen/vue-admin-template?tab=readme-ov-file](https://github.com/PanJiaChen/vue-admin-template?tab=readme-ov-file)  
+The streaming service is based on @xiachu ZLMediaKit [https://github.com/ZLMediaKit/ZLMediaKit](https://github.com/ZLMediaKit/ZLMediaKit) 
+Player using @dexter jessibuca [https://github.com/langhuihui/jessibuca/tree/v3](https://github.com/langhuihui/jessibuca/tree/v3) 
+The player uses @Numberwolf-Yanlong h265web.js [https://github.com/numberwolf/h265web.js](https://github.com/numberwolf/h265web.js) 
+The front-end page is built based on vue-admin-template [https://github.com/PanJiaChen/vue-admin-template?tab=readme-ov-file](https://github.com/PanJiaChen/vue-admin-template?tab=readme-ov-file) 
 
-# 应用场景：
-- 支持浏览器无插件播放摄像头视频。
-- 支持国标设备(摄像机、平台、NVR等)设备接入
-- 支持rtsp, rtmp，直播设备设备接入，充分利旧。
-- 支持国标级联。多平台级联。跨网视频预览。
-- 支持跨网网闸平台互联。
+#Application scenarios:
+- Support browser video playback without plug-in.
+- Supports access to national standard equipment (camera, platform, NVR, etc.)
+- Supports rtsp, rtmp, live broadcast equipment access, making full use of old equipment.
+- Supports national standard cascade. Multi-platform cascading. Cross-network video preview.
+- Support cross-network gatekeeper platform interconnection.
 
 
-# 文档
-wvp使用文档 [https://doc.wvp-pro.cn](https://doc.wvp-pro.cn)  
-ZLM使用文档 [https://github.com/ZLMediaKit/ZLMediaKit](https://github.com/ZLMediaKit/ZLMediaKit)
+# document
+wvp usage documentation [https://doc.wvp-pro.cn](https://doc.wvp-pro.cn) 
+ZLM usage documentation [https://github.com/ZLMediaKit/ZLMediaKit](https://github.com/ZLMediaKit/ZLMediaKit) 
 
-# gitee仓库
+# gitee warehouse
 https://gitee.com/pan648540858/wvp-GB28181-pro.git
 
-# 截图
+# screenshot
 <table>
     <tr>
-        <td ><center><img src="doc/_media/1.png" >登录页面 </center></td>
-        <td ><center><img src="doc/_media/2.png" >首页</center></td>
+<td ><center><img src="doc/_media/1.png" >Login page </center></td>
+<td ><center><img src="doc/_media/2.png" >Homepage</center></td>
     </tr>
     <tr>
-        <td ><center><img src="doc/_media/3.png" >分屏播放 </center></td>
-        <td ><center><img src="doc/_media/4.png" >国标设备列表</center></td>
+<td ><center><img src="doc/_media/3.png" >Split screen playback </center></td>
+<td ><center><img src="doc/_media/4.png" >National standard equipment list</center></td>
     </tr>
     <tr>
-        <td ><center><img src="doc/_media/5.png" >行政区划管理 </center></td>
-        <td ><center><img src="doc/_media/8.png" >业务分组管理</center></td>
+<td ><center><img src="doc/_media/5.png" >Administrative division management </center></td>
+<td ><center><img src="doc/_media/8.png" >Business group management</center></td>
     </tr>
     <tr>
-        <td ><center><img src="doc/_media/6.png" >录制计划</center></td>
-        <td ><center><img src="doc/_media/7.png" >平台信息</center></td>
+<td ><center><img src="doc/_media/6.png" >Recording plan</center></td>
+<td ><center><img src="doc/_media/7.png" >Platform information</center></td>
     </tr>
 </table>
 
-# 功能特性
-- [X] 集成web界面
-- [X] 兼容性良好
-- [X] 跨平台服务，一次编译多端部署， 可以同时用于x86和arm架构
-- [X] 接入设备
-  - [X] 视频预览
-  - [X] 支持主码流子码流切换
-  - [X] 无限制接入路数，能接入多少设备只取决于你的服务器性能
-  - [X] 云台控制，控制设备转向，拉近，拉远
-  - [X] 预置位查询，使用与设置
-  - [X] 查询NVR/IPC上的录像与播放，支持指定时间播放与下载
-  - [X] 无人观看自动断流，节省流量
-  - [X] 视频设备信息同步
-  - [X] 离在线监控
-  - [X] 支持直接输出RTSP、RTMP、HTTP-FLV、Websocket-FLV、HLS多种协议流地址
-  - [X] 支持通过一个流地址直接观看摄像头，无需登录以及调用任何接口
-  - [X] 支持UDP和TCP两种国标信令传输模式
-  - [X] 支持UDP和TCP两种国标流传输模式
-  - [X] 支持检索,通道筛选
-  - [X] 支持通道子目录查询
-  - [X] 支持过滤音频，防止杂音影响观看
-  - [X] 支持国标网络校时
-  - [X] 支持播放H264和H265
-  - [X] 报警信息处理，支持向前端推送报警信息
-  - [X] 语音对讲
-  - [X] 支持业务分组和行政区划树自定义展示以及级联推送
-  - [X] 支持订阅与通知方法
-    - [X] 移动位置订阅
-    - [X] 移动位置通知处理
-    - [X] 报警事件订阅
-    - [X] 报警事件通知处理
-    - [X] 设备目录订阅
-    - [X] 设备目录通知处理
-  -  [X] 移动位置查询和显示
-  - [X] 支持手动添加设备和给设备设置单独的密码
--  [X] 支持平台对接接入
--  [X] 支持国标级联
-  - [X] 国标通道向上级联
-    - [X] WEB添加上级平台
-    - [X] 注册
-    - [X] 心跳保活
-    - [X] 通道选择
-    - [X] 支持通道编号自定义, 支持每个平台使用不同的通道编号
-    - [X] 通道推送
-    - [X] 点播
-    - [X] 云台控制
-    - [X] 平台状态查询
-    - [X] 平台信息查询
-    - [X] 平台远程启动
-    - [X] 每个级联平台可自定义的虚拟目录
-    - [X] 目录订阅与通知
-    - [X] 录像查看与播放
-    - [X] GPS订阅与通知（直播推流）
-    - [X] 语音对讲
-  - [X] 支持同时级联到多个上级平台
-- [X] 支持自动配置ZLM媒体服务, 减少因配置问题所出现的问题;
-- [X] 支持流媒体节点集群，负载均衡。
-- [X] 支持启用udp多端口模式, 提高udp模式下媒体传输性能;
-- [X] 支持公网部署；
-- [X] 支持wvp与zlm分开部署，提升平台并发能力
-- [X] 支持拉流RTSP/RTMP，分发为各种流格式，或者推送到其他国标平台
-- [X] 支持推流RTSP/RTMP，分发为各种流格式，或者推送到其他国标平台
-- [X] 支持推流鉴权
-- [X] 支持接口鉴权
-- [X] 云端录像，推流/代理/国标视频均可以录制在云端服务器，支持预览和下载
-- [X] 支持打包可执行jar和war
-- [X] 支持跨域请求，支持前后端分离部署
-- [X] 支持Mysql，Postgresql，金仓等数据库
-- [X] 支持录制计划, 根据设定的时间对通道进行录制. 暂不支持将录制的内容转发到国标上级
-- [X] 支持国标信令集群
-- [X] 新增支持部标808和部标1078，大量新特性不一一列表了。支持作为网关被国标上级调用部标设备
-- [X] 支持电子地图。支持展示通道位置，支持在地图上修改通道位置。支持了数据分层抽稀数据能力，百万级数据也可以轻松展示。提供标准的矢量瓦片图层，常见地图引擎都可以直接展示。
-- [X] 借用zlm闭源版本新能力，可以支持录像保存至s3存储，支持minio。
-- [X] **全新虚拟线程支持，极大提升了平台的并发能力，局域网压测轻松接入五万+设备，这不是服务极限，这是我的压测工具和硬件测试服务器的极限，大家可自行测试。生产环境实际性能取决于服务器性能和网络带宽。**
-- [X] **支持报警订阅和报警管理，支持报警事件的展示和查询，支持报警时自动获取快照、播放录像。**
+# Features
+- [X] Integrated web interface
+- [X] Good compatibility
+- [X] Cross-platform service, once compiled and deployed on multiple terminals, can be used for both x86 and arm architectures
+- [X] Access device
+- [X] Video preview
+- [X] Support main stream and sub-stream switching
+- [X] Unlimited access channels, how many devices can be accessed only depends on your server performance
+- [X] PTZ control, control device steering, zoom in, zoom out
+- [X] Preset position query, use and settings
+- [X] Query the recording and playback on NVR/IPC, support playback and download at specified time
+- [X] Automatically cut off traffic when no one is watching, saving data traffic
+- [X] Video device information synchronization
+- [X] Off online monitoring
+- [X] Supports direct output of multiple protocol stream addresses for RTSP, RTMP, HTTP-FLV, Websocket-FLV, and HLS
+- [X] Supports viewing the camera directly through a stream address without logging in or calling any interface
+- [X] Supports two national standard signaling transmission modes: UDP and TCP
+- [X] Supports two national standard streaming transmission modes: UDP and TCP
+- [X] Support retrieval and channel filtering
+- [X] Support channel subdirectory query
+- [X] Support audio filtering to prevent noise from affecting viewing
+- [X] Support national standard network time adjustment
+- [X] Support playing H264 and H265
+- [X] Alarm information processing, supports pushing alarm information to the front end
+- [X] Voice intercom
+- [X] Support custom display of business grouping and administrative division tree and cascade push
+- [X] Support subscription and notification methods
+- [X] Mobile location subscription
+- [X] Mobile location notification handling
+- [X] Alarm event subscription
+- [X] Alarm event notification processing
+- [X] Device Catalog Subscription
+- [X] Device catalog notification handling
+- [X] Mobile location query and display
+- [X] Support manually adding devices and setting individual passwords for devices
+- [X] Support platform docking access
+- [X] Support national standard cascade
+- [X] National standard channel upward cascade
+- [X] WEB adds upper level platform
+- [X] Register
+- [X] Heartbeat Keep Alive
+- [X] Channel selection
+- [X] Support channel number customization, support the use of different channel numbers for each platform
+- [X] Channel push
+- [X] On Demand
+- [X] PTZ control
+- [X] Platform status query
+- [X] Platform information query
+- [X] Platform remote start
+- [X] Customizable virtual directories for each cascade platform
+- [X] Directory Subscriptions and Notifications
+- [X] Video viewing and playback
+- [X] GPS subscription and notification (live streaming)
+- [X] Voice intercom
+- [X] Support cascading to multiple upper-level platforms at the same time
+- [X] Support automatic configuration of ZLM media service to reduce problems caused by configuration issues;
+- [X] Support streaming media node cluster and load balancing.
+- [X] Support enabling udp multi-port mode to improve media transmission performance in udp mode;
+- [X] Support public network deployment;
+- [X] Support separate deployment of wvp and zlm to improve platform concurrency capabilities
+- [X] Support streaming RTSP/RTMP, distribute to various streaming formats, or push to other national standard platforms
+- [X] Support RTSP/RTMP streaming, distribute to various streaming formats, or push to other national standard platforms
+- [X] Support push authentication
+- [X] Support interface authentication
+- [X] Cloud recording, push/proxy/national standard videos can be recorded on the cloud server, support preview and download
+- [X] Support packaging executable jar and war
+- [X] Support cross-domain requests and separate deployment of front-end and back-end
+- [X] Support Mysql, Postgresql, Jincang and other databases
+- [X] Support recording plan, record the channel according to the set time. Forwarding the recorded content to the national standard superior is not supported yet.
+- [X] Support national standard signaling cluster
+- [X] Added support for department standard 808 and department standard 1078. A large number of new features are not listed one by one. Supports being used as a gateway to be called by national standard superiors for ministry-standard equipment
+- [X] Support electronic map. Supports displaying channel locations and modifying channel locations on the map. It supports the ability of data layering and thinning, and millions of data can be easily displayed. Provides standard vector tile layers, which can be directly displayed by common map engines.
+- [X] Borrowing the new capabilities of the zlm closed-source version, it can support saving video to s3 storage and minio.
+- [X] **New virtual thread support greatly improves the platform's concurrency capabilities. LAN stress testing can easily access 50,000+ devices. This is not the service limit. This is the limit of my stress testing tools and hardware test servers. You can test it yourself. Actual performance in production environments depends on server performance and network bandwidth. **
+- [X] **Supports alarm subscription and alarm management, supports the display and query of alarm events, and supports automatically obtaining snapshots and playing videos when alarming. **
 
-# 闭源内容
-  - [X] 支持开源所有功能
-  - [X] 支持国标28181-2022协议，已经过认证
-    - [X] 明确支持H265视频编码和AAC音频编码（开源已经支持）
-    - [X] 支持主辅码流切换（开源已经支持）
-    - [X] 支持GB18030编码格式，之前GB2312遇到未收录的字符经常有乱码。这个不会了
-    - [X] 支持图像抓拍，设备自行抓拍后上传到服务器，速度快省流量
-    - [X] PTZ 精准控制：包括控制，查询，订阅位置变化，支持精准设置云台的水平角度，垂直角度，变焦倍数
-    - [X] OSD配置
-    - [X] 视频画面遮挡配置
-    - [X] 支持巡航轨迹迹查询，巡航功能完善（（相当于开源基础上了多了回显））
-    - [X] 存储卡管理，支持状态查询，格式化
-    - [X] 设备升级
-    - [X] 支持目标跟踪，支持网页直接框选位置进行手动跟踪，也支持自动跟踪
-    - [X] 设备自带录像计划远程配置
-    - [X] 报警录像配置
-    - [X] 报警上报开关
-    - [X] 视频参数属性配置，支持对视频参数进行设置：包括编码格式，分辨率，帧率，码率，视频码率配置值(固定码率时必选)
-    - [X] 支持画面翻转控制，支持设置为基准画面，水平镜像（左右翻转），上下镜像（上下翻转）中心镜像（上下左右都翻转）
-    - [X] 支持看守位信息的查询（相当于开源基础上了多了回显）
-    - [X] 录像倒放，倒放拖动
-    - [X] 同时支持国标28181-2022与国标28181-2016双版本国标级联。可自行选择
-  - [X] ONVIF协议
-    - 自研协议实现，安全可靠。
-    - 设备检索
-    - 实时图像预览
-    - 录像回放、回放倍速控制
-    - 云台控制（八个方向）、预置位控制、绝对定位、看守位、聚焦控制
-    - 聚焦控制
-    - 设备重启
-    - 设备时间设置以及跟系统时间的差值比较
-    - 恢复出厂设置
-    - 自动获取设备品牌等信息、支持展示DNS信息、支持协议的展示
-    - 国标级联点播、自动点播等。
-  - [X] **海康-ISUP5.0/ISUP4.0/ISUP2.0/EHome**
-    - 设备注册
-    - 资源获取
-    - 预览
-    - 录像查询与回放
-    - 云台控制
-    - 预置位控制
-    - 报警，支持大量报警类型的解析与展示，
-      - 绊线检测
-      - 区域入侵
-      - 移动侦测
-      - 逆行检测
-      - 徘徊检测
-      - 人员聚集
-      - 声音异常
-      - 设备异常等。
-    - 抓图（设备直接上传快照图片到服务器，流量消耗低，无需服务端拉流解码）
-    - 对讲支持
-    - 设备配置（设备名称、循环录像等配置）
-    - 设备信息（设备序列号、类型等）
-    - 版本信息（软件、编码、面板、硬件的版本号）
-    - 编码配置（主辅码流分辨率、码率、帧率等配置）
-    - 图像参数配置（色调、对比度、亮度、饱和度配置）
-  - [X] 大华SDK
-    - 局域网设备发现
-    - 设备主动注册（用于服务器部署在公网时设备的注册）
-    - 通道获取
-    - 预览
-    - 录像回放
-    - 录像下载
-    - 云台控制，支持预置位控制、巡航组、巡迹、水平旋转、云台速度配置、开机动作、空闲动作、云台限位、定时任务、云台重启
-    - 抓图（设备直接上传快照图片到服务器，流量消耗低，无需服务端拉流解码）
-    - 喊话（单工）和对讲（双工）
-    - 相机配置，包括亮度、对比度、对比度、饱和度、色彩抑制、伽马、锐度、锐度抑制；视角的配置，提供正常、倒影、走廊模式、镜像的配置；曝光、背光、白平衡、日夜模式、数字变倍、聚焦、补光灯、透雾的配置
-    - 报警接收
-  - [ ] 国标35114协议（开发中...）
-  - [X] 国网B接口协议
-    - 设备注册
-    - 资源获取
-    - 预览
-    - 云台控制
-    - 预置位控制等，
-    - 可免费定制支持语音对讲、录像回放和抓拍图像。
-  - [X] 支持按权限分配可以使用的通道
-  - [X] 支持表格导出
-  - [X] 拉流代理支持按照品牌拼接url
-  - [X] 播放鉴权，给授权设备无法进行播放，拿到播放地址也不行
+# Closed source content
+- [X] Support all open source functions
+- [X] Supports the national standard 28181-2022 protocol and has been certified
+- [X] Explicitly support H265 video encoding and AAC audio encoding (already supported by open source)
+- [X] Support primary and secondary stream switching (already supported by open source)
+- [X] Support GB18030 encoding format. Previously, GB2312 often had garbled characters when encountering uncollected characters. This won't happen anymore
+- [X] Supports image capture. The device can capture the image by itself and upload it to the server. It is fast and saves traffic.
+- [X] PTZ precise control: including control, query, and subscription to position changes, supporting precise setting of the horizontal angle, vertical angle, and zoom factor of the PTZ
+- [X] OSD configuration
+- [X] Video screen occlusion configuration
+- [X] Supports cruise track query, and the cruise function is perfect ((equivalent to the addition of echo on the basis of open source))
+- [X] Memory card management, supports status query, formatting
+- [X] Equipment upgrades
+- [X] Supports target tracking, supports direct box selection on web pages for manual tracking, and also supports automatic tracking
+- [X] Remote configuration of the device's built-in recording plan
+- [X] Alarm recording configuration
+- [X] Alarm reporting switch
+- [X] Video parameter attribute configuration, supports the setting of video parameters: including encoding format, resolution, frame rate, bit rate, video bit rate configuration value (required when the bit rate is fixed)
+- [X] Supports screen flip control, supports setting as reference screen, horizontal mirroring (flip left and right), up and down mirroring (flip up and down), center mirroring (flip up and down, left and right)
+- [X] Support query of guard position information (equivalent to adding echo on the basis of open source)
+- [X] Video playback, reverse dragging
+- [X] Supports GB 28181-2022 and GB 28181-2016 dual versions of GB cascade at the same time. You can choose
+- [X] ONVIF protocol
+- Implemented by self-developed protocols, safe and reliable.
+- Device search
+- Live image preview
+- Video playback and playback speed control
+- PTZ control (eight directions), preset position control, absolute positioning, guard position, focus control
+- Focus control
+-Device restart
+- Device time setting and comparison with system time
+- Restore factory settings
+- Automatically obtain information such as device brand, support display of DNS information, and support display of protocols
+- National standard cascade on-demand, automatic on-demand, etc.
+- [X] **Haikang-ISUP5.0/ISUP4.0/ISUP2.0/EHome**
+- Device registration
+- Resource acquisition
+- Preview
+- Video query and playback
+- PTZ control
+- Preset position control
+- Alarm, supports the analysis and display of a large number of alarm types,
+- Tripwire detection
+- Area invasion
+- Motion detection
+- Retrograde detection
+- Wandering detection
+- Gathering of people
+- Abnormal sound
+- Equipment abnormalities, etc.
+- Snapshot (the device directly uploads snapshot pictures to the server, low traffic consumption, no need for server-side streaming decoding)
+- Intercom support
+- Device configuration (device name, loop recording, etc. configuration)
+- Device information (device serial number, type, etc.)
+- Version information (version numbers of software, coding, panels, and hardware)
+- Encoding configuration (main and auxiliary stream resolution, bit rate, frame rate, etc. configuration)
+- Image parameter configuration (hue, contrast, brightness, saturation configuration)
+- [X] Dahua SDK
+- LAN device discovery
+- Device active registration (used for device registration when the server is deployed on the public network)
+- Channel acquisition
+- Preview
+- Video playback
+- Video download
+- PTZ control, supports preset position control, cruise group, patrol, horizontal rotation, PTZ speed configuration, power-on action, idle action, PTZ limit, scheduled tasks, PTZ restart
+- Snapshot (the device directly uploads snapshot pictures to the server, low traffic consumption, no need for server-side streaming decoding)
+- Calling (simplex) and intercom (duplex)
+- Camera configuration, including brightness, contrast, contrast, saturation, color suppression, gamma, sharpness, and sharpness suppression; viewing angle configuration, which provides normal, reflection, corridor mode, and mirror configurations; exposure, backlight, white balance, day and night mode, digital zoom, focus, fill light, and fog penetration configurations
+- Alarm reception
+- [ ] National Standard 35114 Agreement (under development...)
+- [X] State Grid B interface protocol
+- Device registration
+- Resource acquisition
+- Preview
+- PTZ control
+- Preset position control, etc.,
+- Free customization to support voice intercom, video playback and image capture.
+- [X] Support assigning usable channels according to permissions
+- [X] Support table export
+- [X] The streaming agent supports splicing URLs according to brands
+- [X] For playback authentication, playback cannot be performed on authorized devices, even if the playback address is obtained.
 
 
-# 授权协议
-本项目自有代码使用宽松的MIT协议，在保留版权信息的情况下可以自由应用于各自商用、非商业的项目。 但是本项目也零碎的使用了一些其他的开源代码，在商用的情况下请自行替代或剔除； 由于使用本项目而产生的商业纠纷或侵权行为一概与本项目及开发者无关，请自行承担法律风险。 在使用本项目代码时，也应该在授权协议中同时表明本项目依赖的第三方库的协议
+# License Agreement
+This project's own code uses the loose MIT license and can be freely used in their own commercial and non-commercial projects while retaining copyright information. However, this project also uses some other open source codes piecemeal. In the case of commercial use, please replace or eliminate them by yourself; any commercial disputes or infringements arising from the use of this project have nothing to do with this project and the developer. Please bear the legal risks yourself. When using the code of this project, the license agreement should also indicate the agreements of the third-party libraries that this project relies on.
 
-# 技术支持
+# technical support
 
-## 官方公众号
+## Official public account
 <img src="doc/_media/gongzhonghao.jpg" width="40%" height="40%">
 
-> 为大家提供WVP最新的开发进展，未来规划等内容。欢迎关注。
+> Provide everyone with the latest development progress, future plans and other content of WVP. Welcome to pay attention.
 
-## 付费社群
+## Paid community
 <img src="doc/_media/shequ.png" width="50%" height="50%">
 
-> 付费社群即可以对作者提供支持，也可以为大家更加快速的解决问题，还为正式加入星球的用户提供了微信群。对星球内容不满意，三天之内退出支持自动退款。如果暂时无法加入，给项目点个星也是极大的鼓励。
+> The paid community can provide support to the author and solve problems more quickly for everyone. It also provides a WeChat group for users who have officially joined Planet. If you are not satisfied with the content of Planet, you can withdraw within three days to support automatic refund. If you are unable to join temporarily, giving the project a star is also a great encouragement.
 
-[知识星球](https://t.zsxq.com/0d8VAD3Dm)专栏列表：
-- [WVP 部署安全加固指南：新手必看，防范攻击与漏洞](https://articles.zsxq.com/id_tv8wz4uubx2n.html)
+ [knowledge planet](https://t.zsxq.com/0d8VAD3Dm) Column list:
+- [WVP Deployment Security Hardening Guide: A must-read for beginners to prevent attacks and vulnerabilities](https://articles.zsxq.com/id_tv8wz4uubx2n.html) 
 
-有偿技术支持，一对一开发辅导，闭源内容合作请发送邮件到648540858@qq.com咨询
+Paid technical support, one-on-one development coaching, closed source content cooperation, please send an email to 648540858@qq.com for consultation
 
-# 致谢
-感谢作者[夏楚](https://github.com/xia-chu) 提供这么棒的开源流媒体服务框架,并在开发过程中给予支持与帮助。     
-感谢作者[dexter langhuihui](https://github.com/langhuihui)和[Numberwolf-Yanlong](https://github.com/numberwolf/h265web.js) 开源这么好用的WEB播放器。      
-感谢各位大佬的赞助以及对项目的指正与帮助。包括但不限于代码贡献、问题反馈、资金捐赠等各种方式的支持！以下排名不分先后：  
+# Acknowledgments
+Thanks to the author [Xia Chu](https://github.com/xia-chu) for providing such a great open source streaming media service framework and providing support and help during the development process.
+Thanks to the authors [dexter langhuihui](https://github.com/langhuihui) and [Numberwolf-Yanlong](https://github.com/numberwolf/h265web.js) for open source such a useful WEB player.
+Thank you all for your sponsorship and your corrections and help on the project. Including but not limited to code contribution, problem feedback, financial donation and other forms of support! The following rankings are in no particular order:
 [lawrencehj](https://github.com/lawrencehj) [Smallwhitepig](https://github.com/Smallwhitepig) [swwhaha](https://github.com/swwheihei)
 [hotcoffie](https://github.com/hotcoffie) [xiaomu](https://github.com/nikmu) [TristingChen](https://github.com/TristingChen)
 [chenparty](https://github.com/chenparty) [Hotleave](https://github.com/hotleave) [ydwxb](https://github.com/ydwxb)

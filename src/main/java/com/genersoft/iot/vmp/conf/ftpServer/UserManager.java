@@ -78,7 +78,7 @@ public class UserManager implements org.apache.ftpserver.ftplet.UserManager {
         use.setAuthorities(authorities);
         String key = PREFIX + use.getName();
 
-        // 随机用户信息十分钟自动失效
+        // Random user information automatically expires after ten minutes
         Duration duration = Duration.ofMinutes(10);
         redisTemplate.opsForValue().set(key, use, duration);
         return use;

@@ -2,37 +2,37 @@
   <div id="ChannelEdit" style="width: 100%">
     <div class="page-header">
       <div class="page-title">
-        <el-page-header content="编辑推流信息" @back="close" />
+        <el-page-header content="Edit push information" @back="close" />
       </div>
     </div>
     <el-tabs tab-position="top" style="padding-top: 1rem;">
-      <el-tab-pane label="推流信息编辑" style="background-color: #FFFFFF; padding: 1rem; height: calc(-218px + 100vh);
+      <el-tab-pane label="Push information editing" style="background-color: #FFFFFF; padding: 1rem; height: calc(-218px + 100vh);
     overflow: auto;">
-        <el-divider content-position="center">基础信息</el-divider>
+        <el-divider content-position="center">Basic information</el-divider>
         <el-form ref="streamPushForm" v-loading="locading" status-icon label-width="160px" class="channel-form">
-          <el-form-item label="应用名">
-            <el-input v-model="streamPush.app" placeholder="请输入应用名" />
+          <el-form-item label="Application name">
+            <el-input v-model="streamPush.app" placeholder="Please enter application name" />
           </el-form-item>
-          <el-form-item label="流ID">
-            <el-input v-model="streamPush.stream" placeholder="请输入流ID" />
+          <el-form-item label="flowID">
+            <el-input v-model="streamPush.stream" placeholder="Please enter the streamID" />
           </el-form-item>
         </el-form>
-        <el-divider content-position="center">策略</el-divider>
+        <el-divider content-position="center">Strategy</el-divider>
         <el-form ref="streamPushForm" v-loading="locading" status-icon label-width="160px">
           <el-form-item style="text-align: left">
-            <el-checkbox v-model="streamPush.startOfflinePush">拉起离线推流</el-checkbox>
+            <el-checkbox v-model="streamPush.startOfflinePush">Pull up offline push flow</el-checkbox>
           </el-form-item>
 
         </el-form>
         <el-form style="text-align: right">
           <el-form-item>
-            <el-button type="primary" @click="onSubmit">保存</el-button>
-            <el-button @click="close">取消</el-button>
+            <el-button type="primary" @click="onSubmit">save</el-button>
+            <el-button @click="close">Cancel</el-button>
           </el-form-item>
         </el-form>
 
       </el-tab-pane>
-      <el-tab-pane v-if="streamPush.id" label="国标通道配置">
+      <el-tab-pane v-if="streamPush.id" label="National standard channel configuration">
         <CommonChannelEdit ref="commonChannelEdit" :showCancel="true" :data-form="streamPush" @cancel="close" />
       </el-tab-pane>
     </el-tabs>
@@ -65,7 +65,7 @@ export default {
           .then(data => {
             this.$message.success({
               showClose: true,
-              message: '保存成功'
+              message: 'Saved successfully'
             })
           })
           .finally(() => {
@@ -76,7 +76,7 @@ export default {
           .then(data => {
             this.$message.success({
               showClose: true,
-              message: '保存成功'
+              message: 'Saved successfully'
             })
           })
           .finally(() => {

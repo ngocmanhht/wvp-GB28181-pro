@@ -1,25 +1,25 @@
 package com.genersoft.iot.vmp.service.bean;
 
 /**
- * 全局错误码
+ * Global error code
  */
 public enum InviteErrorCode {
-    SUCCESS(0, "成功"),
-    FAIL(-100, "失败"),
-    ERROR_FOR_SIGNALLING_TIMEOUT(-1, "信令超时"),
-    ERROR_FOR_STREAM_TIMEOUT(-2, "收流超时"),
-    ERROR_FOR_RESOURCE_EXHAUSTION(-3, "资源耗尽"),
-    ERROR_FOR_CATCH_DATA(-4, "缓存数据异常"),
-    ERROR_FOR_SIGNALLING_ERROR(-5, "收到信令错误"),
-    ERROR_FOR_STREAM_PARSING_EXCEPTIONS(-6, "流地址解析错误"),
-    ERROR_FOR_SDP_PARSING_EXCEPTIONS(-7, "SDP信息解析失败"),
-    ERROR_FOR_SSRC_UNAVAILABLE(-8, "SSRC不可用"),
-    ERROR_FOR_RESET_SSRC(-9, "重新设置收流信息失败"),
-    ERROR_FOR_SIP_SENDING_FAILED(-10, "命令发送失败"),
-    ERROR_FOR_ASSIST_NOT_READY(-11, "没有可用的assist服务"),
-    ERROR_FOR_PARAMETER_ERROR(-13, "参数异常"),
-    ERROR_FOR_TCP_ACTIVE_CONNECTION_REFUSED_ERROR(-14, "TCP主动连接失败"),
-    ERROR_FOR_FINISH(-20, "已结束"),
+    SUCCESS(0, "success"),
+    FAIL(-100, "failed"),
+    ERROR_FOR_SIGNALLING_TIMEOUT(-1, "Signaling timeout"),
+    ERROR_FOR_STREAM_TIMEOUT(-2, "Traffic collection timeout"),
+    ERROR_FOR_RESOURCE_EXHAUSTION(-3, "resources exhausted"),
+    ERROR_FOR_CATCH_DATA(-4, "Cache data exception"),
+    ERROR_FOR_SIGNALLING_ERROR(-5, "Signaling error received"),
+    ERROR_FOR_STREAM_PARSING_EXCEPTIONS(-6, "Stream address parsing error"),
+    ERROR_FOR_SDP_PARSING_EXCEPTIONS(-7, "SDPInformation parsing failed"),
+    ERROR_FOR_SSRC_UNAVAILABLE(-8, "SSRCNot available"),
+    ERROR_FOR_RESET_SSRC(-9, "Failed to reset traffic collection information"),
+    ERROR_FOR_SIP_SENDING_FAILED(-10, "Command sending failed"),
+    ERROR_FOR_ASSIST_NOT_READY(-11, "No assist service available"),
+    ERROR_FOR_PARAMETER_ERROR(-13, "Parameter exception"),
+    ERROR_FOR_TCP_ACTIVE_CONNECTION_REFUSED_ERROR(-14, "TCPActive connection failed"),
+    ERROR_FOR_FINISH(-20, "ended"),
     ;
 
     private final int code;

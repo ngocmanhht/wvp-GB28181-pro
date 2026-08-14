@@ -3,20 +3,20 @@
     <div v-if="!jtChannel">
       <el-form :inline="true" size="mini">
         <el-form-item style="margin-right: 2rem">
-          <el-page-header content="通道列表" @back="showDevice" />
+          <el-page-header content="Channel list" @back="showDevice" />
         </el-form-item>
-        <el-form-item label="搜索">
+        <el-form-item label="Search">
           <el-input
             v-model="searchSrt"
             style="margin-right: 1rem; width: auto;"
-            placeholder="关键字"
+            placeholder="Keywords"
             prefix-icon="el-icon-search"
             clearable
             @input="search"
           />
         </el-form-item>
         <el-form-item>
-          <el-button icon="el-icon-plus" size="mini" style="margin-right: 1rem;" type="primary" @click="add">添加通道</el-button>
+          <el-button icon="el-icon-plus" size="mini" style="margin-right: 1rem;" type="primary" @click="add">add channel</el-button>
         </el-form-item>
         <el-form-item style="float: right;">
           <el-button icon="el-icon-refresh-right" circle @click="refresh()" />
@@ -31,9 +31,9 @@
             style="width: 100%"
             header-row-class-name="table-header"
           >
-            <el-table-column prop="channelId" label="通道编号" min-width="180" />
-            <el-table-column prop="name" label="名称" min-width="180" />
-            <el-table-column label="快照" min-width="100">
+            <el-table-column prop="channelId" label="Channel number" min-width="180" />
+            <el-table-column prop="name" label="Name" min-width="180" />
+            <el-table-column label="Snapshot" min-width="100">
               <template v-slot:default="scope">
                 <el-image
                   :src="getSnap(scope.row)"
@@ -48,12 +48,12 @@
                 </el-image>
               </template>
             </el-table-column>
-            <el-table-column label="开启音频" min-width="100">
+            <el-table-column label="Turn on audio" min-width="100">
               <template slot-scope="scope">
                 <el-switch v-model="scope.row.hasAudio" active-color="#409EFF" @change="updateChannel(scope.row)" />
               </template>
             </el-table-column>
-            <el-table-column label="操作" min-width="340" fixed="right">
+            <el-table-column label="Operation" min-width="340" fixed="right">
               <template slot-scope="scope">
                 <el-button
                   size="medium"
@@ -61,7 +61,7 @@
                   icon="el-icon-video-play"
                   type="text"
                   @click="sendDevicePush(scope.row)"
-                >播放
+                >play
                 </el-button>
                 <el-button
                   v-if="!!scope.row.stream"
@@ -71,7 +71,7 @@
                   type="text"
                   style="color: #f56c6c"
                   @click="stopDevicePush(scope.row)"
-                >停止
+                >stop
                 </el-button>
                 <el-button
                   size="medium"
@@ -79,7 +79,7 @@
                   icon="el-icon-camera"
                   type="text"
                   @click="shooting(scope.row)"
-                >抓图
+                >Snapshot
                 </el-button>
                 <el-divider direction="vertical" />
                 <el-button
@@ -88,18 +88,18 @@
                   icon="el-icon-edit"
                   @click="handleEdit(scope.row)"
                 >
-                  编辑
+                  Edit
                 </el-button>
                 <el-divider direction="vertical" />
                 <el-dropdown @command="(command)=>{moreClick(command, scope.row)}">
                   <el-button size="medium" type="text">
-                    更多功能<i class="el-icon-arrow-down el-icon--right" />
+                    More features<i class="el-icon-arrow-down el-icon--right" />
                   </el-button>
                   <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item command="records" :disabled="device == null || !device.status">
-                      设备录像</el-dropdown-item>
+                      Equipment video</el-dropdown-item>
                     <el-dropdown-item command="cloudRecords" :disabled="device == null || !device.status">
-                      云端录像</el-dropdown-item>
+                      Cloud recording</el-dropdown-item>
                   </el-dropdown-menu>
                 </el-dropdown>
               </template>
@@ -144,7 +144,7 @@ export default {
     return {
       device: null,
       deviceChannelList: [],
-      updateLooper: 0, // 数据刷新轮训标志
+      updateLooper: 0, // Data refresh rotation training flag
       searchSrt: '',
       channelType: '',
       online: '',
@@ -201,18 +201,18 @@ export default {
         .then(data => {
           this.total = data.total
           this.deviceChannelList = data.list
-          // 防止出现表格错位
+          // Prevent form misalignment
           this.$nextTick(() => {
             this.$refs.channelListTable.doLayout()
           })
         })
     },
 
-    // 通知设备上传媒体流
+    // Notify device to upload media stream
     sendDevicePush: function(itemData) {
       this.isLoging = true
       const channelId = itemData.channelId
-      console.log('通知设备推流1：' + this.device.phoneNumber + ' : ' + channelId)
+      console.log('Notification device push1：' + this.device.phoneNumber + ' : ' + channelId)
 
       this.$store.dispatch('jtDevice/play', {
         phoneNumber: this.device.phoneNumber,
@@ -251,7 +251,7 @@ export default {
       } else if (command === 'cloudRecords') {
         this.queryCloudRecords(itemData)
       } else {
-        this.$message.info('尚不支持')
+        this.$message.info('Not supported yet')
       }
     },
     queryRecords: function(itemData) {
@@ -287,7 +287,7 @@ export default {
     },
     getSnapErrorEvent: function(deviceId, channelId) {
       if (typeof (this.loadSnap[deviceId + channelId]) !== 'undefined') {
-        console.log('下载截图' + this.loadSnap[deviceId + channelId])
+        console.log('Download screenshot' + this.loadSnap[deviceId + channelId])
         if (this.loadSnap[deviceId + channelId] > 5) {
           delete this.loadSnap[deviceId + channelId]
           return
@@ -326,32 +326,32 @@ export default {
         terminalDbId: this.deviceId
       }
     },
-    // 编辑
+    // Edit
     handleEdit(row) {
       this.jtChannel = row
     },
-    // 编辑
+    // Edit
     closeEdit(row) {
       this.jtChannel = null
     },
-    // 编辑
+    // Edit
     shooting(row) {
-      this.$message.success('已申请截图,完成后自动下载', { closed: true })
-      // 文件下载地址
+      this.$message.success('Screenshot has been requested and will be downloaded automatically after completion', { closed: true })
+      // File download address
       const baseUrl = window.baseUrl ? window.baseUrl : ''
       const fileUrl = ((process.env.NODE_ENV === 'development') ? process.env.VUE_APP_BASE_API : baseUrl) + `/api/jt1078/snap?phoneNumber=${this.device.phoneNumber}&channelId=${row.channelId}`
       let controller = new AbortController()
       let signal = controller.signal
-      // 设置请求头
+      // Set request header
       const headers = new Headers()
-      headers.append('access-token', this.$store.getters.token) // 设置授权头，替换YourAccessToken为实际的访问令牌
+      headers.append('access-token', this.$store.getters.token) // Set the authorization header and replace YourAccessToken with the actual access token
 
       let timer = setTimeout(() => {
-        this.$message.error('等待截图超时', { closed: true })
+        this.$message.error('Timeout waiting for screenshot', { closed: true })
         controller.abort('timeout')
       }, 15000)
 
-      // 发起  请求
+      // Make a request
       fetch(fileUrl, {
         method: 'GET',
         headers: headers,
@@ -360,19 +360,19 @@ export default {
         .then(response => response.blob())
         .then(blob => {
           window.clearTimeout(timer)
-          // 创建一个虚拟的链接元素，模拟点击下载
+          // Create a virtual link element to simulate a click to download
           const link = document.createElement('a')
           link.href = window.URL.createObjectURL(blob)
-          link.download = `${this.device.phoneNumber}-${row.channelId}-${dayjs().format('YYYYMMDDHHmmss')}.jpg` // 设置下载文件名，替换filename.ext为实际的文件名和扩展名
+          link.download = `${this.device.phoneNumber}-${row.channelId}-${dayjs().format('YYYYMMDDHHmmss')}.jpg` // Set the download file name and replace filename.ext with the actual file name and extension.
           document.body.appendChild(link)
-          // 模拟点击
+          // simulate click
           link.click()
-          // 移除虚拟链接元素
+          // Remove virtual link element
           document.body.removeChild(link)
         })
         .catch(error => {
           window.clearTimeout(timer)
-          console.error('下载失败：', error)
+          console.error('Download failed：', error)
         })
     }
   }

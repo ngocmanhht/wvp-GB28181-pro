@@ -5,21 +5,21 @@ import io.netty.buffer.Unpooled;
 import lombok.Data;
 
 /**
- * 违规行驶时段范围 ,精确到分
+ * The range of illegal driving periods, accurate to the minute
  */
 @Data
 public class JTVideoParam implements JTDeviceSubConfig{
     /**
-     * 实时流编码模式
-     * 0:CBR( 固定码率) ;
-     * 1:VBR( 可变码率) ;
-     * 2:ABR( 平均码率) ;
-     * 100 ~ 127:自定义
+     * Live streaming encoding mode
+     * 0:CBR( Fixed code rate) ;
+     * 1:VBR( variable code rate) ;
+     * 2:ABR( average code rate) ;
+     * 100 ~ 127:Customize
      */
     private int liveStreamCodeRateType;
 
     /**
-     * 实时流分辨率
+     * Live stream resolution
      * 0:QCIF;
      * 1:CIF;
      * 2:WCIF;
@@ -27,37 +27,37 @@ public class JTVideoParam implements JTDeviceSubConfig{
      * 4:WD1;
      * 5:720P;
      * 6:1 080P;
-     * 100 ~ 127:自定义
+     * 100 ~ 127:Customize
      */
     private int liveStreamResolving;
 
     /**
-     * 实时流关键帧间隔, 范围(1 ~ 1 000) 帧
+     * Live stream keyframe interval, range(1 ~ 1 000) frame
      */
     private int liveStreamIInterval;
 
     /**
-     * 实时流目标帧率,范围(1 ~ 120) 帧 / s
+     * Live streaming target frame rate, range(1 ~ 120) frame / s
      */
     private int liveStreamFrameRate;
 
     /**
-     * 实时流目标码率,单位为千位每秒( kbps)
+     * Real-time streaming target bitrate, in kilobits per second( kbps)
      */
     private long liveStreamCodeRate;
 
 
     /**
-     * 存储流编码模式
-     * 0:CBR( 固定码率)
-     * 1:VBR( 可变码率)
-     * 2:ABR( 平均码率)
-     * 100 ~ 127:自定义
+     * Storage stream encoding mode
+     * 0:CBR( Fixed code rate)
+     * 1:VBR( variable code rate)
+     * 2:ABR( average code rate)
+     * 100 ~ 127:Customize
      */
     private int storageStreamCodeRateType;
 
     /**
-     * 存储流分辨率
+     * Storage stream resolution
      * 0:QCIF;
      * 1:CIF;
      * 2:WCIF;
@@ -65,32 +65,32 @@ public class JTVideoParam implements JTDeviceSubConfig{
      * 4:WD1;
      * 5:720P;
      * 6:1 080P;
-     * 100 ~ 127:自定义
+     * 100 ~ 127:Customize
      */
     private int storageStreamResolving;
 
     /**
-     * 存储流关键帧间隔, 范围(1 ~ 1 000) 帧
+     * Storage stream keyframe interval, range(1 ~ 1 000) frame
      */
     private int storageStreamIInterval;
 
     /**
-     * 存储流目标帧率,范围(1 ~ 120) 帧 / s
+     * Storage stream target frame rate, range(1 ~ 120) frame / s
      */
     private int storageStreamFrameRate;
 
     /**
-     * 存储流目标码率,单位为千位每秒( kbps)
+     * Storage stream target bit rate, in kilobits per second( kbps)
      */
     private long storageStreamCodeRate;
 
     /**
-     * 字幕叠加设置
+     * Subtitle overlay settings
      */
     private JTOSDConfig osd;
 
     /**
-     * 是否启用音频输出, 0:不启用;1:启用
+     * Whether to enable audio output, 0: disable;1:enable
      */
     private int audioEnable;
 

@@ -5,13 +5,13 @@ import lombok.Data;
 @Data
 public class CommonRecordInfo {
 
-    // 开始时间
+    // start time
     private String startTime;
 
-    // 结束时间
+    // end time
     private String endTime;
 
-    // 文件大小 单位byte
+    // File size unitbyte
     private String fileSize;
 
 }

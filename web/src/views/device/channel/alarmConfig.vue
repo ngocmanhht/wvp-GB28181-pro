@@ -3,12 +3,12 @@
     <div class="alarm-config-body">
       <div class="card-list">
         <div class="alarm-section">
-          <div class="section-header">报警设置</div>
+          <div class="section-header">Alarm settings</div>
           <el-form ref="alarmSettingForm">
             <el-form-item>
-              <el-button type="primary" @click="handleSetGuard">布防</el-button>
-              <el-button type="warning" @click="handleResetGuard">撤防</el-button>
-              <el-button type="danger" @click="handleResetAlarm">复位</el-button>
+              <el-button type="primary" @click="handleSetGuard">arm</el-button>
+              <el-button type="warning" @click="handleResetGuard">disarm</el-button>
+              <el-button type="danger" @click="handleResetAlarm">reset</el-button>
             </el-form-item>
           </el-form>
         </div>
@@ -32,32 +32,32 @@ export default {
   mounted() {},
   methods: {
     handleSetGuard() {
-      this.$confirm('确认对该通道执行布防操作？', '提示', {
-        confirmButtonText: '确定', cancelButtonText: '取消', type: 'warning'
+      this.$confirm('Confirm to arm the channel？', 'Tips', {
+        confirmButtonText: 'OK', cancelButtonText: 'Cancel', type: 'warning'
       }).then(() => {
         this.$store.dispatch('device/setGuard', this.deviceId).then(() => {
-          this.$message.success('布防成功')
+          this.$message.success('Armed successfully')
         })
       }).catch(() => {})
     },
     handleResetGuard() {
-      this.$confirm('确认对该通道执行撤防操作？', '提示', {
-        confirmButtonText: '确定', cancelButtonText: '取消', type: 'warning'
+      this.$confirm('Confirm to disarm the channel？', 'Tips', {
+        confirmButtonText: 'OK', cancelButtonText: 'Cancel', type: 'warning'
       }).then(() => {
         this.$store.dispatch('device/resetGuard', this.deviceId).then(() => {
-          this.$message.success('撤防成功')
+          this.$message.success('Disarmed successfully')
         })
       }).catch(() => {})
     },
     handleResetAlarm() {
-      this.$confirm('确认对该通道执行复位操作？', '提示', {
-        confirmButtonText: '确定', cancelButtonText: '取消', type: 'warning'
+      this.$confirm('Confirm the reset operation for the channel？', 'Tips', {
+        confirmButtonText: 'OK', cancelButtonText: 'Cancel', type: 'warning'
       }).then(() => {
         this.$store.dispatch('device/resetAlarm', {
           deviceId: this.deviceId,
           channelId: this.channelDeviceId
         }).then(() => {
-          this.$message.success('复位成功')
+          this.$message.success('Reset successful')
         })
       }).catch(() => {})
     }

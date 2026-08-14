@@ -15,39 +15,39 @@ import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 /**
- * 全局异常处理
+ * Global exception handling
  */
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
     /**
-     * 默认异常处理
-     * @param e 异常
-     * @return 统一返回结果
+     * Default exception handling
+     * @param e Abnormal
+     * @return Return results uniformly
      */
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public WVPResult<String> exceptionHandler(Exception e) {
-        log.error("[全局异常]： ", e);
+        log.error("[global exception]： ", e);
         return WVPResult.fail(ErrorCode.ERROR500.getCode(), e.getMessage());
     }
 
     /**
-     * 默认异常处理
-     * @param e 异常
-     * @return 统一返回结果
+     * Default exception handling
+     * @param e Abnormal
+     * @return Return results uniformly
      */
     @ExceptionHandler(MaxUploadSizeExceededException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
     public WVPResult<String> exceptionHandler(MaxUploadSizeExceededException e) {
-        return WVPResult.fail(ErrorCode.ERROR403.getCode(), "文件过大");
+        return WVPResult.fail(ErrorCode.ERROR403.getCode(), "File too large");
     }
 
     /**
-     * 默认异常处理
-     * @param e 异常
-     * @return 统一返回结果
+     * Default exception handling
+     * @param e Abnormal
+     * @return Return results uniformly
      */
     @ExceptionHandler(NoResourceFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
@@ -56,9 +56,9 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * 默认异常处理
-     * @param e 异常
-     * @return 统一返回结果
+     * Default exception handling
+     * @param e Abnormal
+     * @return Return results uniformly
      */
     @ExceptionHandler(IllegalStateException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -67,9 +67,9 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * 默认异常处理
-     * @param e 异常
-     * @return 统一返回结果
+     * Default exception handling
+     * @param e Abnormal
+     * @return Return results uniformly
      */
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -77,9 +77,9 @@ public class GlobalExceptionHandler {
         return WVPResult.fail(ErrorCode.ERROR400);
     }
     /**
-     * 断言异常处理
-     * @param e 异常
-     * @return 统一返回结果
+     * Assertion exception handling
+     * @param e Abnormal
+     * @return Return results uniformly
      */
     @ExceptionHandler(IllegalArgumentException.class)
     @ResponseStatus(HttpStatus.OK)
@@ -89,9 +89,9 @@ public class GlobalExceptionHandler {
 
 
     /**
-     * 自定义异常处理， 处理controller中返回的错误
-     * @param e 异常
-     * @return 统一返回结果
+     * Custom exception handling to handle errors returned in the controller
+     * @param e Abnormal
+     * @return Return results uniformly
      */
     @ExceptionHandler(ControllerException.class)
     @ResponseStatus(HttpStatus.OK)
@@ -100,9 +100,9 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * 登陆失败
-     * @param e 异常
-     * @return 统一返回结果
+     * Login failed
+     * @param e Abnormal
+     * @return Return results uniformly
      */
     @ExceptionHandler(BadCredentialsException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)

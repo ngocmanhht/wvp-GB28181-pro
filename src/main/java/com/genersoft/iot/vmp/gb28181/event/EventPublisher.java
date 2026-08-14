@@ -22,9 +22,9 @@ import org.springframework.stereotype.Component;
 import java.util.*;
 
 /**
- * @description:Event事件通知推送器，支持推送在线事件、离线事件
+ * @description:EventEvent notification pusher, supports pushing online events and offline events
  * @author: swwheihei
- * @date:   2020年5月6日 上午11:30:50
+ * @date:   2020May 6, 2019, morning11:30:50
  */
 @Slf4j
 @Component
@@ -40,7 +40,7 @@ public class EventPublisher {
 	private IRedisRpcService redisRpcService;
 
 	/**
-	 * 设备报警事件
+	 * Device alarm event
 	 */
 	public void deviceAlarmEventPublish(List<DeviceAlarmNotify> deviceAlarmList) {
 		DeviceAlarmEvent alarmEvent = new DeviceAlarmEvent(this);
@@ -65,19 +65,19 @@ public class EventPublisher {
 	}
 
 	public void channelEventPublishForUpdate(CommonGBChannel commonGBChannel, CommonGBChannel deviceChannelForOld) {
-        log.info("[通道改变内部分发-更新] {}", commonGBChannel.getGbDeviceId());
+        log.info("[Channel changes internal distribution-update] {}", commonGBChannel.getGbDeviceId());
         ChannelEvent channelEvent = ChannelEvent.getInstanceForUpdate(this, Collections.singletonList(commonGBChannel), Collections.singletonList(deviceChannelForOld));
         applicationEventPublisher.publishEvent(channelEvent);
 	}
 
 	public void channelEventPublishForUpdate(List<CommonGBChannel> channelList, List<CommonGBChannel> channelListForOld) {
-        log.info("[通道改变内部分发-更新] 数量： {}", channelList.size());
+        log.info("[Channel changes internal distribution-update] Quantity： {}", channelList.size());
         ChannelEvent channelEvent = ChannelEvent.getInstanceForUpdate(this, channelList, channelListForOld);
         applicationEventPublisher.publishEvent(channelEvent);
 	}
 
     public void channelEventPublish(List<CommonGBChannel> channelList, ChannelEvent.ChannelEventMessageType type) {
-        log.info("[通道改变内部分发-{}] 数量： {}", type, channelList.size());
+        log.info("[Channel changes internal distribution-{}] Quantity： {}", type, channelList.size());
 		ChannelEvent channelEvent = ChannelEvent.getInstance(this, type, channelList);
 		applicationEventPublisher.publishEvent(channelEvent);
 	}
@@ -87,13 +87,13 @@ public class EventPublisher {
 	}
 	public void catalogEventPublish(Platform platform, List<CommonGBChannel> deviceChannels, String type) {
 		if (platform != null && !userSetting.getServerId().equals(platform.getServerId())) {
-			log.info("[国标级联] 目录状态推送， 此上级平台由其他服务处理，消息已经忽略");
+			log.info("[National standard cascade] Directory status push, this upper-level platform is processed by other services, the message has been ignored");
 			return;
 		}
 		CatalogEvent outEvent = new CatalogEvent(this);
 		List<CommonGBChannel> channels = new ArrayList<>();
 		if (deviceChannels.size() > 1) {
-			// 数据去重
+			// Data deduplication
 			Set<String> gbIdSet = new HashSet<>();
 			for (CommonGBChannel deviceChannel : deviceChannels) {
 				if (deviceChannel != null && deviceChannel.getGbDeviceId() != null && !gbIdSet.contains(deviceChannel.getGbDeviceId())) {

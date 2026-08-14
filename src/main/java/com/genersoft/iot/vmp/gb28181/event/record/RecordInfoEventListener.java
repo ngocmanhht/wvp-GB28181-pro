@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * @description: 录像查询结束事件
+ * @description: Video query end event
  * @author: pan
  * @data: 2022-02-23
  */
@@ -28,11 +28,11 @@ public class RecordInfoEventListener implements ApplicationListener<RecordInfoEv
         String channelId = event.getRecordInfo().getChannelId();
         int count = event.getRecordInfo().getCount();
         int sumNum = event.getRecordInfo().getSumNum();
-        log.info("录像查询事件触发，deviceId：{}, channelId: {}, 录像数量{}/{}条", event.getRecordInfo().getDeviceId(),
+        log.info("Recording query event trigger，deviceId：{}, channelId: {}, Number of videos{}/{}Article", event.getRecordInfo().getDeviceId(),
                 event.getRecordInfo().getChannelId(), count,sumNum);
         if (!handlerMap.isEmpty()) {
             RecordEndEventHandler handler = handlerMap.get(deviceId + channelId);
-            log.info("录像查询事件触发, 发送订阅，deviceId：{}, channelId: {}",
+            log.info("Recording query event triggers, sends subscription，deviceId：{}, channelId: {}",
                     event.getRecordInfo().getDeviceId(), event.getRecordInfo().getChannelId());
             if (handler !=null){
                 handler.handler(event.getRecordInfo());
@@ -44,17 +44,17 @@ public class RecordInfoEventListener implements ApplicationListener<RecordInfoEv
     }
 
     /**
-     * 添加
+     * add
      */
     public void addEndEventHandler(String device, String channelId, RecordEndEventHandler recordEndEventHandler) {
-        log.info("录像查询事件添加监听，deviceId：{}, channelId: {}", device, channelId);
+        log.info("Add monitoring for video query events，deviceId：{}, channelId: {}", device, channelId);
         handlerMap.put(device + channelId, recordEndEventHandler);
     }
     /**
-     * 添加
+     * add
      */
     public void delEndEventHandler(String device, String channelId) {
-        log.info("录像查询事件移除监听，deviceId：{}, channelId: {}", device, channelId);
+        log.info("Recording query event removal monitoring，deviceId：{}, channelId: {}", device, channelId);
         handlerMap.remove(device + channelId);
     }
 

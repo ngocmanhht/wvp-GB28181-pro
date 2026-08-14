@@ -18,15 +18,15 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
- * 实现参考自xiaozhangnomoney原创文章，
- * 版权声明：本文为xiaozhangnomoney原创文章，遵循 CC 4.0 BY-SA 版权协议，转载请附上原文出处链接和本声明
- * 原文出处链接：https://blog.csdn.net/xiaozhangnomoney/article/details/107769147
+ * Implementation reference fromxiaozhangnomoneyOriginal article，
+ * Copyright statement: This article isxiaozhangnomoneyOriginal article, follow CC 4.0 BY-SA Copyright agreement, please attach the original source link and this statement when reprinting
+ * Original source link：https://blog.csdn.net/xiaozhangnomoney/article/details/107769147
  */
 @Slf4j
 public class SystemInfoUtils {
 
     /**
-     * 获取cpu信息
+     * Get cpu information
      * @return
      * @throws InterruptedException
      */
@@ -34,7 +34,7 @@ public class SystemInfoUtils {
         SystemInfo systemInfo = new SystemInfo();
         CentralProcessor processor = systemInfo.getHardware().getProcessor();
         long[] prevTicks = processor.getSystemCpuLoadTicks();
-        // 睡眠1s
+        // sleep1s
         TimeUnit.SECONDS.sleep(1);
         long[] ticks = processor.getSystemCpuLoadTicks();
         long nice = ticks[CentralProcessor.TickType.NICE.getIndex()] - prevTicks[CentralProcessor.TickType.NICE.getIndex()];
@@ -50,21 +50,21 @@ public class SystemInfoUtils {
     }
 
     /**
-     * 获取内存使用率
+     * Get memory usage
      * @return
      */
     public static double getMemInfo(){
         SystemInfo systemInfo = new SystemInfo();
         GlobalMemory memory = systemInfo.getHardware().getMemory();
-        //总内存
+        //total memory
         long totalByte = memory.getTotal();
-        //剩余
+        //Remaining
         long acaliableByte = memory.getAvailable();
         return (totalByte-acaliableByte)*1.0/totalByte;
     }
 
     /**
-     * 获取网络上传和下载
+     * Get network uploads and downloads
      * @return
      */
     public static Map<String,Double> getNetworkInterfaces() {
@@ -77,20 +77,20 @@ public class SystemInfoUtils {
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
-            log.error("[线程休眠失败] : {}", e.getMessage());
+            log.error("[Thread sleep failed] : {}", e.getMessage());
         }
         List<NetworkIF> afterNetworkIFs = hal.getNetworkIFs();
         NetworkIF afterNet = afterNetworkIFs.get(afterNetworkIFs.size() - 1);
 
         HashMap<String, Double> map = new HashMap<>();
-        // 速度单位: Mbps
+        // speed unit: Mbps
         map.put("in",formatUnits(afterNet.getBytesRecv()-beforeRecv, 1048576L));
         map.put("out",formatUnits(afterNet.getBytesSent()-beforeSend, 1048576L));
         return map;
     }
 
     /**
-     * 获取带宽总值
+     * Get the total bandwidth value
      * @return
      */
     public static long getNetworkTotal() {
@@ -107,7 +107,7 @@ public class SystemInfoUtils {
     }
 
     /**
-     * 获取进程数
+     * Get the number of processes
      * @return
      */
     public static int getProcessesCount(){
@@ -124,7 +124,7 @@ public class SystemInfoUtils {
         String osName = System.getProperty("os.name");
         List<String> pathArray = new ArrayList<>();
         if (osName.startsWith("Mac OS")) {
-            // 苹果
+            // apple
             pathArray.add("/");
         } else if (osName.startsWith("Windows")) {
             // windows
@@ -137,7 +137,7 @@ public class SystemInfoUtils {
             Map<String, Object> infoMap = new HashMap<>();
             infoMap.put("path", path);
             File partitionFile = new File(path);
-            // 单位： GB
+            // unit： GB
             infoMap.put("use", (partitionFile.getTotalSpace() - partitionFile.getFreeSpace())/1024/1024/1024D);
             infoMap.put("free", partitionFile.getFreeSpace()/1024/1024/1024D);
             result.add(infoMap);
@@ -150,7 +150,7 @@ public class SystemInfoUtils {
         HardwareAbstractionLayer hardware = systemInfo.getHardware();
         // CPU ID
         String cpuId = hardware.getProcessor().getProcessorIdentifier().getProcessorID();
-        // 主板序号
+        // Motherboard serial number
         String serialNumber = hardware.getComputerSystem().getSerialNumber();
 
         return DigestUtils.md5DigestAsHex(

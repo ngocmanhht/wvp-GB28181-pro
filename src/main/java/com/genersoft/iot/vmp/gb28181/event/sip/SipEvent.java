@@ -14,17 +14,17 @@ public class SipEvent implements Delayed {
     private String key;
 
     /**
-     * 成功的回调
+     * successful callback
      */
     private SipSubscribe.Event okEvent;
 
     /**
-     * 错误的回调,包括超时
+     * Error callbacks, including timeouts
      */
     private SipSubscribe.Event errorEvent;
 
     /**
-     * 超时时间(单位： 毫秒)
+     * timeout(Unit: millisecond)
      */
     private long delay;
 

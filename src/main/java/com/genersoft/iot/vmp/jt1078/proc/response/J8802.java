@@ -8,7 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * 存储多媒体数据检索
+ * Stored multimedia data retrieval
  */
 @Setter
 @Getter

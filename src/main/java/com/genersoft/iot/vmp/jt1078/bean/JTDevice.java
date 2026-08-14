@@ -4,85 +4,85 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 /**
- * JT 设备
+ * JT Equipment
  */
 @Data
-@Schema(description = "jt808设备")
+@Schema(description = "jt808Equipment")
 public class JTDevice {
 
     private int id;
 
-    @Schema(description = "省域ID")
+    @Schema(description = "Provincial areaID")
     private String provinceId;
 
-    @Schema(description = "省域文字描述")
+    @Schema(description = "Provincial text description")
     private String provinceText;
 
-    @Schema(description = "市县域ID")
+    @Schema(description = "City and countyID")
     private String cityId;
 
-    @Schema(description = "市县域文字描述")
+    @Schema(description = "City and county text description")
     private String cityText;
 
-    @Schema(description = "制造商ID")
+    @Schema(description = "manufacturerID")
     private String makerId;
 
-    @Schema(description = "终端型号")
+    @Schema(description = "Terminal model")
     private String model;
 
-    @Schema(description = "终端手机号")
+    @Schema(description = "Terminal mobile phone number")
     private String phoneNumber;
 
-    @Schema(description = "终端ID")
+    @Schema(description = "terminalID")
     private String terminalId;
 
-    @Schema(description = "车牌颜色")
+    @Schema(description = "license plate color")
     private int plateColor;
 
-    @Schema(description = "车牌")
+    @Schema(description = "license plate")
     private String plateNo;
 
-    @Schema(description = "经度")
+    @Schema(description = "longitude")
     private Double longitude;
 
-    @Schema(description = "纬度")
+    @Schema(description = "Latitude")
     private Double latitude;
 
-    @Schema(description = "注册时间")
+    @Schema(description = "Registration time")
     private String registerTime;
 
-    @Schema(description = "创建时间")
+    @Schema(description = "creation time")
     private String createTime;
 
-    @Schema(description = "更新时间")
+    @Schema(description = "Update time")
     private String updateTime;
 
-    @Schema(description = "状态")
+    @Schema(description = "Status")
     private boolean status;
 
-    @Schema(description = "设备使用的媒体id, 默认为null")
+    @Schema(description = "Media ID used by the device, default isnull")
     private String mediaServerId;
 
-    @Schema(description = "地理坐标系， 目前支持 WGS84,GCJ02")
+    @Schema(description = "Geographic coordinate system, currently supported WGS84,GCJ02")
     private String geoCoordSys;
 
-    @Schema(description = "收流IP")
+    @Schema(description = "collect flowIP")
     private String sdpIp;
 
     @Override
     public String toString() {
         return "JTDevice{" +
-                "  终端手机号='" + phoneNumber + '\'' +
-                ", 省域ID='" + provinceId + '\'' +
-                ", 省域文字描述='" + provinceText + '\'' +
-                ", 市县域ID='" + cityId + '\'' +
-                ", 市县域文字描述='" + cityText + '\'' +
-                ", 制造商ID='" + makerId + '\'' +
-                ", 终端型号='" + model + '\'' +
-                ", 设备ID='" + terminalId + '\'' +
-                ", 车牌颜色=" + plateColor +
-                ", 车牌='" + plateNo + '\'' +
-                ", 注册时间='" + registerTime + '\'' +
+                "  Terminal mobile phone number='" + phoneNumber + '\'' +
+                ", Provincial areaID='" + provinceId + '\'' +
+                ", Provincial text description='" + provinceText + '\'' +
+                ", City and countyID='" + cityId + '\'' +
+                ", City and county text description='" + cityText + '\'' +
+                ", manufacturerID='" + makerId + '\'' +
+                ", Terminal model='" + model + '\'' +
+                ", EquipmentID='" + terminalId + '\'' +
+                ", license plate color=" + plateColor +
+                ", license plate='" + plateNo + '\'' +
+                ", Registration time='" + registerTime + '\'' +
                 ", status=" + status +
                 '}';
     }

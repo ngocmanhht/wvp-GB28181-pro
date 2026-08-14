@@ -33,7 +33,7 @@ import javax.sip.header.HeaderAddress;
 import javax.sip.header.ToHeader;
 
 /**
- * SIP命令类型： ACK请求
+ * SIPCommand type: ACK request
  * @author lin
  */
 @Slf4j
@@ -47,7 +47,7 @@ public class AckRequestProcessor extends SIPRequestProcessorParent implements In
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
-		// 添加消息处理的订阅
+		// Add message processing subscription
 		sipProcessorObserver.addRequestProcessor(method, this);
 	}
 
@@ -83,7 +83,7 @@ public class AckRequestProcessor extends SIPRequestProcessorParent implements In
 
 
 	/**   
-	 * 处理  ACK请求
+	 * Handle ACK request
 	 */
 	@Override
 	public void process(RequestEvent evt) {
@@ -91,24 +91,24 @@ public class AckRequestProcessor extends SIPRequestProcessorParent implements In
 		dynamicTask.stop(callIdHeader.getCallId());
 		String fromUserId = ((SipURI) ((HeaderAddress) evt.getRequest().getHeader(FromHeader.NAME)).getAddress().getURI()).getUser();
 		String toUserId = ((SipURI) ((HeaderAddress) evt.getRequest().getHeader(ToHeader.NAME)).getAddress().getURI()).getUser();
-		log.info("[收到ACK]： 来自->{}", fromUserId);
+		log.info("[receivedACK]： from->{}", fromUserId);
 		SendRtpInfo sendRtpItem =  sendRtpServerService.queryByCallId(callIdHeader.getCallId());
 		if (sendRtpItem == null) {
-			log.warn("[收到ACK]：未找到来自{}，callId: {}", fromUserId, callIdHeader.getCallId());
+			log.warn("[receivedACK]：Not found from{}，callId: {}", fromUserId, callIdHeader.getCallId());
 			return;
 		}
-		// tcp主动时，此时是级联下级平台，在回复200ok时，本地已经请求zlm开启监听，跳过下面步骤
+		// tcpWhen active, it is cascading to lower-level platforms. When replying with 200ok, the local has requested zlm to start monitoring. Skip the following steps.
 		if (sendRtpItem.isTcpActive()) {
-			log.info("收到ACK，rtp/{} TCP主动方式等收到上级连接后开始发流", sendRtpItem.getStream());
+			log.info("receivedACK，rtp/{} TCPActive mode waits for the superior connection to be received and then starts streaming.", sendRtpItem.getStream());
 			return;
 		}
 		MediaServer mediaServer = mediaServerService.getOne(sendRtpItem.getMediaServerId());
-		log.info("收到ACK，rtp/{}开始向上级推流, 目标={}:{}，SSRC={}, 协议:{}",
+		log.info("receivedACK，rtp/{}Start pushing the flow to the superior, target={}:{}，SSRC={}, Agreement:{}",
 				sendRtpItem.getStream(),
 				sendRtpItem.getIp(),
 				sendRtpItem.getPort(),
 				sendRtpItem.getSsrc(),
-				sendRtpItem.isTcp()?(sendRtpItem.isTcpActive()?"TCP主动":"TCP被动"):"UDP"
+				sendRtpItem.isTcp()?(sendRtpItem.isTcpActive()?"TCPTake the initiative":"TCPPassive"):"UDP"
 		);
 		Platform parentPlatform = platformService.queryPlatformByServerGBId(fromUserId);
 
@@ -128,28 +128,28 @@ public class AckRequestProcessor extends SIPRequestProcessorParent implements In
 							mediaServerService.startSendRtp(mediaServer, sendRtpItem);
 						}
 					}else {
-						// mediaInfo 在集群的其他wvp里
+						// mediaInfo In other wvp of the cluster
 
 					}
 
 					redisCatchStorage.sendPlatformStartPlayMsg(sendRtpItem, deviceChannel, parentPlatform);
 				}catch (ControllerException e) {
-					log.error("RTP推流失败: {}", e.getMessage());
+					log.error("RTPPush failed: {}", e.getMessage());
 					playService.startSendRtpStreamFailHand(sendRtpItem, parentPlatform, callIdHeader);
 				}
 			}
 		}else {
 			Device device = deviceService.getDeviceByDeviceId(fromUserId);
 			if (device == null) {
-				log.warn("[收到ACK]：来自{}，目标为({})的推流信息为找到流体服务[{}]信息",fromUserId, toUserId, sendRtpItem.getMediaServerId());
+				log.warn("[receivedACK]：from{}，The goal is({})The push information for finding the fluid service[{}]information",fromUserId, toUserId, sendRtpItem.getMediaServerId());
 				return;
 			}
-			// 设置为收到ACK后发送语音的设备已经在发送200OK开始发流了
+			// The device that is set to send voice after receiving ACK is already sending 200OK to start streaming.
 			if (!device.isBroadcastPushAfterAck()) {
 				return;
 			}
 			if (mediaServer == null) {
-				log.warn("[收到ACK]：来自{}，目标为({})的推流信息为找到流体服务[{}]信息",fromUserId, toUserId, sendRtpItem.getMediaServerId());
+				log.warn("[receivedACK]：from{}，The goal is({})The push information for finding the fluid service[{}]information",fromUserId, toUserId, sendRtpItem.getMediaServerId());
 				return;
 			}
 			try {
@@ -159,7 +159,7 @@ public class AckRequestProcessor extends SIPRequestProcessorParent implements In
 					mediaServerService.startSendRtp(mediaServer, sendRtpItem);
 				}
 			}catch (ControllerException e) {
-				log.error("RTP推流失败: {}", e.getMessage());
+				log.error("RTPPush failed: {}", e.getMessage());
 				playService.startSendRtpStreamFailHand(sendRtpItem, null, callIdHeader);
 			}
 		}

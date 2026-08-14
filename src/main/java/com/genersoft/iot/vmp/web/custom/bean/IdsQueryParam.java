@@ -6,12 +6,12 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-@Schema(description = "根据多个ID获取摄像头列表")
+@Schema(description = "Get camera list based on multiple IDs")
 public class IdsQueryParam {
 
-    @Schema(description = "通道编号列表")
+    @Schema(description = "Channel number list")
     private List<String> deviceIds;
 
-    @Schema(description = "坐标系类型：WGS84,GCJ02、BD09")
+    @Schema(description = "Coordinate system type：WGS84,GCJ02、BD09")
     private String geoCoordSys;
 }

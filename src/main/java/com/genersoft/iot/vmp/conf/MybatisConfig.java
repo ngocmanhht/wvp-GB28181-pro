@@ -16,7 +16,7 @@ import javax.sql.DataSource;
 import java.util.Properties;
 
 /**
- * 配置mybatis
+ * Configurationmybatis
  */
 @Configuration
 @Order(value=1)

@@ -10,26 +10,26 @@ import lombok.Data;
  */
 @Data
 public class Header {
-    // 消息ID
+    // newsID
     String msgId;
 
-    // 消息体属性
+    // Message body properties
     Integer msgPro;
 
-    // 终端手机号
+    // Terminal mobile phone number
     String phoneNumber;
 
-    // 消息体流水号
+    // Message body serial number
     Integer sn;
 
-    // 协议版本号
+    // Protocol version number
     Short version = -1;
 
 
     /**
-     * 判断是否是2019的版本
+     * Determine whether it is the 2019 version
      *
-     * @return true 2019后的版本。false 2013
+     * @return true 2019later version。false 2013
      */
     public boolean is2019Version() {
         return Bin.get(msgPro, 14);
@@ -38,11 +38,11 @@ public class Header {
     @Override
     public String toString() {
         return "Header{" +
-                "消息ID='" + msgId + '\'' +
-                ", 消息体属性=" + msgPro +
-                ", 终端手机号='" + phoneNumber + '\'' +
-                ", 消息体流水号=" + sn +
-                ", 协议版本号=" + version +
+                "newsID='" + msgId + '\'' +
+                ", Message body properties=" + msgPro +
+                ", Terminal mobile phone number='" + phoneNumber + '\'' +
+                ", Message body serial number=" + sn +
+                ", Protocol version number=" + version +
                 '}';
     }
 }

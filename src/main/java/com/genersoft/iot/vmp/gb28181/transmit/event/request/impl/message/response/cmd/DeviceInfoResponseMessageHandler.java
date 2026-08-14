@@ -46,10 +46,10 @@ public class DeviceInfoResponseMessageHandler extends SIPRequestProcessorParent 
 
     @Override
     public void handForDevice(RequestEvent evt, Device device, Element rootElement) {
-        log.debug("接收到DeviceInfo应答消息");
-        // 检查设备是否存在， 不存在则不回复
+        log.debug("DeviceInfo response message received");
+        // Check whether the device exists. If it does not exist, do not reply.
         if (device == null || !device.isOnLine()) {
-            log.warn("[接收到DeviceInfo应答消息,但是设备已经离线]：" + (device != null ? device.getDeviceId():"" ));
+            log.warn("[DeviceInfo response message received, but the device is offline]：" + (device != null ? device.getDeviceId():"" ));
             return;
         }
         SIPRequest request = (SIPRequest) evt.getRequest();
@@ -57,11 +57,11 @@ public class DeviceInfoResponseMessageHandler extends SIPRequestProcessorParent 
             rootElement = getRootElement(evt, device.getCharset());
 
             if (rootElement == null) {
-                log.warn("[ 接收到DeviceInfo应答消息 ] content cannot be null, {}", evt.getRequest());
+                log.warn("[ DeviceInfo response message received ] content cannot be null, {}", evt.getRequest());
                 try {
                     responseAck((SIPRequest) evt.getRequest(), Response.BAD_REQUEST);
                 } catch (SipException | InvalidArgumentException | ParseException e) {
-                    log.error("[命令发送失败] DeviceInfo应答消息 BAD_REQUEST: {}", e.getMessage());
+                    log.error("[Command sending failed] DeviceInforeply message BAD_REQUEST: {}", e.getMessage());
                 }
                 return;
             }
@@ -80,10 +80,10 @@ public class DeviceInfoResponseMessageHandler extends SIPRequestProcessorParent 
             throw new RuntimeException(e);
         }
         try {
-            // 回复200 OK
+            // Reply200 OK
             responseAckAsync(request, Response.OK);
         } catch (SipException | InvalidArgumentException | ParseException e) {
-            log.error("[命令发送失败] DeviceInfo应答消息 200: {}", e.getMessage());
+            log.error("[Command sending failed] DeviceInforeply message 200: {}", e.getMessage());
         }
 
     }

@@ -24,14 +24,14 @@ export default {
           'xxx': ['free', 'use']
         },
         labelMap: {
-          'free': '剩余',
-          'use': '已使用'
+          'free': 'Remaining',
+          'use': 'Already used'
         },
       },
       extend: {
         title: {
           show: true,
-          text: "磁盘",
+          text: "Disk",
           left: "center",
           top: 20,
         },

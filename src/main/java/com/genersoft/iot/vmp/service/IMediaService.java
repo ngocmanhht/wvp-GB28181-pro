@@ -4,12 +4,12 @@ import com.genersoft.iot.vmp.media.bean.ResultForOnPublish;
 import com.genersoft.iot.vmp.media.bean.MediaServer;
 
 /**
- * 媒体信息业务
+ * Media information business
  */
 public interface IMediaService {
 
     /**
-     * 播放鉴权
+     * Playback authentication
      */
     boolean authenticatePlay(String app, String stream, String callId);
 

@@ -2,7 +2,7 @@
   <div id="addUser" v-loading="getDeviceListLoading">
     <el-dialog
       v-el-drag-dialog
-      title="添加国标设备通道"
+      title="Add national standard equipment channel"
       width="60%"
       top="2rem"
       :close-on-click-modal="false"
@@ -11,56 +11,56 @@
       append-to-body
       @close="close()"
     ><el-form :inline="true" size="mini">
-       <el-form-item label="搜索">
+       <el-form-item label="Search">
          <el-input
            v-model="searchStr"
            style="margin-right: 1rem; width: auto;"
            size="mini"
-           placeholder="关键字"
+           placeholder="Keywords"
            prefix-icon="el-icon-search"
            clearable
            @input="getDeviceList"
          />
        </el-form-item>
-       <el-form-item label="在线状态">
+       <el-form-item label="online status">
          <el-select
            v-model="online"
            size="mini"
            style="width: 8rem; margin-right: 1rem;"
-           placeholder="请选择"
+           placeholder="Please select"
            default-first-option
            @change="getDeviceList"
          >
-           <el-option label="全部" value="" />
-           <el-option label="在线" value="true" />
-           <el-option label="离线" value="false" />
+           <el-option label="All" value="" />
+           <el-option label="online" value="true" />
+           <el-option label="Offline" value="false" />
          </el-select>
        </el-form-item>
        <el-form-item style="float: right;">
          <el-button icon="el-icon-refresh-right" circle @click="getDeviceList()" />
-         <el-button type="primary" @click="onSubmit">确 定</el-button>
+         <el-button type="primary" @click="onSubmit">OK</el-button>
        </el-form-item>
      </el-form>
-      <!--设备列表-->
+      <!--Device list-->
       <el-table size="medium" :data="deviceList" style="width: 100%;font-size: 12px;" :height="winHeight" header-row-class-name="table-header" @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="55" />
-        <el-table-column prop="name" label="名称" min-width="160" />
-        <el-table-column prop="deviceId" label="设备编号" min-width="200" />
-        <el-table-column prop="channelCount" label="通道数" min-width="120" />
-        <el-table-column prop="manufacturer" label="厂家" min-width="120" />
-        <el-table-column label="地址" min-width="160">
+        <el-table-column prop="name" label="Name" min-width="160" />
+        <el-table-column prop="deviceId" label="Device number" min-width="200" />
+        <el-table-column prop="channelCount" label="Number of channels" min-width="120" />
+        <el-table-column prop="manufacturer" label="Manufacturer" min-width="120" />
+        <el-table-column label="address" min-width="160">
           <template v-slot:default="scope">
             <div slot="reference" class="name-wrapper">
               <el-tag v-if="scope.row.hostAddress" size="medium">{{ scope.row.hostAddress }}</el-tag>
-              <el-tag v-if="!scope.row.hostAddress" size="medium">未知</el-tag>
+              <el-tag v-if="!scope.row.hostAddress" size="medium">unknown</el-tag>
             </div>
           </template>
         </el-table-column>
-        <el-table-column label="状态" min-width="120">
+        <el-table-column label="Status" min-width="120">
           <template v-slot:default="scope">
             <div slot="reference" class="name-wrapper">
-              <el-tag v-if="scope.row.onLine" size="medium">在线</el-tag>
-              <el-tag v-if="!scope.row.onLine" size="medium" type="info">离线</el-tag>
+              <el-tag v-if="scope.row.onLine" size="medium">online</el-tag>
+              <el-tag v-if="!scope.row.onLine" size="medium" type="info">Offline</el-tag>
             </div>
           </template>
         </el-table-column>
@@ -90,12 +90,12 @@ export default {
   data() {
     return {
       showDialog: false,
-      deviceList: [], // 设备列表
-      currentDevice: {}, // 当前操作设备对象
+      deviceList: [], // Device list
+      currentDevice: {}, // Current operating device object
       searchStr: '',
       online: null,
       videoComponentList: [],
-      updateLooper: 0, // 数据刷新轮训标志
+      updateLooper: 0, // Data refresh rotation training flag
       currentDeviceChannelsLenth: 0,
       winHeight: 580,
       currentPage: 1,

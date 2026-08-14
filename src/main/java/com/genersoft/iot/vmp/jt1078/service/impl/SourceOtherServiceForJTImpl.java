@@ -34,7 +34,7 @@ public class SourceOtherServiceForJTImpl implements ISourceOtherService {
             }
             String phoneNumber = streamParamArray[0];
             Integer channelId  = Integer.parseInt(streamParamArray[1]);
-            // 判断是否是1078播放类型
+            // Determine whether it is 1078 playback type
             if (MediaStreamUtil.isJT1078Play(app, stream)) {
                 jt1078PlayService.stopPlay(phoneNumber, channelId);
             } else if (MediaStreamUtil.isJT1078Playback(app, stream)) {

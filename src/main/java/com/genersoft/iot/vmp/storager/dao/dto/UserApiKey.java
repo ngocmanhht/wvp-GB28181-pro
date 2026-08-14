@@ -5,9 +5,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 
 /**
- * 用户信息
+ * User information
  */
-@Schema(description = "用户ApiKey信息")
+@Schema(description = "UserApiKey information")
 public class UserApiKey implements Serializable {
 
     /**
@@ -17,15 +17,15 @@ public class UserApiKey implements Serializable {
     private int id;
 
     /**
-     * 用户Id
+     * UserId
      */
-    @Schema(description = "用户Id")
+    @Schema(description = "UserId")
     private int userId;
 
     /**
-     * 应用名
+     * Application name
      */
-    @Schema(description = "应用名")
+    @Schema(description = "Application name")
     private String app;
 
     /**
@@ -35,37 +35,37 @@ public class UserApiKey implements Serializable {
     private String apiKey;
 
     /**
-     * 过期时间（null=永不过期）
+     * Expiration time（null=never expires）
      */
-    @Schema(description = "过期时间（null=永不过期）")
+    @Schema(description = "Expiration time（null=never expires）")
     private long expiredAt;
 
     /**
-     * 备注信息
+     * Remarks
      */
-    @Schema(description = "备注信息")
+    @Schema(description = "Remarks")
     private String remark;
 
     /**
-     * 是否启用
+     * Whether to enable
      */
-    @Schema(description = "是否启用")
+    @Schema(description = "Whether to enable")
     private boolean enable;
 
     /**
-     * 创建时间
+     * creation time
      */
-    @Schema(description = "创建时间")
+    @Schema(description = "creation time")
     private String createTime;
 
     /**
-     * 更新时间
+     * Update time
      */
-    @Schema(description = "更新时间")
+    @Schema(description = "Update time")
     private String updateTime;
 
     /**
-     * 用户名
+     * Username
      */
     private String username;
 

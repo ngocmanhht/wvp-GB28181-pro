@@ -4,74 +4,74 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 @Data
-@Schema(description = "状态信息")
+@Schema(description = "status information")
 public class JTStatus {
 
-    @Schema(description = "false:ACC关；true: ACC开")
+    @Schema(description = "false:ACCOff; true: ACC on")
     private boolean acc;
 
-    @Schema(description = "false:未定位；true: 定位")
+    @Schema(description = "false:Not positioned; true: positioned")
     private boolean positioning;
 
-    @Schema(description = "false:北纬；true: 南纬")
+    @Schema(description = "false:North latitude; true: south latitude")
     private boolean southLatitude;
 
-    @Schema(description = "false:东经；true: 西经")
+    @Schema(description = "false:East longitude; true: West longitude")
     private boolean wesLongitude;
 
-    @Schema(description = "false:运营状态；true: 停运状态")
+    @Schema(description = "false:Operation status; true: out of service status")
     private boolean outage;
 
-    @Schema(description = "false:经纬度未经保密插件加密；true: 经纬度已经保密插件加密")
+    @Schema(description = "false:The latitude and longitude have not been encrypted by the security plug-in; true: the latitude and longitude have been encrypted by the security plug-in.")
     private boolean positionEncryption;
 
 
-    @Schema(description = "true: 紧急刹车系统采集的前撞预警")
+    @Schema(description = "true: Forward collision warning collected by emergency braking system")
     private boolean warningFrontCrash;
 
-    @Schema(description = "true: 车道偏移预警")
+    @Schema(description = "true: Lane departure warning")
     private boolean warningShifting;
 
-    @Schema(description = "00:空车；01:半载；10:保留；11:满载。可表示客车的空载状态 ,重车及货车的空载、满载状态 ,该状态可由人工输入或传感器获取")
+    @Schema(description = "00:Empty; 01: Half loaded; 10: Reserved; 11: Fully loaded. It can represent the empty state of passenger cars, the empty and full state of heavy vehicles and trucks. This state can be obtained by manual input or sensors.")
     private int load;
 
-    @Schema(description = "false:车辆油路正常；true: 车辆油路断开")
+    @Schema(description = "false:The vehicle oil line is normal; true: the vehicle oil line is disconnected")
     private boolean oilWayBreak;
 
-    @Schema(description = "false:车辆电路正常；true: 车辆电路断开")
+    @Schema(description = "false:The vehicle circuit is normal; true: the vehicle circuit is disconnected")
     private boolean circuitBreak;
 
-    @Schema(description = "false:车门解锁；true: 车门加锁")
+    @Schema(description = "false:Door unlock; true: door locked")
     private boolean doorLocking;
 
-    @Schema(description = "false:门1 关；true: 门1 开(前门)")
+    @Schema(description = "false:Door 1 is closed; true: Door 1 is open(front door)")
     private boolean door1Open;
 
-    @Schema(description = "false:门2 关；true: 门2 开(中门)")
+    @Schema(description = "false:Door 2 is closed; true: Door 2 is open(middle gate)")
     private boolean door2Open;
 
-    @Schema(description = "false:门3 关；true: 门3 开(后门)")
+    @Schema(description = "false:Door 3 is closed; true: Door 3 is open(back door)")
     private boolean door3Open;
 
-    @Schema(description = "false:门4 关；true: 门4 开(驾驶席门)")
+    @Schema(description = "false:Door 4 is closed; true: Door 4 is open(driver's seat door)")
     private boolean door4Open;
 
-    @Schema(description = "false:门5 关；true: 门5 开(自定义)")
+    @Schema(description = "false:Door 5 is closed; true: Door 5 is open(Customize)")
     private boolean door5Open;
 
-    @Schema(description = "false:未使用 GPS 卫星进行定位；true:使用 GPS 卫星进行定位")
+    @Schema(description = "false:GPS satellites are not used for positioning; true: GPS satellites are used for positioning")
     private boolean gps;
 
-    @Schema(description = "false:未使用北斗卫星进行定位；true:使用北斗卫星进行定位")
+    @Schema(description = "false:Beidou satellites are not used for positioning; true: Beidou satellites are used for positioning")
     private boolean beidou;
 
-    @Schema(description = "false:未使用GLONASS 卫星进行定位；true:使用GLONASS 卫星进行定位")
+    @Schema(description = "false:GLONASS satellites are not used for positioning; true: GLONASS satellites are used for positioning")
     private boolean glonass;
 
-    @Schema(description = "false:未使用GaLiLeo 卫星进行定位；true:使用GaLiLeo 卫星进行定位")
+    @Schema(description = "false:GaLiLeo satellites are not used for positioning; true: GaLiLeo satellites are used for positioning")
     private boolean gaLiLeo;
 
-    @Schema(description = "false:车辆处于停止状态；true:车辆处于行驶状态")
+    @Schema(description = "false:The vehicle is in a stopped state; true: the vehicle is in a driving state")
     private boolean driving;
 
     public JTStatus() {
@@ -107,30 +107,30 @@ public class JTStatus {
 
     @Override
     public String toString() {
-        return "状态位：" +
-                "\n      acc状态：" + (acc?"开":"关") +
-                "\n      定位状态：" + (positioning?"定位":"未定位") +
-                "\n      南北纬：" + (southLatitude?"南纬":"北纬") +
-                "\n      东西经：" + (wesLongitude?"西经":"东经") +
-                "\n      运营状态：" + (outage?"停运":"运营") +
-                "\n      经纬度保密：" + (positionEncryption?"加密":"未加密") +
-                "\n      前撞预警：" + (warningFrontCrash?"紧急刹车系统采集的前撞预警":"无") +
-                "\n      车道偏移预警：" + (warningShifting?"车道偏移预警":"无") +
-                "\n      空/半/满载状态：" + (load == 0?"空车":(load == 1?"半载":(load == 3?"满载":"未定义状态"))) +
-                "\n      车辆油路状态：" + (oilWayBreak?"车辆油路断开":"车辆油路正常") +
-                "\n      车辆电路状态：" + (circuitBreak?"车辆电路断开":"车辆电路正常") +
-                "\n      门锁状态：" + (doorLocking?"车门加锁":"车门解锁") +
-                "\n      门1(前门)状态：" + (door1Open?"开":"关") +
-                "\n      门2(中门)状态：" + (door2Open?"开":"关") +
-                "\n      门3(后门)状态：" + (door3Open?"开":"关") +
-                "\n      门4(驾驶席门)状态：" + (door4Open?"开":"关") +
-                "\n      门5(自定义)状态：" + (door5Open?"开":"关") +
-                "\n      GPS卫星定位状态： " + (gps?"使用":"未使用") +
-                "\n      北斗卫星定位状态： " + (beidou?"使用":"未使用") +
-                "\n      GLONASS卫星定位状态： " + (glonass?"使用":"未使用") +
-                "\n      GaLiLeo卫星定位状态： " + (gaLiLeo?"使用":"未使用") +
-                "\n      GaLiLeo卫星定位状态： " + (gaLiLeo?"使用":"未使用") +
-                "\n      车辆行驶状态： " + (driving?"车辆行驶":"车辆停止") +
+        return "status bit：" +
+                "\n      accStatus：" + (acc?"open":"close") +
+                "\n      Positioning status：" + (positioning?"Positioning":"Not located") +
+                "\n      North and south latitude：" + (southLatitude?"Southern latitude":"Northern latitude") +
+                "\n      Eastern and Western Classics：" + (wesLongitude?"west longitude":"east longitude") +
+                "\n      Operation status：" + (outage?"Out of service":"Operation") +
+                "\n      Longitude and latitude confidential：" + (positionEncryption?"Encryption":"Not encrypted") +
+                "\n      forward collision warning：" + (warningFrontCrash?"Forward collision warning collected by emergency braking system":"None") +
+                "\n      Lane departure warning：" + (warningShifting?"Lane departure warning":"None") +
+                "\n      empty/half/Fully loaded：" + (load == 0?"Empty car":(load == 1?"Half a year":(load == 3?"Fully loaded":"undefined state"))) +
+                "\n      Vehicle oil line status：" + (oilWayBreak?"Vehicle oil line disconnected":"Vehicle oil line is normal") +
+                "\n      vehicle circuit status：" + (circuitBreak?"Vehicle circuit disconnected":"Vehicle circuit is normal") +
+                "\n      door lock status：" + (doorLocking?"car door lock":"door unlock") +
+                "\n      door1(front door)Status：" + (door1Open?"open":"close") +
+                "\n      door2(middle gate)Status：" + (door2Open?"open":"close") +
+                "\n      door3(back door)Status：" + (door3Open?"open":"close") +
+                "\n      door4(driver's seat door)Status：" + (door4Open?"open":"close") +
+                "\n      door5(Customize)Status：" + (door5Open?"open":"close") +
+                "\n      GPSSatellite positioning status： " + (gps?"Use":"Not used") +
+                "\n      Beidou satellite positioning status： " + (beidou?"Use":"Not used") +
+                "\n      GLONASSSatellite positioning status： " + (glonass?"Use":"Not used") +
+                "\n      GaLiLeoSatellite positioning status： " + (gaLiLeo?"Use":"Not used") +
+                "\n      GaLiLeoSatellite positioning status： " + (gaLiLeo?"Use":"Not used") +
+                "\n      Vehicle driving status： " + (driving?"vehicle driving":"vehicle stopped") +
                 "\n       ";
     }
 }

@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
- * SIP命令类型： NOTIFY请求中的报警通知请求处理
+ * SIPCommand type: Alarm notification request processing in NOTIFY request
  */
 @Slf4j
 @Component
@@ -46,13 +46,13 @@ public class NotifyRequestForAlarm extends SIPRequestProcessorParent {
 
 	public void process(RequestEvent evt) {
 		if (taskQueue.size() >= userSetting.getMaxNotifyCountQueue()) {
-			log.error("[notify-报警订阅] 待处理消息队列已满 {}，返回486 BUSY_HERE", userSetting.getMaxNotifyCountQueue());
+			log.error("[notify-Alarm subscription] The pending message queue is full {}，Return486 BUSY_HERE", userSetting.getMaxNotifyCountQueue());
 			return;
 		}
 		taskQueue.offer(new HandlerCatchData(evt, null, null));
 	}
 
-	@Scheduled(fixedDelay = 400)   //每400毫秒执行一次
+	@Scheduled(fixedDelay = 400)   //Executed every 400 milliseconds
 	@Async
 	public void executeTaskQueue(){
 		if (taskQueue.isEmpty()) {
@@ -81,14 +81,14 @@ public class NotifyRequestForAlarm extends SIPRequestProcessorParent {
 
 				Element rootElement = getRootElement(evt);
 				if (rootElement == null) {
-					log.error("处理alarm设备报警Notify时未获取到消息体{}", evt.getRequest());
+					log.error("The message body was not obtained when processing alarm device alarm Notify.{}", evt.getRequest());
 					return;
 				}
 				String channelId = rootElement.elementText("DeviceID");
 
 				Device device = redisCatchStorage.getDevice(deviceId);
 				if (device == null) {
-					log.warn("[ NotifyAlarm ] 未找到设备：{}", deviceId);
+					log.warn("[ NotifyAlarm ] Device not found：{}", deviceId);
 					return;
 				}
 				rootElement = getRootElement(evt, device.getCharset());
@@ -99,11 +99,11 @@ public class NotifyRequestForAlarm extends SIPRequestProcessorParent {
 				DeviceAlarmNotify deviceAlarmNotify = DeviceAlarmNotify.fromXml(rootElement);
 				deviceAlarmNotify.setDeviceId(deviceId);
 				deviceAlarmNotify.setDeviceName(device.getName());
-				log.info("[收到Notify-Alarm]：{}/{}", device.getDeviceId(), deviceAlarmNotify.getChannelId());
-				if (deviceAlarmNotify.getAlarmMethod() != null && deviceAlarmNotify.getAlarmMethod() == DeviceAlarmMethod.GPS.getVal()) { // GPS报警
+				log.info("[receivedNotify-Alarm]：{}/{}", device.getDeviceId(), deviceAlarmNotify.getChannelId());
+				if (deviceAlarmNotify.getAlarmMethod() != null && deviceAlarmNotify.getAlarmMethod() == DeviceAlarmMethod.GPS.getVal()) { // GPSAlarm
 					DeviceChannel deviceChannel = deviceChannelService.getOne(device.getDeviceId(), channelId);
 					if (deviceChannel == null) {
-						log.warn("[解析报警通知] 未找到通道：{}/{}", device.getDeviceId(), channelId);
+						log.warn("[Parse alarm notifications] Channel not found：{}/{}", device.getDeviceId(), channelId);
 					}else {
 						MobilePosition mobilePosition = new MobilePosition();
 						mobilePosition.setChannelId(deviceChannel.getId());
@@ -113,7 +113,7 @@ public class NotifyRequestForAlarm extends SIPRequestProcessorParent {
 						mobilePosition.setLongitude(deviceAlarmNotify.getLongitude());
 						mobilePosition.setLatitude(deviceAlarmNotify.getLatitude());
 
-						// 更新device channel 的经纬度
+						// Update the latitude and longitude of the device channel
 						deviceChannel.setLongitude(mobilePosition.getLongitude());
 						deviceChannel.setLatitude(mobilePosition.getLatitude());
 						deviceChannel.setGpsTime(deviceAlarmNotify.getAlarmTime());
@@ -122,13 +122,13 @@ public class NotifyRequestForAlarm extends SIPRequestProcessorParent {
 					}
 				}
 
-				// 回复200 OK
+				// Reply200 OK
 				if (redisCatchStorage.deviceIsOnline(deviceId)) {
 					deviceAlarmList.add(deviceAlarmNotify);
 				}
 
 			} catch (DocumentException e) {
-				log.error("未处理的异常 ", e);
+				log.error("unhandled exception ", e);
 			}
 		}
 		if (deviceAlarmList.isEmpty()) {

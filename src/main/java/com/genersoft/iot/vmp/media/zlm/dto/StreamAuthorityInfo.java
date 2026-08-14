@@ -3,7 +3,7 @@ package com.genersoft.iot.vmp.media.zlm.dto;
 import com.genersoft.iot.vmp.media.event.media.MediaArrivalEvent;
 
 /**
- * 流的鉴权信息
+ * Flow authentication information
  * @author lin
  */
 public class StreamAuthorityInfo {
@@ -13,7 +13,7 @@ public class StreamAuthorityInfo {
     private String stream;
 
     /**
-     * 产生源类型，
+     * Generate source type，
      * unknown = 0,
      * rtmp_push=1,
      * rtsp_push=2,
@@ -26,17 +26,17 @@ public class StreamAuthorityInfo {
     private int originType;
 
     /**
-     * 产生源类型的字符串描述
+     * Produces a string description of the source type
      */
     private String originTypeStr;
 
     /**
-     * 推流时自定义的播放鉴权ID
+     * Customized playback authentication when pushing streamsID
      */
     private String callId;
 
     /**
-     * 推流的鉴权签名
+     * Authentication signature for push streaming
      */
     private String sign;
 

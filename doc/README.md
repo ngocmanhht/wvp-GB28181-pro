@@ -1,128 +1,128 @@
-# 介绍
+# introduce
 
-> 开箱即用的28181协议视频平台
+> Out-of-the-box 28181 protocol video platform
 
-# 概述
+# Overview
 
-- WVP-PRO基于GB/T
-  28181-2016标准实现的流媒体平台，依托优秀的开源流媒体服务[ZLMediaKit](https://github.com/ZLMediaKit/ZLMediaKit)
-  ，提供完善丰富的功能。
-- GB/T 28181-2016 中文标准名称是《公共安全视频监控联网系统信息传输、交换、控制技术要求》是监控领域的国家标准。大量应用于政府视频平台。
-- 通过28181协议你可以将IPC摄像头接入平台，可以观看也可以使用28181/rtsp/rtmp/flv等协议将视频流分发到其他平台。
+- WVP-PRO is based on GB/T
+28181-2016 standard-implemented streaming media platform, relying on excellent open source streaming media services [ZLMediaKit](https://github.com/ZLMediaKit/ZLMediaKit) 
+, providing complete and rich functions.
+- GB/T 28181-2016 The Chinese standard name is "Technical Requirements for Information Transmission, Exchange, and Control of Public Security Video Surveillance Networking Systems", which is a national standard in the field of surveillance. It is widely used in government video platforms.
+- Through the 28181 protocol, you can connect the IPC camera to the platform, and you can watch or use 28181/rtsp/rtmp/flv and other protocols to distribute the video stream to other platforms.
 
-# 特性
+# Features
 
-- 实现标准的28181信令，兼容常见的品牌设备，比如海康、大华、宇视等品牌的IPC、NVR以及平台。
-- 支持将国标设备级联到其他国标平台，也支持将不支持国标的设备的图像或者直播推送到其他国标平台
-- 前端完善，自带完整前端页面，无需二次开发可直接部署使用。
-- 完全开源，且使用MIT许可协议。保留版权的情况下可以用于商业项目。
-- 支持多流媒体节点负载均衡。
+- Implements standard 28181 signaling and is compatible with common brand equipment, such as IPC, NVR and platforms of Hikvision, Dahua, Uniview and other brands.
+- Supports cascading national standard devices to other national standard platforms, and also supports pushing images or live broadcasts of devices that do not support national standards to other national standard platforms
+- The front-end is perfect and comes with a complete front-end page, which can be deployed and used directly without secondary development.
+- Completely open source and using the MIT license. Can be used for commercial projects while retaining copyright.
+- Supports load balancing of multiple streaming media nodes.
 
-# 付费社群
+# Paid community
 
-[![社群](_media/shequ.png "shequ")](https://t.zsxq.com/0d8VAD3Dm)
-> 收费是为了提供更好的服务，也是对作者更大的激励。加入星球的用户三天后可以私信我留下微信号，我会拉大家入群。加入三天内不满意可以直接退款，大家不需要有顾虑，来白嫖三天也不是不可以。
+ [![Community](_media/shequ.png "shequ") ](https://t.zsxq.com/0d8VAD3Dm)
+> Charging is to provide better services and is also a greater incentive for authors. Users who join Planet can send me a private message and leave their WeChat ID three days later, and I will recruit everyone into the group. If you are not satisfied within three days of joining, you can get a refund directly. You don’t need to worry. It’s not impossible to come and have sex for free for three days.
 
-# 我们实现了哪些国标功能
+# What national standard functions have we implemented?
 
-**作为上级平台**
+**As a superior platform**
 
-- [X] 注册
-- [X] 注销
-- [X] 实时视音频点播
-- [X] 设备控制
-    - [X] 云台控制
-    - [X] 远程启动
-    - [X] 录像控制
-    - [X] 报警布防/撤防
-    - [X] 报警复位
-    - [X] 强制关键帧
-    - [X] 拉框放大
-    - [X] 拉框缩小
-    - [X] 看守位控制
-    - [X] 设备配置
-- [X] 报警事件通知和分发
-- [X] 设备目录订阅
-- [X] 网络设备信息查询
-    - [X] 设备目录查询
-    - [X] 设备状态查询
-    - [X] 设备配置查询
-    - [X] 设备预置位查询
-- [X] 状态信息报送
-- [X] 设备视音频文件检索
-- [X] 历史视音频的回放
-    - [X] 播放
-    - [X] 暂停
-    - [X] 进/退
-    - [X] 停止
-- [X] 视音频文件下载
-- [X] 校时
-- [X] 订阅和通知
-    - [X] 事件订阅
-        - [X] 移动设备位置订阅
-        - [X] 报警订阅
-        - [X] 目录订阅
-- [X] 语音广播
-- [X] 语音喊话
+- [X] Register
+- [X] Logout
+- [X] Real-time video and audio on demand
+- [X] Device Control
+- [X] PTZ control
+- [X] Remote start
+- [X] Video control
+- [X] Alarm arm/disarm
+- [X] Alarm reset
+- [X] Force keyframe
+- [X] Scroll down to zoom in
+- [X] Zoom out
+- [X] Guard position control
+- [X] Device configuration
+- [X] Alarm event notification and distribution
+- [X] Device Catalog Subscription
+- [X] Network device information query
+- [X] Device directory query
+- [X] Device status query
+- [X] Device configuration query
+- [X] Equipment preset position query
+- [X] Status information reporting
+- [X] Device video and audio file retrieval
+- [X] Playback of historical video and audio
+- [X] Play
+- [X] Pause
+- [X] Forward/Back
+- [X] Stop
+- [X] Video and audio file download
+- [X] School time
+- [X] Subscriptions and notifications
+- [X] Event subscription
+- [X] Mobile Device Location Subscription
+- [X] Alarm subscription
+- [X] Directory Subscription
+- [X] Voice Broadcast
+- [X] Voice call
 
-**国标级联**
+**National Standard Cascade**
 
-- [X] 注册
-- [X] 注销
-- [X] 实时视音频点播
-- [X] 设备控制
-    - [X] 云台控制
-    - [ ] 远程启动
-    - [X] 录像控制
-    - [X] 报警布防/撤防
-    - [X] 报警复位
-    - [X] 强制关键帧
-    - [X] 拉框放大
-    - [X] 拉框缩小
-    - [X] 看守位控制
-    - [ ] 设备配置
-- [ ] 报警事件通知和分发
-- [X] 设备目录订阅
-- [X] 网络设备信息查询
-    - [X] 设备目录查询
-    - [X] 设备状态查询
-    - [ ] 设备配置查询
-    - [X] 设备预置位查询
-- [X] 状态信息报送
-- [X] 设备视音频文件检索
-- [X] 历史视音频的回放
-    - [X] 播放
-    - [x] 暂停
-    - [x] 进/退
-    - [x] 停止
-- [X] 视音频文件下载
-- [ ] ~~校时~~
-- [X] 订阅和通知
-    - [X] 事件订阅
-        - [X] 移动设备位置订阅
-        - [ ] 报警订阅
-        - [X] 目录订阅
-- [X] 语音广播
-- [X] 语音喊话
+- [X] Register
+- [X] Logout
+- [X] Real-time video and audio on demand
+- [X] Device Control
+- [X] PTZ control
+- [ ] Remote start
+- [X] Video control
+- [X] Alarm arm/disarm
+- [X] Alarm reset
+- [X] Force keyframe
+- [X] Scroll down to zoom in
+- [X] Zoom out
+- [X] Guard position control
+- [ ] Device Configuration
+- [ ] Alarm event notification and distribution
+- [X] Device Catalog Subscription
+- [X] Network device information query
+- [X] Device directory query
+- [X] Device status query
+- [ ] Device configuration query
+- [X] Equipment preset position query
+- [X] Status information reporting
+- [X] Device video and audio file retrieval
+- [X] Playback of historical video and audio
+- [X] Play
+- [x] Pause
+- [x] Forward/Return
+- [x] Stop
+- [X] Video and audio file download
+- [ ] ~~school time~~
+- [X] Subscriptions and notifications
+- [X] Event subscription
+- [X] Mobile Device Location Subscription
+- [ ] Alarm subscription
+- [X] Directory Subscription
+- [X] Voice Broadcast
+- [X] Voice call
 
-**闭源版本**
-- [X] 国标28181-2022  
-    相比28181-2016标准，28181-2022标准新增了以下功能
-    - [X] 云台控制精准位置查询和控制，支持设置具体的水平角度、垂直角度和缩放倍数，支持订阅和通知。
-    - [X] 支持标准的H265视频编码和AAC音频编码格式
-    - [X] 支持主辅码流
-    - [X] 支持图像抓拍，无需拉流即可获取当前图像，推理获取图片友好。
-    - [X] 支持GB18030编码，不输UTF-8的编码格式，2016中使用的GB2312编码的升级，基本告别中文乱码了
-    - [X] 支持存储卡格式化
-    - [X] 支持设备软件升级
-    - [X] 支持OSD配置
-    - [X] 支持录像倒放功能
-    - [X] 支持目标跟踪控制
-    - [X] 支持视频参数属性配置
-    - [X] 支持视频遮挡配置
-    - [X] 支持设备软件升级
-# 社区
+**Closed source version**
+- [X] National Standard 28181-2022
+Compared with the 28181-2016 standard, the 28181-2022 standard adds the following functions
+- [X] PTZ control precise position query and control, supports setting specific horizontal angles, vertical angles and zoom multiples, and supports subscriptions and notifications.
+- [X] Support standard H265 video encoding and AAC audio encoding formats
+- [X] Support primary and auxiliary code streams
+- [X] Support image capture, you can obtain the current image without pulling the stream, and the inference image acquisition is friendly.
+- [X] Supports GB18030 encoding, which does not lose the UTF-8 encoding format. The GB2312 encoding used in 2016 has been upgraded, basically saying goodbye to Chinese garbled characters.
+- [X] Support memory card formatting
+- [X] Support device software upgrade
+- [X] Support OSD configuration
+- [X] Support video playback function
+- [X] Support target tracking control
+- [X] Support video parameter attribute configuration
+- [X] Support video blocking configuration
+- [X] Support device software upgrade
+# Community
 
-代码目前托管在GitHub和Gitee，Gitee目前作为加速仓库使用，不接受issue。  
+The code is currently hosted on GitHub and Gitee. Gitee is currently used as an acceleration warehouse and does not accept issues.
 GitHub： [https://github.com/648540858/wvp-GB28181-pro](https://github.com/648540858/wvp-GB28181-pro)  
 Gitee： [https://gitee.com/pan648540858/wvp-GB28181-pro](https://gitee.com/pan648540858/wvp-GB28181-pro)

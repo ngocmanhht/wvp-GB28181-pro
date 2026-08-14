@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 /**
- * 用于存储设备的报警信息
+ * Used to store alarm information of the device
  */
 @Mapper
 @Repository

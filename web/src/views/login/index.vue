@@ -14,7 +14,7 @@
     >
       <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
         <div class="title-container">
-          <h3 class="title">WVP视频平台</h3>
+          <h3 class="title">WVPVideo platform</h3>
         </div>
 
         <el-form-item prop="username">
@@ -24,7 +24,7 @@
           <el-input
             ref="username"
             v-model="loginForm.username"
-            placeholder="用户名"
+            placeholder="Username"
             name="username"
             type="text"
             tabindex="1"
@@ -41,7 +41,7 @@
             ref="password"
             v-model="loginForm.password"
             :type="passwordType"
-            placeholder="密码"
+            placeholder="Password"
             name="password"
             tabindex="2"
             auto-complete="on"
@@ -52,7 +52,7 @@
           </span>
         </el-form-item>
 
-        <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">登录</el-button>
+        <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">Login</el-button>
 
       </el-form>
     </div>
@@ -68,7 +68,7 @@ export default {
   data() {
     const validateUsername = (rule, value, callback) => {
       if (!validUsername(value)) {
-        callback(new Error('请输入用户名'))
+        callback(new Error('Please enter username'))
       } else {
         callback()
       }
@@ -137,7 +137,7 @@ export default {
 </script>
 
 <style lang="scss">
-/* 修复input 背景不协调 和光标变色 */
+/* Fix input background disharmony and cursor discoloration */
 /* Detail see https://github.com/PanJiaChen/vue-element-admin/pull/927 */
 
 $bg:#283443;

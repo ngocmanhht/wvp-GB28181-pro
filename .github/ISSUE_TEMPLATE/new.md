@@ -1,13 +1,13 @@
 ---
-name: "[ 新功能 ]"
-about: 新功能
-title: '希望wVP实现的新功能，此功能应与你的具体业务无关'
+name: "[New Feature]"
+about: new features
+title: 'The new function I hope wVP can implement, this function should have nothing to do with your specific business'
 labels: ''
 assignees: ''
 
 ---
 
-**项目的详细需求**
+**Detailed requirements for the project**
 
-**这样的实现什么作用**
+**What does this implementation do**
 

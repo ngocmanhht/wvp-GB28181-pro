@@ -15,7 +15,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 import java.util.LinkedHashMap;
 
 /**
- * 全局统一返回结果
+ * Global unified return results
  * @author lin
  */
 @RestControllerAdvice
@@ -30,7 +30,7 @@ public class GlobalResponseAdvice implements ResponseBodyAdvice<Object> {
 
     @Override
     public Object beforeBodyWrite(Object body, @NotNull MethodParameter returnType, @NotNull MediaType selectedContentType, @NotNull Class<? extends HttpMessageConverter<?>> selectedConverterType, @NotNull ServerHttpRequest request, @NotNull ServerHttpResponse response) {
-        // 排除api文档的接口，这个接口不需要统一
+        // Exclude the interface of the api document. This interface does not need to be unified.
         String[] excludePath = {"/v3/api-docs","/api/v1","/index/hook","/api/video-"};
         for (String path : excludePath) {
             if (request.getURI().getPath().startsWith(path)) {
@@ -66,7 +66,7 @@ public class GlobalResponseAdvice implements ResponseBodyAdvice<Object> {
     }
 
     /**
-     * 防止返回string时出错
+     * Prevent errors when returning string
      * @return
      */
     /*@Bean

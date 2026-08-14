@@ -10,25 +10,25 @@ import lombok.Setter;
 
 @Setter
 @Getter
-@Schema(description = "存储多媒体数据")
+@Schema(description = "Store multimedia data")
 public class JTQueryMediaDataCommand {
 
-    @Schema(description = "多媒体类型: 0：图像；1：音频；2：视频")
+    @Schema(description = "Multimedia type: 0: image; 1: audio; 2: video")
     private int type;
 
-    @Schema(description = "通道 ID, 0 表示检索该媒体类型的所有通道")
+    @Schema(description = "Channel ID, 0 means to retrieve all channels of this media type")
     private int chanelId;
 
-    @Schema(description = "事件项编码: 0：平台下发指令；1：定时动作；2：抢劫报警触发；3：碰 撞侧翻报警触发；其他保留")
+    @Schema(description = "Event item coding: 0: Instructions issued by the platform; 1: Timing action; 2: Robbery alarm triggered; 3: Collision and rollover alarm triggered; others reserved")
     private int event;
 
-    @Schema(description = "开始时间")
+    @Schema(description = "start time")
     private String startTime;
 
-    @Schema(description = "结束时间")
+    @Schema(description = "end time")
     private String endTime;
 
-    @Schema(description = "删除标志, 0:保留；1:删除, 存储多媒体数据上传命令中使用")
+    @Schema(description = "Delete flag, 0: reserved; 1: deleted, used in storage multimedia data upload command")
     private Integer delete;
 
 

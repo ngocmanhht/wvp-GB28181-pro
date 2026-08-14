@@ -53,9 +53,9 @@ import {
 } from './constant'
 
 /**
- * @Author: 王林25
+ * @Author: Wang Lin25
  * @Date: 2021-01-19 20:15:07
- * @Desc: 时间轴组件
+ * @Desc: Timeline component
  */
 export default {
   name: 'TimeLine',
@@ -63,16 +63,16 @@ export default {
     WindowListItem
   },
   props: {
-    // 初始时间，中点所在的时间，默认为当天0点
+    // Initial time, the time where the midpoint is located, defaults to 0 o'clock on the day
     initTime: {
       type: [Number, String],
       default: ''
     },
-    // 显示预览的时间范围，即中间刻度所允许的时间范围
+    // The time range to show the preview, i.e. the time range allowed by the middle tick
     /*
       {
-        start: '2020-12-19 18:30:00',// 允许显示的最小时间
-        end: '2021-01-20 10:0:00'// 允许显示的最大时间
+        start: '2020-12-19 18:30:00',// Minimum time allowed to display
+        end: '2021-01-20 10:0:00'// Maximum time allowed to display
       }
     */
     timeRange: {
@@ -81,17 +81,17 @@ export default {
         return {}
       }
     },
-    // 初始的时间分辨率
+    // initial time resolution
     initZoomIndex: {
       type: Number,
-      default: 5 // 24小时
+      default: 5 // 24hours
     },
-    // 是否显示中间的竖线
+    // Whether to display the vertical line in the middle
     showCenterLine: {
       type: Boolean,
       default: true
     },
-    // 中间竖线的样式
+    // The style of the middle vertical line
     centerLineStyle: {
       type: Object,
       default() {
@@ -101,84 +101,84 @@ export default {
         }
       }
     },
-    // 日期时间文字颜色
+    // Date time text color
     textColor: {
       type: String,
       default: 'rgba(151,158,167,1)'
     },
-    // 鼠标滑过显示的时间文字颜色
+    // The color of the time text displayed when the mouse rolls over
     hoverTextColor: {
       type: String,
       default: 'rgb(194, 202, 215)'
     },
-    // 时间线段颜色
+    // Timeline segment color
     lineColor: {
       type: String,
       default: 'rgba(151,158,167,1)'
     },
-    // 时间线段高度占时间轴高度的比例
+    // The ratio of the height of the timeline segment to the height of the timeline
     lineHeightRatio: {
       type: Object,
       default() {
         return {
-          date: 0.3, // 0点时的日期线段高度
-          time: 0.2, // 显示时间的线段高度
-          none: 0.1, // 不显示时间的线段高度
-          hover: 0.3 // 鼠标滑过时显示的时间段高度
+          date: 0.3, // 0Date line segment height at point
+          time: 0.2, // The height of the line segment showing time
+          none: 0.1, // Line segment height without showing time
+          hover: 0.3 // The height of the time period displayed when the mouse rolls over
         }
       }
     },
-    // 鼠标滑过时是否显示实时所在的时间
+    // Whether to display the real-time time when the mouse rolls over
     showHoverTime: {
       type: Boolean,
       default: true
     },
-    // 格式化鼠标滑过时间
+    // Format mouseover time
     hoverTimeFormat: {
       type: Function
     },
-    // 要显示的时间颜色段
+    // The time color segment to be displayed
     /*
       {
-        beginTime: new Date('2021-01-19 14:30:00').getTime(),// 起始时间戳
-        endTime: new Date('2021-01-20 18:00:00').getTime(),// 结束时间戳
-        color: '#FA3239',// 颜色
-        startRatio: 0.65,// 高度的起始比例，即top=时间轴高度*startRatio
-        endRatio: 0.9// 高度的结束比例，即bottom=时间轴高度*endRatio
+        beginTime: new Date('2021-01-19 14:30:00').getTime(),// start timestamp
+        endTime: new Date('2021-01-20 18:00:00').getTime(),// end timestamp
+        color: '#FA3239',// color
+        startRatio: 0.65,// The starting proportion of the height, i.e.top=Timeline height*startRatio
+        endRatio: 0.9// The ending proportion of the height, i.e.bottom=Timeline height*endRatio
       }
     */
     timeSegments: {
       type: Array,
       default: () => {}
     },
-    // 时间轴背景颜色
+    // Timeline background color
     backgroundColor: {
       type: String,
       default: '#262626'
     },
-    // 是否允许切换分辨率
+    // Whether to allow resolution switching
     enableZoom: {
       type: Boolean,
       default: true
     },
-    // 是否允许拖动
+    // Whether to allow dragging
     enableDrag: {
       type: Boolean,
       default: true
     },
-    // 窗口列表，如果窗口数量大于1的话可以配置此项，会显示和窗口对应数量的时间轴，只有一个窗口的话请直接使用基本时间轴
+    // Window list. If the number of windows is greater than 1, you can configure this item. The corresponding number of timelines will be displayed. If there is only one window, please use the basic timeline directly.
     /*
       {
-        timeSegments: [// 时间段
+        timeSegments: [// time period
           {
-            beginTime: new Date('2021-01-19 14:30:00').getTime(),// 起始时间戳
-            endTime: new Date('2021-01-20 18:00:00').getTime(),// 结束时间戳
-            color: '#FA3239',// 颜色
-            startRatio: 0.65,// 高度的起始比例，即top=时间轴高度*startRatio
-            endRatio: 0.9// 高度的结束比例，即bottom=时间轴高度*endRatio
+            beginTime: new Date('2021-01-19 14:30:00').getTime(),// start timestamp
+            endTime: new Date('2021-01-20 18:00:00').getTime(),// end timestamp
+            color: '#FA3239',// color
+            startRatio: 0.65,// The starting proportion of the height, i.e.top=Timeline height*startRatio
+            endRatio: 0.9// The ending proportion of the height, i.e.bottom=Timeline height*endRatio
           }
         ],
-        // 你的其他附加信息...
+        // Your other additional information...
       }
     */
     windowList: {
@@ -187,57 +187,57 @@ export default {
         return []
       }
     },
-    // 当显示windowList时的基础时间轴高度
+    // Base timeline height when windowList is displayed
     baseTimeLineHeight: {
       type: Number,
       default: 50
     },
-    // 初始选中的窗口时间轴
+    // Initial selected window timeline
     initSelectWindowTimeLineIndex: {
       type: Number,
       default: -1
     },
-    // 是否是手机端
+    // Is it a mobile phone version?
     isMobile: {
       type: Boolean,
       default: false
     },
-    // 鼠标按下和松开的距离小于该值认为是点击事件
+    // If the distance between pressing and releasing the mouse is less than this value, it is considered a click event.
     maxClickDistance: {
       type: Number,
       default: 3
     },
-    // 绘制时间段时对计算出来的坐标进行四舍五入，可以防止相连的时间段绘制出来有间隔的问题
+    // When drawing time periods, the calculated coordinates are rounded to prevent gaps between connected time periods.
     roundWidthTimeSegments: {
       type: Boolean,
       default: true
     },
-    // 自定义显示哪些时间
+    // Customize which times are displayed
     customShowTime: {
       type: Function
     },
-    // 0点处是否显示日期
+    // 0Whether to display the date at the point
     showDateAtZero: {
       type: Boolean,
       default: true
     },
-    // 扩展ZOOM列表，这个数组的数据会追加到内部的ZOOM数组，对应的zoomIndex往后累加即可，内部一共有11个zoom，那么你追加了一项，对应的zoomIndex为11，因为是从零开始计数
-    // 数组类型，数组的每一项为：
+    // Expand the ZOOM list. The data of this array will be appended to the internal ZOOM array. The corresponding zoomIndex can be accumulated later. There are 11 zooms in total. If you add an item, the corresponding zoomIndex is 11 because counting starts from zero.
+    // Array type, each item of the array is：
     /*
       {
-        zoom: 26,// 时间分辨率，整个时间轴表示的时间范围，单位：小时
-        zoomHourGrid: 0.5,// 时间分辨率对应的每格小时数，即时间轴上最小格代表多少小时
-        mobileZoomHourGrid: 2, // 手机模式下时间分辨率对应的每格小时数，如果不用适配手机端，可以不用设置
+        zoom: 26,// Time resolution, the time range represented by the entire timeline, unit: hour
+        zoomHourGrid: 0.5,// The number of hours per grid corresponding to the time resolution, that is, how many hours the smallest grid on the timeline represents
+        mobileZoomHourGrid: 2, // The number of hours per grid corresponding to the time resolution in mobile phone mode. If you do not need to adapt to the mobile phone, you do not need to set it.
       }
     */
-    // 同时你需要传递customShowTime属性来自定义控制时间显示，否则会报错，因为内置的规则只有11个
+    // At the same time, you need to pass the customShowTime attribute to customize the time display, otherwise an error will be reported because there are only 11 built-in rules.
     extendZOOM: {
       type: Array,
       default() {
         return []
       }
     },
-    // 格式化时间轴显示时间
+    // Format timeline to display time
     formatTime: {
       type: Function
     }
@@ -261,11 +261,11 @@ export default {
     }
   },
   computed: {
-    // 整个时间轴所代表的毫秒数
+    // The number of milliseconds represented by the entire timeline
     totalMS() {
       return ZOOM[this.currentZoomIndex] * ONE_HOUR_STAMP
     },
-    // 时间范围的时间戳表示
+    // Timestamp representation of time range
     timeRangeTimestamp() {
       const t = {}
       if (this.timeRange.start) {
@@ -282,11 +282,11 @@ export default {
     ACT_ZOOM_DATE_SHOW_RULE() {
       return this.isMobile ? MOBILE_ZOOM_DATE_SHOW_RULE : ZOOM_DATE_SHOW_RULE
     },
-    // 年月模式
+    // Year and month mode
     yearMonthMode() {
       return this.currentZoomIndex === 9
     },
-    // 年模式
+    // year pattern
     yearMode() {
       return this.currentZoomIndex === 10
     }
@@ -328,38 +328,38 @@ export default {
   },
   methods: {
     /**
-     * @Author: 王林25
+     * @Author: Wang Lin25
      * @Date: 2021-01-19 20:20:45
-     * @Desc: 设置初始数据
+     * @Desc: Set initial data
      */
     setInitData() {
-      // 内部窗口列表数据
+      // Internal window list data
       this.windowListInner = this.windowList.map((item, index) => {
         return {
           ...item,
           active: this.initSelectWindowTimeLineIndex === index
         }
       })
-      // 必须先设置currentZoomIndex
-      // 初始时间分辨率
+      // Must be set firstcurrentZoomIndex
+      // initial time resolution
       this.currentZoomIndex =
         this.initZoomIndex >= 0 && this.initZoomIndex < ZOOM.length
           ? this.initZoomIndex
           : 5
-      // 初始当前时间
+      // initial current time
       this.startTimestamp =
         (this.initTime
           ? typeof this.initTime === 'number' ? this.initTime : new Date(this.initTime).getTime()
           : new Date(dayjs().format('YYYY-MM-DD 00:00:00')).getTime()) -
         this.totalMS / 2
-      // 根据时间范围检查并修正起始时间
+      // Check and correct start time based on time range
       this.fixStartTimestamp()
     },
 
     /**
-     * @Author: 王林25
+     * @Author: Wang Lin25
      * @Date: 2021-01-20 16:01:21
-     * @Desc: 根据时间范围检查并修正起始时间
+     * @Desc: Check and correct start time based on time range
      */
     fixStartTimestamp() {
       const hfms = this.totalMS / 2
@@ -373,9 +373,9 @@ export default {
     },
 
     /**
-     * @Author: 王林25
+     * @Author: Wang Lin25
      * @Date: 2020-04-14 09:20:22
-     * @Desc: 初始化
+     * @Desc: initialization
      */
     init() {
       const {
@@ -392,12 +392,12 @@ export default {
     },
 
     /**
-     * @Author: 王林25
+     * @Author: Wang Lin25
      * @Date: 2020-04-14 09:27:18
-     * @Desc: 绘制方法
+     * @Desc: drawing method
      */
     draw() {
-      // 顺序很重要，不然层级不对
+      // The order is very important, otherwise the level will be wrong.
       this.drawTimeSegments()
       this.addGraduations()
       this.drawMiddleLine()
@@ -405,7 +405,7 @@ export default {
       this.currentTime = this.startTimestamp + this.totalMS / 2
       this.$emit('timeChange', this.currentTime)
 
-      // 通知窗口时间轴渲染
+      // Notification window timeline rendering
       try {
         this.$refs.WindowListItem.forEach((item) => {
           item.draw()
@@ -413,21 +413,21 @@ export default {
         // eslint-disable-next-line no-empty
       } catch (error) { }
 
-      // 更新观察的时间位置
+      // Update the time position of the observation
       this.updateWatchTime()
     },
 
     /**
-     * @Author: 王林25
+     * @Author: Wang Lin25
      * @Date: 2021-01-21 10:50:11
-     * @Desc:  更新观察的时间位置
+     * @Desc:  Update the time position of the observation
      */
     updateWatchTime() {
       this.watchTimeList.forEach((item) => {
-        // 当前不在显示范围内
+        // Currently not within the display range
         if (item.time < this.startTimestamp || item.time > this.startTimestamp + this.totalMS) {
           item.callback(-1, -1)
-        } else { // 在范围内
+        } else { // within range
           const x = (item.time - this.startTimestamp) * (this.width / this.totalMS)
           let y = 0
           const { left, top } = this.$refs.canvas.getBoundingClientRect()
@@ -443,9 +443,9 @@ export default {
     },
 
     /**
-     * @Author: 王林25
+     * @Author: Wang Lin25
      * @Date: 2020-04-14 09:27:46
-     * @Desc: 绘制中间的竖线
+     * @Desc: Draw the vertical line in the middle
      */
     drawMiddleLine() {
       if (!this.showCenterLine) {
@@ -458,37 +458,37 @@ export default {
     },
 
     /**
-     * @Author: 王林25
+     * @Author: Wang Lin25
      * @Date: 2020-04-14 11:03:44
-     * @Desc: 绘制时间刻度
+     * @Desc: Draw time scale
      */
     addGraduations() {
       this.ctx.beginPath()
-      // 一共可以绘制的格数
+      // The total number of grids that can be drawn
       const gridNum =
         ZOOM[this.currentZoomIndex] / this.ACT_ZOOM_HOUR_GRID[this.currentZoomIndex]
-      // 一格多少毫秒
+      // How many milliseconds per grid?
       const msPerGrid = this.ACT_ZOOM_HOUR_GRID[this.currentZoomIndex] * ONE_HOUR_STAMP
-      // 每格间距，一格多少像素宽
+      // Each grid spacing, how many pixels wide is one grid?
       const pxPerGrid = this.width / gridNum
-      // 起始偏移距离
+      // Starting offset distance
       const msOffset = msPerGrid - (this.startTimestamp % msPerGrid)
       const pxOffset = (msOffset / msPerGrid) * pxPerGrid
       for (let i = 0; i < gridNum; i++) {
         const currentStartTimestamp = this.startTimestamp + msOffset + i * msPerGrid
         let adjustMsOffset = 0
-        // 分辨率以年为单位
+        // Resolution is in years
         if (this.yearMode) {
           adjustMsOffset = currentStartTimestamp - new Date(`${dayjs(currentStartTimestamp).format('YYYY')}-01-01 00:00:00`).getTime()
         } else if (this.yearMonthMode) {
-          // 分辨率以月为单位
+          // Resolution is in months
           adjustMsOffset = currentStartTimestamp - new Date(`${dayjs(currentStartTimestamp).format('YYYY')}-${dayjs(currentStartTimestamp).format('MM')}-01 00:00:00`).getTime()
         }
         const x = pxOffset + i * pxPerGrid - (adjustMsOffset / msPerGrid) * pxPerGrid
         const graduationTime = currentStartTimestamp - adjustMsOffset
         let h = 0
         const date = new Date(graduationTime)
-        // 0点显示日期
+        // 0Click to show date
         if (this.showDateAtZero && date.getHours() === 0 && date.getMinutes() === 0) {
           h = this.height * (this.lineHeightRatio.date === undefined ? 0.3 : this.lineHeightRatio.date)
           this.ctx.fillStyle = this.textColor
@@ -498,7 +498,7 @@ export default {
             h + 15
           )
         } else if (this.checkShowTime(date)) {
-          // 其余时间根据各自规则显示
+          // The rest of the time is displayed according to respective rules
           h = this.height * (this.lineHeightRatio.time === undefined ? 0.2 : this.lineHeightRatio.time)
           this.ctx.fillStyle = this.textColor
           this.ctx.fillText(
@@ -507,14 +507,14 @@ export default {
             h + 15
           )
         } else {
-          // 不显示时间的线段
+          // Line segments without showing time
           h = this.height * (this.lineHeightRatio.none === undefined ? 0.1 : this.lineHeightRatio.none)
         }
         this.drawLine(x, 0, x, h, 1, this.lineColor)
       }
     },
 
-    // 判断是否需要显示该时间
+    // Determine whether the time needs to be displayed
     checkShowTime(date) {
       if (this.customShowTime) {
         const res = this.customShowTime(date, this.currentZoomIndex)
@@ -528,12 +528,12 @@ export default {
     },
 
     /**
-     * @Author: 王林25
+     * @Author: Wang Lin25
      * @Date: 2020-04-14 15:42:49
-     * @Desc: 绘制时间段
+     * @Desc: Draw time period
      */
     drawTimeSegments(callback, path) {
-      const PX_PER_MS = this.width / this.totalMS // px/ms，每毫秒占的像素
+      const PX_PER_MS = this.width / this.totalMS // px/ms，Pixels per millisecond
       this.timeSegments.forEach((item) => {
         if (
           item.beginTime <= this.startTimestamp + this.totalMS
@@ -554,7 +554,7 @@ export default {
             x = Math.round(x)
             w = Math.round(w)
           }
-          // 避免时间段小于1px绘制不出来
+          // Avoid time periods smaller than 1px from being drawn.
           w = Math.max(1, w)
           if (path) {
             this.ctx.rect(
@@ -577,7 +577,7 @@ export default {
       })
     },
 
-    // 触摸开始事件
+    // touch start event
     onTouchstart(e) {
       if (!this.isMobile) {
         return
@@ -587,9 +587,9 @@ export default {
     },
 
     /**
-     * @Author: 王林25
+     * @Author: Wang Lin25
      * @Date: 2020-04-14 14:29:40
-     * @Desc: 鼠标按下事件
+     * @Desc: mouse press event
      */
     onMousedown(e) {
       if (this.isMobile) {
@@ -598,7 +598,7 @@ export default {
       this.onPointerdown(e)
     },
 
-    // 按下事件
+    // press event
     onPointerdown(e) {
       const pos = this.getClientOffset(e)
       this.mousedownX = pos[0]
@@ -608,7 +608,7 @@ export default {
       this.$emit('mousedown', e)
     },
 
-    // 触摸结束事件
+    // touch end event
     onTouchend(e) {
       if (!this.isMobile) {
         return
@@ -618,9 +618,9 @@ export default {
     },
 
     /**
-     * @Author: 王林25
+     * @Author: Wang Lin25
      * @Date: 2020-04-14 14:38:30
-     * @Desc: 鼠标松开
+     * @Desc: Release mouse
      */
     onMouseup(e) {
       if (this.isMobile) {
@@ -629,9 +629,9 @@ export default {
       this.onPointerup(e)
     },
 
-    // 松开事件
+    // Release event
     onPointerup(e) {
-      // 触发click事件
+      // trigger click event
       const pos = this.getClientOffset(e)
       const reset = () => {
         this.mousedown = false
@@ -656,7 +656,7 @@ export default {
       this.$emit('mouseup', e)
     },
 
-    // 触摸移动事件
+    // touch move event
     onTouchmove(e) {
       if (!this.isMobile) {
         return
@@ -666,9 +666,9 @@ export default {
     },
 
     /**
-     * @Author: 王林25
+     * @Author: Wang Lin25
      * @Date: 2020-04-14 14:17:02
-     * @Desc: 鼠标移动事件
+     * @Desc: mouse move event
      */
     onMousemove(e) {
       if (this.isMobile) {
@@ -677,32 +677,32 @@ export default {
       this.onPointermove(e)
     },
 
-    // 移动事件
+    // move event
     onPointermove(e) {
       const x = this.getClientOffset(e)[0]
       this.mousemoveX = x
-      // 按下拖动
+      // press drag
       if (this.mousedown && this.enableDrag) {
         this.drag(x)
       } else if (this.showHoverTime) {
-        // 未按下显示鼠标所在时间
+        // Display mouse location time when not pressed
         this.hoverShow(x)
       }
     },
 
     /**
-     * @Author: 王林25
+     * @Author: Wang Lin25
      * @Date: 2021-01-21 10:40:37
-     * @Desc: 鼠标移出事件
+     * @Desc: mouse out event
      */
     onMouseleave() {
       this.mousemoveX = -1
     },
 
     /**
-     * @Author: 王林25
+     * @Author: Wang Lin25
      * @Date: 2021-01-20 15:29:46
-     * @Desc: 按下拖动
+     * @Desc: press drag
      */
     drag(x) {
       if (!this.enableDrag) {
@@ -710,7 +710,7 @@ export default {
       }
       const PX_PER_MS = this.width / this.totalMS // px/ms
       const diffX = x - this.mousedownX
-      // 判断是否超出限制范围
+      // Determine whether the limit is exceeded
       const hfms = this.totalMS / 2
       let _newStartTimestamp =
         this.mousedownCacheStartTimestamp - Math.round(diffX / PX_PER_MS)
@@ -727,9 +727,9 @@ export default {
     },
 
     /**
-     * @Author: 王林25
+     * @Author: Wang Lin25
      * @Date: 2021-01-20 15:29:52
-     * @Desc: 未按下显示鼠标所在时间
+     * @Desc: Display mouse location time when not pressed
      */
     hoverShow(x, noDraw) {
       const PX_PER_MS = this.width / this.totalMS // px/ms
@@ -747,9 +747,9 @@ export default {
     },
 
     /**
-     * @Author: 王林25
+     * @Author: Wang Lin25
      * @Date: 2020-04-14 14:28:48
-     * @Desc: 鼠标移出事件
+     * @Desc: mouse out event
      */
     onMouseout() {
       this.clearCanvas(this.width, this.height)
@@ -757,9 +757,9 @@ export default {
     },
 
     /**
-     * @Author: 王林25
+     * @Author: Wang Lin25
      * @Date: 2020-04-14 15:14:12
-     * @Desc: 鼠标滚动
+     * @Desc: mouse scroll
      */
     onMouseweel(event) {
       if (!this.enableZoom) {
@@ -774,7 +774,7 @@ export default {
           this.currentZoomIndex++
         }
       } else if (delta > 0) {
-        // 放大
+        // Zoom in
         if (this.currentZoomIndex - 1 <= 0) {
           this.currentZoomIndex = 0
         } else {
@@ -782,14 +782,14 @@ export default {
         }
       }
       this.clearCanvas(this.width, this.height)
-      this.startTimestamp = this.currentTime - this.totalMS / 2 // 当前时间-新的时间范围的一半
+      this.startTimestamp = this.currentTime - this.totalMS / 2 // current time-Half of the new time frame
       this.draw()
     },
 
     /**
-     * @Author: 王林25
+     * @Author: Wang Lin25
      * @Date: 2021-01-20 16:22:04
-     * @Desc: 点击事件
+     * @Desc: click event
      */
     onClick(x, y) {
       const PX_PER_MS = this.width / this.totalMS // px/ms
@@ -804,9 +804,9 @@ export default {
     },
 
     /**
-     * @Author: 王林25
+     * @Author: Wang Lin25
      * @Date: 2021-01-20 16:24:54
-     * @Desc: 检测当前是否点击了某个时间段
+     * @Desc: Detect whether a certain time period is currently clicked
      */
     getClickTimeSegments(x, y) {
       const inItems = []
@@ -819,9 +819,9 @@ export default {
     },
 
     /**
-     * @Author: 王林25
+     * @Author: Wang Lin25
      * @Date: 2021-01-20 11:14:30
-     * @Desc: 获取鼠标相当于时间轴的距离
+     * @Desc: Get the mouse distance equivalent to the timeline
      */
     getClientOffset(e) {
       if (!this.$refs.timeLineContainer || !e) {
@@ -832,18 +832,18 @@ export default {
     },
 
     /**
-     * @Author: 王林25
+     * @Author: Wang Lin25
      * @Date: 2020-04-14 14:25:43
-     * @Desc: 清除画布
+     * @Desc: clear canvas
      */
     clearCanvas(w, h) {
       this.ctx.clearRect(0, 0, w, h)
     },
 
     /**
-     * @Author: 王林25
+     * @Author: Wang Lin25
      * @Date: 2020-04-14 14:15:25
-     * @Desc: 时间格式化
+     * @Desc: time formatting
      */
     graduationTitle(datetime) {
       const time = dayjs(datetime)
@@ -870,9 +870,9 @@ export default {
     },
 
     /**
-     * @Author: 王林25
+     * @Author: Wang Lin25
      * @Date: 2020-04-14 11:28:37
-     * @Desc: 绘制线段
+     * @Desc: Draw line segments
      */
     drawLine(x1, y1, x2, y2, lineWidth = 1, color = '#fff') {
       this.ctx.beginPath()
@@ -884,9 +884,9 @@ export default {
     },
 
     /**
-     * @Author: 王林25
+     * @Author: Wang Lin25
      * @Date: 2021-01-20 15:57:11
-     * @Desc: 重新渲染
+     * @Desc: Re-render
      */
     reRender() {
       this.$nextTick(() => {
@@ -899,9 +899,9 @@ export default {
     },
 
     /**
-     * @Author: 王林25
+     * @Author: Wang Lin25
      * @Date: 2021-01-20 16:07:53
-     * @Desc: 复位
+     * @Desc: reset
      */
     reset() {
       this.width = 0
@@ -916,9 +916,9 @@ export default {
     },
 
     /**
-     * @Author: 王林25
+     * @Author: Wang Lin25
      * @Date: 2021-01-20 15:57:26
-     * @Desc: 设置当前时间
+     * @Desc: Set current time
      */
     setTime(t) {
       if (this.mousedown) {
@@ -935,18 +935,18 @@ export default {
     },
 
     /**
-     * @Author: 王林25
+     * @Author: Wang Lin25
      * @Date: 2021-01-20 19:32:39
-     * @Desc: 转发窗口时间轴的事件
+     * @Desc: Forward events from window timeline
      */
     triggerClickWindowTimeSegments(data, index, item) {
       this.$emit('click_window_timeSegments', data, index, item)
     },
 
     /**
-     * @Author: 王林25
+     * @Author: Wang Lin25
      * @Date: 2021-01-21 09:58:17
-     * @Desc: 设置分辨率
+     * @Desc: Set resolution
      */
     setZoom(index) {
       this.currentZoomIndex =
@@ -954,14 +954,14 @@ export default {
           ? index
           : 5
       this.clearCanvas(this.width, this.height)
-      this.startTimestamp = this.currentTime - this.totalMS / 2 // 当前时间-新的时间范围的一半
+      this.startTimestamp = this.currentTime - this.totalMS / 2 // current time-Half of the new time frame
       this.draw()
     },
 
     /**
-     * @Author: 王林25
+     * @Author: Wang Lin25
      * @Date: 2021-01-21 10:15:30
-     * @Desc: 切换窗口时间轴的选中
+     * @Desc: Toggle window timeline selection
      */
     toggleActive(index) {
       this.windowListInner.forEach((item) => {
@@ -972,9 +972,9 @@ export default {
     },
 
     /**
-     * @Author: 王林25
+     * @Author: Wang Lin25
      * @Date: 2021-01-21 10:47:28
-     * @Desc: 要观察的时间点，会返回该时间点的实时位置，你可以根据该位置来设置一些你的自定义元素，位置为相对于浏览器可视窗口的位置
+     * @Desc: The time point to be observed will return the real-time position at that time point. You can set some of your custom elements based on this position. The position is relative to the browser's visual window.
      */
     watchTime(time, callback, windowTimeLineIndex) {
       if (!time || !callback) {
@@ -988,18 +988,18 @@ export default {
     },
 
     /**
-     * @Author: 王林25
+     * @Author: Wang Lin25
      * @Date: 2021-01-21 13:36:37
-     * @Desc: 窗口时间轴滚动
+     * @Desc: Window timeline scrolling
      */
     onWindowListScroll() {
       this.updateWatchTime()
     },
 
     /**
-     * @Author: 王林25
+     * @Author: Wang Lin25
      * @Date: 2021-01-21 13:40:53
-     * @Desc: 尺寸重适应
+     * @Desc: size refit
      */
     onResize() {
       this.init()
@@ -1012,7 +1012,7 @@ export default {
       } catch (error) { }
     },
 
-    // 时间轴点击事件
+    // Timeline click event
     onCanvasClick(...args) {
       this.$emit('click_timeline', ...args)
     }

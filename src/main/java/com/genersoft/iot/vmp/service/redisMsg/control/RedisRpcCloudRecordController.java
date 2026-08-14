@@ -41,7 +41,7 @@ public class RedisRpcCloudRecordController extends RpcController {
     }
 
     /**
-     * 播放
+     * play
      */
     @RedisRpcMapping("play")
     public RedisRpcResponse play(RedisRpcRequest request) {

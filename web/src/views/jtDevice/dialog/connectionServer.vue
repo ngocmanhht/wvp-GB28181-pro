@@ -2,7 +2,7 @@
   <div id="configInfo">
     <el-dialog
       v-el-drag-dialog
-      title="连接到指定的服务器"
+      title="Connect to the specified server"
       width="=80%"
       top="2rem"
       :close-on-click-modal="false"
@@ -12,42 +12,42 @@
     >
       <div style="padding: 0 20px 0 10px">
         <el-form label-width="110px">
-          <el-form-item label="服务类型">
+          <el-form-item label="Service type">
             <el-radio-group v-model="form.switchOn">
-              <el-radio :label="false" border>指定监管平台服务器</el-radio>
-              <el-radio :label="true" border>原缺省监控平台服务器</el-radio>
+              <el-radio :label="false" border>Specify supervision platform server</el-radio>
+              <el-radio :label="true" border>Original default monitoring platform server</el-radio>
             </el-radio-group>
           </el-form-item>
           <div v-if="form.switchOn != null && !form.switchOn">
-            <el-form-item label="平台鉴权码">
+            <el-form-item label="Platform authentication code">
               <el-input type="input" v-model="form.authentication" ></el-input>
             </el-form-item>
-            <el-form-item label="拨号点名称">
+            <el-form-item label="dial point name">
               <el-input type="input" v-model="form.name" ></el-input>
             </el-form-item>
-            <el-form-item label="拨号用户名">
+            <el-form-item label="Dial-up username">
               <el-input type="input" v-model="form.username" ></el-input>
             </el-form-item>
-            <el-form-item label="拨号密码">
+            <el-form-item label="Dial-up password">
               <el-input type="input" v-model="form.password" ></el-input>
             </el-form-item>
-            <el-form-item label="IP地址">
+            <el-form-item label="IPaddress">
               <el-input type="input" v-model="form.address" ></el-input>
             </el-form-item>
-            <el-form-item label="TCP端口">
+            <el-form-item label="TCPport">
               <el-input type="input" v-model="form.tcpPort" ></el-input>
             </el-form-item>
-            <el-form-item label="UDP端口">
+            <el-form-item label="UDPport">
               <el-input type="input" v-model="form.udpPort" ></el-input>
             </el-form-item>
-            <el-form-item label="时限">
+            <el-form-item label="time limit">
               <el-input type="input" v-model="form.timeLimit" ></el-input>
             </el-form-item>
           </div>
 
           <el-form-item style="text-align: right">
-            <el-button type="primary" @click="onSubmit">确认</el-button>
-            <el-button @click="close" >取消</el-button>
+            <el-button type="primary" @click="onSubmit">Confirm</el-button>
+            <el-button @click="close" >Cancel</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -77,8 +77,8 @@ export default {
         tcpPort: null,
         udpPort: null,
         timeLimit: null,
-        sign: 0, // 标志: 0:普通通话,1:监听
-        destPhoneNumber: null // 回拨电话号码
+        sign: 0, // Flag: 0: normal call, 1: monitoring
+        destPhoneNumber: null // call back phone number
       }
     }
   },
@@ -99,8 +99,8 @@ export default {
         tcpPort: null,
         udpPort: null,
         timeLimit: null,
-        sign: 0, // 标志: 0:普通通话,1:监听
-        destPhoneNumber: null // 回拨电话号码
+        sign: 0, // Flag: 0: normal call, 1: monitoring
+        destPhoneNumber: null // call back phone number
       }
     },
     close: function() {
@@ -114,7 +114,7 @@ export default {
         .then(data => {
           this.$message.success({
             showClose: true,
-            message: '发送成功'
+            message: 'Sent successfully'
           })
           this.close()
         })

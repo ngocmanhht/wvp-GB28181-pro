@@ -21,9 +21,9 @@ public class ConnectChangeEventListener implements ApplicationListener<ConnectCh
     @Override
     public void onApplicationEvent(ConnectChangeEvent event) {
         if (event.isConnected()) {
-            log.info("[JT-设备已连接] 终端ID： {}", event.getPhoneNumber());
+            log.info("[JT-Device is connected] terminalID： {}", event.getPhoneNumber());
         }else{
-            log.info("[JT-设备连接已断开] 终端ID： {}", event.getPhoneNumber());
+            log.info("[JT-Device connection has been disconnected] terminalID： {}", event.getPhoneNumber());
             if(SessionManager.INSTANCE.get(event.getPhoneNumber()) != null) {
                 SessionManager.INSTANCE.get(event.getPhoneNumber()).unregister();
             }

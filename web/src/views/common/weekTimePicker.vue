@@ -6,9 +6,9 @@
           <el-row style="margin-left: 0">
             <el-col :span="24">
               <div class="time-select-header">
-                <el-button @click="selectAll()">全选</el-button>
-                <el-button @click="clearTrack()">清空</el-button>
-                <el-button @click="removeSelectedTrack()">删除</el-button>
+                <el-button @click="selectAll()">Select all</el-button>
+                <el-button @click="clearTrack()">Clear</el-button>
+                <el-button @click="removeSelectedTrack()">Delete</el-button>
               </div>
               <el-row>
                 <el-col :span="20" :offset="2">
@@ -51,14 +51,14 @@
                         </el-form-item>
                         <el-form-item>
                           <div style="float: right;">
-                            <el-button @click="weekDataCheckBoxForAll(index)">全选</el-button>
-                            <el-button type="primary" @click="onSubmitCopy(index)">确认</el-button>
-                            <el-button @click="closeCopyBox(index)">取消</el-button>
+                            <el-button @click="weekDataCheckBoxForAll(index)">Select all</el-button>
+                            <el-button type="primary" @click="onSubmitCopy(index)">Confirm</el-button>
+                            <el-button @click="closeCopyBox(index)">Cancel</el-button>
                           </div>
                         </el-form-item>
                       </el-form>
                     </div>
-                    <el-button slot="reference" type="text" size="medium">复制</el-button>
+                    <el-button slot="reference" type="text" size="medium">Copy</el-button>
                   </el-popover>
                 </el-col>
               </el-row>
@@ -80,31 +80,31 @@ export default {
     return {
       weekData: [
         {
-          name: '星期一',
+          name: 'Monday',
           data: []
         },
         {
-          name: '星期二',
+          name: 'tuesday',
           data: []
         },
         {
-          name: '星期三',
+          name: 'wednesday',
           data: []
         },
         {
-          name: '星期四',
+          name: 'Thursday',
           data: []
         },
         {
-          name: '星期五',
+          name: 'Friday',
           data: []
         },
         {
-          name: '星期六',
+          name: 'Saturday',
           data: []
         },
         {
-          name: '星期天',
+          name: 'sunday',
           data: []
         }
 
@@ -243,7 +243,7 @@ export default {
         }
         this.weekData[this.startPointTrack.index].data[this.startPointTrack.trackIndex].start = start
         this.startPointTrack.x = event.screenX
-        // 设置提示框位置
+        // Set the prompt box position
         this.$refs[`startPointToolTip-${this.startPointTrack.index}-${this.startPointTrack.trackIndex}`][0].popperElm.style.left = this.startPointTrack.target.getBoundingClientRect().left - 20 + 'px'
         this.updateValue()
       } else if (this.endPointTrack.trackIndex !== null) {
@@ -257,7 +257,7 @@ export default {
         }
         this.weekData[this.endPointTrack.index].data[this.endPointTrack.trackIndex].end = end
         this.endPointTrack.x = event.screenX
-        // 设置提示框位置
+        // Set the prompt box position
         this.$refs[`endPointToolTip-${this.endPointTrack.index}-${this.endPointTrack.trackIndex}`][0].popperElm.style.left = this.endPointTrack.target.getBoundingClientRect().left - 20 + 'px'
         this.updateValue()
       }
@@ -303,7 +303,7 @@ export default {
       this.updateValue()
     },
     trackHandler: function(index, start, end) {
-      // 检查时间段是否重合 重合则合并
+      // Check whether the time periods overlap and merge if they overlap.
       this.weekData[index].data = this.checkTrack(this.weekData[index].data)
       this.selectedTrack.trackIndex = null
       setTimeout(() => {
@@ -342,7 +342,7 @@ export default {
     checkTrack: function(intervals) {
       if (intervals.length === 0) return []
 
-      // 按起始时间排序
+      // Sort by start time
       intervals.sort((a, b) => a.start - b.start)
 
       const merged = [intervals[0]]
@@ -352,7 +352,7 @@ export default {
         const last = merged[merged.length - 1]
 
         if (current.start <= last.end) {
-          // 合并时间段
+          // Merge time period
           last.end = Math.max(last.end, current.end)
         } else {
           merged.push(current)

@@ -2,7 +2,7 @@
   <div id="importChannel" v-loading="isLoging">
     <el-dialog
       v-el-drag-dialog
-      title="导入通道数据"
+      title="Import channel data"
       width="30rem"
       top="2rem"
       :append-to-body="true"
@@ -22,8 +22,8 @@
           :on-error="errorHook"
         >
           <i class="el-icon-upload" />
-          <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-          <div slot="tip" class="el-upload__tip">只能上传 csv / xls / xlsx 文件</div>
+          <div class="el-upload__text">Drag files here, or<em>Click to upload</em></div>
+          <div slot="tip" class="el-upload__tip">Can only upload csv / xls / xlsx File</div>
         </el-upload>
       </div>
     </el-dialog>

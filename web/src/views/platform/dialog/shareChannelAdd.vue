@@ -1,60 +1,60 @@
 <template>
   <div id="shareChannelAdd" style="background-color: #FFFFFF; display: grid; grid-template-columns: 83px minmax(0, 1fr);">
     <el-tabs v-model="hasShare" tab-position="left" style="" @tab-click="search">
-      <el-tab-pane label="未共享" name="false" />
-      <el-tab-pane label="已共享" name="true" />
+      <el-tab-pane label="Not shared" name="false" />
+      <el-tab-pane label="Shared" name="true" />
     </el-tabs>
     <div style="padding: 0 2rem">
       <el-form :inline="true" size="mini">
-        <el-form-item label="搜索">
+        <el-form-item label="Search">
           <el-input
             v-model="searchStr"
             style="margin-right: 1rem; width: auto;"
             size="mini"
-            placeholder="关键字"
+            placeholder="Keywords"
             prefix-icon="el-icon-search"
             clearable
             @input="search"
           />
         </el-form-item>
-        <el-form-item label="在线状态">
+        <el-form-item label="online status">
           <el-select
             v-model="online"
             size="mini"
             style="width: 8rem; margin-right: 1rem;"
-            placeholder="请选择"
+            placeholder="Please select"
             default-first-option
             @change="search"
           >
-            <el-option label="全部" value="" />
-            <el-option label="在线" value="true" />
-            <el-option label="离线" value="false" />
+            <el-option label="All" value="" />
+            <el-option label="online" value="true" />
+            <el-option label="Offline" value="false" />
           </el-select>
         </el-form-item>
-        <el-form-item label="类型">
+        <el-form-item label="Type">
           <el-select
             v-model="channelType"
             size="mini"
             style="width: 8rem; margin-right: 1rem;"
-            placeholder="请选择"
+            placeholder="Please select"
             default-first-option
             @change="search"
           >
-            <el-option label="全部" value="" />
+            <el-option label="All" value="" />
             <el-option v-for="item in Object.values($channelTypeList)" :key="item.id" :label="item.name" :value="item.id" />
           </el-select>
         </el-form-item>
         <el-form-item>
           <el-button v-if="hasShare !=='true'" size="mini" type="primary" :loading="addLoading" @click="add()">
-            添加
+            add
           </el-button>
           <el-button v-if="hasShare ==='true'" size="mini" type="danger" :loading="removeLoading" @click="remove()">
-            移除
+            Remove
           </el-button>
-          <el-button v-if="hasShare !=='true'" size="mini" :loading="addByDeviceLoading" @click="addByDevice()">按设备添加</el-button>
-          <el-button v-if="hasShare ==='true'" size="mini" :loading="removeByDeviceLoading" @click="removeByDevice()">按设备移除</el-button>
-          <el-button v-if="hasShare !=='true'" size="mini" :loading="addAllLoading" @click="addAll()">全部添加</el-button>
-          <el-button v-if="hasShare ==='true'" size="mini" :loading="removeAllLoading" @click="removeAll()">全部移除</el-button>
+          <el-button v-if="hasShare !=='true'" size="mini" :loading="addByDeviceLoading" @click="addByDevice()">Add by device</el-button>
+          <el-button v-if="hasShare ==='true'" size="mini" :loading="removeByDeviceLoading" @click="removeByDevice()">Remove by device</el-button>
+          <el-button v-if="hasShare !=='true'" size="mini" :loading="addAllLoading" @click="addAll()">add all</el-button>
+          <el-button v-if="hasShare ==='true'" size="mini" :loading="removeAllLoading" @click="removeAll()">Remove all</el-button>
         </el-form-item>
         <el-form-item style="float: right;">
           <el-button icon="el-icon-refresh-right" circle @click="getChannelList()" />
@@ -69,41 +69,41 @@
         @selection-change="handleSelectionChange"
       >
         <el-table-column type="selection" width="55" :selectable="selectable" />
-        <el-table-column prop="gbName" label="名称" min-width="180" />
-        <el-table-column prop="gbDeviceId" label="编号" min-width="180" />
-        <el-table-column v-if="hasShare ==='true'" label="自定义名称" min-width="180">
+        <el-table-column prop="gbName" label="Name" min-width="180" />
+        <el-table-column prop="gbDeviceId" label="No." min-width="180" />
+        <el-table-column v-if="hasShare ==='true'" label="custom name" min-width="180">
           <template v-slot:default="scope">
             <div slot="—" class="name-wrapper">
-              <el-input v-model:value="scope.row.customName" size="mini" placeholder="不填按原名称" />
+              <el-input v-model:value="scope.row.customName" size="mini" placeholder="Leave blank and press original name" />
             </div>
           </template>
         </el-table-column>
-        <el-table-column v-if="hasShare ==='true'" label="自定义编号" min-width="180">
+        <el-table-column v-if="hasShare ==='true'" label="Custom number" min-width="180">
           <template v-slot:default="scope">
             <div slot="—" class="name-wrapper">
-              <el-input v-model:value="scope.row.customDeviceId" size="mini" placeholder="不填按原编号" />
+              <el-input v-model:value="scope.row.customDeviceId" size="mini" placeholder="If left blank, press the original number" />
             </div>
           </template>
         </el-table-column>
         <el-table-column v-if="hasShare ==='true'" label="" min-width="80">
           <template v-slot:default="scope">
-            <el-button size="mini" type="primary" @click="saveCustom(scope.row)">保存
+            <el-button size="mini" type="primary" @click="saveCustom(scope.row)">save
             </el-button>
           </template>
         </el-table-column>
-        <el-table-column prop="gbManufacturer" label="厂家" min-width="100" />
-        <el-table-column label="类型" min-width="100">
+        <el-table-column prop="gbManufacturer" label="Manufacturer" min-width="100" />
+        <el-table-column label="Type" min-width="100">
           <template v-slot:default="scope">
             <div slot="reference" class="name-wrapper">
               <el-tag size="medium" effect="plain" type="success" :style="$channelTypeList[scope.row.dataType].style">{{ $channelTypeList[scope.row.dataType].name }}</el-tag>
             </div>
           </template>
         </el-table-column>
-        <el-table-column label="状态" min-width="100">
+        <el-table-column label="Status" min-width="100">
           <template v-slot:default="scope">
             <div slot="reference" class="name-wrapper">
-              <el-tag v-if="scope.row.gbStatus === 'ON'" size="medium">在线</el-tag>
-              <el-tag v-if="scope.row.gbStatus !== 'ON'" size="medium" type="info">离线</el-tag>
+              <el-tag v-if="scope.row.gbStatus === 'ON'" size="medium">online</el-tag>
+              <el-tag v-if="scope.row.gbStatus !== 'ON'" size="medium" type="info">Offline</el-tag>
             </div>
           </template>
         </el-table-column>
@@ -183,7 +183,7 @@ export default {
         .then(data => {
           this.total = data.total
           this.channelList = data.list
-          // 防止出现表格错位
+          // Prevent form misalignment
           this.$nextTick(() => {
             this.$refs.channelListTable.doLayout()
           })
@@ -214,7 +214,7 @@ export default {
       if (channels.length === 0) {
         this.$message.info({
           showClose: true,
-          message: '请选择通道'
+          message: 'Please select channel'
         })
         return
       }
@@ -226,7 +226,7 @@ export default {
         .then(() => {
           this.$message.success({
             showClose: true,
-            message: '保存成功'
+            message: 'Saved successfully'
           })
           this.getChannelList()
         })
@@ -241,10 +241,10 @@ export default {
         })
     },
     addAll: function(row) {
-      this.$confirm('确定全部添加？', '提示', {
+      this.$confirm('Confirm to add all？', 'Tips', {
         dangerouslyUseHTMLString: true,
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+        confirmButtonText: 'OK',
+        cancelButtonText: 'Cancel',
         type: 'warning'
       }).then(() => {
         this.addAllLoading = true
@@ -255,7 +255,7 @@ export default {
           .then(() => {
             this.$message.success({
               showClose: true,
-              message: '保存成功'
+              message: 'Saved successfully'
             })
             this.getChannelList()
           })
@@ -286,7 +286,7 @@ export default {
           .then(() => {
             this.$message.success({
               showClose: true,
-              message: '保存成功'
+              message: 'Saved successfully'
             })
             this.initData()
           })
@@ -316,7 +316,7 @@ export default {
           .then(() => {
             this.$message.success({
               showClose: true,
-              message: '保存成功'
+              message: 'Saved successfully'
             })
             this.initData()
           })
@@ -339,7 +339,7 @@ export default {
       if (channels.length === 0) {
         this.$message.info({
           showClose: true,
-          message: '请选择通道'
+          message: 'Please select channel'
         })
         return
       }
@@ -351,7 +351,7 @@ export default {
         .then(() => {
           this.$message.success({
             showClose: true,
-            message: '保存成功'
+            message: 'Saved successfully'
           })
           this.getChannelList()
         })
@@ -366,10 +366,10 @@ export default {
         })
     },
     removeAll: function(row) {
-      this.$confirm('确定全部移除？', '提示', {
+      this.$confirm('Confirm to remove all？', 'Tips', {
         dangerouslyUseHTMLString: true,
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+        confirmButtonText: 'OK',
+        cancelButtonText: 'Cancel',
         type: 'warning'
       }).then(() => {
         this.removeAllLoading = true
@@ -380,7 +380,7 @@ export default {
           .then(() => {
             this.$message.success({
               showClose: true,
-              message: '保存成功'
+              message: 'Saved successfully'
             })
             this.getChannelList()
           })
@@ -401,7 +401,7 @@ export default {
         .then(() => {
           this.$message.success({
             showClose: true,
-            message: '保存成功'
+            message: 'Saved successfully'
           })
           this.initData()
         })

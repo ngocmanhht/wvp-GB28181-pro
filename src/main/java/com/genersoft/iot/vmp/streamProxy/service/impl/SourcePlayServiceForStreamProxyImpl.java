@@ -22,7 +22,7 @@ public class SourcePlayServiceForStreamProxyImpl implements ISourcePlayService {
 
     @Override
     public void play(CommonGBChannel channel, Platform platform, Boolean record, ErrorCallback<StreamInfo> callback) {
-        // 拉流代理通道
+        // Pull proxy channel
         try {
             playService.start(channel.getDataDeviceId(), record, callback);
         }catch (Exception e) {
@@ -32,11 +32,11 @@ public class SourcePlayServiceForStreamProxyImpl implements ISourcePlayService {
 
     @Override
     public void stopPlay(CommonGBChannel channel) {
-        // 拉流代理通道
+        // Pull proxy channel
         try {
             playService.stop(channel.getDataDeviceId());
         }catch (Exception e) {
-            log.error("[停止点播失败] {}({})", channel.getGbName(), channel.getGbDeviceId(), e);
+            log.error("[Failed to stop on demand] {}({})", channel.getGbName(), channel.getGbDeviceId(), e);
         }
     }
 

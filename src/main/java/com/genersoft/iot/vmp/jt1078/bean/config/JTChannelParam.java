@@ -9,14 +9,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 单独视频通道参数设置
+ * Individual video channel parameter settings
  */
 @Setter
 @Getter
 public class JTChannelParam implements JTDeviceSubConfig {
 
     /**
-     * 单独通道视频参数设置列表
+     * Individual channel video parameter setting list
      */
     private List<JTAloneChanel> jtAloneChanelList;
 

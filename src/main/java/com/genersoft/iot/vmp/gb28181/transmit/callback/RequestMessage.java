@@ -3,9 +3,9 @@ package com.genersoft.iot.vmp.gb28181.transmit.callback;
 import lombok.Data;
 
 /**
- * @description: 请求信息定义   
+ * @description: Request information definition   
  * @author: swwheihei
- * @date:   2020年5月8日 下午1:09:18     
+ * @date:   2020May 8, 2018, afternoon1:09:18     
  */
 @Data
 public class RequestMessage {

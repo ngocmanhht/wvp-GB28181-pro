@@ -68,7 +68,7 @@ public class RecordInfoQueryMessageHandler extends SIPRequestProcessorParent imp
         try {
             responseAck((SIPRequest) evt.getRequest(), Response.OK);
         } catch (SipException | InvalidArgumentException | ParseException e) {
-            log.error("[命令发送失败] 回复200 OK: {}", e.getMessage());
+            log.error("[Command sending failed] Reply200 OK: {}", e.getMessage());
         }
     }
 
@@ -101,75 +101,75 @@ public class RecordInfoQueryMessageHandler extends SIPRequestProcessorParent imp
             type =  typeElement.getText();
         }
 
-        // 向国标设备请求录像数据
+        // Request video data from national standard equipment
         CommonGBChannel channel = channelService.queryOneWithPlatform(platform.getId(), channelId);
         if (channel == null) {
-            log.info("[平台查询录像记录] 未找到通道 {}/{}", platform.getName(), channelId );
+            log.info("[Platform query video records] Channel not found {}/{}", platform.getName(), channelId );
             try {
                 responseAck(request, Response.BAD_REQUEST);
             } catch (SipException | InvalidArgumentException | ParseException e) {
-                log.error("[命令发送失败] [平台查询录像记录] 未找到通道: {}", e.getMessage());
+                log.error("[Command sending failed] [Platform query video records] Channel not found: {}", e.getMessage());
             }
             return;
         }
         if (channel.getDataType() == ChannelDataType.GB28181) {
             Device device = deviceService.getDevice(channel.getDataDeviceId());
             if (device == null) {
-                log.warn("[平台查询录像记录] 未找到通道对应的设备 {}/{}", platform.getName(), channelId );
+                log.warn("[Platform query video records] The device corresponding to the channel was not found {}/{}", platform.getName(), channelId );
                 try {
                     responseAck(request, Response.BAD_REQUEST);
                 } catch (SipException | InvalidArgumentException | ParseException e) {
-                    log.error("[命令发送失败] [平台查询录像记录] 未找到通道对应的设备: {}", e.getMessage());
+                    log.error("[Command sending failed] [Platform query video records] The device corresponding to the channel was not found: {}", e.getMessage());
                 }
                 return;
             }
-            // 获取通道的原始信息
+            // Get the original information of the channel
             DeviceChannel deviceChannel = deviceChannelService.getOneForSourceById(channel.getGbId());
-            // 接收录像数据
+            // Receive video data
             recordInfoEventListener.addEndEventHandler(device.getDeviceId(), deviceChannel.getDeviceId(), (recordInfo)->{
                 try {
-                    log.info("[国标级联] 录像查询收到数据， 通道： {}，准备转发===", channelId);
+                    log.info("[National standard cascade] Recording query received data, channel： {}，Ready to forward===", channelId);
                     cmderFroPlatform.recordInfo(channel, platform, request.getFromTag(), recordInfo);
                 } catch (SipException | InvalidArgumentException | ParseException e) {
-                    log.error("[命令发送失败] 国标级联 回复录像数据: {}", e.getMessage());
+                    log.error("[Command sending failed] National standard cascade reply to video data: {}", e.getMessage());
                 }
             });
             try {
                 commander.recordInfoQuery(device, deviceChannel.getDeviceId(), DateUtil.ISO8601Toyyyy_MM_dd_HH_mm_ss(startTime),
                         DateUtil.ISO8601Toyyyy_MM_dd_HH_mm_ss(endTime), sn, secrecy, type, (eventResult -> {
-                            // 回复200 OK
+                            // Reply200 OK
                             try {
                                 responseAck(request, Response.OK);
                             } catch (SipException | InvalidArgumentException | ParseException e) {
-                                log.error("[命令发送失败] 录像查询回复: {}", e.getMessage());
+                                log.error("[Command sending failed] Video inquiry reply: {}", e.getMessage());
                             }
                         }),(eventResult -> {
-                            // 查询失败 - 校验statusCode合法性，防止非法状态码导致IllegalArgumentException
+                            // Query failed - Verify the legality of statusCode to prevent illegal status codes from causingIllegalArgumentException
                             try {
                                 int statusCode = eventResult.statusCode;
                                 if (statusCode < 100 || statusCode > 699) {
-                                    log.warn("[录像查询失败] 收到非法SIP状态码: {}，通道: {}/{}，消息: {}，已替换为500",
+                                    log.warn("[Video query failed] Illegal SIP status code received: {}，channel: {}/{}，news: {}，Replaced with500",
                                             statusCode, platform.getName(), channelId, eventResult.msg);
                                     statusCode = Response.SERVER_INTERNAL_ERROR; // 500
                                 }
                                 responseAck(request, statusCode, eventResult.msg);
                             } catch (SipException | InvalidArgumentException | ParseException e) {
-                                log.error("[命令发送失败] 录像查询回复: {}", e.getMessage());
+                                log.error("[Command sending failed] Video inquiry reply: {}", e.getMessage());
                             } catch (Exception e) {
-                                // 兜底捕获所有异常，防止异常逃逸到Spring调度层导致无限重试
-                                log.error("[录像查询] 未预期的异常，通道: {}/{}: {}",
+                                // Catch all exceptions to prevent them from escaping to the Spring scheduling layer and causing infinite retries.
+                                log.error("[Video query] Unexpected exception, channel: {}/{}: {}",
                                         platform.getName(), channelId, e.getMessage(), e);
                             }
                         }));
             } catch (InvalidArgumentException | ParseException | SipException e) {
-                log.error("[命令发送失败] 录像查询: {}", e.getMessage());
+                log.error("[Command sending failed] Video query: {}", e.getMessage());
             }
         }else {
-            // 回复200 OK
+            // Reply200 OK
             try {
                 responseAck(request, Response.OK);
             } catch (SipException | InvalidArgumentException | ParseException e) {
-                log.error("[命令发送失败] 录像查询回复: {}", e.getMessage());
+                log.error("[Command sending failed] Video inquiry reply: {}", e.getMessage());
             }
 
             playService.queryRecord(channel, DateUtil.ISO8601Toyyyy_MM_dd_HH_mm_ss(startTime),
@@ -198,10 +198,10 @@ public class RecordInfoQueryMessageHandler extends SIPRequestProcessorParent imp
                 recordInfo.setRecordList(recordList);
 
                 try {
-                    log.info("[国标级联] 录像查询收到数据， 通道： {}，准备转发===", channelId);
+                    log.info("[National standard cascade] Recording query received data, channel： {}，Ready to forward===", channelId);
                     cmderFroPlatform.recordInfo(channel, platform, request.getFromTag(), recordInfo);
                 } catch (SipException | InvalidArgumentException | ParseException e) {
-                    log.error("[命令发送失败] 国标级联 回复录像数据: {}", e.getMessage());
+                    log.error("[Command sending failed] National standard cascade reply to video data: {}", e.getMessage());
                 }
             });
         }
@@ -213,11 +213,11 @@ public class RecordInfoQueryMessageHandler extends SIPRequestProcessorParent imp
 //
 //
 //        if (channel.getDataType() != ChannelDataType.GB28181) {
-//            log.info("[平台查询录像记录] 只支持查询国标28181的录像数据 {}/{}", platform.getName(), channelId );
+//            log.info("[Platform query video records] Only supports querying the video data of national standard 28181 {}/{}", platform.getName(), channelId );
 //            try {
-//                responseAck(request, Response.NOT_IMPLEMENTED); // 回复未实现
+//                responseAck(request, Response.NOT_IMPLEMENTED); // Reply not implemented
 //            } catch (SipException | InvalidArgumentException | ParseException e) {
-//                log.error("[命令发送失败] 平台查询录像记录: {}", e.getMessage());
+//                log.error("[Command sending failed] Platform query video records: {}", e.getMessage());
 //            }
 //            return;
 //        }

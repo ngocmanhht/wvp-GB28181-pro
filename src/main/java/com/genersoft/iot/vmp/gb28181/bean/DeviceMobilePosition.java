@@ -15,7 +15,7 @@ import java.util.List;
 import static com.genersoft.iot.vmp.gb28181.utils.XmlUtil.getText;
 
 /**
- * 国标设备移动位置
+ * National standard equipment mobile location
  */
 
 @Slf4j
@@ -24,7 +24,7 @@ import static com.genersoft.iot.vmp.gb28181.utils.XmlUtil.getText;
 public class DeviceMobilePosition extends MobilePosition{
 
     /**
-     * 通道数据库自增Id
+     * Channel database auto-incrementId
      */
     private String channelDeviceId;
 
@@ -49,7 +49,7 @@ public class DeviceMobilePosition extends MobilePosition{
         }else {
             Long timestamp = SipUtils.parseTimeForTimestamp(time);
             if(timestamp == null) {
-                log.warn("解析移动位置时间失败：{}， 使用当前时间", time);
+                log.warn("Failed to parse mobile location time：{}， Use current time", time);
                 mobilePosition.setTimestamp(System.currentTimeMillis());
             }else {
                 mobilePosition.setTimestamp(timestamp);

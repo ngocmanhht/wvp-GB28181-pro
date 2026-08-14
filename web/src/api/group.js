@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-// 分组API
+// GroupAPI
 
 export function update(data) {
   return request({

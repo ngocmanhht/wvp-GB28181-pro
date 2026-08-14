@@ -6,21 +6,21 @@ import lombok.Setter;
 
 @Setter
 @Getter
-@Schema(description = "人工确认报警类型")
+@Schema(description = "Manual confirmation alarm type")
 public class JTConfirmationAlarmMessageType {
-    @Schema(description = "确认紧急报警")
+    @Schema(description = "Confirm emergency alarm")
     private boolean urgent;
-    @Schema(description = "确认危险预警")
+    @Schema(description = "Confirm danger warning")
     private boolean alarmDangerous;
-    @Schema(description = "确认进出区域报警")
+    @Schema(description = "Confirm entry and exit area alarm")
     private boolean alarmRegion;
-    @Schema(description = "确认进出路线报警")
+    @Schema(description = "Confirm entry and exit route alarm")
     private boolean alarmRoute;
-    @Schema(description = "确认路段行驶时间不足/过长报警")
+    @Schema(description = "Confirm that the road segment travel time is insufficient/Alarm if too long")
     private boolean alarmTravelTime;
-    @Schema(description = "确认车辆非法点火报警")
+    @Schema(description = "Confirm vehicle illegal ignition alarm")
     private boolean alarmIllegalIgnition;
-    @Schema(description = "确认车辆非法位移报警")
+    @Schema(description = "Confirm vehicle illegal displacement alarm")
     private boolean alarmIllegalDisplacement;
 
     public long encode(){

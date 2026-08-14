@@ -11,7 +11,7 @@ import lombok.Setter;
 import java.util.List;
 
 /**
- * 设置多边形区域
+ * Set polygon area
  */
 @Setter
 @Getter
@@ -19,7 +19,7 @@ import java.util.List;
 public class J8604 extends Rs {
 
     /**
-     * 多边形区域
+     * polygon area
      */
     private JTPolygonArea polygonArea;
 

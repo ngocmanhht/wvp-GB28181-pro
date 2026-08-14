@@ -9,24 +9,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 音视频通道列表设置
+ * Audio and video channel list settings
  */
 @Setter
 @Getter
 public class JTChannelListParam implements JTDeviceSubConfig{
 
     /**
-     * 音视频通道总数
+     * Total number of audio and video channels
      */
     private int videoAndAudioCount;
 
     /**
-     * 音频通道总数
+     * Total number of audio channels
      */
     private int audioCount;
 
     /**
-     * 视频通道总数
+     * Total number of video channels
      */
     private int videoCount;
 

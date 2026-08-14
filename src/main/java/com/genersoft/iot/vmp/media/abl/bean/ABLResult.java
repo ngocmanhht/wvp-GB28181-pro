@@ -27,7 +27,7 @@ public class ABLResult {
     public static ABLResult getFailForMediaServer() {
         ABLResult zlmResult = new ABLResult();
         zlmResult.setCode(-2);
-        zlmResult.setMemo("流媒体调用失败");
+        zlmResult.setMemo("Streaming media call failed");
         return zlmResult;
     }
 

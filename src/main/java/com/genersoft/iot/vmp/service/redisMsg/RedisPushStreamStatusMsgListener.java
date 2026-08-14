@@ -22,11 +22,11 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 
 /**
- * 接收redis发送的推流设备上线下线通知
+ * Receive online and offline notifications of streaming devices sent by redis
  *
  * @author lin
- * 发送 PUBLISH VM_MSG_PUSH_STREAM_STATUS_CHANGE '{"setAllOffline":false,"offlineStreams":[{"app":"1000","stream":"10000022","timeStamp":1726729716551}]}'
- * 订阅 SUBSCRIBE VM_MSG_PUSH_STREAM_STATUS_CHANGE
+ * send PUBLISH VM_MSG_PUSH_STREAM_STATUS_CHANGE '{"setAllOffline":false,"offlineStreams":[{"app":"1000","stream":"10000022","timeStamp":1726729716551}]}'
+ * Subscribe SUBSCRIBE VM_MSG_PUSH_STREAM_STATUS_CHANGE
  */
 @Slf4j
 @Component
@@ -48,7 +48,7 @@ public class RedisPushStreamStatusMsgListener implements MessageListener, Applic
 
     @Override
     public void onMessage(Message message, byte[] bytes) {
-        log.info("[REDIS: 推流设备状态变化]： {}", new String(message.getBody()));
+        log.info("[REDIS: Push device status changes]： {}", new String(message.getBody()));
         taskQueue.offer(message);
     }
 
@@ -72,30 +72,30 @@ public class RedisPushStreamStatusMsgListener implements MessageListener, Applic
             try {
                 PushStreamStatusChangeFromRedisDto streamStatusMessage = JSON.parseObject(msg.getBody(), PushStreamStatusChangeFromRedisDto.class);
                 if (streamStatusMessage == null) {
-                    log.warn("[REDIS消息]推流设备状态变化消息解析失败");
+                    log.warn("[REDISnews]Failed to parse push device status change message");
                     continue;
                 }
-                // 取消定时任务
+                // Cancel scheduled tasks
                 dynamicTask.stop(VideoManagerConstants.VM_MSG_GET_ALL_ONLINE_REQUESTED);
                 if (streamStatusMessage.isSetAllOffline()) {
-                    // 所有设备离线
+                    // All devices offline
                     streamPushService.allOfflineForRedisMsg();
                 }
                 if (streamStatusMessage.getOfflineStreams() != null
                         && !streamStatusMessage.getOfflineStreams().isEmpty()) {
-                    // 更新部分设备离线
-                    log.info("[REDIS: 推流设备状态变化] 更新部分设备离线： {}个", streamStatusMessage.getOfflineStreams().size());
+                    // Update some devices offline
+                    log.info("[REDIS: Push device status changes] Update some devices offline： {}a", streamStatusMessage.getOfflineStreams().size());
                     streamPushService.offlineforRedisMsg(streamStatusMessage.getOfflineStreams());
                 }
                 if (streamStatusMessage.getOnlineStreams() != null &&
                         !streamStatusMessage.getOnlineStreams().isEmpty()) {
-                    // 更新部分设备上线
-                    log.info("[REDIS: 推流设备状态变化] 更新部分设备上线： {}个", streamStatusMessage.getOnlineStreams().size());
+                    // Update some devices online
+                    log.info("[REDIS: Push device status changes] Update some devices online： {}a", streamStatusMessage.getOnlineStreams().size());
                     streamPushService.onlineForRedisMsg(streamStatusMessage.getOnlineStreams());
                 }
             } catch (Exception e) {
-                log.warn("[REDIS消息-推流设备状态变化] 发现未处理的异常, \r\n{}", JSON.parseObject(msg.getBody()));
-                log.error("[REDIS消息-推流设备状态变化] 异常内容： ", e);
+                log.warn("[REDISnews-Push device status changes] Unhandled exception found, \r\n{}", JSON.parseObject(msg.getBody()));
+                log.error("[REDISnews-Push device status changes] Unusual content： ", e);
             }
         }
     }
@@ -105,16 +105,16 @@ public class RedisPushStreamStatusMsgListener implements MessageListener, Applic
         if (userSetting.getUsePushingAsStatus()) {
             return;
         }
-        // 查询是否存在推流设备,没有则不发送
+        // Query whether there is a streaming device, if not, it will not be sent.
         List<String> allAppAndStream = streamPushService.getAllAppAndStream();
         if (allAppAndStream == null || allAppAndStream.isEmpty()) {
             return;
         }
-        //  启动时设置所有推流通道离线，发起查询请求
+        //  Set all push channels offline at startup and initiate a query request
         redisCatchStorage.sendStreamPushRequestedMsgForStatus();
         dynamicTask.startDelay(VideoManagerConstants.VM_MSG_GET_ALL_ONLINE_REQUESTED, () -> {
-            log.info("[REDIS消息]未收到redis回复推流设备状态，执行推流设备离线");
-            // 五秒收不到请求就设置通道离线，然后通知上级离线
+            log.info("[REDISnews]The push device status was not received from redis, and the push device was offline.");
+            // If no request is received within five seconds, set the channel offline and then notify the superior to go offline.
             streamPushService.allOfflineForRedisMsg();
         }, 5000);
     }

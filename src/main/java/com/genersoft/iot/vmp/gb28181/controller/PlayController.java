@@ -47,7 +47,7 @@ import java.util.UUID;
 /**
  * @author lin
  */
-@Tag(name  = "国标设备点播")
+@Tag(name  = "National standard equipment on demand")
 @Slf4j
 @RestController
 @RequestMapping("/api/play")
@@ -77,30 +77,30 @@ public class PlayController {
 	@Autowired
 	private IDeviceChannelService deviceChannelService;
 
-	@Operation(summary = "开始点播", security = @SecurityRequirement(name = JwtUtils.HEADER))
-	@Parameter(name = "deviceId", description = "设备国标编号", required = true)
-	@Parameter(name = "channelId", description = "通道国标编号", required = true)
+	@Operation(summary = "Start on demand", security = @SecurityRequirement(name = JwtUtils.HEADER))
+	@Parameter(name = "deviceId", description = "Equipment national standard number", required = true)
+	@Parameter(name = "channelId", description = "Channel national standard number", required = true)
 	@GetMapping("/start/{deviceId}/{channelId}")
 	public DeferredResult<WVPResult<StreamContent>> play(HttpServletRequest request, @PathVariable String deviceId,
 														 @PathVariable String channelId) {
 
-		log.info("[开始点播] deviceId：{}, channelId：{}, ", deviceId, channelId);
-		Assert.notNull(deviceId, "设备国标编号不可为NULL");
-		Assert.notNull(channelId, "通道国标编号不可为NULL");
-		// 获取可用的zlm
+		log.info("[Start on demand] deviceId：{}, channelId：{}, ", deviceId, channelId);
+		Assert.notNull(deviceId, "The equipment national standard number cannot beNULL");
+		Assert.notNull(channelId, "The national standard number of the channel cannot beNULL");
+		// Get availablezlm
 		Device device = deviceService.getDeviceByDeviceId(deviceId);
-		Assert.notNull(device, "设备不存在");
+		Assert.notNull(device, "Device does not exist");
 		DeviceChannel channel = deviceChannelService.getOne(deviceId, channelId);
-		Assert.notNull(channel, "通道不存在");
+		Assert.notNull(channel, "Channel does not exist");
 
 		DeferredResult<WVPResult<StreamContent>> result = new DeferredResult<>(userSetting.getPlayTimeout().longValue());
 
 		result.onTimeout(()->{
-			log.info("[点播等待超时] deviceId：{}, channelId：{}, ", deviceId, channelId);
-			// 释放rtpserver
+			log.info("[On-demand waiting timeout] deviceId：{}, channelId：{}, ", deviceId, channelId);
+			// releasertpserver
 			WVPResult<StreamContent> wvpResult = new WVPResult<>();
 			wvpResult.setCode(ErrorCode.ERROR100.getCode());
-			wvpResult.setMsg("点播超时");
+			wvpResult.setMsg("On-demand timeout");
 			result.setResult(wvpResult);
 
 			inviteStreamService.removeInviteInfoByDeviceAndChannel(InviteSessionType.PLAY, channel.getId());
@@ -115,7 +115,7 @@ public class PlayController {
 
 				if (streamInfo != null) {
 					if (userSetting.getUseSourceIpAsStreamIp()) {
-						streamInfo=streamInfo.clone();//深拷贝
+						streamInfo=streamInfo.clone();//deep copy
 						String host;
 						try {
 							URL url=new URL(request.getRequestURL().toString());
@@ -143,13 +143,13 @@ public class PlayController {
 		return result;
 	}
 
-	@Operation(summary = "停止点播", security = @SecurityRequirement(name = JwtUtils.HEADER))
-	@Parameter(name = "deviceId", description = "设备国标编号", required = true)
-	@Parameter(name = "channelId", description = "通道国标编号", required = true)
+	@Operation(summary = "Stop on demand", security = @SecurityRequirement(name = JwtUtils.HEADER))
+	@Parameter(name = "deviceId", description = "Equipment national standard number", required = true)
+	@Parameter(name = "channelId", description = "Channel national standard number", required = true)
 	@GetMapping("/stop/{deviceId}/{channelId}")
 	public JSONObject playStop(@PathVariable String deviceId, @PathVariable String channelId) {
 
-		log.debug(String.format("设备预览/回放停止API调用，streamId：%s_%s", deviceId, channelId ));
+		log.debug(String.format("Device preview/Playback stop API call，streamId：%s_%s", deviceId, channelId ));
 
 		if (deviceId == null || channelId == null) {
 			throw new ControllerException(ErrorCode.ERROR400);
@@ -157,8 +157,8 @@ public class PlayController {
 
 		Device device = deviceService.getDeviceByDeviceId(deviceId);
 		DeviceChannel channel = deviceChannelService.getOneForSource(deviceId, channelId);
-		Assert.notNull(device, "设备不存在");
-		Assert.notNull(channel, "通道不存在");
+		Assert.notNull(device, "Device does not exist");
+		Assert.notNull(channel, "Channel does not exist");
 		String streamId = String.format("%s_%s", device.getDeviceId(), channel.getDeviceId());
 		playService.stop(InviteSessionType.PLAY, device, channel, streamId);
 		JSONObject json = new JSONObject();
@@ -167,19 +167,19 @@ public class PlayController {
 		return json;
 	}
 	/**
-	 * 结束转码
+	 * End transcoding
 	 */
-	@Operation(summary = "结束转码", security = @SecurityRequirement(name = JwtUtils.HEADER))
-	@Parameter(name = "key", description = "视频流key", required = true)
-	@Parameter(name = "mediaServerId", description = "流媒体服务ID", required = true)
+	@Operation(summary = "End transcoding", security = @SecurityRequirement(name = JwtUtils.HEADER))
+	@Parameter(name = "key", description = "video streamingkey", required = true)
+	@Parameter(name = "mediaServerId", description = "streaming servicesID", required = true)
 	@PostMapping("/convertStop/{key}")
 	public void playConvertStop(@PathVariable String key, String mediaServerId) {
 		if (mediaServerId == null) {
-			throw new ControllerException(ErrorCode.ERROR400.getCode(), "流媒体：" + mediaServerId + "不存在" );
+			throw new ControllerException(ErrorCode.ERROR400.getCode(), "streaming media：" + mediaServerId + "does not exist" );
 		}
 		MediaServer mediaInfo = mediaServerService.getOne(mediaServerId);
 		if (mediaInfo == null) {
-			throw new ControllerException(ErrorCode.ERROR100.getCode(), "使用的流媒体已经停止运行" );
+			throw new ControllerException(ErrorCode.ERROR100.getCode(), "The streamer being used has stopped running" );
 		}else {
 			Boolean deleted = mediaServerService.delFFmpegSource(mediaInfo, key);
 			if (!deleted) {
@@ -188,42 +188,42 @@ public class PlayController {
 		}
 	}
 
-	@Operation(summary = "语音广播命令", security = @SecurityRequirement(name = JwtUtils.HEADER))
-	@Parameter(name = "deviceId", description = "设备国标编号", required = true)
-	@Parameter(name = "deviceId", description = "通道国标编号", required = true)
-	@Parameter(name = "timeout", description = "推流超时时间(秒)", required = true)
+	@Operation(summary = "Voice broadcast command", security = @SecurityRequirement(name = JwtUtils.HEADER))
+	@Parameter(name = "deviceId", description = "Equipment national standard number", required = true)
+	@Parameter(name = "deviceId", description = "Channel national standard number", required = true)
+	@Parameter(name = "timeout", description = "Push timeout(seconds)", required = true)
 	@GetMapping("/broadcast/{deviceId}/{channelId}")
 	@PostMapping("/broadcast/{deviceId}/{channelId}")
     public AudioBroadcastResult broadcastApi(@PathVariable String deviceId, @PathVariable String channelId, Integer timeout, Boolean broadcastMode) {
 		if (log.isDebugEnabled()) {
-			log.debug("语音广播API调用");
+			log.debug("Voice broadcast API call");
 		}
 
 		return playService.audioBroadcast(deviceId, channelId, broadcastMode);
 
 	}
 
-	@Operation(summary = "停止语音广播")
-	@Parameter(name = "deviceId", description = "设备Id", required = true)
-	@Parameter(name = "channelId", description = "通道Id", required = true)
+	@Operation(summary = "Stop voice broadcast")
+	@Parameter(name = "deviceId", description = "EquipmentId", required = true)
+	@Parameter(name = "channelId", description = "channelId", required = true)
 	@GetMapping("/broadcast/stop/{deviceId}/{channelId}")
 	@PostMapping("/broadcast/stop/{deviceId}/{channelId}")
 	public void stopBroadcast(@PathVariable String deviceId, @PathVariable String channelId) {
 		if (log.isDebugEnabled()) {
-			log.debug("停止语音广播API调用");
+			log.debug("Stop voice broadcast API call");
 		}
 		Device device = deviceService.getDeviceByDeviceId(deviceId);
-		Assert.notNull(device, "设备不存在");
+		Assert.notNull(device, "Device does not exist");
 		DeviceChannel channel = deviceChannelService.getOne(deviceId, channelId);
-		Assert.notNull(channel, "通道不存在");
+		Assert.notNull(channel, "Channel does not exist");
 		playService.stopAudioBroadcast(device, channel);
 	}
 
-	@Operation(summary = "获取所有的ssrc", security = @SecurityRequirement(name = JwtUtils.HEADER))
+	@Operation(summary = "get allssrc", security = @SecurityRequirement(name = JwtUtils.HEADER))
 	@GetMapping("/ssrc")
 	public JSONObject getSSRC() {
 		if (log.isDebugEnabled()) {
-			log.debug("获取所有的ssrc");
+			log.debug("get allssrc");
 		}
 		JSONArray objects = new JSONArray();
 		List<SsrcTransaction> allSsrc = sessionManager.getAll();
@@ -242,13 +242,13 @@ public class PlayController {
 		return jsonObject;
 	}
 
-	@Operation(summary = "获取截图", security = @SecurityRequirement(name = JwtUtils.HEADER))
-	@Parameter(name = "deviceId", description = "设备国标编号", required = true)
-	@Parameter(name = "channelId", description = "通道国标编号", required = true)
+	@Operation(summary = "Get screenshot", security = @SecurityRequirement(name = JwtUtils.HEADER))
+	@Parameter(name = "deviceId", description = "Equipment national standard number", required = true)
+	@Parameter(name = "channelId", description = "Channel national standard number", required = true)
 	@GetMapping("/snap")
 	public DeferredResult<String> getSnap(String deviceId, String channelId) {
 		if (log.isDebugEnabled()) {
-			log.debug("获取截图: {}/{}", deviceId, channelId);
+			log.debug("Get screenshot: {}/{}", deviceId, channelId);
 		}
 
 		DeferredResult<String> result = new DeferredResult<>(3 * 1000L);

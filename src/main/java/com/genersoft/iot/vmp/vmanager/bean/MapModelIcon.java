@@ -6,13 +6,13 @@ import lombok.Data;
 @Data
 public class MapModelIcon {
 
-    @Schema(description = "名称")
+    @Schema(description = "Name")
     private String name;
 
-    @Schema(description = "别名")
+    @Schema(description = "Alias")
     private String alias;
 
-    @Schema(description = "路径")
+    @Schema(description = "path")
     private String path;
 
 

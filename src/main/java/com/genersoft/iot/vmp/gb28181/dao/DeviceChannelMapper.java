@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 用于存储设备通道信息
+ * Used to store device channel information
  */
 @Mapper
 @Repository

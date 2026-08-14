@@ -24,14 +24,14 @@ export default {
       chartSettings: {
         area: true,
         labelMap: {
-          'in': '下载',
-          'out': '上传'
+          'in': 'Download',
+          'out': 'upload'
         }
       },
       extend: {
         title: {
           show: true,
-          text: '网络',
+          text: 'network',
           left: 'center',
           top: 20
 
@@ -58,7 +58,7 @@ export default {
             console.log(parseFloat(data[0].data[1]).toFixed(2))
             console.log(parseFloat(data[1].data[1]).toFixed(2))
             console.log('############')
-            return '下载：' + parseFloat(data[0].data[1]).toFixed(2) + 'Mbps' + '</br> 上传：' + parseFloat(data[1].data[1]).toFixed(2) + 'Mbps'
+            return 'Download：' + parseFloat(data[0].data[1]).toFixed(2) + 'Mbps' + '</br> upload：' + parseFloat(data[1].data[1]).toFixed(2) + 'Mbps'
           }
         },
         legend: {

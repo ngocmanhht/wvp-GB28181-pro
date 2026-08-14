@@ -43,7 +43,7 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- * SIP命令类型： REGISTER请求
+ * SIPCommand type: REGISTER request
  */
 @Slf4j
 @Component
@@ -72,7 +72,7 @@ public class RegisterRequestProcessor extends SIPRequestProcessorParent implemen
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        // 添加消息处理的订阅
+        // Add message processing subscription
         sipProcessorObserver.addRequestProcessor(method, this);
     }
 
@@ -116,26 +116,26 @@ public class RegisterRequestProcessor extends SIPRequestProcessorParent implemen
                 cancellationHandler(device, request, remoteAddressInfo, deviceId, requestAddress);
             }
         } catch (SipException | NoSuchAlgorithmException | ParseException e) {
-            log.error("未处理的异常 ", e);
+            log.error("unhandled exception ", e);
         }
     }
 
     private Response getRegisterOkResponse(Request request) throws ParseException {
-        // 携带授权头并且密码正确
+        // Bring the authorization header and the password is correct
         Response response = getMessageFactory().createResponse(Response.OK, request);
-        // 如果主动禁用了Date头，则不添加
+        // If the Date header is actively disabled, it is not added
         if (!userSetting.isDisableDateHeader()) {
-            // 添加date头
+            // Add date header
             SIPDateHeader dateHeader = new SIPDateHeader();
-            // 使用自己修改的
+            // Use your own modified
             GbSipDate gbSipDate = new GbSipDate(Calendar.getInstance(Locale.ENGLISH).getTimeInMillis());
             dateHeader.setDate(gbSipDate);
             response.addHeader(dateHeader);
         }
 
-        // 添加Contact头
+        // Add Contact header
         response.addHeader(request.getHeader(ContactHeader.NAME));
-        // 添加Expires头
+        // Add Expires header
         response.addHeader(request.getExpires());
 
         return response;
@@ -146,7 +146,7 @@ public class RegisterRequestProcessor extends SIPRequestProcessorParent implemen
                                   String deviceId, String requestAddress) throws SipException, NoSuchAlgorithmException, ParseException {
         if (device != null && device.getSipTransactionInfo() != null &&
                 request.getCallIdHeader().getCallId().equals(device.getSipTransactionInfo().getCallId())) {
-            log.info("[注册续订] 设备：{}", device.getDeviceId());
+            log.info("[Registration renewal] Equipment：{}", device.getDeviceId());
             device.setExpires(request.getExpires().getExpires());
             device.setIp(remoteAddressInfo.getIp());
             device.setPort(remoteAddressInfo.getPort());
@@ -166,7 +166,7 @@ public class RegisterRequestProcessor extends SIPRequestProcessorParent implemen
         }
 
         if (device == null && ObjectUtils.isEmpty(sipConfig.getPassword())) {
-            log.info("[注册请求] 设备：{}, 地址: {}, 公共密码已经禁用，请添加用户信息后注册", deviceId, requestAddress);
+            log.info("[Registration request] Equipment：{}, address: {}, The public password has been disabled, please add user information and register", deviceId, requestAddress);
             Response response = getMessageFactory().createResponse(Response.FORBIDDEN, request);
             sipSender.transmitRequest(request.getLocalAddress().getHostAddress(), response);
             return;
@@ -175,7 +175,7 @@ public class RegisterRequestProcessor extends SIPRequestProcessorParent implemen
 
         AuthorizationHeader authHead = (AuthorizationHeader) request.getHeader(AuthorizationHeader.NAME);
         if (!ObjectUtils.isEmpty(password) && authHead == null) {
-            log.info("[注册请求] 设备：{}, 回复401: {}", deviceId, requestAddress);
+            log.info("[Registration request] Equipment：{}, Reply401: {}", deviceId, requestAddress);
             Response response = getMessageFactory().createResponse(Response.UNAUTHORIZED, request);
             new DigestServerAuthenticationHelper().generateChallenge(getHeaderFactory(), response, sipConfig.getDomain());
             sipSender.transmitRequest(request.getLocalAddress().getHostAddress(), response);
@@ -183,7 +183,7 @@ public class RegisterRequestProcessor extends SIPRequestProcessorParent implemen
         }
 
         if (!ObjectUtils.isEmpty(password) && !new DigestServerAuthenticationHelper().doAuthenticatePlainTextPassword(request, password)) {
-            log.info("[注册请求] 设备：{}, 密码/SIP服务器ID错误, 回复403: {}", deviceId, requestAddress);
+            log.info("[Registration request] Equipment：{}, Password/SIPWrong server ID, reply403: {}", deviceId, requestAddress);
             Response response = getMessageFactory().createResponse(Response.FORBIDDEN, request);
             response.setReasonPhrase("wrong password");
             sipSender.transmitRequest(request.getLocalAddress().getHostAddress(), response);
@@ -238,7 +238,7 @@ public class RegisterRequestProcessor extends SIPRequestProcessorParent implemen
         deviceService.online(device);
         redisCatchStorage.updateDeviceRegisterTimeStamp(List.of(device));
 
-        log.info("[注册成功] deviceId: {}->{}", deviceId, requestAddress);
+        log.info("[Registration successful] deviceId: {}->{}", deviceId, requestAddress);
     }
 
     private void cancellationHandler(Device device, SIPRequest request, RemoteAddressInfo remoteAddressInfo,
@@ -250,12 +250,12 @@ public class RegisterRequestProcessor extends SIPRequestProcessorParent implemen
             deviceService.offline(device);
             device.setRegisterTimeStamp(System.currentTimeMillis());
             redisCatchStorage.updateDeviceRegisterTimeStamp(List.of(device));
-            log.info("[注销成功] deviceId: {}->{}", deviceId, requestAddress);
+            log.info("[Logout successful] deviceId: {}->{}", deviceId, requestAddress);
             return;
         }
 
         if (device == null && ObjectUtils.isEmpty(sipConfig.getPassword())) {
-            log.info("[注销请求] 设备：{}, 地址: {}, 公共密码已经禁用，请添加用户信息后注销", deviceId, requestAddress);
+            log.info("[Logout request] Equipment：{}, address: {}, The public password has been disabled, please add user information and log out", deviceId, requestAddress);
             Response response = getMessageFactory().createResponse(Response.FORBIDDEN, request);
             sipSender.transmitRequest(request.getLocalAddress().getHostAddress(), response);
             return;
@@ -264,7 +264,7 @@ public class RegisterRequestProcessor extends SIPRequestProcessorParent implemen
 
         AuthorizationHeader authHead = (AuthorizationHeader) request.getHeader(AuthorizationHeader.NAME);
         if (!ObjectUtils.isEmpty(password) && authHead == null) {
-            log.info("[注销请求] 设备：{}, 回复401: {}", deviceId, requestAddress);
+            log.info("[Logout request] Equipment：{}, Reply401: {}", deviceId, requestAddress);
             Response response = getMessageFactory().createResponse(Response.UNAUTHORIZED, request);
             new DigestServerAuthenticationHelper().generateChallenge(getHeaderFactory(), response, sipConfig.getDomain());
             sipSender.transmitRequest(request.getLocalAddress().getHostAddress(), response);
@@ -272,7 +272,7 @@ public class RegisterRequestProcessor extends SIPRequestProcessorParent implemen
         }
 
         if (!ObjectUtils.isEmpty(password) && !new DigestServerAuthenticationHelper().doAuthenticatePlainTextPassword(request, password)) {
-            log.info("[注销请求] 设备：{}, 密码/SIP服务器ID错误, 回复403: {}", deviceId, requestAddress);
+            log.info("[Logout request] Equipment：{}, Password/SIPWrong server ID, reply403: {}", deviceId, requestAddress);
             Response response = getMessageFactory().createResponse(Response.FORBIDDEN, request);
             response.setReasonPhrase("wrong password");
             sipSender.transmitRequest(request.getLocalAddress().getHostAddress(), response);
@@ -288,7 +288,7 @@ public class RegisterRequestProcessor extends SIPRequestProcessorParent implemen
             redisCatchStorage.updateDeviceRegisterTimeStamp(List.of(device));
         }
 
-        log.info("[注销成功] deviceId: {}->{}", deviceId, requestAddress);
+        log.info("[Logout successful] deviceId: {}->{}", deviceId, requestAddress);
     }
 
 }

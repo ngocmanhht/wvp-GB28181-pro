@@ -1,33 +1,33 @@
 package com.genersoft.iot.vmp.conf.redis.bean;
 
 /**
- * 通过redis发送请求
+ * Send request through redis
  */
 public class RedisRpcRequest {
 
     /**
-     * 来自的WVP ID
+     * fromWVP ID
      */
     private String fromId;
 
 
     /**
-     * 目标的WVP ID
+     * TargetedWVP ID
      */
     private String toId;
 
     /**
-     * 序列号
+     * serial number
      */
     private long sn;
 
     /**
-     * 访问的路径
+     * access path
      */
     private String uri;
 
     /**
-     * 参数
+     * parameters
      */
     private Object param;
 

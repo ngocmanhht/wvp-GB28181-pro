@@ -14,7 +14,7 @@ import org.springframework.util.ObjectUtils;
 
 
 @Data
-@Schema(description = "推流信息")
+@Schema(description = "push information")
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 public class StreamPush extends CommonGBChannel implements Comparable<StreamPush>{
@@ -26,81 +26,81 @@ public class StreamPush extends CommonGBChannel implements Comparable<StreamPush
     private Integer id;
 
     /**
-     * 应用名
+     * Application name
      */
-    @Schema(description = "应用名")
+    @Schema(description = "Application name")
     private String app;
 
     /**
-     * 流id
+     * flowid
      */
-    @Schema(description = "流id")
+    @Schema(description = "flowid")
     private String stream;
 
     /**
-     * 使用的流媒体ID
+     * Streaming media usedID
      */
-    @Schema(description = "使用的流媒体ID")
+    @Schema(description = "Streaming media usedID")
     private String mediaServerId;
 
     /**
-     * 使用的服务ID
+     * Services usedID
      */
-    @Schema(description = "使用的服务ID")
+    @Schema(description = "Services usedID")
     private String serverId;
 
     /**
-     * 推流时间
+     * Push time
      */
-    @Schema(description = "推流时间")
+    @Schema(description = "Push time")
     private String pushTime;
 
     /**
-     * 更新时间
+     * Update time
      */
-    @Schema(description = "更新时间")
+    @Schema(description = "Update time")
     private String updateTime;
 
     /**
-     * 创建时间
+     * creation time
      */
-    @Schema(description = "创建时间")
+    @Schema(description = "creation time")
     private String createTime;
 
     /**
-     * 是否正在推流
+     * Whether streaming is being pushed
      */
-    @Schema(description = "是否正在推流")
+    @Schema(description = "Whether streaming is being pushed")
     private boolean pushing;
 
     /**
-     * 拉起离线推流
+     * Pull up offline push flow
      */
-    @Schema(description = "拉起离线推流")
+    @Schema(description = "Pull up offline push flow")
     private boolean startOfflinePush;
 
     /**
-     * 速度,单位:km/h (可选)
+     * speed, unit:km/h (Optional)
      */
-    @Schema(description = "GPS的速度")
+    @Schema(description = "GPSspeed")
     private Double gpsSpeed;
 
     /**
-     * 方向,取值为当前摄像头方向与正北方的顺时针夹角,取值范围0°~360°,单位:(°)(可选)
+     * Direction, the value is the clockwise angle between the current camera direction and true north, the value range is 0°~360°, unit:(°)(Optional)
      */
-    @Schema(description = "GPS的方向")
+    @Schema(description = "GPSdirection")
     private Double gpsDirection;
 
     /**
-     * 海拔高度,单位:m(可选)
+     * Altitude, unit:m(Optional)
      */
-    @Schema(description = "GPS的海拔高度")
+    @Schema(description = "GPSaltitude")
     private Double gpsAltitude;
 
     /**
-     * GPS的更新时间
+     * GPSupdate time
      */
-    @Schema(description = "GPS的更新时间")
+    @Schema(description = "GPSupdate time")
     private String gpsTime;
 
     private String uniqueKey;

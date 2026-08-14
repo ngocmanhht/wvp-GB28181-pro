@@ -2,25 +2,25 @@
   <div id="streamProxyList" class="app-container">
     <div v-if="!streamProxy" style="height: calc(100vh - 124px);">
       <el-form :inline="true" size="mini">
-        <el-form-item label="搜索">
+        <el-form-item label="Search">
           <el-input
             v-model="searchStr"
             style="margin-right: 1rem; width: auto;"
-            placeholder="关键字"
+            placeholder="Keywords"
             prefix-icon="el-icon-search"
             clearable
             @input="queryList"
           />
         </el-form-item>
-        <el-form-item label="流媒体">
+        <el-form-item label="streaming media">
           <el-select
             v-model="mediaServerId"
             style="margin-right: 1rem;"
-            placeholder="请选择"
+            placeholder="Please select"
             default-first-option
             @change="queryList"
           >
-            <el-option label="全部" value="" />
+            <el-option label="All" value="" />
             <el-option
               v-for="item in mediaServerList"
               :key="item.id"
@@ -29,21 +29,21 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item label="拉流状态">
+        <el-form-item label="Pull state">
           <el-select
             v-model="pulling"
             style="margin-right: 1rem;"
-            placeholder="请选择"
+            placeholder="Please select"
             default-first-option
             @change="queryList"
           >
-            <el-option label="全部" value="" />
-            <el-option label="正在拉流" value="true" />
-            <el-option label="尚未拉流" value="false" />
+            <el-option label="All" value="" />
+            <el-option label="Streaming" value="true" />
+            <el-option label="Not yet streamed" value="false" />
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button icon="el-icon-plus" size="mini" style="margin-right: 1rem;" type="primary" @click="addStreamProxy">添加代理</el-button>
+          <el-button icon="el-icon-plus" size="mini" style="margin-right: 1rem;" type="primary" @click="addStreamProxy">Add proxy</el-button>
         </el-form-item>
         <el-form-item style="float: right;">
           <el-button icon="el-icon-refresh-right" circle @click="refresh()" />
@@ -51,60 +51,60 @@
       </el-form>
       <streamProxyPlayer ref="streamProxyPlayer" />
       <el-table size="small" :data="streamProxyList" style="width: 100%" height="calc(100% - 64px)">
-        <el-table-column prop="app" label="流应用名" min-width="120" show-overflow-tooltip />
-        <el-table-column prop="stream" label="流ID" min-width="120" show-overflow-tooltip />
-        <el-table-column label="流地址" min-width="250" show-overflow-tooltip>
+        <el-table-column prop="app" label="Streaming application name" min-width="120" show-overflow-tooltip />
+        <el-table-column prop="stream" label="flowID" min-width="120" show-overflow-tooltip />
+        <el-table-column label="stream address" min-width="250" show-overflow-tooltip>
           <template v-slot:default="scope">
             <div slot="reference" class="name-wrapper">
-              <el-tag v-clipboard="scope.row.srcUrl" size="medium" @success="$message({type:'success', message:'成功拷贝到粘贴板'})">
-                <i class="el-icon-document-copy" title="点击拷贝" />
+              <el-tag v-clipboard="scope.row.srcUrl" size="medium" @success="$message({type:'success', message:'Successfully copied to clipboard'})">
+                <i class="el-icon-document-copy" title="Click to copy" />
                 {{ scope.row.srcUrl }}
               </el-tag>
             </div>
           </template>
         </el-table-column>
-        <el-table-column prop="mediaServerId" label="流媒体" min-width="180" />
-        <el-table-column label="代理方式" width="100">
+        <el-table-column prop="mediaServerId" label="streaming media" min-width="180" />
+        <el-table-column label="Agency method" width="100">
           <template v-slot:default="scope">
             <div slot="reference" class="name-wrapper">
-              {{ scope.row.type === "default"? "默认":"FFMPEG代理" }}
+              {{ scope.row.type === "default"? "Default":"FFMPEGagent" }}
             </div>
           </template>
         </el-table-column>
 
-        <el-table-column prop="gbDeviceId" label="国标编码" min-width="180" show-overflow-tooltip />
-        <el-table-column label="拉流状态" min-width="100">
+        <el-table-column prop="gbDeviceId" label="National standard code" min-width="180" show-overflow-tooltip />
+        <el-table-column label="Pull state" min-width="100">
           <template v-slot:default="scope">
             <div slot="reference" class="name-wrapper">
-              <el-tag v-if="scope.row.pulling && myServerId !== scope.row.serverId" size="medium" style="border-color: #ecf1af">正在拉流</el-tag>
-              <el-tag v-if="scope.row.pulling && myServerId === scope.row.serverId" size="medium">正在拉流</el-tag>
-              <el-tag v-if="!scope.row.pulling" size="medium" type="info">尚未拉流</el-tag>
+              <el-tag v-if="scope.row.pulling && myServerId !== scope.row.serverId" size="medium" style="border-color: #ecf1af">Streaming</el-tag>
+              <el-tag v-if="scope.row.pulling && myServerId === scope.row.serverId" size="medium">Streaming</el-tag>
+              <el-tag v-if="!scope.row.pulling" size="medium" type="info">Not yet streamed</el-tag>
             </div>
           </template>
         </el-table-column>
-        <el-table-column label="启用" min-width="100">
+        <el-table-column label="enable" min-width="100">
           <template v-slot:default="scope">
             <div slot="reference" class="name-wrapper">
-              <el-tag v-if="scope.row.enable && myServerId !== scope.row.serverId" size="medium" style="border-color: #ecf1af">已启用</el-tag>
-              <el-tag v-if="scope.row.enable && myServerId === scope.row.serverId" size="medium">已启用</el-tag>
-              <el-tag v-if="!scope.row.enable" size="medium" type="info">未启用</el-tag>
+              <el-tag v-if="scope.row.enable && myServerId !== scope.row.serverId" size="medium" style="border-color: #ecf1af">Enabled</el-tag>
+              <el-tag v-if="scope.row.enable && myServerId === scope.row.serverId" size="medium">Enabled</el-tag>
+              <el-tag v-if="!scope.row.enable" size="medium" type="info">Not enabled</el-tag>
             </div>
           </template>
         </el-table-column>
-        <el-table-column prop="createTime" label="创建时间" min-width="150" show-overflow-tooltip />
-        <el-table-column label="操作" width="370" fixed="right">
+        <el-table-column prop="createTime" label="creation time" min-width="150" show-overflow-tooltip />
+        <el-table-column label="Operation" width="370" fixed="right">
           <template v-slot:default="scope">
-            <el-button size="medium" :loading="scope.row.playLoading" icon="el-icon-video-play" type="text" @click="play(scope.row)">播放</el-button>
+            <el-button size="medium" :loading="scope.row.playLoading" icon="el-icon-video-play" type="text" @click="play(scope.row)">play</el-button>
             <el-divider direction="vertical" />
-            <el-button v-if="scope.row.pulling" size="medium" icon="el-icon-switch-button" style="color: #f56c6c" type="text" @click="stopPlay(scope.row)">停止</el-button>
+            <el-button v-if="scope.row.pulling" size="medium" icon="el-icon-switch-button" style="color: #f56c6c" type="text" @click="stopPlay(scope.row)">stop</el-button>
             <el-divider v-if="scope.row.pulling" direction="vertical" />
             <el-button size="medium" icon="el-icon-edit" type="text" @click="edit(scope.row)">
-              编辑
+              Edit
             </el-button>
             <el-divider direction="vertical" />
-            <el-button size="medium" icon="el-icon-cloudy" type="text" @click="queryCloudRecords(scope.row)">云端录像</el-button>
+            <el-button size="medium" icon="el-icon-cloudy" type="text" @click="queryCloudRecords(scope.row)">Cloud recording</el-button>
             <el-divider direction="vertical" />
-            <el-button size="medium" icon="el-icon-delete" type="text" style="color: #f56c6c" @click="deleteStreamProxy(scope.row)">删除</el-button>
+            <el-button size="medium" icon="el-icon-delete" type="text" style="color: #f56c6c" @click="deleteStreamProxy(scope.row)">Delete</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -137,8 +137,8 @@ export default {
   data() {
     return {
       streamProxyList: [],
-      currentPusher: {}, // 当前操作设备对象
-      updateLooper: 0, // 数据刷新轮训标志
+      currentPusher: {}, // Current operating device object
+      updateLooper: 0, // Data refresh rotation training flag
       currentDeviceChannelsLenth: 0,
       currentPage: 1,
       count: 15,
@@ -267,16 +267,16 @@ export default {
       this.$router.push(`/cloudRecord/detail/${row.app}/${row.stream}`)
     },
     deleteStreamProxy: function(row) {
-      this.$confirm('确定删除此代理吗？', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+      this.$confirm('Are you sure you want to delete this agent?？', 'Tips', {
+        confirmButtonText: 'OK',
+        cancelButtonText: 'Cancel',
         type: 'warning'
       }).then(() => {
         this.$store.dispatch('streamProxy/remove', row.id)
           .then((data) => {
             this.$message.success({
               showClose: true,
-              message: '删除成功'
+              message: 'Delete successfully'
             })
             this.initData()
           })

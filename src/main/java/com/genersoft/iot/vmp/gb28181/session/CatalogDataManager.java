@@ -59,7 +59,7 @@ public class CatalogDataManager{
     }
 
     public void addReady(Device device, int sn ) {
-        // 清除该设备的所有旧条目
+        // Clear all old entries for this device
         Iterator<Map.Entry<String, CatalogData>> it = dataMap.entrySet().iterator();
         while (it.hasNext()) {
             Map.Entry<String, CatalogData> entry = it.next();
@@ -103,7 +103,7 @@ public class CatalogDataManager{
                     List<Region> regionList, List<Group> groupList) {
         CatalogData catalogData = dataMap.get(buildMapKey(device.getDeviceId(),sn));
         if (catalogData == null ) {
-            log.warn("[缓存-Catalog] 未找到缓存对象，可能已经结束");
+            log.warn("[cache-Catalog] Cache object not found, may have ended");
             return;
         }
         catalogData.setStatus(CatalogData.CatalogDataStatus.runIng);
@@ -139,7 +139,7 @@ public class CatalogDataManager{
         List<DeviceChannel> result = new ArrayList<>();
         CatalogData catalogData = dataMap.get(buildMapKey(deviceId,sn));
         if (catalogData == null ) {
-            log.warn("[Redis-Catalog] 未找到缓存对象，可能已经结束");
+            log.warn("[Redis-Catalog] Cache object not found, may have ended");
             return result;
         }
         for (String objectKey : catalogData.getRedisKeysForChannel()) {
@@ -155,7 +155,7 @@ public class CatalogDataManager{
         List<Region> result = new ArrayList<>();
         CatalogData catalogData = dataMap.get(buildMapKey(deviceId,sn));
         if (catalogData == null ) {
-            log.warn("[Redis-Catalog] 未找到缓存对象，可能已经结束");
+            log.warn("[Redis-Catalog] Cache object not found, may have ended");
             return result;
         }
         for (String objectKey : catalogData.getRedisKeysForRegion()) {
@@ -171,7 +171,7 @@ public class CatalogDataManager{
         List<Group> result = new ArrayList<>();
         CatalogData catalogData = dataMap.get(buildMapKey(deviceId,sn));
         if (catalogData == null ) {
-            log.warn("[Redis-Catalog] 未找到缓存对象，可能已经结束");
+            log.warn("[Redis-Catalog] Cache object not found, may have ended");
             return result;
         }
         for (String objectKey : catalogData.getRedisKeysForGroup()) {
@@ -215,7 +215,7 @@ public class CatalogDataManager{
         for (String key : keySet) {
             CatalogData catalogData = dataMap.get(key);
             if (catalogData != null && deviceId.equals(catalogData.getDevice().getDeviceId())) {
-                // 此时检查是否过期
+                // Check whether it has expired at this time
                 Instant instantBefore30S = Instant.now().minusMillis(TimeUnit.SECONDS.toMillis(30));
                 if ((catalogData.getStatus().equals(CatalogData.CatalogDataStatus.end)
                         || catalogData.getStatus().equals(CatalogData.CatalogDataStatus.ready))
@@ -232,22 +232,22 @@ public class CatalogDataManager{
 
     @EventListener(ApplicationReadyEvent.class)
     public void onApplicationReady(){
-        // 启动时清理旧的数据
+        // Clean old data on startup
         redisTemplate.delete(key);
     }
 
-    //每5秒执行一次, 发现数据5秒未更新则移除数据并认为数据接收超时
+    //Executed every 5 seconds. If the data is not updated for 5 seconds, the data will be removed and the data reception will be considered to have timed out.
     @Scheduled(fixedDelay = 5, timeUnit = TimeUnit.SECONDS)
     private void timerTask(){
         if (dataMap.isEmpty()) {
             return;
         }
         Set<String> keys = dataMap.keySet();
-        // 消息间等待间隔最大五秒
+        // The maximum waiting interval between messages is five seconds
         Instant instantBefore5S = Instant.now().minusMillis(TimeUnit.SECONDS.toMillis(5));
-        // 消息接收完毕，等待30秒后移除数据
+        // After receiving the message, wait 30 seconds before removing the data.
         Instant instantBefore30S = Instant.now().minusMillis(TimeUnit.SECONDS.toMillis(30));
-        // 初次等待的时间长度，兼容部分下级平台发送初次数据很慢的情况
+        // The length of initial waiting time is compatible with the situation where some lower-level platforms are slow to send initial data.
         Instant instantBefore2M = Instant.now().minusMillis(TimeUnit.MINUTES.toMillis(2));
         for (String dataKey : keys) {
             try {
@@ -257,7 +257,7 @@ public class CatalogDataManager{
                 }
                 if (catalogData.getStatus().equals(CatalogData.CatalogDataStatus.ready)) {
                     if ( catalogData.getTime().isBefore(instantBefore2M)) {
-                        String errorMsg = "同步失败，等待回复超时";
+                        String errorMsg = "Synchronization failed, timeout waiting for reply";
                         catalogData.setErrorMsg(errorMsg);
                         catalogData.setStatus(CatalogData.CatalogDataStatus.end);
                         syncingDevices.remove(catalogData.getDevice().getDeviceId());
@@ -287,8 +287,8 @@ public class CatalogDataManager{
                         }
                         catalogData.setErrorMsg(null);
                     } catch (Exception e) {
-                        log.error("[国标通道同步] 入库失败： ", e);
-                        catalogData.setErrorMsg("入库失败: " + e.getMessage());
+                        log.error("[National standard channel synchronization] Storage failed： ", e);
+                        catalogData.setErrorMsg("Storage failed: " + e.getMessage());
                     } finally {
                         lock.unlock();
                     }
@@ -299,7 +299,7 @@ public class CatalogDataManager{
                 if (catalogData.getTime().isBefore(instantBefore30S)) {
                     String deviceId = catalogData.getDevice().getDeviceId();
                     dataMap.remove(dataKey);
-                    // 清理可能残留的设备锁
+                    // Clean up possible remaining device locks
                     if (deviceWriteLocks.containsKey(deviceId)) {
                         deviceWriteLocks.remove(deviceId);
                     }
@@ -308,7 +308,7 @@ public class CatalogDataManager{
                 }
             }
             } catch (Exception e) {
-                log.error("[定时清理Catalog] 处理异常: dataKey={}", dataKey, e);
+                log.error("[Clean regularlyCatalog] Handle exceptions: dataKey={}", dataKey, e);
             }
         }
     }

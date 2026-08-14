@@ -28,7 +28,7 @@ public class ServerLoggerImpl implements ServerLogger {
             return;
         }
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(sender? "发送：目标--->" + from:"接收：来自--->" + to)
+        stringBuilder.append(sender? "send: target--->" + from:"Receive: from--->" + to)
                 .append("\r\n")
                         .append(message);
         this.stackLogger.logInfo(stringBuilder.toString());
@@ -41,7 +41,7 @@ public class ServerLoggerImpl implements ServerLogger {
             return;
         }
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(sender? "发送： 目标->" + from :"接收：来自->" + to)
+        stringBuilder.append(sender? "Send: destination->" + from :"Receive: from->" + to)
                 .append("\r\n")
                 .append(message);
         this.stackLogger.logInfo(stringBuilder.toString());
@@ -53,7 +53,7 @@ public class ServerLoggerImpl implements ServerLogger {
             return;
         }
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(sender? "发送： 目标->" + from :"接收：来自->" + to)
+        stringBuilder.append(sender? "Send: destination->" + from :"Receive: from->" + to)
                 .append("\r\n")
                 .append(message);
         this.stackLogger.logInfo(stringBuilder.toString());

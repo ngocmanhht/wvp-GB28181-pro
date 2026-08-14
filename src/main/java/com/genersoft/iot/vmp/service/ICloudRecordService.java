@@ -13,52 +13,52 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * 云端录像管理
+ * Cloud video management
  * @author lin
  */
 public interface ICloudRecordService {
 
     /**
-     * 分页回去云端录像列表
+     * Paginate back to cloud recording list
      */
     PageInfo<CloudRecordItem> getList(int page, int count, String query,  String app, String stream, String startTime, String endTime, List<MediaServer> mediaServerItems, String callId, Boolean ascOrder);
 
     /**
-     * 获取所有的日期
+     * Get all dates
      */
     List<String> getDateList(String app, String stream, int year, int month, List<MediaServer> mediaServerItems);
 
     /**
-     * 添加合并任务
+     * Add merge task
      */
     String addTask(String app, String stream, MediaServer mediaServerItem, String startTime,
                    String endTime, String callId, String remoteHost, boolean filterMediaServer);
 
 
     /**
-     * 查询合并任务列表
+     * Query merge task list
      */
     JSONArray queryTask(String app, String stream, String callId, String taskId, String mediaServerId, Boolean isEnd, String scheme);
 
     /**
-     * 收藏视频，收藏的视频过期不会删除
+     * Collect videos. Favorite videos will not be deleted when they expire.
      */
     int changeCollect(boolean result, String app, String stream, String mediaServerId, String startTime, String endTime, String callId);
 
     /**
-     * 添加指定录像收藏
+     * Add specified video collection
      */
     int changeCollectById(Integer recordId, boolean result);
 
     /**
-     * 获取播放地址
+     * Get playback address
      */
     DownloadFileInfo getPlayUrlPath(Integer recordId);
 
     List<CloudRecordItem> getAllList(String query, String app, String stream, String startTime, String endTime, List<MediaServer> mediaServerItems, String callId, List<Integer> ids);
 
     /**
-     * 加载录像文件，形成录像流
+     * Load video files to form a video stream
      */
     void loadMP4FileForDate(String app, String stream, String date, ErrorCallback<StreamInfo> callback);
 

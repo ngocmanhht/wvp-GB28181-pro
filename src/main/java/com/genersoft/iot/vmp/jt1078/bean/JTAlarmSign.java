@@ -7,73 +7,73 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 /**
- * 报警标志
+ * Alarm sign
  */
 @Data
-@Schema(description = "报警标志")
+@Schema(description = "Alarm sign")
 public class JTAlarmSign implements JTDeviceSubConfig {
 
-    @Schema(description = "紧急报警，触动报警开关后触发")
+    @Schema(description = "Emergency alarm, triggered after touching the alarm switch")
     private boolean urgent;
-    @Schema(description = "超速报警")
+    @Schema(description = "speed alarm")
     private boolean alarmSpeeding;
-    @Schema(description = "疲劳驾驶报警")
+    @Schema(description = "Fatigue driving alarm")
     private boolean alarmTired;
-    @Schema(description = "危险驾驶行为报警")
+    @Schema(description = "Dangerous driving behavior warning")
     private boolean alarmDangerous;
-    @Schema(description = "GNSS 模块发生故障报警")
+    @Schema(description = "GNSS Module failure alarm")
     private boolean alarmGnssFault;
-    @Schema(description = "GNSS 天线未接或被剪断报警")
+    @Schema(description = "GNSS Alarm if antenna is not connected or cut off")
     private boolean alarmGnssBreak;
-    @Schema(description = "GNSS 天线短路报警")
+    @Schema(description = "GNSS Antenna short circuit alarm")
     private boolean alarmGnssShortCircuited;
-    @Schema(description = "终端主电源欠压报警")
+    @Schema(description = "Terminal main power undervoltage alarm")
     private boolean alarmUnderVoltage;
-    @Schema(description = "终端主电源掉电报警")
+    @Schema(description = "Terminal main power failure alarm")
     private boolean alarmPowerOff;
-    @Schema(description = "终端 LCD或显示器故障报警")
+    @Schema(description = "Terminal LCD or display failure alarm")
     private boolean alarmLCD;
-    @Schema(description = "TTS 模块故障报警")
+    @Schema(description = "TTS Module fault alarm")
     private boolean alarmTtsFault;
-    @Schema(description = "摄像头故障报警")
+    @Schema(description = "Camera failure alarm")
     private boolean alarmCameraFault;
-    @Schema(description = "道路运输证 IC卡模块故障报警")
+    @Schema(description = "Road Transport Certificate IC Card Module Failure Alarm")
     private boolean alarmIcFault;
-    @Schema(description = "超速预警")
+    @Schema(description = "speed warning")
     private boolean warningSpeeding;
-    @Schema(description = "疲劳驾驶预警")
+    @Schema(description = "Fatigue driving warning")
     private boolean warningTired;
-    @Schema(description = "违规行驶报警")
+    @Schema(description = "Violation driving alarm")
     private boolean alarmWrong;
-    @Schema(description = "胎压预警")
+    @Schema(description = "Tire pressure warning")
     private boolean warningTirePressure;
-    @Schema(description = "右转盲区异常报警")
+    @Schema(description = "Right turn blind spot abnormality alarm")
     private boolean alarmBlindZone;
-    @Schema(description = "当天累计驾驶超时报警")
+    @Schema(description = "Accumulated driving overtime alarm for the day")
     private boolean alarmDrivingTimeout;
-    @Schema(description = "超时停车报警")
+    @Schema(description = "Overtime parking alarm")
     private boolean alarmParkingTimeout;
-    @Schema(description = "进出区域报警")
+    @Schema(description = "Alarm for entry and exit areas")
     private boolean alarmRegion;
-    @Schema(description = "进出路线报警")
+    @Schema(description = "Alarm for entry and exit routes")
     private boolean alarmRoute;
-    @Schema(description = "路段行驶时间不足/过长报警")
+    @Schema(description = "Insufficient travel time on the road section/Alarm if too long")
     private boolean alarmTravelTime;
-    @Schema(description = "路线偏离报警")
+    @Schema(description = "Route deviation alarm")
     private boolean alarmRouteDeviation;
-    @Schema(description = "车辆 VSS 故障")
+    @Schema(description = "Vehicle VSS failure")
     private boolean alarmVSS;
-    @Schema(description = "车辆油量异常报警")
+    @Schema(description = "Vehicle oil level abnormality alarm")
     private boolean alarmOil;
-    @Schema(description = "车辆被盗报警(通过车辆防盗器)")
+    @Schema(description = "vehicle stolen alarm(Via vehicle immobilizer)")
     private boolean alarmStolen;
-    @Schema(description = "车辆非法点火报警")
+    @Schema(description = "Illegal vehicle ignition alarm")
     private boolean alarmIllegalIgnition;
-    @Schema(description = "车辆非法位移报警")
+    @Schema(description = "Vehicle illegal displacement alarm")
     private boolean alarmIllegalDisplacement;
-    @Schema(description = "碰撞侧翻报警")
+    @Schema(description = "Collision and rollover alarm")
     private boolean alarmRollover;
-    @Schema(description = "侧翻预警")
+    @Schema(description = "Rollover warning")
     private boolean warningRollover;
 
     public JTAlarmSign() {
@@ -83,7 +83,7 @@ public class JTAlarmSign implements JTDeviceSubConfig {
         if (alarmSignInt == 0) {
             return;
         }
-        // 解析alarm参数
+        // Parse alarm parameters
         this.urgent = (alarmSignInt & 1) == 1;
         this.alarmSpeeding = (alarmSignInt >>> 1 & 1) == 1;
         this.alarmTired = (alarmSignInt >>> 2 & 1) == 1;
@@ -124,7 +124,7 @@ public class JTAlarmSign implements JTDeviceSubConfig {
 
     @Override
     public ByteBuf encode() {
-        // 限定容量 避免影响后续占位
+        // Limited capacity to avoid affecting subsequent space occupation
         ByteBuf byteBuf = Unpooled.buffer();
         int alarmSignValue = 0;
         if (urgent) {
@@ -226,38 +226,38 @@ public class JTAlarmSign implements JTDeviceSubConfig {
 
     @Override
     public String toString() {
-        return "状态报警标志位：" +
-                "\n      紧急报警：" + (urgent?"开":"关") +
-                "\n      超速报警：" + (alarmSpeeding?"开":"关") +
-                "\n      疲劳驾驶报警：" + (alarmTired?"开":"关") +
-                "\n      危险驾驶行为报警：" + (alarmDangerous?"开":"关") +
-                "\n      GNSS 模块发生故障报警：" + (alarmGnssFault?"开":"关") +
-                "\n      GNSS 天线未接或被剪断报警：" + (alarmGnssBreak?"开":"关") +
-                "\n      GNSS 天线短路报警：" + (alarmGnssShortCircuited?"开":"关") +
-                "\n      终端主电源欠压报警：" + (alarmUnderVoltage?"开":"关") +
-                "\n      终端主电源掉电报警：" + (alarmPowerOff?"开":"关") +
-                "\n      终端LCD或显示器故障报警：" + (alarmLCD?"开":"关") +
-                "\n      TTS 模块故障报警：" + (alarmTtsFault?"开":"关") +
-                "\n      摄像头故障报警：" + (alarmCameraFault?"开":"关") +
-                "\n      道路运输证IC卡模块故障报警：" + (alarmIcFault?"开":"关") +
-                "\n      超速预警：" + (warningSpeeding?"开":"关") +
-                "\n      疲劳驾驶预警：" + (warningTired?"开":"关") +
-                "\n      违规行驶报警：" + (alarmWrong ?"开":"关") +
-                "\n      胎压预警：" + (warningTirePressure?"开":"关") +
-                "\n      右转盲区异常报警：" + (alarmBlindZone?"开":"关") +
-                "\n      当天累计驾驶超时报警：" + (alarmDrivingTimeout?"开":"关") +
-                "\n      超时停车报警：" + (alarmParkingTimeout?"开":"关") +
-                "\n      进出区域报警：" + (alarmRegion?"开":"关") +
-                "\n      进出路线报警：" + (alarmRoute?"开":"关") +
-                "\n      路段行驶时间不足/过长报警：" + (alarmTravelTime?"开":"关") +
-                "\n      路线偏离报警：" + (alarmRouteDeviation?"开":"关") +
-                "\n      车辆 VSS 故障：" + (alarmVSS?"开":"关") +
-                "\n      车辆油量异常报警：" + (alarmOil?"开":"关") +
-                "\n      车辆被盗报警(通过车辆防盗器)：" + (alarmStolen?"开":"关") +
-                "\n      车辆非法点火报警：" + (alarmIllegalIgnition?"开":"关") +
-                "\n      车辆非法位移报警：" + (alarmIllegalDisplacement?"开":"关") +
-                "\n      碰撞侧翻报警：" + (alarmRollover?"开":"关") +
-                "\n      侧翻预警：" + (warningRollover?"开":"关") +
+        return "status alarm flag bit：" +
+                "\n      emergency alarm：" + (urgent?"open":"close") +
+                "\n      speed alarm：" + (alarmSpeeding?"open":"close") +
+                "\n      Fatigue driving alarm：" + (alarmTired?"open":"close") +
+                "\n      Dangerous driving behavior warning：" + (alarmDangerous?"open":"close") +
+                "\n      GNSS Module failure alarm：" + (alarmGnssFault?"open":"close") +
+                "\n      GNSS Alarm if antenna is not connected or cut off：" + (alarmGnssBreak?"open":"close") +
+                "\n      GNSS Antenna short circuit alarm：" + (alarmGnssShortCircuited?"open":"close") +
+                "\n      Terminal main power undervoltage alarm：" + (alarmUnderVoltage?"open":"close") +
+                "\n      Terminal main power failure alarm：" + (alarmPowerOff?"open":"close") +
+                "\n      Terminal LCD or display failure alarm：" + (alarmLCD?"open":"close") +
+                "\n      TTS Module fault alarm：" + (alarmTtsFault?"open":"close") +
+                "\n      Camera failure alarm：" + (alarmCameraFault?"open":"close") +
+                "\n      Road transport certificate IC card module failure alarm：" + (alarmIcFault?"open":"close") +
+                "\n      speed warning：" + (warningSpeeding?"open":"close") +
+                "\n      Fatigue driving warning：" + (warningTired?"open":"close") +
+                "\n      Violation driving alarm：" + (alarmWrong ?"open":"close") +
+                "\n      Tire pressure warning：" + (warningTirePressure?"open":"close") +
+                "\n      Right turn blind spot abnormality alarm：" + (alarmBlindZone?"open":"close") +
+                "\n      Accumulated driving overtime alarm for the day：" + (alarmDrivingTimeout?"open":"close") +
+                "\n      Overtime parking alarm：" + (alarmParkingTimeout?"open":"close") +
+                "\n      Alarm for entry and exit areas：" + (alarmRegion?"open":"close") +
+                "\n      Alarm for entry and exit routes：" + (alarmRoute?"open":"close") +
+                "\n      Insufficient travel time on the road section/Alarm if too long：" + (alarmTravelTime?"open":"close") +
+                "\n      Route deviation alarm：" + (alarmRouteDeviation?"open":"close") +
+                "\n      Vehicle VSS failure：" + (alarmVSS?"open":"close") +
+                "\n      Vehicle oil level abnormality alarm：" + (alarmOil?"open":"close") +
+                "\n      vehicle stolen alarm(Via vehicle immobilizer)：" + (alarmStolen?"open":"close") +
+                "\n      Illegal vehicle ignition alarm：" + (alarmIllegalIgnition?"open":"close") +
+                "\n      Vehicle illegal displacement alarm：" + (alarmIllegalDisplacement?"open":"close") +
+                "\n      Collision and rollover alarm：" + (alarmRollover?"open":"close") +
+                "\n      Rollover warning：" + (warningRollover?"open":"close") +
                 "\n       ";
     }
 

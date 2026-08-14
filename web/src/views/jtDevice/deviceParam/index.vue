@@ -2,47 +2,47 @@
   <div id="jtDeviceParam" style="width: 100%">
     <div class="page-header">
       <div class="page-title">
-        <el-page-header content="终端参数" @back="showDevice" />
+        <el-page-header content="Terminal parameters" @back="showDevice" />
       </div>
     </div>
     <el-tabs tab-position="left" v-model="activeTab" style="height: calc(100vh - 164px); padding: 20px">
-      <el-tab-pane label="通讯参数" name="communication">
+      <el-tab-pane label="Communication parameters" name="communication">
         <communication v-if="activeTab === 'communication'" :phone-number="phoneNumber" @submit="onSubmit" @show-device="showDevice"></communication>
       </el-tab-pane>
-      <el-tab-pane label="服务器" name="server">
+      <el-tab-pane label="server" name="server">
         <server v-if="activeTab === 'server'" :phone-number="phoneNumber" @submit="onSubmit" @show-device="showDevice"></server>
       </el-tab-pane>
-      <el-tab-pane label="位置汇报" name="position">
+      <el-tab-pane label="location report" name="position">
         <position v-if="activeTab === 'position'" :phone-number="phoneNumber" @submit="onSubmit" @show-device="showDevice"></position>
       </el-tab-pane>
-      <el-tab-pane label="电话号码" name="phoneNumber">
+      <el-tab-pane label="phone number" name="phoneNumber">
         <phoneNumber v-if="activeTab === 'phoneNumber'" :phone-number="phoneNumber" @submit="onSubmit" @show-device="showDevice"></phoneNumber>
       </el-tab-pane>
-      <el-tab-pane label="报警参数" name="alarm">
+      <el-tab-pane label="Alarm parameters" name="alarm">
         <alarm v-if="activeTab === 'alarm'" :phone-number="phoneNumber" @submit="onSubmit" @show-device="showDevice"></alarm>
       </el-tab-pane>
-      <el-tab-pane label="行驶参数" name="driving">
+      <el-tab-pane label="Driving parameters" name="driving">
         <driving v-if="activeTab === 'driving'" :phone-number="phoneNumber" @submit="onSubmit" @show-device="showDevice"></driving>
       </el-tab-pane>
-      <el-tab-pane label="定时拍照" name="cameraTimer">
+      <el-tab-pane label="Take photos regularly" name="cameraTimer">
         <cameraTimer v-if="activeTab === 'cameraTimer'" :phone-number="phoneNumber" @submit="onSubmit" @show-device="showDevice"></cameraTimer>
       </el-tab-pane>
-      <el-tab-pane label="图像参数" name="imageConfig">
+      <el-tab-pane label="Image parameters" name="imageConfig">
         <imageConfig v-if="activeTab === 'imageConfig'" :phone-number="phoneNumber" @submit="onSubmit" @show-device="showDevice"></imageConfig>
       </el-tab-pane>
-      <el-tab-pane label="视频参数" name="videoParam">
+      <el-tab-pane label="Video parameters" name="videoParam">
         <videoParam v-if="activeTab === 'videoParam'" :phone-number="phoneNumber" @submit="onSubmit" @show-device="showDevice"></videoParam>
       </el-tab-pane>
-      <el-tab-pane label="休眠唤醒" name="awakenParam">
+      <el-tab-pane label="wake up from sleep" name="awakenParam">
         <awakenParam v-if="activeTab === 'awakenParam'" :phone-number="phoneNumber" @submit="onSubmit" @show-device="showDevice"></awakenParam>
       </el-tab-pane>
-      <el-tab-pane label="车辆信息" name="carInfo">
+      <el-tab-pane label="vehicle information" name="carInfo">
         <carInfo v-if="activeTab === 'carInfo'" :phone-number="phoneNumber" @submit="onSubmit" @show-device="showDevice"></carInfo>
       </el-tab-pane>
-      <el-tab-pane label="卫星定位" name="gnssParam">
+      <el-tab-pane label="Satellite positioning" name="gnssParam">
         <gnssParam v-if="activeTab === 'gnssParam'" :phone-number="phoneNumber" @submit="onSubmit" @show-device="showDevice"></gnssParam>
       </el-tab-pane>
-      <el-tab-pane label="CAN总线" name="canCollection">
+      <el-tab-pane label="CANbus" name="canCollection">
         <canCollectionParam v-if="activeTab === 'canCollection'" :phone-number="phoneNumber" @submit="onSubmit" @show-device="showDevice"></canCollectionParam>
       </el-tab-pane>
     </el-tabs>
@@ -79,7 +79,7 @@ export default {
     return {
       form: {},
       rules: {
-        deviceId: [{ required: true, message: '请输入设备编号', trigger: 'blur' }]
+        deviceId: [{ required: true, message: 'Please enter the device number', trigger: 'blur' }]
       },
       isLoading: false,
       activeTab: 'communication'
@@ -111,7 +111,7 @@ export default {
         .then((data) => {
           this.$message.success({
             showClose: true,
-            message: '保存成功'
+            message: 'Saved successfully'
           })
         })
     },

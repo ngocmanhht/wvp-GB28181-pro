@@ -61,17 +61,17 @@ public class RedisRpcStreamPushController extends RpcController {
     }
 
     /**
-     * 监听流上线
+     * Listening stream online
      */
     @RedisRpcMapping("waitePushStreamOnline")
     public RedisRpcResponse waitePushStreamOnline(RedisRpcRequest request) {
         SendRtpInfo sendRtpItem = JSONObject.parseObject(request.getParam().toString(), SendRtpInfo.class);
-        log.info("[redis-rpc] 监听流上线： {}/{}, 目标地址： {}：{}", sendRtpItem.getApp(), sendRtpItem.getStream(), sendRtpItem.getIp(), sendRtpItem.getPort());
-        // 查询本级是否有这个流
+        log.info("[redis-rpc] Listening stream online： {}/{}, destination address： {}：{}", sendRtpItem.getApp(), sendRtpItem.getStream(), sendRtpItem.getIp(), sendRtpItem.getPort());
+        // Query whether this stream exists at this level
         MediaServer mediaServer = mediaServerService.getMediaServerByAppAndStream(sendRtpItem.getApp(), sendRtpItem.getStream());
         if (mediaServer != null) {
-            log.info("[redis-rpc] 监听流上线时发现流已存在直接返回： {}/{}, 目标地址： {}：{}", sendRtpItem.getApp(), sendRtpItem.getStream(), sendRtpItem.getIp(), sendRtpItem.getPort() );
-            // 读取redis中的上级点播信息，生成sendRtpItm发送出去
+            log.info("[redis-rpc] When the monitoring stream goes online, it is found that the stream already exists and returns directly.： {}/{}, destination address： {}：{}", sendRtpItem.getApp(), sendRtpItem.getStream(), sendRtpItem.getIp(), sendRtpItem.getPort() );
+            // Read the superior on-demand information in redis, generate sendRtpItm and send it out
             if (sendRtpItem.getSsrc() == null) {
                 sendRtpItem.setSsrc(sendSsrcFactory.getSendSsrc(
                         "Play".equalsIgnoreCase(sendRtpItem.getSessionName()) ? "0" : "1"));
@@ -85,11 +85,11 @@ public class RedisRpcStreamPushController extends RpcController {
             response.setBody(sendRtpItem.getChannelId());
             response.setStatusCode(ErrorCode.SUCCESS.getCode());
         }
-        // 监听流上线。 流上线直接发送sendRtpItem消息给实际的信令处理者
+        // The monitoring stream is online. When the stream goes online, it directly sends the sendRtpItem message to the actual signaling processor.
         Hook hook = Hook.getInstance(HookType.on_media_arrival, sendRtpItem.getApp(), sendRtpItem.getStream(), null);
         hookSubscribe.addSubscribe(hook, (hookData) -> {
-            log.info("[redis-rpc] 监听流上线，流已上线： {}/{}, 目标地址： {}：{}", sendRtpItem.getApp(), sendRtpItem.getStream(), sendRtpItem.getIp(), sendRtpItem.getPort());
-            // 读取redis中的上级点播信息，生成sendRtpItm发送出去
+            log.info("[redis-rpc] The listening stream is online. The stream is online.： {}/{}, destination address： {}：{}", sendRtpItem.getApp(), sendRtpItem.getStream(), sendRtpItem.getIp(), sendRtpItem.getPort());
+            // Read the superior on-demand information in redis, generate sendRtpItm and send it out
             if (sendRtpItem.getSsrc() == null) {
                 sendRtpItem.setSsrc(sendSsrcFactory.getSendSsrc(
                         "Play".equalsIgnoreCase(sendRtpItem.getSessionName()) ? "0" : "1"));
@@ -102,7 +102,7 @@ public class RedisRpcStreamPushController extends RpcController {
             RedisRpcResponse response = request.getResponse();
             response.setBody(sendRtpItem.getChannelId());
             response.setStatusCode(ErrorCode.SUCCESS.getCode());
-            // 手动发送结果
+            // Send results manually
             sendResponse(response);
             hookSubscribe.removeSubscribe(hook);
 
@@ -111,33 +111,33 @@ public class RedisRpcStreamPushController extends RpcController {
     }
 
     /**
-     * 监听流上线
+     * Listening stream online
      */
     @RedisRpcMapping("onStreamOnlineEvent")
     public RedisRpcResponse onStreamOnlineEvent(RedisRpcRequest request) {
         StreamInfo streamInfo = JSONObject.parseObject(request.getParam().toString(), StreamInfo.class);
-        log.info("[redis-rpc] 监听流信息，等待流上线： {}/{}", streamInfo.getApp(), streamInfo.getStream());
-        // 查询本级是否有这个流
+        log.info("[redis-rpc] Monitor the flow information and wait for the flow to come online： {}/{}", streamInfo.getApp(), streamInfo.getStream());
+        // Query whether this stream exists at this level
         StreamInfo streamInfoInServer = mediaServerService.getMediaByAppAndStream(streamInfo.getApp(), streamInfo.getStream());
         if (streamInfoInServer != null) {
-            log.info("[redis-rpc] 监听流上线时发现流已存在直接返回： {}/{}", streamInfo.getApp(), streamInfo.getStream());
+            log.info("[redis-rpc] When the monitoring stream goes online, it is found that the stream already exists and returns directly.： {}/{}", streamInfo.getApp(), streamInfo.getStream());
             RedisRpcResponse response = request.getResponse();
             response.setBody(JSONObject.toJSONString(streamInfoInServer));
             response.setStatusCode(ErrorCode.SUCCESS.getCode());
             return response;
         }
-        // 监听流上线。 流上线直接发送sendRtpItem消息给实际的信令处理者
+        // The monitoring stream is online. When the stream goes online, it directly sends the sendRtpItem message to the actual signaling processor.
         Hook hook = Hook.getInstance(HookType.on_media_arrival, streamInfo.getApp(), streamInfo.getStream());
         hookSubscribe.addSubscribe(hook, (hookData) -> {
-            log.info("[redis-rpc] 监听流上线，流已上线： {}/{}", streamInfo.getApp(), streamInfo.getStream());
-            // 读取redis中的上级点播信息，生成sendRtpItm发送出去
+            log.info("[redis-rpc] The listening stream is online. The stream is online.： {}/{}", streamInfo.getApp(), streamInfo.getStream());
+            // Read the superior on-demand information in redis, generate sendRtpItm and send it out
             RedisRpcResponse response = request.getResponse();
             StreamInfo streamInfoByAppAndStream = mediaServerService.getStreamInfoByAppAndStream(hookData.getMediaServer(),
                     streamInfo.getApp(), streamInfo.getStream(), hookData.getMediaInfo(),
                     hookData.getMediaInfo() != null ? hookData.getMediaInfo().getCallId() : null);
             response.setBody(JSONObject.toJSONString(streamInfoByAppAndStream));
             response.setStatusCode(ErrorCode.SUCCESS.getCode());
-            // 手动发送结果
+            // Send results manually
             sendResponse(response);
             hookSubscribe.removeSubscribe(hook);
         });
@@ -145,13 +145,13 @@ public class RedisRpcStreamPushController extends RpcController {
     }
 
     /**
-     * 停止监听流上线
+     * Stop monitoring the stream online
      */
     @RedisRpcMapping("stopWaitePushStreamOnline")
     public RedisRpcResponse stopWaitePushStreamOnline(RedisRpcRequest request) {
         SendRtpInfo sendRtpItem = JSONObject.parseObject(request.getParam().toString(), SendRtpInfo.class);
-        log.info("[redis-rpc] 停止监听流上线： {}/{}, 目标地址： {}：{}", sendRtpItem.getApp(), sendRtpItem.getStream(), sendRtpItem.getIp(), sendRtpItem.getPort() );
-        // 监听流上线。 流上线直接发送sendRtpItem消息给实际的信令处理者
+        log.info("[redis-rpc] Stop monitoring the stream online： {}/{}, destination address： {}：{}", sendRtpItem.getApp(), sendRtpItem.getStream(), sendRtpItem.getIp(), sendRtpItem.getPort() );
+        // The monitoring stream is online. When the stream goes online, it directly sends the sendRtpItem message to the actual signaling processor.
         Hook hook = Hook.getInstance(HookType.on_media_arrival, sendRtpItem.getApp(), sendRtpItem.getStream(), null);
         hookSubscribe.removeSubscribe(hook);
         RedisRpcResponse response = request.getResponse();
@@ -160,13 +160,13 @@ public class RedisRpcStreamPushController extends RpcController {
     }
 
     /**
-     * 停止监听流上线
+     * Stop monitoring the stream online
      */
     @RedisRpcMapping("unPushStreamOnlineEvent")
     public RedisRpcResponse unPushStreamOnlineEvent(RedisRpcRequest request) {
         StreamInfo streamInfo = JSONObject.parseObject(request.getParam().toString(), StreamInfo.class);
-        log.info("[redis-rpc] 停止监听流上线： {}/{}", streamInfo.getApp(), streamInfo.getStream());
-        // 监听流上线。 流上线直接发送sendRtpItem消息给实际的信令处理者
+        log.info("[redis-rpc] Stop monitoring the stream online： {}/{}", streamInfo.getApp(), streamInfo.getStream());
+        // The monitoring stream is online. When the stream goes online, it directly sends the sendRtpItem message to the actual signaling processor.
         Hook hook = Hook.getInstance(HookType.on_media_arrival, streamInfo.getApp(), streamInfo.getStream(), null);
         hookSubscribe.removeSubscribe(hook);
         RedisRpcResponse response = request.getResponse();
@@ -175,7 +175,7 @@ public class RedisRpcStreamPushController extends RpcController {
     }
 
     /**
-     * 停止监听流上线
+     * Stop monitoring the stream online
      */
     @RedisRpcMapping("play")
     public RedisRpcResponse play(RedisRpcRequest request) {

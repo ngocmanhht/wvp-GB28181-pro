@@ -2,7 +2,7 @@
   <div id="editRecordPlan" v-loading="loading" style="text-align: left;">
     <el-dialog
       v-el-drag-dialog
-      title="录制计划"
+      title="Recording plan"
       width="900px"
       top="2rem"
       :close-on-click-modal="false"
@@ -13,7 +13,7 @@
       <div id="shared" class="edit-record-plan">
         <el-form style="padding: 0 20px" size="small">
           <el-form-item>
-            <el-input v-model="planName" type="text" placeholder="请输入计划名称" />
+            <el-input v-model="planName" type="text" placeholder="Please enter plan name" />
           </el-form-item>
           <el-form-item>
             <div class="content">
@@ -22,8 +22,8 @@
           </el-form-item>
           <el-form-item>
             <div style="float: right; margin-top: 20px">
-              <el-button type="primary" @click="onSubmit">保存</el-button>
-              <el-button @click="close">取消</el-button>
+              <el-button type="primary" @click="onSubmit">save</el-button>
+              <el-button @click="close">Cancel</el-button>
             </div>
           </el-form-item>
         </el-form>
@@ -133,7 +133,7 @@ export default {
           .then(data => {
             this.$message({
               showClose: true,
-              message: '添加成功',
+              message: 'Added successfully',
               type: 'success'
             })
             this.endCallback()
@@ -157,7 +157,7 @@ export default {
           .then(data => {
             this.$message({
               showClose: true,
-              message: '更新成功',
+              message: 'Update successful',
               type: 'success'
             })
             this.endCallback()
@@ -171,7 +171,7 @@ export default {
       }
     },
     handPlanData: function(planList) {
-      // 数据库数据转为组件数据格式
+      // Convert database data to component data format
       for (let i = 0; i < planList.length; i++) {
         const item = planList[i]
         console.log(item)
@@ -182,7 +182,7 @@ export default {
       }
     },
     handPlanArray: function() {
-      // 组件数据格式转为数据库数据
+      // Convert component data format to database data
       const dataArray = []
       for (let i = 0; i < this.planArray.length; i++) {
         const item = this.planArray[i]

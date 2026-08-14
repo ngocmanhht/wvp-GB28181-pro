@@ -10,7 +10,7 @@ import lombok.Setter;
 import java.nio.charset.Charset;
 
 /**
- * 文件上传指令
+ * File upload command
  *
  */
 @Setter
@@ -18,45 +18,45 @@ import java.nio.charset.Charset;
 @MsgId(id = "9206")
 public class J9206 extends Rs {
 
-    // 服务器地址
+    // Server address
     private String serverIp;
-    // 服务器端口
+    // Server port
     private int port;
-    // 用户名
+    // Username
     private String username;
-    // 密码
+    // Password
     private String password;
-    // 文件上传路径
+    // File upload path
     private String path;
-    // 逻辑通道号
+    // Logical channel number
     private int channelId;
 
-    // 开始时间YYMMDDHHMMSS,全0表示无起始时间
+    // Start time YYMMDDHHMMSS, all 0 means no start time
     private String startTime;
 
-    // 结束时间YYMMDDHHMMSS,全0表示无终止时间
+    // End time YYMMDDHHMMSS, all 0 means no end time
     private String endTime;
 
-    // 报警标志
+    // Alarm sign
     private int alarmSign = 0;
 
-    // 音视频资源类型：0.音视频 1.音频 2.视频 3.视频或音视频
+    // Audio and video resource types: 0. Audio and video 1. Audio 2. Video 3. Video or audio and video
     private int mediaType;
 
-    // 码流类型：0.所有码流 1.主码流 2.子码流
+    // Stream type: 0. All streams 1. Main stream 2. Sub-stream
     private int streamType = 0;
 
-    // 存储器类型：0.所有存储器 1.主存储器 2.灾备存储器
+    // Storage type: 0. All storage 1. Main storage 2. Disaster recovery storage
     private int storageType = 0;
 
-    // 任务执行条件，
-    // 1：仅WI-FI 下可下载，
-    // 2： 仅LAN 连接时可下载；
-    // 3： WI-FI + LAN 连接时可下载；
-    // 4： 仅3G/ 4G 连接时可下载
-    // 5： WI-FI + 3G/ 4G 连接时可下载
-    // 6： WI-FI + LAN 连接时可下载
-    // 7： WI-FI + LAN + 3G/ 4G 连接时可下载
+    // Task execution conditions，
+    // 1：onlyWI-FI Downloadable below，
+    // 2： Downloading is only possible when connected via LAN；
+    // 3： WI-FI + LAN Downloadable when connected；
+    // 4： only3G/ 4G Downloadable when connected
+    // 5： WI-FI + 3G/ 4G Downloadable when connected
+    // 6： WI-FI + LAN Downloadable when connected
+    // 7： WI-FI + LAN + 3G/ 4G Downloadable when connected
     private int taskConditions = 7;
 
     @Override

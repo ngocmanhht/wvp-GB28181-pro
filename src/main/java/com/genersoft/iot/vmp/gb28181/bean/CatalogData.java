@@ -12,7 +12,7 @@ import java.util.Set;
 @Data
 public class CatalogData {
     /**
-     * 命令序列号
+     * command sequence number
      */
     private int sn;
     private Integer total;

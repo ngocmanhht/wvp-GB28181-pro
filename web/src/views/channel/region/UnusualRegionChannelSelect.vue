@@ -2,7 +2,7 @@
   <div id="gbChannelSelect" v-loading="getChannelListLoading">
     <el-dialog
       v-el-drag-dialog
-      title="异常挂载通道"
+      title="Abnormal mount channel"
       width="60%"
       top="2rem"
       :close-on-click-modal="false"
@@ -12,41 +12,41 @@
       @close="close()"
     >
       <el-form :inline="true" size="mini">
-        <el-form-item label="搜索">
+        <el-form-item label="Search">
           <el-input
             v-model="searchStr"
             style="margin-right: 1rem; width: auto;"
             size="mini"
-            placeholder="关键字"
+            placeholder="Keywords"
             prefix-icon="el-icon-search"
             clearable
             @input="getChannelList"
           />
         </el-form-item>
-        <el-form-item label="在线状态">
+        <el-form-item label="online status">
           <el-select
             v-model="online"
             size="mini"
             style="width: 8rem; margin-right: 1rem;"
-            placeholder="请选择"
+            placeholder="Please select"
             default-first-option
             @change="getChannelList"
           >
-            <el-option label="全部" value="" />
-            <el-option label="在线" value="true" />
-            <el-option label="离线" value="false" />
+            <el-option label="All" value="" />
+            <el-option label="online" value="true" />
+            <el-option label="Offline" value="false" />
           </el-select>
         </el-form-item>
-        <el-form-item label="类型">
+        <el-form-item label="Type">
           <el-select
             v-model="channelType"
             size="mini"
             style="width: 8rem; margin-right: 1rem;"
-            placeholder="请选择"
+            placeholder="Please select"
             default-first-option
             @change="getChannelList"
           >
-            <el-option label="全部" value="" />
+            <el-option label="All" value="" />
             <el-option v-for="item in Object.values($channelTypeList)" :key="item.id" :label="item.name" :value="item.id" />
           </el-select>
         </el-form-item>
@@ -57,18 +57,18 @@
             :loading="getChannelListLoading"
             :disabled="multipleSelection.length ===0"
             @click="clearUnusualRegion()"
-          >清除</el-button>
+          >Clear</el-button>
           <el-button
             size="mini"
             :loading="getChannelListLoading"
             @click="clearUnusualRegion(true)"
-          >全部清除</el-button>
+          >clear all</el-button>
         </el-form-item>
         <el-form-item style="float: right;">
           <el-button icon="el-icon-refresh-right" circle :loading="getChannelListLoading" @click="getChannelList()" />
         </el-form-item>
       </el-form>
-      <!--通道列表-->
+      <!--Channel list-->
       <el-table
         ref="channelListTable"
         size="small"
@@ -79,32 +79,32 @@
         @selection-change="handleSelectionChange"
       >
         <el-table-column type="selection" width="55" />
-        <el-table-column prop="gbName" label="名称" min-width="180" />
-        <el-table-column prop="gbDeviceId" label="编号" min-width="180" />
-        <el-table-column prop="gbManufacturer" label="厂家" min-width="100" />
-        <el-table-column prop="gbCivilCode" label="行政区划" min-width="100" />
-        <el-table-column label="类型" min-width="100">
+        <el-table-column prop="gbName" label="Name" min-width="180" />
+        <el-table-column prop="gbDeviceId" label="No." min-width="180" />
+        <el-table-column prop="gbManufacturer" label="Manufacturer" min-width="100" />
+        <el-table-column prop="gbCivilCode" label="Administrative division" min-width="100" />
+        <el-table-column label="Type" min-width="100">
           <template v-slot:default="scope">
             <div slot="reference" class="name-wrapper">
               <el-tag size="medium" effect="plain" type="success" :style="$channelTypeList[scope.row.dataType].style">{{ $channelTypeList[scope.row.dataType].name }}</el-tag>
             </div>
           </template>
         </el-table-column>
-        <el-table-column label="位置信息" min-width="150">
+        <el-table-column label="location information" min-width="150">
           <template v-slot:default="scope">
             <span v-if="scope.row.gbLongitude && scope.row.gbLatitude">{{ scope.row.gbLongitude }}<br>{{ scope.row.gbLatitude }}</span>
-            <span v-if="!scope.row.gbLongitude || !scope.row.gbLatitude">无</span>
+            <span v-if="!scope.row.gbLongitude || !scope.row.gbLatitude">None</span>
           </template>
         </el-table-column>
-        <el-table-column label="状态" min-width="100">
+        <el-table-column label="Status" min-width="100">
           <template v-slot:default="scope">
             <div slot="reference" class="name-wrapper">
-              <el-tag v-if="scope.row.gbStatus === 'ON'" size="medium">在线</el-tag>
-              <el-tag v-if="scope.row.gbStatus !== 'ON'" size="medium" type="info">离线</el-tag>
+              <el-tag v-if="scope.row.gbStatus === 'ON'" size="medium">online</el-tag>
+              <el-tag v-if="scope.row.gbStatus !== 'ON'" size="medium" type="info">Offline</el-tag>
             </div>
           </template>
         </el-table-column>
-        <el-table-column label="操作" min-width="140" fixed="right">
+        <el-table-column label="Operation" min-width="140" fixed="right">
           <template v-slot:default="scope">
             <el-button
               size="medium"
@@ -113,14 +113,14 @@
               :loading="scope.row.addRegionLoading"
               @click="addRegion(scope.row)"
             >
-              添加
+              add
             </el-button>
           </template>
         </el-table-column>
       </el-table>
       <div style="display: grid; grid-template-columns: 1fr 1fr">
         <div style="text-align: left; line-height: 32px">
-          <i class="el-icon-info" /> 清除后通道可正常添加到行政区划，添加可以自动添加对应的行政区划节点。
+          <i class="el-icon-info" /> After clearing, the channel can be added to the administrative division normally, and the corresponding administrative division node can be added automatically.。
         </div>
         <el-pagination
           style="text-align: right"
@@ -149,7 +149,7 @@ export default {
   data() {
     return {
       showDialog: false,
-      channelList: [], // 设备列表
+      channelList: [], // Device list
       searchStr: '',
       online: null,
       channelType: '',
@@ -222,7 +222,7 @@ export default {
         .then((data) => {
           this.$message.success({
             showClose: true,
-            message: '清除成功'
+            message: 'Clear successfully'
           })
           this.getChannelList()
         })
@@ -240,16 +240,16 @@ export default {
       row.addRegionLoading = true
       this.$store.dispatch('region/description', row.gbCivilCode)
         .then((data) => {
-          this.$confirm(`确定添加： ${data}`, '提示', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
+          this.$confirm(`Confirm to add： ${data}`, 'Tips', {
+            confirmButtonText: 'OK',
+            cancelButtonText: 'Cancel',
             type: 'info'
           }).then(() => {
             this.$store.dispatch('region/addByCivilCode', row.gbCivilCode)
               .then((data) => {
                 this.$message.success({
                   showClose: true,
-                  message: '添加成功'
+                  message: 'Added successfully'
                 })
                 this.initData()
               })

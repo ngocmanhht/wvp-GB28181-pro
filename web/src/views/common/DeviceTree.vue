@@ -1,14 +1,14 @@
 <template>
   <div id="DeviceTree" class="device-tree-container" style="height: 100%">
     <div class="device-tree-header">
-      <div class="header-title">通道列表</div>
+      <div class="header-title">Channel list</div>
       <div class="header-switch">
         <el-switch
           v-model="showRegion"
           active-color="#13ce66"
           inactive-color="rgb(64, 158, 255)"
-          active-text="行政区划"
-          inactive-text="业务分组"
+          active-text="Administrative division"
+          inactive-text="business grouping"
         />
       </div>
     </div>

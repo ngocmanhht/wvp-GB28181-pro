@@ -23,7 +23,7 @@ public class FtpDownloadManager {
 
     private final Map<String, SynchronousQueue<Object>> topicSubscribers = new ConcurrentHashMap<>();
 
-    // 下载过期检查
+    // Download expiration check
     @Scheduled(fixedDelay = 1, timeUnit = TimeUnit.SECONDS)
     public void downloadCatchCheck(){
         while (!downloadCatchQueue.isEmpty()) {
@@ -31,7 +31,7 @@ public class FtpDownloadManager {
                 JTRecordDownloadCatch take = downloadCatchQueue.take();
                 downloadCatchMap.remove(take.getPath());
             } catch (InterruptedException e) {
-                log.error("[下载过期] ", e);
+                log.error("[Download expired] ", e);
             }
         }
     }
@@ -42,7 +42,7 @@ public class FtpDownloadManager {
         downloadCatch.setPath(path);
         downloadCatch.setJ9206(j9206);
 
-        // 10分钟临时地址无法访问则删除
+        // 10If the temporary address cannot be accessed, it will be deleted.
         downloadCatch.setDelayTime(System.currentTimeMillis() + 10 * 60 * 1000L);
 
         downloadCatchMap.put(path, downloadCatch);
@@ -73,13 +73,13 @@ public class FtpDownloadManager {
     public Object runDownload(String path, long timeOut) {
         SynchronousQueue<Object> subscribe = subscribe(path);
         if (subscribe == null) {
-            log.error("[JT-下载] 暂停进程失败");
+            log.error("[JT-Download] Failed to suspend process");
             return null;
         }
         try {
             return subscribe.poll(timeOut, TimeUnit.SECONDS);
         } catch (InterruptedException e) {
-            log.warn("[JT-下载] 暂停进程超时", e);
+            log.warn("[JT-Download] Pause process timeout", e);
         } finally {
             this.unsubscribe(path);
             JTRecordDownloadCatch downloadCatch = getCatch(path);

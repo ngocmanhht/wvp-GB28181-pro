@@ -2,11 +2,11 @@
   <div id="app" class="app-container">
     <div style="height: calc(100vh - 124px);">
       <el-form :inline="true" size="mini">
-        <el-form-item label="搜索">
+        <el-form-item label="Search">
           <el-input
             v-model="search"
             style="margin-right: 1rem; width: auto;"
-            placeholder="关键字"
+            placeholder="Keywords"
             prefix-icon="el-icon-search"
             clearable
             @input="initData"
@@ -16,43 +16,43 @@
           <el-input
             v-model="callId"
             style="margin-right: 1rem; width: auto;"
-            placeholder="事务标识"
+            placeholder="Transaction ID"
             prefix-icon="el-icon-search"
             clearable
             @input="initData"
           />
         </el-form-item>
-        <el-form-item label="开始时间">
+        <el-form-item label="start time">
           <el-date-picker
             v-model="startTime"
             type="datetime"
             size="mini"
             style="width: 12rem; margin-right: 1rem;"
             value-format="yyyy-MM-dd HH:mm:ss"
-            placeholder="选择日期时间"
+            placeholder="Select date time"
             @change="initData"
           />
         </el-form-item>
-        <el-form-item label="结束时间">
+        <el-form-item label="end time">
           <el-date-picker
             v-model="endTime"
             type="datetime"
             size="mini"
             style="width: 12rem; margin-right: 1rem;"
             value-format="yyyy-MM-dd HH:mm:ss"
-            placeholder="选择日期时间"
+            placeholder="Select date time"
             @change="initData"
           />
         </el-form-item>
-        <el-form-item label="节点选择">
+        <el-form-item label="Node selection">
           <el-select
             v-model="mediaServerId"
             size="mini"
             style="width: 12rem; margin-right: 1rem;"
-            placeholder="请选择"
+            placeholder="Please select"
             @change="initData"
           >
-            <el-option label="全部" value="" />
+            <el-option label="All" value="" />
             <el-option
               v-for="item in mediaServerList"
               :key="item.id"
@@ -66,7 +66,7 @@
             :disabled="multipleSelection.length === 0"
             type="danger"
             @click="deleteRecord"
-          >移除
+          >Remove
           </el-button>
           <el-button
             icon="el-icon-download"
@@ -74,47 +74,47 @@
             :disabled="multipleSelection.length === 0"
             type="primary"
             @click="downloadZip"
-          >下载
+          >Download
           </el-button>
         </el-form-item>
         <el-form-item style="float: right;">
           <el-button icon="el-icon-refresh-right" circle :loading="loading" @click="initData()" />
         </el-form-item>
       </el-form>
-      <!--设备列表-->
+      <!--Device list-->
       <el-table :data="recordList" style="width: 100%" size="small" :loading="loading" height="calc(100% - 64px)" @selection-change="handleSelectionChange">
         <el-table-column
           type="selection"
           width="55"
         />
-        <el-table-column prop="app" label="应用名" />
-        <el-table-column prop="stream" label="流ID" />
+        <el-table-column prop="app" label="Application name" />
+        <el-table-column prop="stream" label="flowID" />
         <el-table-column prop="callId" label="Call Id"/>
-        <el-table-column label="开始时间">
+        <el-table-column label="start time">
           <template v-slot:default="scope">
             {{ formatTimeStamp(scope.row.startTime) }}
           </template>
         </el-table-column>
-        <el-table-column label="结束时间">
+        <el-table-column label="end time">
           <template v-slot:default="scope">
             {{ formatTimeStamp(scope.row.endTime) }}
           </template>
         </el-table-column>
-        <el-table-column label="时长">
+        <el-table-column label="duration">
           <template v-slot:default="scope">
             <el-tag v-if="myServerId !== scope.row.serverId" style="border-color: #ecf1af">{{ formatTime(scope.row.timeLen) }}</el-tag>
             <el-tag v-if="myServerId === scope.row.serverId">{{ formatTime(scope.row.timeLen) }}</el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="fileName" label="文件名称" width="200" />
-        <el-table-column prop="mediaServerId" label="流媒体" />
-        <el-table-column label="操作" fixed="right" width="260">
+        <el-table-column prop="fileName" label="File name" width="200" />
+        <el-table-column prop="mediaServerId" label="streaming media" />
+        <el-table-column label="Operation" fixed="right" width="260">
           <template v-slot:default="scope">
-            <el-button size="medium" icon="el-icon-video-play" type="text" @click="play(scope.row)">播放
+            <el-button size="medium" icon="el-icon-video-play" type="text" @click="play(scope.row)">play
             </el-button>
-            <el-button size="medium" icon="el-icon-download" type="text" @click="downloadFile(scope.row)">下载
+            <el-button size="medium" icon="el-icon-download" type="text" @click="downloadFile(scope.row)">Download
             </el-button>
-            <el-button size="medium" icon="el-icon-info" type="text" @click="showDetail(scope.row)">详情
+            <el-button size="medium" icon="el-icon-info" type="text" @click="showDetail(scope.row)">Details
             </el-button>
             <el-button
               size="medium"
@@ -122,7 +122,7 @@
               type="text"
               style="color: #f56c6c"
               @click="deleteOneRecord(scope.row)"
-            >删除
+            >Delete
             </el-button>
           </template>
         </el-table-column>
@@ -158,13 +158,13 @@ export default {
       endTime: '',
       playerTitle: '',
       videoUrl: '',
-      mediaServerList: [], // 滅体节点列表
+      mediaServerList: [], // List of dead nodes
       multipleSelection: [],
-      mediaServerId: '', // 媒体服务
-      mediaServerPath: null, // 媒体服务地址
-      recordList: [], // 设备列表
-      chooseRecord: null, // 媒体服务
-      updateLooper: 0, // 数据刷新轮训标志
+      mediaServerId: '', // media services
+      mediaServerPath: null, // Media service address
+      recordList: [], // Device list
+      chooseRecord: null, // media services
+      updateLooper: 0, // Data refresh rotation training flag
       currentPage: 1,
       count: 15,
       total: 0,
@@ -261,7 +261,7 @@ export default {
             }else {
               this.$message.error({
                 showClose: true,
-                message: '获取下载地址失败'
+                message: 'Failed to obtain download address'
               })
             }
           } else {
@@ -272,7 +272,7 @@ export default {
             }else {
               this.$message.error({
                 showClose: true,
-                message: '获取下载地址失败'
+                message: 'Failed to obtain download address'
               })
             }
           }
@@ -286,9 +286,9 @@ export default {
       this.$router.push(`/cloudRecord/detail/${row.app}/${row.stream}`)
     },
     deleteRecord() {
-      this.$confirm(`确定删除选中的${this.multipleSelection.length}个文件?`, '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+      this.$confirm(`Confirm to delete selected${this.multipleSelection.length}files?`, 'Tips', {
+        confirmButtonText: 'OK',
+        cancelButtonText: 'Cancel',
         type: 'warning'
       }).then(() => {
         const ids = []
@@ -299,7 +299,7 @@ export default {
           .then((data) => {
             this.$message.success({
               showClose: true,
-              message: '删除成功'
+              message: 'Delete successfully'
             })
             this.getRecordList()
           })
@@ -322,9 +322,9 @@ export default {
       link.click()
     },
     deleteOneRecord(row) {
-      this.$confirm('确定删除?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+      this.$confirm('Confirm deletion?', 'Tips', {
+        confirmButtonText: 'OK',
+        cancelButtonText: 'Cancel',
         type: 'warning'
       }).then(() => {
         const ids = []
@@ -333,7 +333,7 @@ export default {
           .then((data) => {
             this.$message.success({
               showClose: true,
-              message: '删除成功'
+              message: 'Delete successfully'
             })
             this.getRecordList()
           })
@@ -348,7 +348,7 @@ export default {
       if (second < 0) {
         second = 0
       }
-      return (h > 0 ? h + `小时` : '') + (minute > 0 ? minute + '分' : '') + (second > 0 ? second + '秒' : '')
+      return (h > 0 ? h + `hours` : '') + (minute > 0 ? minute + 'points' : '') + (second > 0 ? second + 'seconds' : '')
     },
     formatTimeStamp(time) {
       return moment.unix(time / 1000).format('yyyy-MM-DD HH:mm:ss')

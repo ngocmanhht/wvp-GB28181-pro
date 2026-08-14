@@ -9,11 +9,11 @@ import org.springframework.stereotype.Component;
 
 
 /**
- * @description: 在线事件监听器，监听到离线后，修改设备离在线状态。 设备在线有两个来源：
- *               1、设备主动注销，发送注销指令
- *               2、设备未知原因离线，心跳超时
+ * @description: Online event listener, after monitoring that the device is offline, modify the device's offline status. There are two sources for device online：
+ *               1、The device actively logs out and sends a logout command.
+ *               2、The device is offline for unknown reasons and the heartbeat times out.
  * @author: swwheihei
- * @date: 2020年5月6日 下午1:51:23
+ * @date: 2020May 6, 2018, afternoon1:51:23
  */
 @Slf4j
 @Component
@@ -25,7 +25,7 @@ public class MediaServerStatusEventListener {
 	@Async
 	@EventListener
 	public void onApplicationEvent(MediaServerOnlineEvent event) {
-		log.info("[媒体节点] 上线 ID：" + event.getMediaServer().getId());
+		log.info("[media node] Go online ID：" + event.getMediaServer().getId());
 		playService.zlmServerOnline(event.getMediaServer());
 	}
 
@@ -33,8 +33,8 @@ public class MediaServerStatusEventListener {
 	@EventListener
 	public void onApplicationEvent(MediaServerOfflineEvent event) {
 
-		log.info("[媒体节点] 离线，ID：" + event.getMediaServer().getId());
-		// 处理ZLM离线
+		log.info("[media node] Offline，ID：" + event.getMediaServer().getId());
+		// Handling ZLM offline
 		playService.zlmServerOffline(event.getMediaServer());
 	}
 }

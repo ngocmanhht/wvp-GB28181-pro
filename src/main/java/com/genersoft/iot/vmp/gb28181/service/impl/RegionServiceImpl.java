@@ -28,7 +28,7 @@ import org.springframework.util.ObjectUtils;
 import java.util.*;
 
 /**
- * 区域管理类
+ * Regional management
  */
 @Service
 @Slf4j
@@ -48,8 +48,8 @@ public class RegionServiceImpl implements IRegionService {
 
     @Override
     public void add(Region region) {
-        Assert.hasLength(region.getName(), "名称必须存在");
-        Assert.hasLength(region.getDeviceId(), "国标编号必须存在");
+        Assert.hasLength(region.getName(), "name must exist");
+        Assert.hasLength(region.getDeviceId(), "The national standard number must exist");
         if (ObjectUtils.isEmpty(region.getParentDeviceId()) || ObjectUtils.isEmpty(region.getParentDeviceId().trim())) {
             region.setParentDeviceId(null);
         }
@@ -58,7 +58,7 @@ public class RegionServiceImpl implements IRegionService {
         try {
             regionMapper.add(region);
         }catch (DuplicateKeyException e){
-            throw new ControllerException(ErrorCode.ERROR100.getCode(), "此行政区划已存在");
+            throw new ControllerException(ErrorCode.ERROR100.getCode(), "This administrative division already exists");
         }
 
     }
@@ -67,10 +67,10 @@ public class RegionServiceImpl implements IRegionService {
     @Transactional
     public boolean deleteByDeviceId(Integer regionDeviceId) {
         Region region = regionMapper.queryOne(regionDeviceId);
-        // 获取所有子节点
+        // Get all child nodes
         List<Region> allChildren = getAllChildren(regionDeviceId);
         allChildren.add(region);
-        // 设置使用这些节点的通道的civilCode为null,
+        // Set the civilCode of the channel using these nodes tonull,
         gbChannelService.removeCivilCode(allChildren);
         regionMapper.batchDelete(allChildren);
         return true;
@@ -108,25 +108,25 @@ public class RegionServiceImpl implements IRegionService {
     @Override
     @Transactional
     public void update(Region region) {
-        Assert.notNull(region.getDeviceId(), "编号不可为NULL");
-        Assert.notNull(region.getName(), "名称不可为NULL");
+        Assert.notNull(region.getDeviceId(), "The number cannot beNULL");
+        Assert.notNull(region.getName(), "Name cannot beNULL");
         Region regionInDb = regionMapper.queryOne(region.getId());
-        Assert.notNull(regionInDb, "待更新行政区划在数据库中不存在");
+        Assert.notNull(regionInDb, "The administrative division to be updated does not exist in the database");
         if (!regionInDb.getDeviceId().equals(region.getDeviceId())) {
             Region regionNewInDb = regionMapper.queryByDeviceId(region.getDeviceId());
-            Assert.isNull(regionNewInDb, "此行政区划已存在");
-            // 编号发生变化，把分配了这个行政区划的通道全部更新，并发送数据
+            Assert.isNull(regionNewInDb, "This administrative division already exists");
+            // When the number changes, all channels assigned to this administrative division are updated and the data is sent.
             gbChannelService.updateCivilCode(regionInDb.getDeviceId(), region.getDeviceId());
-            // 子节点信息更新
+            // Child node information update
             regionMapper.updateChild(region.getId(), region.getDeviceId());
         }
         regionMapper.update(region);
-        // 发送变化通知
+        // Send change notifications
         try {
-            // 发送catalog
+            // sendcatalog
             eventPublisher.channelEventPublishForUpdate(CommonGBChannel.build(region), null);
         }catch (Exception e) {
-            log.warn("[行政区划变化] 发送失败，{}", region.getDeviceId(), e);
+            log.warn("[Administrative division changes] Sending failed，{}", region.getDeviceId(), e);
         }
     }
 
@@ -157,20 +157,20 @@ public class RegionServiceImpl implements IRegionService {
 
     @Override
     public void syncFromChannel() {
-        // 获取未初始化的行政区划节点
+        // Get the uninitialized administrative division node
         List<String> civilCodeList = regionMapper.getUninitializedCivilCode();
         if (civilCodeList.isEmpty()) {
             return;
         }
         List<Region> regionList = new ArrayList<>();
-        // 收集节点的父节点,用于验证哪些节点的父节点不存在,方便一并存入
+        // Collect the parent nodes of nodes to verify which nodes' parent nodes do not exist, so that they can be stored together.
         Map<String, Region> regionMapForVerification = new HashMap<>();
         civilCodeList.forEach(civilCode->{
             CivilCodePo civilCodePo = CivilCodeUtil.INSTANCE.getCivilCodePo(civilCode);
             if (civilCodePo != null) {
                 Region region = Region.getInstance(civilCodePo);
                 regionList.add(region);
-                // 获取全部的父节点
+                // Get all parent nodes
                 List<CivilCodePo> civilCodePoList = CivilCodeUtil.INSTANCE.getAllParentCode(civilCode);
                 if (!civilCodePoList.isEmpty()) {
                     for (CivilCodePo codePo : civilCodePoList) {
@@ -183,7 +183,7 @@ public class RegionServiceImpl implements IRegionService {
             return;
         }
         if (!regionMapForVerification.isEmpty()) {
-            // 查询数据库中已经存在的.
+            // Query what already exists in the database.
             List<String> civilCodesInDb = regionMapper.queryInList(regionMapForVerification.keySet());
             if (!civilCodesInDb.isEmpty()) {
                 for (String code : civilCodesInDb) {
@@ -213,7 +213,7 @@ public class RegionServiceImpl implements IRegionService {
         for (Region region : regionList) {
             regionMapForVerification.put(region.getDeviceId(), region);
         }
-        // 查询数据库中已经存在的.
+        // Query what already exists in the database.
         List<Region> regionListInDb = regionMapper.queryInRegionListByDeviceId(regionList);
         if (!regionListInDb.isEmpty()) {
             for (Region region : regionListInDb) {
@@ -233,7 +233,7 @@ public class RegionServiceImpl implements IRegionService {
     public List<Region> getPath(String deviceId) {
         Region region = regionMapper.queryByDeviceId(deviceId);
         if (region == null) {
-            throw new ControllerException(ErrorCode.ERROR100.getCode(), "行政区划不存在");
+            throw new ControllerException(ErrorCode.ERROR100.getCode(), "Administrative divisions do not exist");
         }
         List<Region> allParent = getAllParent(region);
         List<Region> regionList = new LinkedList<>(allParent);
@@ -260,7 +260,7 @@ public class RegionServiceImpl implements IRegionService {
     public String getDescription(String civilCode) {
 
         CivilCodePo civilCodePo = CivilCodeUtil.INSTANCE.getCivilCodePo(civilCode);
-        Assert.notNull(civilCodePo, String.format("节点%s未查询到", civilCode));
+        Assert.notNull(civilCodePo, String.format("Node %s was not found", civilCode));
         StringBuilder sb = new StringBuilder();
         sb.append(civilCodePo.getName());
         List<CivilCodePo> civilCodePoList = CivilCodeUtil.INSTANCE.getAllParentCode(civilCode);
@@ -281,8 +281,8 @@ public class RegionServiceImpl implements IRegionService {
     @Transactional
     public void addByCivilCode(String civilCode) {
         CivilCodePo civilCodePo = CivilCodeUtil.INSTANCE.getCivilCodePo(civilCode);
-        // 查询是否已经存在此节点
-        Assert.notNull(civilCodePo, String.format("节点%s未查询到", civilCode));
+        // Query whether this node already exists
+        Assert.notNull(civilCodePo, String.format("Node %s was not found", civilCode));
         List<CivilCodePo> civilCodePoList = CivilCodeUtil.INSTANCE.getAllParentCode(civilCode);
         civilCodePoList.add(civilCodePo);
 
@@ -306,8 +306,8 @@ public class RegionServiceImpl implements IRegionService {
             if (parentId == -1 && codePo.getParentCode() != null) {
                 Region parentRegion = regionMapper.queryByDeviceId(codePo.getParentCode());
                 if (parentRegion == null){
-                    log.error(String.format("行政区划%sy已存在，但查询错误", codePo.getParentCode()));
-                    throw new ControllerException(ErrorCode.ERROR100.getCode(), String.format("行政区划%sy已存在，但查询错误", codePo.getParentCode()));
+                    log.error(String.format("Administrative division %sy already exists, but the query is wrong", codePo.getParentCode()));
+                    throw new ControllerException(ErrorCode.ERROR100.getCode(), String.format("Administrative division %sy already exists, but the query is wrong", codePo.getParentCode()));
                 }
                 region.setParentId(parentRegion.getId());
             }else {

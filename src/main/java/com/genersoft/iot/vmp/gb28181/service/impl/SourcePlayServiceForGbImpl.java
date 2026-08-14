@@ -25,27 +25,27 @@ public class SourcePlayServiceForGbImpl implements ISourcePlayService {
 
     @Override
     public void play(CommonGBChannel channel, Platform platform, Boolean record, ErrorCallback<StreamInfo> callback) {
-        // 国标通道
+        // National standard channel
         try {
             deviceChannelPlayService.play(channel, record, callback);
         } catch (PlayException e) {
             callback.run(e.getCode(), e.getMsg(), null);
         } catch (ControllerException e) {
-            log.error("[点播失败] {}({}), {}", channel.getGbName(), channel.getGbDeviceId(), e.getMsg());
+            log.error("[On-demand failed] {}({}), {}", channel.getGbName(), channel.getGbDeviceId(), e.getMsg());
             callback.run(Response.BUSY_HERE, "busy here", null);
         } catch (Exception e) {
-            log.error("[点播失败] {}({})", channel.getGbName(), channel.getGbDeviceId(), e);
+            log.error("[On-demand failed] {}({})", channel.getGbName(), channel.getGbDeviceId(), e);
             callback.run(Response.BUSY_HERE, "busy here", null);
         }
     }
 
     @Override
     public void stopPlay(CommonGBChannel channel) {
-        // 国标通道
+        // National standard channel
         try {
             deviceChannelPlayService.stopPlay(InviteSessionType.PLAY, channel);
         }  catch (Exception e) {
-            log.error("[停止点播失败] {}({})", channel.getGbName(), channel.getGbDeviceId(), e);
+            log.error("[Failed to stop on demand] {}({})", channel.getGbName(), channel.getGbDeviceId(), e);
         }
     }
 
@@ -56,10 +56,10 @@ public class SourcePlayServiceForGbImpl implements ISourcePlayService {
         } catch (PlayException e) {
             callback.run(e.getCode(), e.getMsg(), null);
         } catch (ControllerException e) {
-            log.error("[获取抓图失败] {}({}), {}", channel.getGbName(), channel.getGbDeviceId(), e.getMsg());
+            log.error("[Failed to obtain screenshot] {}({}), {}", channel.getGbName(), channel.getGbDeviceId(), e.getMsg());
             callback.run(Response.BUSY_HERE, "busy here", null);
         } catch (Exception e) {
-            log.error("[获取抓图失败] {}({})", channel.getGbName(), channel.getGbDeviceId(), e);
+            log.error("[Failed to obtain screenshot] {}({})", channel.getGbName(), channel.getGbDeviceId(), e);
             callback.run(Response.BUSY_HERE, "busy here", null);
         }
     }

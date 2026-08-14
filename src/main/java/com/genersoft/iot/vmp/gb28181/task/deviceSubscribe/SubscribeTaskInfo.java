@@ -15,7 +15,7 @@ public class SubscribeTaskInfo {
     private String key;
 
     /**
-     * 过期时间，单位： 秒
+     * Expiration time, unit: seconds
      */
     private long expireTime;
 

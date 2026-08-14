@@ -4,25 +4,25 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 /**
- * 文本信息标志
+ * text message sign
  */
 @Data
-@Schema(description = "文本信息标志")
+@Schema(description = "text message sign")
 public class JTTextSign {
 
-    @Schema(description = "1紧急,2服务,3通知")
+    @Schema(description = "1Emergency, 2 services, 3 notifications")
     private int type;
 
-    @Schema(description = "1终端显示器显示")
+    @Schema(description = "1Terminal monitor display")
     private boolean terminalDisplay;
 
-    @Schema(description = "1广告屏显示")
+    @Schema(description = "1Advertising screen display")
     private boolean adScreen;
 
-    @Schema(description = "1终端 TTS 播读")
+    @Schema(description = "1Terminal TTS reading")
     private boolean tts;
 
-    @Schema(description = "false: 中心导航信息 true CAN故障码信息")
+    @Schema(description = "false: Center navigation information true CAN fault code information")
     private boolean source;
 
     public byte encode(){

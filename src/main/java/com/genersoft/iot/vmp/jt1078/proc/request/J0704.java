@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 定位数据批量上传
+ * Positioning data batch upload
  */
 @Slf4j
 @MsgId(id = "0704")
@@ -38,7 +38,7 @@ public class J0704 extends Re {
             byteBuf.release();
             positionBaseInfoList.add(positionInfo);
         }
-        log.info("[JT-定位数据批量上传]: 共{}条", positionBaseInfoList.size());
+        log.info("[JT-Positioning data batch upload]: total{}Article", positionBaseInfoList.size());
         return null;
     }
 

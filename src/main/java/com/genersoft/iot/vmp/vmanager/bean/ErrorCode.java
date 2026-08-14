@@ -1,18 +1,18 @@
 package com.genersoft.iot.vmp.vmanager.bean;
 
 /**
- * 全局错误码
+ * Global error code
  */
 public enum ErrorCode {
-    SUCCESS(0, "成功"),
-    ERROR100(100, "失败"),
-    ERROR400(400, "参数或方法错误"),
-    ERROR404(404, "资源未找到"),
-    ERROR403(403, "无权限操作"),
-    ERROR486(486, "超时或无响应"),
-    ERROR401(401, "请登录后重新请求"),
-    ERROR408(408, "请求超时"),
-    ERROR500(500, "系统异常");
+    SUCCESS(0, "success"),
+    ERROR100(100, "failed"),
+    ERROR400(400, "Parameter or method error"),
+    ERROR404(404, "Resource not found"),
+    ERROR403(403, "Operation without permission"),
+    ERROR486(486, "Timeout or no response"),
+    ERROR401(401, "Please log in and request again"),
+    ERROR408(408, "Request timeout"),
+    ERROR500(500, "System exception");
 
     private final int code;
     private final String msg;

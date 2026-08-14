@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 媒体服务节点
+ * media service node
  */
 public interface IMediaServerService {
 
@@ -102,7 +102,7 @@ public interface IMediaServerService {
     Map<String, String> getFFmpegCMDs(MediaServer mediaServer);
 
     /**
-     * 根据应用名和流ID获取播放地址, 通过zlm接口检查是否存在
+     * Obtain the playback address based on the application name and stream ID, and check whether it exists through the zlm interface
      * @param app
      * @param stream
      * @return
@@ -111,7 +111,7 @@ public interface IMediaServerService {
 
 
     /**
-     * 根据应用名和流ID获取播放地址, 通过zlm接口检查是否存在, 返回的ip使用远程访问ip，适用与zlm与wvp在一台主机的情况
+     * Obtain the playback address based on the application name and stream ID, check whether it exists through the zlm interface, and use the remote access IP for the returned IP, which is suitable for situations where zlm and wvp are on the same host.
      * @param app
      * @param stream
      * @return
@@ -119,7 +119,7 @@ public interface IMediaServerService {
     StreamInfo getStreamInfoByAppAndStreamWithCheck(String app, String stream, String mediaServerId, boolean authority);
 
     /**
-     * 根据应用名和流ID获取播放地址, 只是地址拼接
+     * Get the playback address based on the application name and stream ID, just address splicing
      * @param app
      * @param stream
      * @return
@@ -127,7 +127,7 @@ public interface IMediaServerService {
     StreamInfo getStreamInfoByAppAndStream(MediaServer mediaServerItem, String app, String stream, MediaInfo mediaInfo, String callId);
 
     /**
-     * 根据应用名和流ID获取播放地址, 只是地址拼接，返回的ip使用远程访问ip，适用与zlm与wvp在一台主机的情况
+     * Obtain the playback address based on the application name and stream ID. It is just address splicing. The returned IP uses the remote access IP. It is suitable for the situation where zlm and wvp are on the same host.
      * @param app
      * @param stream
      * @return

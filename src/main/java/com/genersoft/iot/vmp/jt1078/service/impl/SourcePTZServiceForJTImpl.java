@@ -33,12 +33,12 @@ public class SourcePTZServiceForJTImpl implements ISourcePTZService {
     public void ptz(CommonGBChannel channel, FrontEndControlCodeForPTZ frontEndControlCode, ErrorCallback<String> callback) {
         JTChannel jtChannel = service.getChannelByDbId(channel.getDataDeviceId());
         if (jtChannel == null) {
-            callback.run(ErrorCode.ERROR404.getCode(), "通道不存在", null);
+            callback.run(ErrorCode.ERROR404.getCode(), "Channel does not exist", null);
             return;
         }
         JTDevice jtDevice = service.getDeviceById(jtChannel.getTerminalDbId());
         if (jtDevice == null) {
-            callback.run(ErrorCode.ERROR404.getCode(), "设备不存在", null);
+            callback.run(ErrorCode.ERROR404.getCode(), "Device does not exist", null);
             return;
         }
 
@@ -92,12 +92,12 @@ public class SourcePTZServiceForJTImpl implements ISourcePTZService {
     public void fi(CommonGBChannel channel, FrontEndControlCodeForFI frontEndControlCode, ErrorCallback<String> callback) {
         JTChannel jtChannel = service.getChannelByDbId(channel.getDataDeviceId());
         if (jtChannel == null) {
-            callback.run(ErrorCode.ERROR404.getCode(), "通道不存在", null);
+            callback.run(ErrorCode.ERROR404.getCode(), "Channel does not exist", null);
             return;
         }
         JTDevice jtDevice = service.getDeviceById(jtChannel.getTerminalDbId());
         if (jtDevice == null) {
-            callback.run(ErrorCode.ERROR404.getCode(), "设备不存在", null);
+            callback.run(ErrorCode.ERROR404.getCode(), "Device does not exist", null);
             return;
         }
         if (frontEndControlCode.getIris() != null) {
@@ -133,12 +133,12 @@ public class SourcePTZServiceForJTImpl implements ISourcePTZService {
     public void wiper(CommonGBChannel channel, FrontEndControlCodeForWiper frontEndControlCode, ErrorCallback<String> callback) {
         JTChannel jtChannel = service.getChannelByDbId(channel.getDataDeviceId());
         if (jtChannel == null) {
-            callback.run(ErrorCode.ERROR404.getCode(), "通道不存在", null);
+            callback.run(ErrorCode.ERROR404.getCode(), "Channel does not exist", null);
             return;
         }
         JTDevice jtDevice = service.getDeviceById(jtChannel.getTerminalDbId());
         if (jtDevice == null) {
-            callback.run(ErrorCode.ERROR404.getCode(), "设备不存在", null);
+            callback.run(ErrorCode.ERROR404.getCode(), "Device does not exist", null);
             return;
         }
         J9304 j9304 = new J9304();

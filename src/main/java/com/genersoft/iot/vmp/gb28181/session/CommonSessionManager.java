@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * 通用回调管理
+ * General callback management
  */
 @Component
 public class CommonSessionManager {
@@ -17,7 +17,7 @@ public class CommonSessionManager {
     public static Map<String, CommonSession> callbackMap = new ConcurrentHashMap<>();
 
     /**
-     * 存储回调相关的信息
+     * Store callback-related information
      */
     class CommonSession{
         public String session;
@@ -29,10 +29,10 @@ public class CommonSessionManager {
     }
 
     /**
-     * 添加回调
-     * @param sessionId 唯一标识
-     * @param callback 回调
-     * @param timeout 超时时间, 单位分钟
+     * Add callback
+     * @param sessionId unique identifier
+     * @param callback callback
+     * @param timeout Timeout time, in minutes
      */
     public void add(String sessionId, CommonCallback<Object> callback, CommonCallback<String> timeoutCallback,
                     Integer timeout) {
@@ -69,7 +69,7 @@ public class CommonSessionManager {
         callbackMap.remove(sessionID);
     }
 
-    @Scheduled(fixedRate= 60)   //每分钟执行一次
+    @Scheduled(fixedRate= 60)   //Execute once every minute
     public void execute(){
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.MINUTE, -1);
@@ -79,7 +79,7 @@ public class CommonSessionManager {
                 continue;
             }
             if (session.createTime < cal.getTimeInMillis()) {
-                // 超时
+                // timeout
                 if (session.timeoutCallback != null) {
                     session.timeoutCallback.run("timeout");
                 }

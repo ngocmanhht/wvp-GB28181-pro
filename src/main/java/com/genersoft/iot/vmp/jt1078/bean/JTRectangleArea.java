@@ -12,43 +12,43 @@ import java.nio.charset.Charset;
 
 @Setter
 @Getter
-@Schema(description = "矩形区域")
+@Schema(description = "Rectangular area")
 public class JTRectangleArea implements JTAreaOrRoute{
 
-    @Schema(description = "区域 ID")
+    @Schema(description = "area ID")
     private long id;
 
     @Schema(description = "")
     private JTAreaAttribute attribute;
 
-    @Schema(description = "左上点纬度")
+    @Schema(description = "Latitude of upper left point")
     private Double latitudeForUpperLeft;
 
-    @Schema(description = "左上点经度")
+    @Schema(description = "Upper left point longitude")
     private Double longitudeForUpperLeft;
 
-    @Schema(description = "右下点纬度")
+    @Schema(description = "Latitude of lower right point")
     private Double latitudeForLowerRight;
 
-    @Schema(description = "右下点经度")
+    @Schema(description = "Longitude of lower right point")
     private Double longitudeForLowerRight;
 
-    @Schema(description = "起始时间, yyyy-MM-dd HH:mm:ss")
+    @Schema(description = "start time, yyyy-MM-dd HH:mm:ss")
     private String startTime;
 
-    @Schema(description = "结束时间, yyyy-MM-dd HH:mm:ss")
+    @Schema(description = "end time, yyyy-MM-dd HH:mm:ss")
     private String endTime;
 
-    @Schema(description = "最高速度, 单位为千米每小时(km/h)")
+    @Schema(description = "Maximum speed in kilometers per hour(km/h)")
     private int maxSpeed;
 
-    @Schema(description = "超速持续时间, 单位为秒(s)")
+    @Schema(description = "Overspeed duration, in seconds(s)")
     private int overSpeedDuration;
 
-    @Schema(description = "夜间最高速度, 单位为千米每小时(km/h)")
+    @Schema(description = "Maximum speed at night in kilometers per hour(km/h)")
     private int nighttimeMaxSpeed;
 
-    @Schema(description = "区域的名称")
+    @Schema(description = "The name of the area")
     private String name;
 
 

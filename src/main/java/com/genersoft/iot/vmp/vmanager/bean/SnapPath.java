@@ -2,16 +2,16 @@ package com.genersoft.iot.vmp.vmanager.bean;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
-@Schema(description = "截图地址信息")
+@Schema(description = "Screenshot address information")
 public class SnapPath {
 
-    @Schema(description = "相对地址")
+    @Schema(description = "relative address")
     private String path;
 
-    @Schema(description = "绝对地址")
+    @Schema(description = "absolute address")
     private String absoluteFilePath;
 
-    @Schema(description = "请求地址")
+    @Schema(description = "Request address")
     private String url;
 
 

@@ -1,46 +1,46 @@
-<!-- 配置 -->
+<!-- Configuration -->
 
-# 配置
+#Configuration
 
-对于首次测试或者新手同学，我建议在局域网测试，并且关闭服务器与客户机的防火墙测试。建议部署在linux进行测试。
+For first-time testing or novice students, I recommend testing on the LAN and turning off the firewall test on the server and client. It is recommended to deploy on linux for testing.
 
 ```plantuml
 @startuml
-"WVP-PRO" -> "ZLMediaKit": RESTful 接口
-"WVP-PRO" <-- "ZLMediaKit": Web Hook 接口
+"WVP-PRO" -> "ZLMediaKit": RESTful interface
+"WVP-PRO" <-- "ZLMediaKit": Web Hook interface
 @enduml
 ```
 
-WVP-PRO通过调用ZLMediaKit的RESTful接口实现对ZLMediaKit行为的控制; ZLMediaKit通过Web Hook 接口把消息通知WVP-PRO。通过这种方式，实现了两者的互通。
-对于最简单的配置，你不需要修改ZLMediaKit的任何默认配置。你只需要在WVP-PRO中配置的ZLMediaKit信息即可
+WVP-PRO controls the behavior of ZLMediaKit by calling the RESTful interface of ZLMediaKit; ZLMediaKit notifies WVP-PRO of messages through the Web Hook interface. In this way, the interoperability between the two is achieved.
+For the simplest configuration, you do not need to modify any of ZLMediaKit's default configuration. You only need the ZLMediaKit information configured in WVP-PRO
 
-## 1 WVP配置文件位置
+## 1 WVP configuration file location
 
-基于spring boot的开发方式，配置文件的加载是很灵活的。默认在src/main/resources/application.yml，部分配置项是可选，你不需要全部配置在配置文件中，
-完全的配置说明可以参看"src/main/resources/配置详情.yml"。
+Based on the spring boot development method, the loading of configuration files is very flexible. By default, it is in src/main/resources/application.yml. Some configuration items are optional. You do not need to configure them all in the configuration file.
+For complete configuration instructions, please refer to "src/main/resources/configuration details.yml".
 
-### 1.1 默认加载配置文件方式
+### 1.1 Default configuration file loading method
 
-使用maven打包后的target里，已经存在了配置文件，默认加载配置文件为application.yml，查看内容发现其中spring.profiles.active配置的内容，将入配置的值为dev，那么具体加载的配置文件就是application-dev.yml，如果配置的值找不到对应的配置文件，修改值为dev。
+There is already a configuration file in the target packaged with maven. The default loaded configuration file is application.yml. Check the content and find the content of spring.profiles.active configuration. The value of the configuration is dev, then the specific configuration file to be loaded is application-dev.yml. If the configured value cannot find the corresponding configuration file, modify the value to dev.
 
 ```shell
 cd wvp-GB28181-pro/target
 java -jar wvp-pro-*.jar
 ```
 
-## 2 配置WVP-PRO
+## 2 Configure WVP-PRO
 
-wvp支持多种数据库，包括Mysql，Postgresql，金仓等，配置任选一种即可。
+wvp supports a variety of databases, including Mysql, Postgresql, Jincang, etc. You can choose any one for configuration.
 
-### 2.1 数据库配置
+### 2.1 Database configuration
 
-#### 2.1.1 初始化数据库
+#### 2.1.1 Initialize database
 
-首先使用创建数据库，然后使用sql/初始化.sql初始化数据库，如果是从旧版升级上来的，使用升级sql更新。
+First use create database, then use sql/initialization.sql to initialize the database. If it is upgraded from an old version, use upgrade sql to update.
 
-#### 2.1.2 Mysql数据库配置
+#### 2.1.2 Mysql database configuration
 
-数据库名称以wvp为例
+The database name is wvp as an example
 
 ```yaml
 spring:
@@ -52,9 +52,9 @@ spring:
     password: root123
 ```
 
-#### 2.1.3 Postgresql数据库配置
+#### 2.1.3 Postgresql database configuration
 
-数据库名称以wvp为例
+The database name is wvp as an example
 
 ```yaml
 spring:
@@ -69,9 +69,9 @@ pagehelper:
   helper-dialect: postgresql
 ```
 
-#### 2.1.4 金仓数据库配置
+#### 2.1.4 Gold warehouse database configuration
 
-数据库名称以wvp为例
+The database name is wvp as an example
 
 ```yaml
 spring:
@@ -87,80 +87,80 @@ pagehelper:
   helper-dialect: postgresql
 ```
 
-### 2.2 Redis数据库配置
+### 2.2 Redis database configuration
 
-配置wvp中的redis连接信息，建议wvp自己单独使用一个db。
+Configure the redis connection information in wvp. It is recommended that wvp use a separate db.
 
-### 2.3 配置服务启动端口（可直接使用默认配置）
+### 2.3 Configure the service startup port (the default configuration can be used directly)
 
 ```yaml
-# [可选] WVP监听的HTTP端口, 网页和接口调用都是这个端口
+# [Optional] The HTTP port WVP listens to, web pages and interface calls are all on this port
 server:
   port: 18080
 ```
 
-### 2.4 配置28181相关信息（可直接使用默认配置）
+### 2.4 Configure 28181 related information (the default configuration can be used directly)
 
 ```yaml
-# 作为28181服务器的配置
+# Configuration as 28181 server
 sip:
-  # [可选] 28181服务监听的端口
+  # [Optional] 28181 service listening port
   port: 5060
-  # 根据国标6.1.2中规定，domain宜采用ID统一编码的前十位编码。国标附录D中定义前8位为中心编码（由省级、市级、区级、基层编号组成，参照GB/T 2260-2007）
-  # 后两位为行业编码，定义参照附录D.3
-  # 3701020049标识山东济南历下区 信息行业接入
-  # [可选]
+  # According to the provisions of national standard 6.1.2, domain should use the first ten digits of the unified ID code. Appendix D of the national standard defines the first 8 digits as the center code (composed of provincial, municipal, district and grassroots numbers, refer toGB/T 2260-2007）
+  # The last two digits are industry codes. For definitions, please refer to the appendix.D.3
+  # 3701020049Identification of information industry access in Lixia District, Jinan, Shandong Province
+  # [Optional]
   domain: 3402000000
-  # [可选]
+  # [Optional]
   id: 34020000002000000001
-  # [可选] 默认设备认证密码，后续扩展使用设备单独密码, 移除密码将不进行校验
+  # [Optional] Default device authentication password. Subsequent extensions will use a device-specific password. If the password is removed, verification will not be performed.
   password: 12345678
 ```
 
-### 2.5 配置ZLMediaKit连接信息
+### 2.5 Configure ZLMediaKit connection information
 
 ```yaml
-#zlm 默认服务器配置
+#zlm Default server configuration
 media:
   id: zlmediakit-local
-  # [必须修改] zlm服务器的内网IP
+  # [Must be modified] Intranet of zlm serverIP
   ip: 172.19.128.50
-  # [可选] 有公网IP就配置公网IP, 不可用域名
+  # [Optional] If there is a public IP, configure the public IP. Domain names are not available.
   wan_ip:
-  # [必须修改] zlm服务器的http.port
+  # [Must be modified] zlm serverhttp.port
   http-port: 9092
-  # [可选] zlm服务器访问WVP所使用的IP, 默认使用127.0.0.1，zlm和wvp没有部署在同一台服务器时必须配置
+  # [Optional] The IP used by the zlm server to access WVP. The default is 127.0.0.1. This must be configured when zlm and wvp are not deployed on the same server.
   hook-ip: 172.19.128.50
-  # [必选选] zlm服务器的hook.admin_params=secret
+  # [Required] zlm serverhook.admin_params=secret
   secret: TWSYFgYJOQWB4ftgeYut8DW4wbs7pQnj
-  # 启用多端口模式, 多端口模式使用端口区分每路流，兼容性更好。 单端口使用流的ssrc区分， 点播超时建议使用多端口测试
+  # Enable multi-port mode. Multi-port mode uses ports to distinguish each flow for better compatibility. Single port uses the ssrc of the flow to distinguish. For on-demand timeout, it is recommended to use multi-port testing.
   rtp:
-    # [可选] 是否启用多端口模式, 开启后会在portRange范围内选择端口用于媒体流传输
+    # [Optional] Whether to enable multi-port mode. When enabled, the port will be selected within the portRange range for media streaming.
     enable: true
-    # [可选] 在此范围内选择端口用于媒体流传输, 必须提前在zlm上配置该属性，不然自动配置此属性可能不成功
-    port-range: 30000,35000 # 端口范围
-    # [可选] 国标级联在此范围内选择端口发送媒体流,
-    send-port-range: 40000,40300 # 端口范围
+    # [Optional] Select a port within this range for media streaming. This attribute must be configured on zlm in advance, otherwise the automatic configuration of this attribute may not be successful.
+    port-range: 30000,35000 # port range
+    # [Optional] National standard cascade selects a port within this range to send media streams,
+    send-port-range: 40000,40300 # port range
 ```
 
-### 2.4 策略配置
+### 2.4 Policy configuration
 
 ```yaml
-# [根据业务需求配置]
+# [Configure according to business needs]
 user-settings:
-  # 点播/录像回放 等待超时时间,单位：毫秒
+  # On-demand/video playback waiting timeout, unit: milliseconds
   play-timeout: 180000
-  # [可选] 自动点播， 使用固定流地址进行播放时，如果未点播则自动进行点播, 需要rtp.enable=true
+  # [Optional] Automatically play on demand. When using a fixed stream address for playback, if the playback is not on demand, it will automatically play on demand. Requiredrtp.enable=true
   auto-apply-play: true
-  # 推流直播是否录制
+  # Whether to record live push streaming
   record-push-live: true
-  # 国标是否录制
+  # Is the national standard recorded?
   record-sip: true
-  # 国标点播 按需拉流, true：有人观看拉流，无人观看释放， false：拉起后不自动释放
+  # National standard on-demand streaming on demand, true: someone is watching the stream, no one is watching it, it is released, false: it is not automatically released after it is pulled up.
   stream-on-demand: true
 ```
 
-更多完整的配置信息参考"src/main/resources/配置详情.yml"文件，需要那个配置项，复制到正在使用的配置文件中对应的文件即可。
+For more complete configuration information, refer to the "src/main/resources/configuration details.yml" file. If you need the configuration item, just copy it to the corresponding file in the configuration file being used.
 
-如果配置信息无误，你可以启动zlm，再启动wvp来测试了，启动成功的话，你可以在wvp的日志下看到zlm已连接的提示。
-接下来[部署到服务器](./_content/introduction/deployment.md)， 如果你只是本地运行直接在本地运行即可。
+If the configuration information is correct, you can start zlm and then start wvp to test. If the startup is successful, you can see the prompt that zlm is connected under the wvp log.
+Next [Deploy to server](./_content/introduction/deployment.md) , if you only run it locally, just run it locally.

@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * zlm hook事件中的on_publish事件的参数
+ * zlm hookParameters of the on_publish event in the event
  * @author lin
  */
 

@@ -27,9 +27,9 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- *  位置信息管理
+ *  Location information management
  */
-@Tag(name  = "位置信息管理")
+@Tag(name  = "Location information management")
 @Slf4j
 @RestController
 @RequestMapping("/api/position")
@@ -48,10 +48,10 @@ public class MobilePositionController {
 	private IDeviceService deviceService;
 
 
-    @Operation(summary = "查询历史轨迹", security = @SecurityRequirement(name = JwtUtils.HEADER))
-    @Parameter(name = "channelId", description = "通道的数据库ID")
-    @Parameter(name = "start", description = "开始时间")
-    @Parameter(name = "end", description = "结束时间")
+    @Operation(summary = "Query historical track", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Parameter(name = "channelId", description = "channel databaseID")
+    @Parameter(name = "start", description = "start time")
+    @Parameter(name = "end", description = "end time")
     @GetMapping("/history/{deviceId}")
     public List<MobilePosition> positions( Integer channelId,
                                            @RequestParam(required = false) String start,
@@ -66,20 +66,20 @@ public class MobilePositionController {
         return mobilePositionService.queryMobilePositions(channelId, start, end);
     }
 
-    @Operation(summary = "查询通道最新位置", security = @SecurityRequirement(name = JwtUtils.HEADER))
-    @Parameter(name = "channelId", description = "通道的数据库ID", required = true)
+    @Operation(summary = "Query the latest position of the channel", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Parameter(name = "channelId", description = "channel databaseID", required = true)
     @GetMapping("/latest")
     public MobilePosition latestPosition(Integer channelId) {
         return mobilePositionService.queryLatestPosition(channelId);
     }
 
     /**
-     *  获取移动位置信息
-     * @param deviceId 设备ID
+     *  Get mobile location information
+     * @param deviceId EquipmentID
      * @return
      */
-    @Operation(summary = "获取移动位置信息", security = @SecurityRequirement(name = JwtUtils.HEADER))
-    @Parameter(name = "deviceId", description = "设备国标编号", required = true)
+    @Operation(summary = "Get mobile location information", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Parameter(name = "deviceId", description = "Equipment national standard number", required = true)
     @GetMapping("/realtime/{deviceId}")
     public DeferredResult<MobilePosition> realTimePosition(@PathVariable String deviceId) {
         Device device = deviceService.getDeviceByDeviceId(deviceId);
@@ -90,17 +90,17 @@ public class MobilePositionController {
                 RequestMessage msg = new RequestMessage();
                 msg.setId(uuid);
                 msg.setKey(key);
-                msg.setData(String.format("获取移动位置信息失败，错误码： %s, %s", event.statusCode, event.msg));
+                msg.setData(String.format("Failed to obtain mobile location information, error code： %s, %s", event.statusCode, event.msg));
                 resultHolder.invokeResult(msg);
             });
         } catch (InvalidArgumentException | SipException | ParseException e) {
-            log.error("[命令发送失败] 获取移动位置信息: {}", e.getMessage());
-            throw new ControllerException(ErrorCode.ERROR100.getCode(), "命令发送失败: " + e.getMessage());
+            log.error("[Command sending failed] Get mobile location information: {}", e.getMessage());
+            throw new ControllerException(ErrorCode.ERROR100.getCode(), "Command sending failed: " + e.getMessage());
         }
         DeferredResult<MobilePosition> result = new DeferredResult<MobilePosition>(5*1000L);
 		result.onTimeout(()->{
-			log.warn(String.format("获取移动位置信息超时"));
-			// 释放rtpserver
+			log.warn(String.format("Timeout for obtaining mobile location information"));
+			// releasertpserver
 			RequestMessage msg = new RequestMessage();
             msg.setId(uuid);
             msg.setKey(key);
@@ -112,16 +112,16 @@ public class MobilePositionController {
     }
 
     /**
-     * 订阅位置信息
-     * @param deviceId 设备ID
-     * @param expires 订阅超时时间
-     * @param interval 上报时间间隔
-     * @return true = 命令发送成功
+     * Subscribe to location information
+     * @param deviceId EquipmentID
+     * @param expires Subscription timeout
+     * @param interval Reporting interval
+     * @return true = Command sent successfully
      */
-    @Operation(summary = "订阅位置信息", security = @SecurityRequirement(name = JwtUtils.HEADER))
-    @Parameter(name = "deviceId", description = "设备国标编号", required = true)
-    @Parameter(name = "expires", description = "订阅超时时间", required = true)
-    @Parameter(name = "interval", description = "上报时间间隔", required = true)
+    @Operation(summary = "Subscribe to location information", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Parameter(name = "deviceId", description = "Equipment national standard number", required = true)
+    @Parameter(name = "expires", description = "Subscription timeout", required = true)
+    @Parameter(name = "interval", description = "Reporting interval", required = true)
     @GetMapping("/subscribe/{deviceId}")
     public void positionSubscribe(@PathVariable String deviceId,
                                                     @RequestParam String expires,

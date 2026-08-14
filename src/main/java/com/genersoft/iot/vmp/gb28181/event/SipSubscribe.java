@@ -30,16 +30,16 @@ public class SipSubscribe {
     private final DelayQueue<SipEvent> delayQueue = new DelayQueue<>();
 
 
-    @Scheduled(fixedDelay = 200)   //每200毫秒执行
+    @Scheduled(fixedDelay = 200)   //Executed every 200 milliseconds
     public void execute(){
         while (!delayQueue.isEmpty()) {
             try {
                 SipEvent take = delayQueue.take();
-                // 出现超时异常
+                // A timeout exception occurred
                 if(take.getErrorEvent() != null) {
                     EventResult<Object> eventResult = new EventResult<>();
                     eventResult.type = EventResultType.timeout;
-                    eventResult.msg = "消息超时未回复";
+                    eventResult.msg = "Message timed out and no reply was received";
                     eventResult.statusCode = -1024;
                     take.getErrorEvent().response(eventResult);
                 }
@@ -57,21 +57,21 @@ public class SipSubscribe {
      *
      */
     public enum EventResultType{
-        // 超时
+        // timeout
         timeout,
-        // 回复
+        // Reply
         response,
-        // 事务已结束
+        // Transaction ended
         transactionTerminated,
-        // 会话已结束
+        // Session ended
         dialogTerminated,
-        // 设备未找到
+        // Device not found
         deviceNotFoundEvent,
-        // 消息发送失败
+        // Message sending failed
         cmdSendFailEvent,
-        // 消息发送失败
+        // Message sending failed
         failedToGetPort,
-        // 收到失败的回复
+        // Received failed reply
         failedResult
     }
 
@@ -113,7 +113,7 @@ public class SipSubscribe {
             }else if (event instanceof TimeoutEvent) {
                 TimeoutEvent timeoutEvent = (TimeoutEvent)event;
                 this.type = EventResultType.timeout;
-                this.msg = "消息超时未回复";
+                this.msg = "Message timed out and no reply was received";
                 this.statusCode = -1024;
                 if (timeoutEvent.isServerTransaction()) {
                     this.callId = ((SIPRequest)timeoutEvent.getServerTransaction().getRequest()).getCallIdHeader().getCallId();
@@ -123,7 +123,7 @@ public class SipSubscribe {
             }else if (event instanceof TransactionTerminatedEvent) {
                 TransactionTerminatedEvent transactionTerminatedEvent = (TransactionTerminatedEvent)event;
                 this.type = EventResultType.transactionTerminated;
-                this.msg = "事务已结束";
+                this.msg = "Transaction ended";
                 this.statusCode = -1024;
                 if (transactionTerminatedEvent.isServerTransaction()) {
                     this.callId = ((SIPRequest)transactionTerminatedEvent.getServerTransaction().getRequest()).getCallIdHeader().getCallId();
@@ -133,12 +133,12 @@ public class SipSubscribe {
             }else if (event instanceof DialogTerminatedEvent) {
                 DialogTerminatedEvent dialogTerminatedEvent = (DialogTerminatedEvent)event;
                 this.type = EventResultType.dialogTerminated;
-                this.msg = "会话已结束";
+                this.msg = "Session ended";
                 this.statusCode = -1024;
                 this.callId = dialogTerminatedEvent.getDialog().getCallId().getCallId();
             }else if (event instanceof DeviceNotFoundEvent) {
                 this.type = EventResultType.deviceNotFoundEvent;
-                this.msg = "设备未找到";
+                this.msg = "Device not found";
                 this.statusCode = -1024;
                 this.callId = ((DeviceNotFoundEvent) event).getCallId();
             }

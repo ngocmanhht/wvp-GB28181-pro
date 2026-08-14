@@ -14,9 +14,9 @@ import java.util.List;
 import static com.genersoft.iot.vmp.gb28181.utils.XmlUtil.getText;
 
 /**
- * @description: 移动位置bean
+ * @description: Move locationbean
  * @author: lawrencehj
- * @date: 2021年1月23日
+ * @date: 2021January 23
  */
 
 @Slf4j
@@ -24,47 +24,47 @@ import static com.genersoft.iot.vmp.gb28181.utils.XmlUtil.getText;
 public class MobilePosition {
 
     /**
-     * 通道数据库自增Id
+     * Channel database auto-incrementId
      */
     private Integer channelId;
 
     /**
-     * 通道国标编号
+     * Channel national standard number
      */
     private String channelDeviceId;
 
     /**
-     * 通知时间
+     * Notification time
      */
     private long timestamp;
 
     /**
-     * 经度
+     * longitude
      */
     private double longitude;
 
     /**
-     * 纬度
+     * Latitude
      */
     private double latitude;
 
     /**
-     * 海拔高度
+     * altitude
      */
     private double altitude;
 
     /**
-     * 速度
+     * speed
      */
     private double speed;
 
     /**
-     * 方向
+     * direction
      */
     private double direction;
 
     /**
-     * 创建时间
+     * creation time
      */
     private String createTime;
 
@@ -84,7 +84,7 @@ public class MobilePosition {
         }else {
             Long timestamp = SipUtils.parseTimeForTimestamp(time);
             if(timestamp == null) {
-                log.warn("解析移动位置时间失败：{}， 使用当前时间", time);
+                log.warn("Failed to parse mobile location time：{}， Use current time", time);
                 mobilePosition.setTimestamp(System.currentTimeMillis());
             }else {
                 mobilePosition.setTimestamp(timestamp);

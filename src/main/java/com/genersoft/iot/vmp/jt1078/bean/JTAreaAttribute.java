@@ -8,40 +8,40 @@ import lombok.Setter;
 
 @Setter
 @Getter
-@Schema(description = "区域属性")
+@Schema(description = "Area properties")
 public class JTAreaAttribute {
 
-    @Schema(description = "是否启用起始时间与结束时间的判断规则 ,false：否；true：是")
+    @Schema(description = "Whether to enable the judgment rules of start time and end time, false: no; true: yes")
     private boolean ruleForTimeLimit;
 
-    @Schema(description = "是否启用最高速度、超速持续时间和夜间最高速度的判断规则 ,false：否；true：是")
+    @Schema(description = "Whether to enable the judgment rules for maximum speed, overspeed duration and nighttime maximum speed, false: no; true: yes")
     private boolean ruleForSpeedLimit;
 
-    @Schema(description = "进区域是否报警给驾驶员,false：否；true：是")
+    @Schema(description = "Whether to alert the driver when entering the area, false: no; true: yes")
     private boolean ruleForAlarmToDriverWhenEnter;
 
-    @Schema(description = "进区域是否报警给平台 ,false：否；true：是")
+    @Schema(description = "Whether to alert the platform when entering the area, false: no; true: yes")
     private boolean ruleForAlarmToPlatformWhenEnter;
 
-    @Schema(description = "出区域是否报警给驾驶员,false：否；true：是")
+    @Schema(description = "Whether to alert the driver when leaving the area, false: no; true: yes")
     private boolean ruleForAlarmToDriverWhenExit;
 
-    @Schema(description = "出区域是否报警给平台 ,false：否；true：是")
+    @Schema(description = "Whether to alarm the platform when leaving the area, false: no; true: yes")
     private boolean ruleForAlarmToPlatformWhenExit;
 
-    @Schema(description = "false：北纬；true：南纬")
+    @Schema(description = "false：North latitude; true: south latitude")
     private boolean southLatitude;
 
-    @Schema(description = "false：东经；true：西经")
+    @Schema(description = "false：East longitude; true: west longitude")
     private boolean westLongitude;
 
-    @Schema(description = "false：允许开门；true：禁止开门")
+    @Schema(description = "false：Allow opening the door; true: prohibit opening the door")
     private boolean prohibitOpeningDoors;
 
-    @Schema(description = "false：进区域开启通信模块；true：进区域关闭通信模块")
+    @Schema(description = "false：Turn on the communication module when entering the area; true: turn off the communication module when entering the area")
     private boolean ruleForTurnOffCommunicationWhenEnter;
 
-    @Schema(description = "false：进区域不采集 GNSS 详细定位数据；true：进区域采集 GNSS 详细定位数据")
+    @Schema(description = "false：Do not collect GNSS detailed positioning data when entering the area; true: Collect GNSS detailed positioning data when entering the area")
     private boolean ruleForGnssWhenEnter;
 
     public ByteBuf encode(){

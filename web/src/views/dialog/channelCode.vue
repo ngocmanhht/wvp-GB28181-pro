@@ -1,7 +1,7 @@
 <template>
   <el-dialog
     v-el-drag-dialog
-    title="生成国标编码"
+    title="Generate national standard code"
     width="65rem"
     top="2rem"
     center
@@ -45,7 +45,7 @@
         </el-radio-group>
       </el-tab-pane>
       <el-tab-pane name="3">
-        请手动输入基层接入单位编码,两位数字
+        Please manually enter the grassroots access unit code, two digits
         <div slot="label">
           <div class="show-code-item">{{ allVal[3].val }}</div>
           <div style="text-align: center">{{ allVal[3].meaning }}</div>
@@ -53,7 +53,7 @@
         <el-input
           v-model="allVal[3].val"
           type="text"
-          placeholder="请输入内容"
+          placeholder="Please enter content"
           maxlength="2"
           :disabled="allVal[3].lock"
           show-word-limit
@@ -93,7 +93,7 @@
         </el-radio-group>
       </el-tab-pane>
       <el-tab-pane name="7">
-        请手动输入设备/用户序号, 六位数字
+        Please enter the device manually/User serial number, six digits
         <div slot="label">
           <div class="show-code-item">{{ allVal[7].val }}</div>
           <div style="text-align: center">{{ allVal[7].meaning }}</div>
@@ -101,7 +101,7 @@
         <el-input
           v-model="allVal[7].val"
           type="text"
-          placeholder="请输入内容"
+          placeholder="Please enter content"
           maxlength="6"
           :disabled="allVal[7].lock"
           show-word-limit
@@ -112,8 +112,8 @@
 
       <el-form-item style="margin-top: 22px; margin-bottom: 0;">
         <div style="float:right;">
-          <el-button type="primary" @click="handleOk">保存</el-button>
-          <el-button @click="closeModel">取消</el-button>
+          <el-button type="primary" @click="handleOk">save</el-button>
+          <el-button @click="closeModel">Cancel</el-button>
         </div>
       </el-form-item>
     </el-form>
@@ -134,58 +134,58 @@ export default {
       allVal: [
         {
           id: [1, 2],
-          meaning: '省级编码',
+          meaning: 'Provincial code',
           val: '11',
-          type: '中心编码',
+          type: 'center coding',
           lock: false
         },
         {
           id: [3, 4],
-          meaning: '市级编码',
+          meaning: 'Municipal code',
           val: '01',
-          type: '中心编码',
+          type: 'center coding',
           lock: false
         },
         {
           id: [5, 6],
-          meaning: '区级编码',
+          meaning: 'District level coding',
           val: '01',
-          type: '中心编码',
+          type: 'center coding',
           lock: false
         },
         {
           id: [7, 8],
-          meaning: '基层接入单位编码',
+          meaning: 'Basic access unit code',
           val: '01',
-          type: '中心编码',
+          type: 'center coding',
           lock: false
         },
         {
           id: [9, 10],
-          meaning: '行业编码',
+          meaning: 'Industry code',
           val: '00',
-          type: '行业编码',
+          type: 'Industry code',
           lock: false
         },
         {
           id: [11, 13],
-          meaning: '类型编码',
+          meaning: 'type encoding',
           val: '132',
-          type: '类型编码',
+          type: 'type encoding',
           lock: false
         },
         {
           id: [14],
-          meaning: '网络标识编码',
+          meaning: 'network identification encoding',
           val: '7',
-          type: '网络标识',
+          type: 'Network ID',
           lock: false
         },
         {
           id: [15, 20],
-          meaning: '设备/用户序号',
+          meaning: 'Equipment/User serial number',
           val: '000001',
-          type: '序号',
+          type: 'serial number',
           lock: false
         }
       ],
@@ -234,7 +234,7 @@ export default {
         if (this.activeKey !== '0' && parent === '') {
           this.$message.error({
             showClose: true,
-            message: '请先选择上级行政区划'
+            message: 'Please select the upper-level administrative division first'
           })
         }
         this.queryChildList(parent)

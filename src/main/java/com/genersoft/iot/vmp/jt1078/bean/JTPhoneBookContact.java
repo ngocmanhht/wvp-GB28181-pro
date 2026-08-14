@@ -10,16 +10,16 @@ import java.nio.charset.Charset;
 
 @Setter
 @Getter
-@Schema(description = "电话本联系人")
+@Schema(description = "Phone book contacts")
 public class JTPhoneBookContact {
 
-    @Schema(description = "1:呼入,2:呼出,3:呼入/呼出")
+    @Schema(description = "1:Incoming call, 2: outgoing call, 3: incoming call/exhale")
     private int sign;
 
-    @Schema(description = "电话号码")
+    @Schema(description = "phone number")
     private String phoneNumber;
 
-    @Schema(description = "联系人")
+    @Schema(description = "Contact person")
     private String contactName;
 
     public ByteBuf encode(){

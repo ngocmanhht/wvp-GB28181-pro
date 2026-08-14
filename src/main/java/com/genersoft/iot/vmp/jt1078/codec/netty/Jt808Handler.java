@@ -36,7 +36,7 @@ public class Jt808Handler extends ChannelInboundHandlerAdapter {
         } else {
             ctx.fireChannelRead(msg);
         }
-        // 读取完成后的消息释放
+        // Message release after reading is completed
         ReferenceCountUtil.release(msg);
     }
 

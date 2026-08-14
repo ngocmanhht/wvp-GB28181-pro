@@ -2,47 +2,47 @@
   <div style="width: 100%;">
     <div style="height: calc(100vh - 260px); overflow: auto">
       <el-form ref="form" :model="form" label-width="240px" style="width: 50%; margin: 0 auto">
-        <el-form-item label="最高速度(千米每小时)" prop="topSpeed">
+        <el-form-item label="top speed(kilometers per hour)" prop="topSpeed">
           <el-input type="number" v-model="form.topSpeed" />
         </el-form-item>
-        <el-form-item label="超速持续时间(秒)" prop="overSpeedDuration">
+        <el-form-item label="Speeding duration(seconds)" prop="overSpeedDuration">
           <el-input type="number" v-model="form.overSpeedDuration" />
         </el-form-item>
-        <el-form-item label="连续驾驶时间门限(秒)" prop="continuousDrivingTimeThreshold">
+        <el-form-item label="Continuous driving time threshold(seconds)" prop="continuousDrivingTimeThreshold">
           <el-input type="number" v-model="form.continuousDrivingTimeThreshold" />
         </el-form-item>
-        <el-form-item label="当天累计驾驶时间门限(秒)" prop="cumulativeDrivingTimeThresholdForTheDay">
+        <el-form-item label="Cumulative driving time threshold for the day(seconds)" prop="cumulativeDrivingTimeThresholdForTheDay">
           <el-input type="number" v-model="form.cumulativeDrivingTimeThresholdForTheDay" />
         </el-form-item>
-        <el-form-item label="最小休息时间(秒)" prop="minimumBreakTime">
+        <el-form-item label="minimum rest time(seconds)" prop="minimumBreakTime">
           <el-input type="number" v-model="form.minimumBreakTime" />
         </el-form-item>
-        <el-form-item label="最长停车时间(秒)" prop="maximumParkingTime">
+        <el-form-item label="Maximum parking time(seconds)" prop="maximumParkingTime">
           <el-input type="number" v-model="form.maximumParkingTime" />
         </el-form-item>
-        <el-form-item label="超速预警差值(1/10 千米每小时)" prop="overSpeedWarningDifference">
+        <el-form-item label="Speed warning difference(1/10 kilometers per hour)" prop="overSpeedWarningDifference">
           <el-input type="number" v-model="form.overSpeedWarningDifference" />
         </el-form-item>
-        <el-form-item label="疲劳驾驶预警差值(秒)" prop="drowsyDrivingWarningDifference">
+        <el-form-item label="Fatigue driving warning difference(seconds)" prop="drowsyDrivingWarningDifference">
           <el-input type="number" v-model="form.drowsyDrivingWarningDifference" />
         </el-form-item>
         <div v-if="form.collisionAlarmParams">
-          <el-form-item label="碰撞报警-碰撞时间(毫秒)" prop="collisionAlarmParamsCollisionAlarmTime">
+          <el-form-item label="Collision alarm-collision time(milliseconds)" prop="collisionAlarmParamsCollisionAlarmTime">
             <el-input type="number" v-model="form.collisionAlarmParams.collisionAlarmTime" />
           </el-form-item>
-          <el-form-item label="碰撞报警-碰撞加速度(0.1g)" prop="collisionAlarmParamsCollisionAcceleration">
+          <el-form-item label="Collision alarm-collision acceleration(0.1g)" prop="collisionAlarmParamsCollisionAcceleration">
             <el-input type="number" v-model="form.collisionAlarmParams.collisionAcceleration" />
           </el-form-item>
         </div>
 
-        <el-form-item label="侧翻报警参数-侧翻角度(度)" prop="rolloverAlarm">
+        <el-form-item label="Rollover alarm parameters-Rollover angle(Degree)" prop="rolloverAlarm">
           <el-input v-model="form.rolloverAlarm" clearable />
         </el-form-item>
       </el-form>
     </div>
     <p style="text-align: right">
-      <el-button type="primary" @click="onSubmit">确认</el-button>
-      <el-button @click="showDevice">取消</el-button>
+      <el-button type="primary" @click="onSubmit">Confirm</el-button>
+      <el-button @click="showDevice">Cancel</el-button>
     </p>
 
   </div>

@@ -1,7 +1,7 @@
 <template>
   <div id="deviceEdit" v-loading="isLoging">
     <el-dialog
-      title="设备编辑"
+      title="Device editing"
       width="40%"
       top="2rem"
       :close-on-click-modal="false"
@@ -11,13 +11,13 @@
     >
       <div id="shared" style="margin-top: 1rem;margin-right: 100px;">
         <el-form ref="form" :rules="rules" :model="form" label-width="200px">
-          <el-form-item label="终端手机号" prop="phoneNumber">
+          <el-form-item label="Terminal mobile phone number" prop="phoneNumber">
             <el-input v-model="form.phoneNumber" clearable />
           </el-form-item>
           <el-form-item>
             <div style="float: right;">
-              <el-button type="primary" @click="onSubmit">确认</el-button>
-              <el-button @click="close">取消</el-button>
+              <el-button type="primary" @click="onSubmit">Confirm</el-button>
+              <el-button @click="close">Cancel</el-button>
             </div>
           </el-form-item>
         </el-form>
@@ -38,7 +38,7 @@ export default {
       form: {},
       isEdit: false,
       rules: {
-        deviceId: [{ required: true, message: '请输入设备编号', trigger: 'blur' }]
+        deviceId: [{ required: true, message: 'Please enter the device number', trigger: 'blur' }]
       }
     }
   },

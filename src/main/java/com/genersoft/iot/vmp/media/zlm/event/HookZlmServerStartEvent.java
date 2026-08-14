@@ -7,7 +7,7 @@ import lombok.Setter;
 import org.springframework.context.ApplicationEvent;
 
 /**
- * zlm server_start事件
+ * zlm server_startevent
  */
 @Setter
 @Getter

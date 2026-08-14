@@ -56,7 +56,7 @@ public class RedisRpcChannelPlayController extends RpcController {
 
 
     /**
-     * 点播国标设备
+     * On-demand national standard equipment
      */
     @RedisRpcMapping("play")
     public RedisRpcResponse playChannel(RedisRpcRequest request) {
@@ -68,7 +68,7 @@ public class RedisRpcChannelPlayController extends RpcController {
             response.setBody("param error");
             return response;
         }
-        // 获取对应的设备和通道信息
+        // Get the corresponding device and channel information
         CommonGBChannel channel = channelService.getOne(channelId);
         if (channel == null) {
             response.setStatusCode(ErrorCode.ERROR400.getCode());
@@ -85,7 +85,7 @@ public class RedisRpcChannelPlayController extends RpcController {
             }else {
                 response.setStatusCode(code);
             }
-            // 手动发送结果
+            // Send results manually
             sendResponse(response);
         });
         return null;
@@ -93,7 +93,7 @@ public class RedisRpcChannelPlayController extends RpcController {
 
 
     /**
-     * 点播国标设备
+     * On-demand national standard equipment
      */
     @RedisRpcMapping("queryRecordInfo")
     public RedisRpcResponse queryRecordInfo(RedisRpcRequest request) {
@@ -108,7 +108,7 @@ public class RedisRpcChannelPlayController extends RpcController {
             response.setBody("param error");
             return response;
         }
-        // 获取对应的设备和通道信息
+        // Get the corresponding device and channel information
         CommonGBChannel channel = channelService.getOne(channelId);
         if (channel == null) {
             response.setStatusCode(ErrorCode.ERROR400.getCode());
@@ -124,7 +124,7 @@ public class RedisRpcChannelPlayController extends RpcController {
                 }else {
                     response.setStatusCode(code);
                 }
-                // 手动发送结果
+                // Send results manually
                 sendResponse(response);
             });
         }catch (ControllerException e) {
@@ -136,7 +136,7 @@ public class RedisRpcChannelPlayController extends RpcController {
     }
 
     /**
-     * 暂停录像回放
+     * Pause video playback
      */
     @RedisRpcMapping("playbackPause")
     public RedisRpcResponse playbackPause(RedisRpcRequest request) {
@@ -161,7 +161,7 @@ public class RedisRpcChannelPlayController extends RpcController {
     }
 
     /**
-     * 恢复录像回放
+     * Resume video playback
      */
     @RedisRpcMapping("playbackResume")
     public RedisRpcResponse playbackResume(RedisRpcRequest request) {
@@ -187,7 +187,7 @@ public class RedisRpcChannelPlayController extends RpcController {
 
 
     /**
-     * 停止点播国标设备
+     * Stop on-demand national standard equipment
      */
     @RedisRpcMapping("stop")
     public RedisRpcResponse stop(RedisRpcRequest request) {
@@ -205,7 +205,7 @@ public class RedisRpcChannelPlayController extends RpcController {
         String stream = jsonObject.getString("stream");
         InviteSessionType type = jsonObject.getObject("inviteSessionType", InviteSessionType.class);
 
-        // 获取对应的设备和通道信息
+        // Get the corresponding device and channel information
         CommonGBChannel channel = channelService.getOne(channelId);
         if (channel == null) {
             response.setStatusCode(ErrorCode.ERROR400.getCode());
@@ -223,7 +223,7 @@ public class RedisRpcChannelPlayController extends RpcController {
     }
 
     /**
-     * 录像回放国标设备
+     * Video playback national standard equipment
      */
     @RedisRpcMapping("playback")
     public RedisRpcResponse playbackChannel(RedisRpcRequest request) {
@@ -238,7 +238,7 @@ public class RedisRpcChannelPlayController extends RpcController {
             response.setBody("param error");
             return response;
         }
-        // 获取对应的设备和通道信息
+        // Get the corresponding device and channel information
         CommonGBChannel channel = channelService.getOne(channelId);
         if (channel == null) {
             response.setStatusCode(ErrorCode.ERROR400.getCode());
@@ -257,14 +257,14 @@ public class RedisRpcChannelPlayController extends RpcController {
             }else {
                 response.setStatusCode(code);
             }
-            // 手动发送结果
+            // Send results manually
             sendResponse(response);
         });
         return null;
     }
 
     /**
-     * 录像回放国标设备
+     * Video playback national standard equipment
      */
     @RedisRpcMapping("download")
     public RedisRpcResponse downloadChannel(RedisRpcRequest request) {
@@ -280,7 +280,7 @@ public class RedisRpcChannelPlayController extends RpcController {
             response.setBody("param error");
             return response;
         }
-        // 获取对应的设备和通道信息
+        // Get the corresponding device and channel information
         CommonGBChannel channel = channelService.getOne(channelId);
         if (channel == null) {
             response.setStatusCode(ErrorCode.ERROR400.getCode());
@@ -300,14 +300,14 @@ public class RedisRpcChannelPlayController extends RpcController {
             }else {
                 response.setStatusCode(code);
             }
-            // 手动发送结果
+            // Send results manually
             sendResponse(response);
         });
         return null;
     }
 
     /**
-     * 云台控制
+     * PTZ control
      */
     @RedisRpcMapping("ptz/frontEndCommand")
     public RedisRpcResponse frontEndCommand(RedisRpcRequest request) {
@@ -325,7 +325,7 @@ public class RedisRpcChannelPlayController extends RpcController {
             response.setBody("param error");
             return response;
         }
-        // 获取对应的设备和通道信息
+        // Get the corresponding device and channel information
         CommonGBChannel channel = channelService.getOne(channelId);
         if (channel == null) {
             response.setStatusCode(ErrorCode.ERROR400.getCode());

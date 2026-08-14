@@ -8,7 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * 人工确认报警消息
+ * Manually confirm alarm message
  */
 @Setter
 @Getter
@@ -16,11 +16,11 @@ import lombok.Setter;
 public class J8203 extends Rs {
 
     /**
-     * 报警消息流水号
+     * Alarm message serial number
      */
     private int alarmPackageNo;
     /**
-     * 人工确认报警类型
+     * Manual confirmation alarm type
      */
     private JTConfirmationAlarmMessageType alarmMessageType;
 

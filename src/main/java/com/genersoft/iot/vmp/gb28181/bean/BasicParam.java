@@ -6,38 +6,38 @@ import lombok.Data;
 import org.dom4j.Element;
 
 /**
- * 基础配置
+ * Basic configuration
  */
 @Data
-@Schema(description = "基础配置")
+@Schema(description = "Basic configuration")
 public class BasicParam implements DeviceConfigAware {
 
-    @Schema(description = "设备ID")
+    @Schema(description = "EquipmentID")
     private String deviceId;
 
-    @Schema(description = "通道ID，如果时对设备配置直接设置同设备ID一样即可")
+    @Schema(description = "Channel ID, if you set the device configuration directly to the same as the device ID, you can")
     private String channelId;
 
-    @Schema(description = "名称")
+    @Schema(description = "Name")
     private String name;
 
-    @Schema(description = "注册过期时间")
+    @Schema(description = "Registration expiration time")
     private String expiration;
 
-    @Schema(description = "心跳间隔时间")
+    @Schema(description = "heartbeat interval")
     private Integer heartBeatInterval;
 
-    @Schema(description = "心跳超时次数")
+    @Schema(description = "Number of heartbeat timeouts")
     private Integer heartBeatCount;
 
-    @Schema(description = "定位功能支持情况。取值:0-不支持;1-支持 GPS定位;2-支持北斗定位(可选,默认取值为0)，" +
-            "用于接受配置查询结果， 基础配置时无效")
+    @Schema(description = "Positioning feature support. value:0-Not supported;1-Support GPS positioning;2-Support Beidou positioning(Optional, the default value is0)，" +
+            "Used to accept configuration query results, invalid in basic configuration")
     private Integer positionCapability;
 
-    @Schema(description = "经度(可选)，用于接受配置查询结果， 基础配置时无效")
+    @Schema(description = "longitude(Optional)，Used to accept configuration query results, invalid in basic configuration")
     private Double longitude;
 
-    @Schema(description = "纬度(可选)，用于接受配置查询结果， 基础配置时无效")
+    @Schema(description = "Latitude(Optional)，Used to accept configuration query results, invalid in basic configuration")
     private Double latitude;
 
     public static BasicParam getInstance(String name, String expiration, Integer heartBeatInterval, Integer heartBeatCount) {

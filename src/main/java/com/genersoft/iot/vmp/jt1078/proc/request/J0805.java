@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 摄像头立即拍摄命令应答
+ * Camera immediately shoots command response
  */
 @Setter
 @Getter
@@ -24,12 +24,12 @@ public class J0805 extends Re {
 
     private int respNo;
     /**
-     * 0：成功/确认；1：失败；2：消息有误；3：不支持
+     * 0：success/Confirm; 1: Failed; 2: The message is wrong; 3: Not supported
      */
     private int result;
 
     /**
-     * 表示拍摄成功的多媒体个数
+     * Indicates the number of multimedia items captured successfully
      */
     private List<Long> ids = new ArrayList<>();
 

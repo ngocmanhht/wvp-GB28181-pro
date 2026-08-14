@@ -2,7 +2,7 @@
   <div id="configInfo">
     <el-dialog
       v-el-drag-dialog
-      title="文本信息下发"
+      title="Text message delivery"
       width="=80%"
       top="2rem"
       :close-on-click-modal="false"
@@ -12,42 +12,42 @@
     >
       <div>
         <el-form >
-          <el-divider content-position="center">标志</el-divider>
-          <el-form-item label="类型">
+          <el-divider content-position="center">logo</el-divider>
+          <el-form-item label="Type">
             <el-radio-group v-model="form.sign.type">
-              <el-radio :label="1">紧急</el-radio>
-              <el-radio :label="2">服务</el-radio>
-              <el-radio :label="3">通知</el-radio>
+              <el-radio :label="1">urgent</el-radio>
+              <el-radio :label="2">service</el-radio>
+              <el-radio :label="3">Notification</el-radio>
             </el-radio-group>
           </el-form-item>
-          <el-form-item label="终端显示器显示">
+          <el-form-item label="Terminal monitor display">
             <el-checkbox v-model="form.sign.terminalDisplay"></el-checkbox>
           </el-form-item>
-          <el-form-item label="终端TTS播读">
+          <el-form-item label="Terminal TTS reading">
             <el-checkbox v-model="form.sign.tts"></el-checkbox>
           </el-form-item>
-          <el-form-item label="广告屏显示">
+          <el-form-item label="Advertising screen display">
             <el-checkbox v-model="form.sign.adScreen"></el-checkbox>
           </el-form-item>
-          <el-form-item label="信息类型">
+          <el-form-item label="Information type">
             <el-radio-group v-model="form.sign.source">
-              <el-radio :label="false">中心导航信息</el-radio>
-              <el-radio :label="true">CAN故障码信息</el-radio>
+              <el-radio :label="false">Center navigation information</el-radio>
+              <el-radio :label="true">CANDTC information</el-radio>
             </el-radio-group>
           </el-form-item>
-          <el-divider content-position="center">属性</el-divider>
-          <el-form-item label="文本类型">
+          <el-divider content-position="center">Properties</el-divider>
+          <el-form-item label="text type">
             <el-radio-group v-model="form.textType">
-              <el-radio :label="1">通知</el-radio>
-              <el-radio :label="2">服务</el-radio>
+              <el-radio :label="1">Notification</el-radio>
+              <el-radio :label="2">service</el-radio>
             </el-radio-group>
           </el-form-item>
-          <el-form-item label="消息内容">
+          <el-form-item label="Message content">
             <el-input type="textarea" v-model="form.content" maxlength="1024" show-word-limit></el-input>
           </el-form-item>
           <el-form-item style="text-align: right">
-            <el-button type="primary" @click="onSubmit">下发</el-button>
-            <el-button @click="close" >取消</el-button>
+            <el-button type="primary" @click="onSubmit">Issue</el-button>
+            <el-button @click="close" >Cancel</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -69,14 +69,14 @@ export default {
       form: {
         phoneNumber: null,
         sign: {
-          type: 3, // 1紧急,2服务,3通知
-          terminalDisplay: true, // 1终端显示器显示
-          tts: true, // 从选区创建新的临时文件
-          adScreen: true, // 广告屏显示
-          source: false // false: 中心导航信息 true CAN故障码信息
+          type: 3, // 1Emergency, 2 services, 3 notifications
+          terminalDisplay: true, // 1Terminal monitor display
+          tts: true, // Create a new temporary file from the selection
+          adScreen: true, // Advertising screen display
+          source: false // false: Center navigation information true CAN fault code information
         },
-        textType: 1, // 文本类型,1 = 通知 ，2 = 服务
-        content: '' // 消息内容，最长为1024字节
+        textType: 1, // text type,1 = Notification ，2 = service
+        content: '' // Message content, up to 1024 bytes
       }
     }
   },
@@ -89,14 +89,14 @@ export default {
       this.form = {
         phoneNumber: null,
           sign: {
-          type: 3, // 1紧急,2服务,3通知
-            terminalDisplay: true, // 1终端显示器显示
-            tts: true, // 从选区创建新的临时文件
-            adScreen: true, // 广告屏显示
-            source: false // false: 中心导航信息 true CAN故障码信息
+          type: 3, // 1Emergency, 2 services, 3 notifications
+            terminalDisplay: true, // 1Terminal monitor display
+            tts: true, // Create a new temporary file from the selection
+            adScreen: true, // Advertising screen display
+            source: false // false: Center navigation information true CAN fault code information
         },
-        textType: 1, // 文本类型,1 = 通知 ，2 = 服务
-          content: '' // 消息内容，最长为1024字节
+        textType: 1, // text type,1 = Notification ，2 = service
+          content: '' // Message content, up to 1024 bytes
       }
       this.form.phoneNumber = data.phoneNumber
     },
@@ -108,7 +108,7 @@ export default {
         .then(data => {
           this.$message.success({
             showClose: true,
-            message: '发送成功'
+            message: 'Sent successfully'
           })
           this.close()
         })

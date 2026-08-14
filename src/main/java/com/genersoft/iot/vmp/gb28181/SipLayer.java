@@ -42,11 +42,11 @@ public class SipLayer{
 	public void onApplicationReady(){
 		if (ObjectUtils.isEmpty(sipConfig.getIp())) {
 			try {
-				// 获得本机的所有网络接口
+				// Get all network interfaces of this machine
 				Enumeration<NetworkInterface> nifs = NetworkInterface.getNetworkInterfaces();
 				while (nifs.hasMoreElements()) {
 					NetworkInterface nif = nifs.nextElement();
-					// 获得与该网络接口绑定的 IP 地址，一般只有一个
+					// Obtain the IP address bound to the network interface, generally there is only one
 					Enumeration<InetAddress> addresses = nif.getInetAddresses();
 					while (addresses.hasMoreElements()) {
 						InetAddress addr = addresses.nextElement();
@@ -57,20 +57,20 @@ public class SipLayer{
 							if (nif.getName().startsWith("docker")) {
 								continue;
 							}
-							log.info("[自动配置SIP监听网卡] 网卡接口地址： {}", addr.getHostAddress());// 只关心 IPv4 地址
+							log.info("[Automatically configure SIP listening network card] Network card interface address： {}", addr.getHostAddress());// Only care about IPv4 addresses
 							monitorIps.add(addr.getHostAddress());
 						}
 					}
 				}
 			}catch (Exception e) {
-				log.error("[读取网卡信息失败]", e);
+				log.error("[Failed to read network card information]", e);
 			}
 			if (monitorIps.isEmpty()) {
-				log.error("[自动配置SIP监听网卡信息失败]， 请手动配置SIP.IP后重新启动");
+				log.error("[Automatic configuration of SIP monitoring network card information failed]， Please manually configure SIP.IP and then restart");
 				System.exit(1);
 			}
 		}else {
-			// 使用逗号分割多个ip
+			// Use commas to separate multipleip
 			String separator = ",";
 			if (sipConfig.getIp().indexOf(separator) > 0) {
 				String[] split = sipConfig.getIp().split(separator);
@@ -100,7 +100,7 @@ public class SipLayer{
 			sipStack = (SipStackImpl)SipFactory.getInstance().createSipStack(DefaultProperties.getProperties("GB28181_SIP", userSetting.getSipLog(), userSetting.isSipCacheServerConnections()));
 			sipStack.setMessageParserFactory(new GbStringMsgParserFactory());
 		} catch (PeerUnavailableException e) {
-			log.error("[SIP SERVER] SIP服务启动失败， 监听地址{}失败,请检查ip是否正确", monitorIp);
+			log.error("[SIP SERVER] SIPService startup failed, listening address{}Failed, please check if the IP is correct", monitorIp);
 			return;
 		}
 
@@ -111,12 +111,12 @@ public class SipLayer{
 			tcpSipProvider.setDialogErrorsAutomaticallyHandled();
 			tcpSipProvider.addSipListener(sipProcessorObserver);
 			tcpSipProviderMap.put(monitorIp, tcpSipProvider);
-			log.info("[SIP SERVER] tcp://{}:{} 启动成功", monitorIp, port);
+			log.info("[SIP SERVER] tcp://{}:{} Started successfully", monitorIp, port);
 		} catch (TransportNotSupportedException
 				 | TooManyListenersException
 				 | ObjectInUseException
 				 | InvalidArgumentException e) {
-			log.error("[SIP SERVER] tcp://{}:{} SIP服务启动失败,请检查端口是否被占用或者ip是否正确"
+			log.error("[SIP SERVER] tcp://{}:{} SIPThe service failed to start. Please check whether the port is occupied or whether the IP address is correct."
 					, monitorIp, port);
 		}
 
@@ -128,12 +128,12 @@ public class SipLayer{
 			udpSipProvider.setDialogErrorsAutomaticallyHandled();
 			udpSipProviderMap.put(monitorIp, udpSipProvider);
 
-			log.info("[SIP SERVER] udp://{}:{} 启动成功", monitorIp, port);
+			log.info("[SIP SERVER] udp://{}:{} Started successfully", monitorIp, port);
 		} catch (TransportNotSupportedException
 				 | TooManyListenersException
 				 | ObjectInUseException
 				 | InvalidArgumentException e) {
-			log.error("[SIP SERVER] udp://{}:{} SIP服务启动失败,请检查端口是否被占用或者ip是否正确"
+			log.error("[SIP SERVER] udp://{}:{} SIPThe service failed to start. Please check whether the port is occupied or whether the IP address is correct."
 					, monitorIp, port);
 		}
 	}

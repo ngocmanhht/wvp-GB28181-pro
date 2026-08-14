@@ -20,7 +20,7 @@ import javax.sip.message.Response;
 import java.text.ParseException;
 
 /**
- * SIP命令类型： NOTIFY请求,这是作为上级发送订阅请求后，设备才会响应的
+ * SIPCommand type: NOTIFY request. The device will respond only after the superior sends a subscription request.
  */
 @Slf4j
 @Component
@@ -42,7 +42,7 @@ public class NotifyRequestProcessor extends SIPRequestProcessorParent implements
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
-		// 添加消息处理的订阅
+		// Add message processing subscription
 		sipProcessorObserver.addRequestProcessor(method, this);
 	}
 
@@ -52,7 +52,7 @@ public class NotifyRequestProcessor extends SIPRequestProcessorParent implements
 			responseAckAsync((SIPRequest) evt.getRequest(), Response.OK);
 			Element rootElement = getRootElement(evt);
 			if (rootElement == null) {
-				log.error("处理NOTIFY消息时未获取到消息体,{}", evt.getRequest());
+				log.error("The message body was not obtained when processing the NOTIFY message.,{}", evt.getRequest());
 				return;
 			}
 			String cmd = XmlUtil.getText(rootElement, "CmdType");
@@ -64,10 +64,10 @@ public class NotifyRequestProcessor extends SIPRequestProcessorParent implements
 			} else if (CmdType.MOBILE_POSITION.equals(cmd)) {
 				notifyRequestForMobilePositionProcessor.process(evt);
 			} else {
-				log.info("[Notify] 收到位置类型消息：{}, \r\n {}",  cmd, evt.getRequest());
+				log.info("[Notify] Location type message received：{}, \r\n {}",  cmd, evt.getRequest());
 			}
 		} catch (SipException | InvalidArgumentException | ParseException e) {
-			log.error("未处理的异常 ", e);
+			log.error("unhandled exception ", e);
 		} catch (DocumentException e) {
 			throw new RuntimeException(e);
 		}

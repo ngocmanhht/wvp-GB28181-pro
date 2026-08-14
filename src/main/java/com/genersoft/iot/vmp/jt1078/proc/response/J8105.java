@@ -10,7 +10,7 @@ import java.nio.charset.Charset;
 import java.util.Arrays;
 
 /**
- * 终端控制
+ * terminal control
  */
 @Getter
 @MsgId(id = "8105")
@@ -19,12 +19,12 @@ public class J8105 extends Rs {
     private JTDeviceConnectionControl connectionControl;
 
     /**
-     * 终端复位
+     * terminal reset
      */
     private Boolean reset;
 
     /**
-     * 终端恢复出厂设置
+     * Restore the terminal to factory settings
      */
     private Boolean factoryReset;
 

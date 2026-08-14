@@ -4,17 +4,17 @@
       v-if="showDialog"
       v-el-drag-dialog
       :visible.sync="showDialog"
-      title="国标收流列表"
+      title="National standard collection list"
       width="70%"
       top="5rem"
       append-to-body
       :close-on-click-modal="false"
     >
       <el-form :inline="true" size="mini" @submit.native.prevent>
-        <el-form-item label="搜索">
+        <el-form-item label="Search">
           <el-input
             v-model="query"
-            placeholder="关键字"
+            placeholder="Keywords"
             prefix-icon="el-icon-search"
             clearable
             @input="getChannelList"
@@ -23,16 +23,16 @@
       </el-form>
 
       <el-table v-loading="loading" :data="channelList" :height="500" stripe>
-        <el-table-column prop="parentDeviceId" label="设备编号" min-width="180"/>
-        <el-table-column prop="parentName" label="设备名称" min-width="180"/>
-        <el-table-column prop="deviceId" label="通道编号" min-width="180"/>
-        <el-table-column prop="name" label="通道名称" min-width="180"/>
-        <el-table-column prop="ptzType" label="摄像头类型" min-width="100">
+        <el-table-column prop="parentDeviceId" label="Device number" min-width="180"/>
+        <el-table-column prop="parentName" label="Device name" min-width="180"/>
+        <el-table-column prop="deviceId" label="Channel number" min-width="180"/>
+        <el-table-column prop="name" label="Channel name" min-width="180"/>
+        <el-table-column prop="ptzType" label="Camera type" min-width="100">
           <template v-slot:default="scope">
             <div>{{ scope.row.ptzTypeText }}</div>
           </template>
         </el-table-column>
-        <el-table-column label="操作" min-width="120" fixed="right">
+        <el-table-column label="Operation" min-width="120" fixed="right">
           <template v-slot:default="scope">
             <el-button
               size="medium"
@@ -40,7 +40,7 @@
               type="text"
               :loading="scope.row.playing"
               @click="sendDevicePush(scope.row)"
-            >播放
+            >play
             </el-button>
             <el-button
               size="medium"
@@ -48,7 +48,7 @@
               type="text"
               style="color: #f56c6c"
               @click="stopDevicePush(scope.row)"
-            >停止
+            >stop
             </el-button>
           </template>
         </el-table-column>

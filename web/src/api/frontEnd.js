@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-// 前端控制
+// front-end control
 
 export function setSpeedForScan([deviceId, channelDeviceId, scanId, speed]) {
   return request({
@@ -157,7 +157,7 @@ export function deletePreset([deviceId, channelDeviceId, presetId]) {
 }
 
 /**
- * command: on 开启， off 关闭
+ * command: on on, off off
  */
 export function auxiliary([deviceId, channelDeviceId, command, switchId]) {
   return request({
@@ -170,7 +170,7 @@ export function auxiliary([deviceId, channelDeviceId, command, switchId]) {
   })
 }
 /**
- * command: on 开启， off 关闭
+ * command: on on, off off
  */
 export function wiper([deviceId, channelDeviceId, command]) {
   return request({

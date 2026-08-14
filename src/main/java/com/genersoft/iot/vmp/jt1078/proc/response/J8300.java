@@ -10,7 +10,7 @@ import lombok.EqualsAndHashCode;
 import java.nio.charset.Charset;
 
 /**
- * 文本信息下发
+ * Text message delivery
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -18,17 +18,17 @@ import java.nio.charset.Charset;
 public class J8300 extends Rs {
 
     /**
-     * 标志
+     * logo
      */
     private JTTextSign sign;
 
     /**
-     * 文本类型1 = 通知 ，2 = 服务
+     * text type1 = Notification ，2 = service
      */
     private int textType;
 
     /**
-     * 文本信息
+     * text message
      */
     private String content;
 

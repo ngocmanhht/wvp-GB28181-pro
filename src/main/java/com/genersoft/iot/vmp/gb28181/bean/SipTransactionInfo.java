@@ -16,7 +16,7 @@ public class SipTransactionInfo {
     private String user;
     private String eventId;
 
-    // 自己是否媒体流发送者
+    // Whether you are a media streamer
     private boolean asSender;
 
     public SipTransactionInfo(SIPResponse response, boolean asSender) {

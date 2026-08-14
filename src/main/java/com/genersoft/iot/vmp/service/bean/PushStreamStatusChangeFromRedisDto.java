@@ -5,7 +5,7 @@ import lombok.Data;
 import java.util.List;
 
 /**
- * 收到redis通知修改推流通道状态
+ * Receive redis notification to modify push channel status
  * @author lin
  */
 @Data

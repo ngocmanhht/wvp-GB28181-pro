@@ -3,94 +3,94 @@ spring:
         type: redis
     thymeleaf:
         cache: false
-    # 设置接口超时时间
+    # Set interface timeout
     mvc:
         async:
             request-timeout: 20000
-    # [可选]上传文件大小限制
+    # [Optional]Upload file size limit
     servlet:
         multipart:
             max-file-size: 10MB
             max-request-size: 100MB
     data:
-      # REDIS数据库配置
+      # REDISDatabase configuration
       redis:
-          # [必须修改] Redis服务器IP, REDIS安装在本机的,使用127.0.0.1
+          # [Must be modified] RedisServer IP, REDIS is installed on this machine, use127.0.0.1
           host: ${REDIS_HOST:127.0.0.1}
-          # [必须修改] 端口号
+          # [Must be modified] port number
           port: ${REDIS_PORT:6379}
-          # [可选] 数据库 DB
+          # [Optional] database DB
           database: 1
-          # [可选] 访问密码,若你的redis服务器没有设置密码，就不需要用密码去连接
+          # [Optional] Access password. If your redis server does not have a password set, you do not need to use a password to connect.
           password:
-          # [可选] 超时时间
+          # [Optional] timeout
           timeout: 10000
-         ## [可选] 一个pool最多可分配多少个jedis实例
+         ## [Optional] The maximum number of jedis instances that can be allocated to a pool
          #poolMaxTotal: 1000
-         ## [可选] 一个pool最多有多少个状态为idle(空闲)的jedis实例
+         ## [Optional] The maximum number of states a pool can have isidle(free)jedis instance
          #poolMaxIdle: 500
-         ## [可选] 最大的等待时间(秒)
+         ## [Optional] maximum waiting time(seconds)
          #poolMaxWait: 5
-    # [必选] jdbc数据库配置
+    # [Required] jdbcDatabase configuration
     datasource:
-        # mysql数据源
+        # mysqldata source
         type: com.zaxxer.hikari.HikariDataSource
         driver-class-name: com.mysql.cj.jdbc.Driver
         url: jdbc:mysql://${DATABASE_HOST:127.0.0.1}:${DATABASE_PORT:3306}/wvp?useUnicode=true&characterEncoding=UTF8&rewriteBatchedStatements=true&serverTimezone=PRC&useSSL=false&allowMultiQueries=true&allowPublicKeyRetrieval=true
         username: ${DATABASE_USER:root}
         password: ${DATABASE_PASSWORD:root}
 
-#[可选] 监听的HTTP端口, 网页和接口调用都是这个端口
+#[Optional] The listening HTTP port, web pages and interface calls are all on this port
 server:
     port: 18978
     ssl:
-        # [可选] 是否开启HTTPS访问
-        # docker里运行，内部不需要HTTPS
+        # [Optional] Whether to enable HTTPS access
+        # dockerRun inside, not needed internallyHTTPS
         enabled: false
-# 作为28181服务器的配置
+# Configuration as 28181 server
 sip:
-    # [必须修改] 本机的IP，对应你的网卡，监听什么ip就是使用什么网卡，
-    # 如果要监听多张网卡，可以使用逗号分隔多个IP， 例如： 192.168.1.4,10.0.0.4
-    # 如果不明白，就使用0.0.0.0，大部分情况都是可以的
-    # 请不要使用127.0.0.1，任何包括localhost在内的域名都是不可以的。
+    # [Must be modified] The IP of this machine corresponds to your network card. The IP you monitor depends on the network card you use.，
+    # If you want to monitor multiple network cards, you can use commas to separate multiple IPs, for example： 192.168.1.4,10.0.0.4
+    # If you don’t understand, just use 0.0.0.0, which is fine in most cases.
+    # Please do not use 127.0.0.1, any domain name including localhost is not allowed。
     ip: 0.0.0.0
-    # [可选] 没有任何业务需求，仅仅是在前端展示的时候用
+    # [Optional] There is no business requirement. It is only used for front-end display.
     show-ip: ${SIP_ShowIP}
-    # [可选]
+    # [Optional]
     port: ${SIP_Port:8116}
-    # 根据国标6.1.2中规定，domain宜采用ID统一编码的前十位编码。国标附录D中定义前8位为中心编码（由省级、市级、区级、基层编号组成，参照GB/T 2260-2007）
-    # 后两位为行业编码，定义参照附录D.3
-    # 3701020049标识山东济南历下区 信息行业接入
-    # [可选]
+    # According to the provisions of national standard 6.1.2, domain should use the first ten digits of the unified ID code. Appendix D of the national standard defines the first 8 digits as the center code (composed of provincial, municipal, district and grassroots numbers, refer toGB/T 2260-2007）
+    # The last two digits are industry codes. For definitions, please refer to the appendix.D.3
+    # 3701020049Identification of information industry access in Lixia District, Jinan, Shandong Province
+    # [Optional]
     domain: ${SIP_Domain:3402000000}
-    # [可选]
+    # [Optional]
     id: ${SIP_Id:34020000002000000001}
-    # [可选] 默认设备认证密码，后续扩展使用设备单独密码, 移除密码将不进行校验
+    # [Optional] The default device authentication password. Subsequent extensions will use a device-specific password. If the password is removed, verification will not be performed.
     password: ${SIP_Password}
-    # [可选] 国标级联注册失败，再次发起注册的时间间隔。 默认60秒
+    # [Optional] If the national standard cascade registration fails, the time interval for re-initiating registration. Default 60 seconds
     register-time-interval: 60
-    # [可选] 云台控制速度
+    # [Optional] PTZ control speed
     ptz-speed: 50
-    # TODO [可选] 收到心跳后自动上线， 重启服务后会将所有设备置为离线，默认false，等待注册后上线。设置为true则收到心跳设置为上线。
+    # TODO [Optional] It will automatically go online after receiving the heartbeat. After restarting the service, all devices will be set offline. The default is false and will go online after registration. Set to true to receive a heartbeat and set it to go online.。
     # keepalliveToOnline: false
-    # 是否存储alarm信息
+    # Whether to store alarm information
     alarm: true
-    # 命令发送等待回复的超时时间, 单位:毫秒
+    # Timeout for command sending and waiting for reply, unit: milliseconds
     timeout: 1000
 
-# 默认服务器配置
+# Default server configuration
 media:
   id: polaris
-  # [必须修改] ZLM 内网IP与端口
+  # [Must be modified] ZLM Intranet IP and port
   ip: ${ZLM_HOST:127.0.0.1}
   http-port: 80
-  # [可选] 返回流地址时的ip，置空使用 media.ip
+  # [Optional] IP when returning the flow address, leave it blank and use it media.ip
   stream-ip: ${Stream_IP}
-  # [可选] wvp在国标信令中使用的ip，此ip为摄像机可以访问到的ip， 置空使用 media.ip
+  # [Optional] wvpThe IP used in national standard signaling. This IP is the IP that the camera can access. Leave it blank. media.ip
   sdp-ip: ${SDP_IP}
-  # [可选] zlm服务器访问WVP所使用的IP, 默认使用127.0.0.1，zlm和wvp没有部署在同一台服务器时必须配置
+  # [Optional] zlmThe IP used by the server to access WVP. The default is 127.0.0.1. This must be configured when zlm and wvp are not deployed on the same server.
   hook-ip: ${ZLM_HOOK_HOST}
-  # [可选] sslport
+  # [Optional] sslport
   http-ssl-port: 0
   flv-port: ${MediaHttp:}
   flv-ssl-port: ${MediaHttps:}
@@ -101,17 +101,17 @@ media:
   rtmp-ssl-port: 0
   rtsp-port: ${MediaRtsp:}
   rtsp-ssl-port: 0
-  # [可选] 是否自动配置ZLM, 如果希望手动配置ZLM, 可以设为false, 不建议新接触的用户修改
+  # [Optional] Whether to automatically configure ZLM. If you want to configure ZLM manually, you can set it to false. It is not recommended for new users to modify it.
   auto-config: true
-  # [可选] 
+  # [Optional] 
   secret: ${ZLM_SERCERT}
-  # 启用多端口模式, 多端口模式使用端口区分每路流，兼容性更好。 单端口使用流的ssrc区分， 点播超时建议使用多端口测试
+  # Enable multi-port mode. Multi-port mode uses ports to distinguish each flow for better compatibility. Single port uses the ssrc of the flow to distinguish. For on-demand timeout, it is recommended to use multi-port testing.
   rtp:
-    # [可选] 是否启用多端口模式, 开启后会在portRange范围内选择端口用于媒体流传输
+    # [Optional] Whether to enable multi-port mode. When enabled, the port will be selected within the portRange range for media streaming.
     enable: false
-    # [可选] 
+    # [Optional] 
     port-range: 30000,30500 
-    # [可选] 
+    # [Optional] 
     send-port-range: 50502,50506 
 
   record-path: /opt/media/bin/www/record/

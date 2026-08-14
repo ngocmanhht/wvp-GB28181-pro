@@ -8,35 +8,35 @@ import lombok.EqualsAndHashCode;
 import org.springframework.util.ObjectUtils;
 
 /**
- * JT 通道
+ * JT channel
  */
 @Data
-@Schema(description = "jt808通道")
+@Schema(description = "jt808channel")
 @EqualsAndHashCode(callSuper = true)
 public class JTChannel extends CommonGBChannel {
 
-    @Schema(description = "数据库自增ID")
+    @Schema(description = "Database auto-incrementID")
     private int id;
 
-    @Schema(description = "名称")
+    @Schema(description = "Name")
     private String name;
 
-    @Schema(description = "设备的数据库ID")
+    @Schema(description = "Device databaseID")
     private int terminalDbId;
 
-    @Schema(description = "通道ID")
+    @Schema(description = "channelID")
     private Integer channelId;
 
-    @Schema(description = "是否含有音频")
+    @Schema(description = "Does it contain audio")
     private boolean hasAudio;
 
-    @Schema(description = "创建时间")
+    @Schema(description = "creation time")
     private String createTime;
 
-    @Schema(description = "更新时间")
+    @Schema(description = "Update time")
     private String updateTime;
 
-    @Schema(description = "流信息")
+    @Schema(description = "flow information")
     private String stream;
 
     private Integer dataType = ChannelDataType.JT_1078;

@@ -3,55 +3,55 @@ package com.genersoft.iot.vmp.service.bean;
 import lombok.Data;
 
 /**
- * 当上级平台
+ * Be the superior platform
  * @author lin
  */
 
 @Data
 public class MessageForPushChannel {
     /**
-     * 消息类型
-     * 0 流注销 1 流注册
+     * Message type
+     * 0 Stream Logout 1 Stream Register
      */
     private int type;
 
     /**
-     * 流应用名
+     * Streaming application name
      */
     private String app;
 
     /**
-     * 流Id
+     * flowId
      */
     private String stream;
 
     /**
-     * 国标ID
+     * National standardID
      */
     private String gbId;
 
     /**
-     * 请求的平台国标编号
+     * Requested platform national standard number
      */
     private String platFormId;
 
     /**
-     * 请求的平台自增ID
+     * The requested platform is incrementedID
      */
     private int platFormIndex;
 
     /**
-     * 请求平台名称
+     * Request platform name
      */
     private String platFormName;
 
     /**
-     * WVP服务ID
+     * WVPserviceID
      */
     private String serverId;
 
     /**
-     * 目标流媒体节点ID
+     * Target streaming nodeID
      */
     private String mediaServerId;
 

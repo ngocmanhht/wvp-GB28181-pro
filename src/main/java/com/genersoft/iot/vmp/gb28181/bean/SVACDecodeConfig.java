@@ -6,13 +6,13 @@ import lombok.Data;
 import org.dom4j.Element;
 
 @Data
-@Schema(description = "SVAC解码配置")
+@Schema(description = "SVACDecoding configuration")
 public class SVACDecodeConfig implements DeviceConfigAware {
 
-    @Schema(description = "SVC参数")
+    @Schema(description = "SVCparameters")
     private SVCParam svcParam;
 
-    @Schema(description = "监控专用信息参数")
+    @Schema(description = "Monitor special information parameters")
     private SurveillanceParam surveillanceParam;
 
     @Override
@@ -38,10 +38,10 @@ public class SVACDecodeConfig implements DeviceConfigAware {
 
     @Data
     public static class SVCParam {
-        @Schema(description = "空域编码能力，0:不支持，1:1级增强，2:2级增强，3:3级增强")
+        @Schema(description = "Airspace coding capability, 0: not supported, 1: level 1 enhancement, 2: level 2 enhancement, 3: level 3 enhancement")
         private Integer SVCSpaceSupportMode;
 
-        @Schema(description = "时域编码能力，0:不支持，1:1级增强，2:2级增强，3:3级增强")
+        @Schema(description = "Time domain coding capability, 0: not supported, 1: level 1 enhancement, 2: level 2 enhancement, 3: level 3 enhancement")
         private Integer SVCTimeSupportMode;
 
         public void fromXml(Element element) {
@@ -52,13 +52,13 @@ public class SVACDecodeConfig implements DeviceConfigAware {
 
     @Data
     public static class SurveillanceParam {
-        @Schema(description = "绝对时间信息显示开关，0:关闭，1:打开")
+        @Schema(description = "Absolute time information display switch, 0: off, 1: on")
         private Integer TimeShowFlag;
 
-        @Schema(description = "监控事件信息显示开关，0:关闭，1:打开")
+        @Schema(description = "Monitoring event information display switch, 0: off, 1: on")
         private Integer EventShowFlag;
 
-        @Schema(description = "报警信息显示开关，0:关闭，1:打开")
+        @Schema(description = "Alarm information display switch, 0: off, 1: on")
         private Integer AlerShowtFlag;
 
         public void fromXml(Element element) {

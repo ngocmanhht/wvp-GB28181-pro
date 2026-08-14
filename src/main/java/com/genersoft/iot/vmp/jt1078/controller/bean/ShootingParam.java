@@ -7,19 +7,19 @@ import lombok.Setter;
 
 @Setter
 @Getter
-@Schema(description = "摄像头立即拍摄命令参数")
+@Schema(description = "Camera immediately captures command parameters")
 public class ShootingParam {
 
-    @Schema(description = "终端手机号")
+    @Schema(description = "Terminal mobile phone number")
     private String phoneNumber;
 
-    @Schema(description = "拍摄命令参数")
+    @Schema(description = "Shooting command parameters")
     private JTShootingCommand shootingCommand;
 
     @Override
     public String toString() {
         return "ShootingParam{" +
-                "设备手机号='" + phoneNumber + '\'' +
+                "Device mobile phone number='" + phoneNumber + '\'' +
                 ", shootingCommand=" + shootingCommand +
                 '}';
     }

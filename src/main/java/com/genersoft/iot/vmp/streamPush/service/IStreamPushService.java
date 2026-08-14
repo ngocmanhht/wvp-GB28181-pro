@@ -16,7 +16,7 @@ import java.util.Set;
 public interface IStreamPushService {
 
     /**
-     * 获取
+     * get
      */
     PageInfo<StreamPush> getPushList(Integer page, Integer count, String query, Boolean pushing, String mediaServerId);
 
@@ -27,58 +27,58 @@ public interface IStreamPushService {
     boolean stop(StreamPush streamPush);
 
     /**
-     * 停止一路推流
-     * @param app 应用名
-     * @param stream 流ID
+     * Stop pushing all the way
+     * @param app Application name
+     * @param stream flowID
      */
     boolean stopByAppAndStream(String app, String stream);
 
     /**
-     * 新的节点加入
+     * New node added
      */
     void zlmServerOnline(MediaServer mediaServer);
 
     /**
-     * 节点离线
+     * Node offline
      */
     void zlmServerOffline(MediaServer mediaServer);
 
     /**
-     * 批量添加
+     * Add in batches
      */
     void batchAdd(List<StreamPush> streamPushExcelDtoList);
 
 
     /**
-     * 全部离线
+     * All offline
      */
     void allOfflineForRedisMsg();
 
     /**
-     * 推流离线
+     * Push streaming offline
      */
     void offlineforRedisMsg(List<StreamPushItemFromRedis> offlineStreams);
 
     /**
-     * 推流上线
+     * Push streaming online
      */
     void onlineForRedisMsg(List<StreamPushItemFromRedis> onlineStreams);
 
     /**
-     * 增加推流
+     * Increase push flow
      */
     boolean add(StreamPush stream);
 
     boolean update(StreamPush stream);
 
     /**
-     * 获取全部的app+Streanm 用于判断推流列表是新增还是修改
+     * Get allapp+Streanm Used to determine whether the push list is added or modified
      * @return
      */
     List<String> getAllAppAndStream();
 
     /**
-     * 获取统计信息
+     * Get statistics
      * @return
      */
     ResourceBaseInfo getOverview();

@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-// 回放流播放API
+// Replay streamingAPI
 
 export function play([deviceId, channelId, startTime, endTime]) {
   return request({

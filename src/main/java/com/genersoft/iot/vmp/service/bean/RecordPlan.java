@@ -6,27 +6,27 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-@Schema(description = "录制计划")
+@Schema(description = "Recording plan")
 public class RecordPlan {
 
-    @Schema(description = "计划数据库ID")
+    @Schema(description = "planning databaseID")
     private int id;
 
-    @Schema(description = "计划名称")
+    @Schema(description = "Plan name")
     private String name;
 
-    @Schema(description = "计划关联通道数量")
+    @Schema(description = "Number of planned associated channels")
     private int channelCount;
 
-    @Schema(description = "是否开启定时截图")
+    @Schema(description = "Whether to enable scheduled screenshots")
     private Boolean snap;
 
-    @Schema(description = "创建时间")
+    @Schema(description = "creation time")
     private String createTime;
 
-    @Schema(description = "更新时间")
+    @Schema(description = "Update time")
     private String updateTime;
 
-    @Schema(description = "计划内容")
+    @Schema(description = "Plan content")
     private List<RecordPlanItem> planItemList;
 }

@@ -9,19 +9,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-@Schema(description = "SVAC编码配置")
+@Schema(description = "SVACencoding configuration")
 public class SVACEncodeConfig implements DeviceConfigAware {
 
-    @Schema(description = "感兴趣区域参数")
+    @Schema(description = "Region of interest parameters")
     private ROIParam roiParam;
 
-    @Schema(description = "SVC参数")
+    @Schema(description = "SVCparameters")
     private SVCParam svcParam;
 
-    @Schema(description = "监控专用信息参数")
+    @Schema(description = "Monitor special information parameters")
     private SurveillanceParam surveillanceParam;
 
-    @Schema(description = "音频参数")
+    @Schema(description = "Audio parameters")
     private AudioParam audioParam;
 
     @Override
@@ -59,19 +59,19 @@ public class SVACEncodeConfig implements DeviceConfigAware {
 
     @Data
     public static class ROIParam {
-        @Schema(description = "感兴趣区域开关，0:关闭，1:打开")
+        @Schema(description = "Region of interest switch, 0: off, 1: on")
         private Integer ROIFlag;
 
-        @Schema(description = "感兴趣区域数量，取值范围0~16")
+        @Schema(description = "Number of regions of interest, value range0~16")
         private Integer ROINumber;
 
-        @Schema(description = "感兴趣区域列表")
+        @Schema(description = "List of areas of interest")
         private List<ROIItem> Item;
 
-        @Schema(description = "背景区域编码质量等级，0:一般，1:较好，2:好，3:很好")
+        @Schema(description = "Background area encoding quality level, 0: average, 1: better, 2: good, 3: very good")
         private Integer BackGroundQP;
 
-        @Schema(description = "背景跳过开关，0:关闭，1:打开")
+        @Schema(description = "Background skip switch, 0: off, 1: on")
         private Integer BackGroundSkipFlag;
 
         public void fromXml(Element element) {
@@ -94,16 +94,16 @@ public class SVACEncodeConfig implements DeviceConfigAware {
 
     @Data
     public static class ROIItem {
-        @Schema(description = "感兴趣区域编号，取值范围1~16")
+        @Schema(description = "Area of interest number, value range1~16")
         private Integer ROISeq;
 
-        @Schema(description = "感兴趣区域左上角坐标，取值范围0~19683")
+        @Schema(description = "Coordinates of the upper left corner of the area of interest, value range0~19683")
         private Integer TopLeft;
 
-        @Schema(description = "感兴趣区域右下角坐标，取值范围0~19683")
+        @Schema(description = "Coordinates of the lower right corner of the area of interest, value range0~19683")
         private Integer BottomRight;
 
-        @Schema(description = "ROI区域编码质量等级，0:一般，1:较好，2:好，3:很好")
+        @Schema(description = "ROIRegional encoding quality level, 0: Fair, 1: Better, 2: Good, 3: Very good")
         private Integer ROIQP;
 
         public void fromXml(Element element) {
@@ -117,16 +117,16 @@ public class SVACEncodeConfig implements DeviceConfigAware {
 
     @Data
     public static class SVCParam {
-        @Schema(description = "空域编码方式，0:基本层，1:1级增强，2:2级增强，3:3级增强")
+        @Schema(description = "Airspace coding method, 0: basic layer, 1:1 level enhancement, 2:2 level enhancement, 3:3 level enhancement")
         private Integer SVCSpaceDomainMode;
 
-        @Schema(description = "时域编码方式，0:基本层，1:1级增强，2:2级增强，3:3级增强")
+        @Schema(description = "Time domain coding method, 0: basic layer, 1: 1-level enhancement, 2: 2-level enhancement, 3: 3-level enhancement")
         private Integer SVCTimeDomainMode;
 
-        @Schema(description = "空域编码能力，0:不支持，1:1级增强，2:2级增强，3:3级增强")
+        @Schema(description = "Airspace coding capability, 0: not supported, 1: level 1 enhancement, 2: level 2 enhancement, 3: level 3 enhancement")
         private Integer SVCSpaceSupportMode;
 
-        @Schema(description = "时域编码能力，0:不支持，1:1级增强，2:2级增强，3:3级增强")
+        @Schema(description = "Time domain coding capability, 0: not supported, 1: level 1 enhancement, 2: level 2 enhancement, 3: level 3 enhancement")
         private Integer SVCTimeSupportMode;
 
         public void fromXml(Element element) {
@@ -139,13 +139,13 @@ public class SVACEncodeConfig implements DeviceConfigAware {
 
     @Data
     public static class SurveillanceParam {
-        @Schema(description = "绝对时间信息开关，0:关闭，1:打开")
+        @Schema(description = "Absolute time information switch, 0: off, 1: on")
         private Integer TimeFlag;
 
-        @Schema(description = "监控事件信息开关，0:关闭，1:打开")
+        @Schema(description = "Monitoring event information switch, 0: off, 1: on")
         private Integer EventFlag;
 
-        @Schema(description = "报警信息开关，0:关闭，1:打开")
+        @Schema(description = "Alarm information switch, 0: off, 1: on")
         private Integer AlertFlag;
 
         public void fromXml(Element element) {
@@ -157,7 +157,7 @@ public class SVACEncodeConfig implements DeviceConfigAware {
 
     @Data
     public static class AudioParam {
-        @Schema(description = "声音识别特征参数开关，0:关闭，1:打开")
+        @Schema(description = "Voice recognition feature parameter switch, 0: off, 1: on")
         private Integer AudioRecognitionFlag;
 
         public void fromXml(Element element) {

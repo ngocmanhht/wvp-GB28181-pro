@@ -22,7 +22,7 @@ public class ZLMResult<T> {
     public static <T> ZLMResult<T> getFailForMediaServer() {
         ZLMResult<T> zlmResult = new ZLMResult<>();
         zlmResult.setCode(-2);
-        zlmResult.setMsg("流媒体调用失败");
+        zlmResult.setMsg("Streaming media call failed");
         return zlmResult;
     }
 

@@ -14,13 +14,13 @@
         <el-row type="flex" justify="space-between" align="middle" style="margin-bottom: 12px;">
           <div>
             <el-button-group>
-              <el-button type="primary" :plain="viewMode !== 'table'" size="mini" @click="viewMode = 'table'">表格</el-button>
-              <el-button type="primary" :plain="viewMode !== 'chart'" size="mini" @click="viewMode = 'chart'">折线图</el-button>
+              <el-button type="primary" :plain="viewMode !== 'table'" size="mini" @click="viewMode = 'table'">table</el-button>
+              <el-button type="primary" :plain="viewMode !== 'chart'" size="mini" @click="viewMode = 'chart'">Line chart</el-button>
             </el-button-group>
-            <el-button icon="el-icon-refresh" size="mini" @click="fetchData" style="margin-left: 8px;">刷新</el-button>
+            <el-button icon="el-icon-refresh" size="mini" @click="fetchData" style="margin-left: 8px;">Refresh</el-button>
           </div>
           <el-form :inline="true" size="mini">
-            <el-form-item label="数量">
+            <el-form-item label="Quantity">
               <el-input-number v-model="count" :min="1" @change="fetchData" />
             </el-form-item>
           </el-form>
@@ -35,8 +35,8 @@
           height="400px"
           style="width: 100%;"
         >
-          <el-table-column prop="time" label="时间" min-width="180" />
-          <el-table-column prop="timeDiff" label="间隔(秒)" min-width="120" />
+          <el-table-column prop="time" label="time" min-width="180" />
+          <el-table-column prop="timeDiff" label="interval(seconds)" min-width="120" />
         </el-table>
 
         <ve-line
@@ -48,7 +48,7 @@
         />
       </div>
       <div style="margin-top: 12px; text-align: right;">
-        <span>最大波动：{{ timeDiffDelta }} 秒</span>
+        <span>Maximum fluctuation：{{ timeDiffDelta }} seconds</span>
       </div>
     </el-dialog>
   </div>
@@ -86,14 +86,14 @@ export default {
           type: 'value',
           min: 0,
           splitNumber: 6,
-          axisLabel: { formatter: (v) => `${v} 秒` }
+          axisLabel: { formatter: (v) => `${v} seconds` }
         },
         tooltip: {
           trigger: 'axis',
           formatter: (data) => {
             if (!data || !data.length) return ''
             const [item] = data
-            return `${moment(item.data[0]).format('HH:mm:ss')}<br/>间隔：${item.data[1]} 秒`
+            return `${moment(item.data[0]).format('HH:mm:ss')}<br/>interval：${item.data[1]} seconds`
           }
         },
         series: {

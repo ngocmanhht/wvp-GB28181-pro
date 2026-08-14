@@ -1,12 +1,12 @@
 # vue-admin-template
 
-> 这是一个极简的 vue admin 管理后台。它只包含了 Element UI & axios & iconfont & permission control & lint，这些搭建后台必要的东西。
+> This is a minimalist vue admin management backend. It only contains Element UI & axios & iconfont & permission control & lint, which are necessary to build the backend.
 
-[线上地址](http://panjiachen.github.io/vue-admin-template)
+ [online address](http://panjiachen.github.io/vue-admin-template) 
 
-[国内访问](https://panjiachen.gitee.io/vue-admin-template)
+ [Domestic visit](https://panjiachen.gitee.io/vue-admin-template) 
 
-目前版本为 `v4.0+` 基于 `vue-cli` 进行构建，若你想使用旧版本，可以切换分支到[tag/3.11.0](https://github.com/PanJiaChen/vue-admin-template/tree/tag/3.11.0)，它不依赖 `vue-cli`。
+The current version is `v4.0+` , which is built based on `vue-cli` . If you want to use an older version, you can switch the branch to [tag/3.11.0](https://github.com/PanJiaChen/vue-admin-template/tree/tag/3.11.0) , which does not depend on `vue-cli` .
 
 <p align="center">
   <b>SPONSORED BY</b>
@@ -19,9 +19,9 @@
 
 ## Extra
 
-如果你想要根据用户角色来动态生成侧边栏和 router，你可以使用该分支[permission-control](https://github.com/PanJiaChen/vue-admin-template/tree/permission-control)
+If you want to dynamically generate sidebars and routers based on user roles, you can use this branch [permission-control](https://github.com/PanJiaChen/vue-admin-template/tree/permission-control) 
 
-## 相关项目
+## Related projects
 
 - [vue-element-admin](https://github.com/PanJiaChen/vue-element-admin)
 
@@ -31,66 +31,66 @@
 
 - [awesome-project](https://github.com/PanJiaChen/vue-element-admin/issues/2312)
 
-写了一个系列的教程配套文章，如何从零构建后一个完整的后台项目:
+Wrote a series of tutorial supporting articles on how to build a complete backend project from scratch:
 
-- [手摸手，带你用 vue 撸后台 系列一(基础篇)](https://juejin.im/post/59097cd7a22b9d0065fb61d2)
-- [手摸手，带你用 vue 撸后台 系列二(登录权限篇)](https://juejin.im/post/591aa14f570c35006961acac)
-- [手摸手，带你用 vue 撸后台 系列三 (实战篇)](https://juejin.im/post/593121aa0ce4630057f70d35)
-- [手摸手，带你用 vue 撸后台 系列四(vueAdmin 一个极简的后台基础模板,专门针对本项目的文章,算作是一篇文档)](https://juejin.im/post/595b4d776fb9a06bbe7dba56)
-- [手摸手，带你封装一个 vue component](https://segmentfault.com/a/1190000009090836)
+- [Hand in hand, I will show you how to use Vue to master the backend. Series 1 (Basics)](https://juejin.im/post/59097cd7a22b9d0065fb61d2) 
+- [Hand in hand, I will show you how to use vue to control the backend. Series 2 (Login Permissions)](https://juejin.im/post/591aa14f570c35006961acac) 
+- [Hand in hand, I will show you how to use Vue to master the backend. Series 3 (Practice)](https://juejin.im/post/593121aa0ce4630057f70d35) 
+- [Hands-on, I will show you how to use vue to build the backend. Series 4 (vueAdmin is a minimalist backend basic template. Articles specifically for this project are counted as one document)](https://juejin.im/post/595b4d776fb9a06bbe7dba56) 
+- [Hands-on, I will help you encapsulate a vue component](https://segmentfault.com/a/1190000009090836) 
 
 ## Build Setup
 
 ```bash
-# 克隆项目
+# Clone project
 git clone https://github.com/PanJiaChen/vue-admin-template.git
 
-# 进入项目目录
+# Enter the project directory
 cd vue-admin-template
 
-# 安装依赖
+# Install dependencies
 npm install
 
-# 建议不要直接使用 cnpm 安装以来，会有各种诡异的 bug。可以通过如下操作解决 npm 下载速度慢的问题
+# It is recommended not to use cnpm directly since there will be various weird bugs after installation. You can solve the problem of slow npm download speed by doing the following
 npm install --registry=https://registry.npm.taobao.org
 
-# 启动服务
+# Start service
 npm run dev
 ```
 
-浏览器访问 [http://localhost:9528](http://localhost:9528)
+Browser access [http://localhost:9528](http://localhost:9528) 
 
-## 发布
+## Publish
 
 ```bash
-# 构建测试环境
+# Build test environment
 npm run build:stage
 
-# 构建生产环境
+# Build a production environment
 npm run build:prod
 ```
 
-## 其它
+## Others
 
 ```bash
-# 预览发布环境效果
+# Preview publishing environment effects
 npm run preview
 
-# 预览发布环境效果 + 静态资源分析
+# Preview publishing environment effects + static resource analysis
 npm run preview -- --report
 
-# 代码格式检查
+# Code format check
 npm run lint
 
-# 代码格式检查并自动修复
+# Code format checking and automatic repair
 npm run lint -- --fix
 ```
 
-更多信息请参考 [使用文档](https://panjiachen.github.io/vue-element-admin-site/zh/)
+For more information please refer to [Use documentation](https://panjiachen.github.io/vue-element-admin-site/zh/) 
 
-## 购买贴纸
+## Buy Stickers
 
-你也可以通过 购买[官方授权的贴纸](https://smallsticker.com/product/vue-element-admin) 的方式来支持 vue-element-admin - 每售出一张贴纸，我们将获得 2 元的捐赠。
+You can also support vue-element-admin by purchasing [Officially licensed stickers](https://smallsticker.com/product/vue-element-admin) - for every sticker sold, we will receive a donation of 2 yuan.
 
 ## Demo
 

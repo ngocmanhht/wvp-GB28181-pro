@@ -50,15 +50,15 @@ public class SourcePTZServiceForGbImpl implements ISourcePTZService {
                     }
                 }
                 if (frontEndControlCode.getPanSpeed() == null) {
-                    callback.run(ErrorCode.ERROR100.getCode(), "参数异常", null);
+                    callback.run(ErrorCode.ERROR100.getCode(), "Parameter exception", null);
                     return;
                 }
                 if (frontEndControlCode.getTiltSpeed() == null) {
-                    callback.run(ErrorCode.ERROR100.getCode(), "参数异常", null);
+                    callback.run(ErrorCode.ERROR100.getCode(), "Parameter exception", null);
                     return;
                 }
                 if (frontEndControlCode.getZoomSpeed() == null) {
-                    callback.run(ErrorCode.ERROR100.getCode(), "参数异常", null);
+                    callback.run(ErrorCode.ERROR100.getCode(), "Parameter exception", null);
                     return;
                 }
                 panSpeed = (int)(frontEndControlCode.getPanSpeed()/100D* 255);
@@ -68,7 +68,7 @@ public class SourcePTZServiceForGbImpl implements ISourcePTZService {
             ptzService.frontEndCommand(channel, cmdCode, panSpeed, titleSpeed, zoomSpeed);
             callback.run(ErrorCode.SUCCESS.getCode(), ErrorCode.SUCCESS.getMsg(), null);
         }catch (Exception e) {
-            log.error("[云台控制失败] ", e);
+            log.error("[PTZ control failed] ", e);
             callback.run(ErrorCode.ERROR100.getCode(), e.getMessage(), null);
         }
     }
@@ -91,7 +91,7 @@ public class SourcePTZServiceForGbImpl implements ISourcePTZService {
                     }
                 }
                 if (frontEndControlCode.getPresetId() == null) {
-                    callback.run(ErrorCode.ERROR100.getCode(), "参数异常", null);
+                    callback.run(ErrorCode.ERROR100.getCode(), "Parameter exception", null);
                     return;
                 }
                 parameter2 = frontEndControlCode.getPresetId();
@@ -99,7 +99,7 @@ public class SourcePTZServiceForGbImpl implements ISourcePTZService {
             ptzService.frontEndCommand(channel, cmdCode, parameter1, parameter2, parameter3);
             callback.run(ErrorCode.SUCCESS.getCode(), ErrorCode.SUCCESS.getMsg(), null);
         }catch (Exception e) {
-            log.error("[预置位控制失败] ", e);
+            log.error("[Preset position control failed] ", e);
             callback.run(ErrorCode.ERROR100.getCode(), e.getMessage(), null);
         }
     }
@@ -118,11 +118,11 @@ public class SourcePTZServiceForGbImpl implements ISourcePTZService {
                     } else if (frontEndControlCode.getFocus() == 1) {
                         cmdCode = cmdCode | 1;
                     }else {
-                        log.error("[FI失败] 未知的聚焦指令 {}", frontEndControlCode.getFocus());
-                        callback.run(ErrorCode.ERROR100.getCode(), "未知的指令", null);
+                        log.error("[FIfailed] Unknown focus command {}", frontEndControlCode.getFocus());
+                        callback.run(ErrorCode.ERROR100.getCode(), "unknown command", null);
                     }
                     if (frontEndControlCode.getFocusSpeed() == null) {
-                        callback.run(ErrorCode.ERROR100.getCode(), "参数异常", null);
+                        callback.run(ErrorCode.ERROR100.getCode(), "Parameter exception", null);
                         return;
                     }
                     focusSpeed = frontEndControlCode.getFocusSpeed();
@@ -133,11 +133,11 @@ public class SourcePTZServiceForGbImpl implements ISourcePTZService {
                     } else if (frontEndControlCode.getIris() == 1) {
                         cmdCode = cmdCode | 1 << 2;
                     }else {
-                        log.error("[FI失败] 未知的光圈指令 {}", frontEndControlCode.getIris());
-                        callback.run(ErrorCode.ERROR100.getCode(), "未知的指令", null);
+                        log.error("[FIfailed] Unknown aperture command {}", frontEndControlCode.getIris());
+                        callback.run(ErrorCode.ERROR100.getCode(), "unknown command", null);
                     }
                     if (frontEndControlCode.getIrisSpeed() == null) {
-                        callback.run(ErrorCode.ERROR100.getCode(), "参数异常", null);
+                        callback.run(ErrorCode.ERROR100.getCode(), "Parameter exception", null);
                         return;
                     }
                     irisSpeed = frontEndControlCode.getIrisSpeed();
@@ -146,7 +146,7 @@ public class SourcePTZServiceForGbImpl implements ISourcePTZService {
             ptzService.frontEndCommand(channel, cmdCode, focusSpeed, irisSpeed, parameter3);
             callback.run(ErrorCode.SUCCESS.getCode(), ErrorCode.SUCCESS.getMsg(), null);
         }catch (Exception e) {
-            log.error("[云台控制失败] ", e);
+            log.error("[PTZ control failed] ", e);
             callback.run(ErrorCode.ERROR100.getCode(), e.getMessage(), null);
         }
     }
@@ -163,38 +163,38 @@ public class SourcePTZServiceForGbImpl implements ISourcePTZService {
                     if (frontEndControlCode.getCode() == 1) {
                         cmdCode = 0x84;
                         if (frontEndControlCode.getPresetId() == null) {
-                            callback.run(ErrorCode.ERROR100.getCode(), "参数异常", null);
+                            callback.run(ErrorCode.ERROR100.getCode(), "Parameter exception", null);
                             return;
                         }
                         parameter2 = frontEndControlCode.getPresetId();
                     } else if (frontEndControlCode.getCode() == 2) {
                         cmdCode = 0x85;
                         if (frontEndControlCode.getPresetId() == null) {
-                            callback.run(ErrorCode.ERROR100.getCode(), "参数异常", null);
+                            callback.run(ErrorCode.ERROR100.getCode(), "Parameter exception", null);
                             return;
                         }
                         parameter2 = frontEndControlCode.getPresetId();
                     }else if (frontEndControlCode.getCode() == 3) {
                         cmdCode = 0x86;
                         if (frontEndControlCode.getPresetId() == null) {
-                            callback.run(ErrorCode.ERROR100.getCode(), "参数异常", null);
+                            callback.run(ErrorCode.ERROR100.getCode(), "Parameter exception", null);
                             return;
                         }
                         parameter2 = frontEndControlCode.getPresetId();
                         if (frontEndControlCode.getTourSpeed() == null) {
-                            callback.run(ErrorCode.ERROR100.getCode(), "参数异常", null);
+                            callback.run(ErrorCode.ERROR100.getCode(), "Parameter exception", null);
                             return;
                         }
                         parameter3 = frontEndControlCode.getTourSpeed();
                     }else if (frontEndControlCode.getCode() == 4) {
                         cmdCode = 0x87;
                         if (frontEndControlCode.getPresetId() == null) {
-                            callback.run(ErrorCode.ERROR100.getCode(), "参数异常", null);
+                            callback.run(ErrorCode.ERROR100.getCode(), "Parameter exception", null);
                             return;
                         }
                         parameter2 = frontEndControlCode.getPresetId();
                         if (frontEndControlCode.getTourTime() == null) {
-                            callback.run(ErrorCode.ERROR100.getCode(), "参数异常", null);
+                            callback.run(ErrorCode.ERROR100.getCode(), "Parameter exception", null);
                             return;
                         }
                         parameter3 = frontEndControlCode.getTourTime();
@@ -202,11 +202,11 @@ public class SourcePTZServiceForGbImpl implements ISourcePTZService {
                         cmdCode = 0x88;
                     }else if (frontEndControlCode.getCode() == 6) {
                     }else {
-                        log.error("[巡航控制失败] 未知的指令 {}", frontEndControlCode.getCode());
-                        callback.run(ErrorCode.ERROR100.getCode(), "未知的指令", null);
+                        log.error("[cruise control failed] unknown command {}", frontEndControlCode.getCode());
+                        callback.run(ErrorCode.ERROR100.getCode(), "unknown command", null);
                     }
                     if (frontEndControlCode.getTourId() == null) {
-                        callback.run(ErrorCode.ERROR100.getCode(), "参数异常", null);
+                        callback.run(ErrorCode.ERROR100.getCode(), "Parameter exception", null);
                         return;
                     }
                     parameter1 = frontEndControlCode.getTourId();
@@ -216,7 +216,7 @@ public class SourcePTZServiceForGbImpl implements ISourcePTZService {
             ptzService.frontEndCommand(channel, cmdCode, parameter1, parameter2, parameter3);
             callback.run(ErrorCode.SUCCESS.getCode(), ErrorCode.SUCCESS.getMsg(), null);
         }catch (Exception e) {
-            log.error("[巡航控制失败] ", e);
+            log.error("[cruise control failed] ", e);
             callback.run(ErrorCode.ERROR100.getCode(), e.getMessage(), null);
         }
     }
@@ -233,14 +233,14 @@ public class SourcePTZServiceForGbImpl implements ISourcePTZService {
                     if (frontEndControlCode.getCode() == 1) {
                         cmdCode = 0x89;
                         if (frontEndControlCode.getScanId() == null) {
-                            callback.run(ErrorCode.ERROR100.getCode(), "参数异常", null);
+                            callback.run(ErrorCode.ERROR100.getCode(), "Parameter exception", null);
                             return;
                         }
                         parameter1 = frontEndControlCode.getScanId();
                     } else if (frontEndControlCode.getCode() == 2) {
                         cmdCode = 0x89;
                         if (frontEndControlCode.getScanId() == null) {
-                            callback.run(ErrorCode.ERROR100.getCode(), "参数异常", null);
+                            callback.run(ErrorCode.ERROR100.getCode(), "Parameter exception", null);
                             return;
                         }
                         parameter1 = frontEndControlCode.getScanId();
@@ -248,7 +248,7 @@ public class SourcePTZServiceForGbImpl implements ISourcePTZService {
                     }else if (frontEndControlCode.getCode() == 3) {
                         cmdCode = 0x89;
                         if (frontEndControlCode.getScanId() == null) {
-                            callback.run(ErrorCode.ERROR100.getCode(), "参数异常", null);
+                            callback.run(ErrorCode.ERROR100.getCode(), "Parameter exception", null);
                             return;
                         }
                         parameter1 = frontEndControlCode.getScanId();
@@ -256,26 +256,26 @@ public class SourcePTZServiceForGbImpl implements ISourcePTZService {
                     }else if (frontEndControlCode.getCode() == 4) {
                         cmdCode = 0x8A;
                         if (frontEndControlCode.getScanId() == null) {
-                            callback.run(ErrorCode.ERROR100.getCode(), "参数异常", null);
+                            callback.run(ErrorCode.ERROR100.getCode(), "Parameter exception", null);
                             return;
                         }
                         if (frontEndControlCode.getScanSpeed() == null) {
-                            callback.run(ErrorCode.ERROR100.getCode(), "参数异常", null);
+                            callback.run(ErrorCode.ERROR100.getCode(), "Parameter exception", null);
                             return;
                         }
                         parameter1 = frontEndControlCode.getScanId();
                         parameter2 = frontEndControlCode.getScanSpeed();
                     }else if (frontEndControlCode.getCode() == 5) {
                     }else {
-                        log.error("[巡航控制失败] 未知的指令 {}", frontEndControlCode.getCode());
-                        callback.run(ErrorCode.ERROR100.getCode(), "未知的指令", null);
+                        log.error("[cruise control failed] unknown command {}", frontEndControlCode.getCode());
+                        callback.run(ErrorCode.ERROR100.getCode(), "unknown command", null);
                     }
                 }
             }
             ptzService.frontEndCommand(channel, cmdCode, parameter1, parameter2, parameter3);
             callback.run(ErrorCode.SUCCESS.getCode(), ErrorCode.SUCCESS.getMsg(), null);
         }catch (Exception e) {
-            log.error("[巡航控制失败] ", e);
+            log.error("[cruise control failed] ", e);
             callback.run(ErrorCode.ERROR100.getCode(), e.getMessage(), null);
         }
     }
@@ -292,27 +292,27 @@ public class SourcePTZServiceForGbImpl implements ISourcePTZService {
                     if (frontEndControlCode.getCode() == 1) {
                         cmdCode = 0x8C;
                         if (frontEndControlCode.getAuxiliaryId() == null) {
-                            callback.run(ErrorCode.ERROR100.getCode(), "参数异常", null);
+                            callback.run(ErrorCode.ERROR100.getCode(), "Parameter exception", null);
                             return;
                         }
                         parameter1 = frontEndControlCode.getAuxiliaryId();
                     } else if (frontEndControlCode.getCode() == 2) {
                         cmdCode = 0x8D;
                         if (frontEndControlCode.getAuxiliaryId() == null) {
-                            callback.run(ErrorCode.ERROR100.getCode(), "参数异常", null);
+                            callback.run(ErrorCode.ERROR100.getCode(), "Parameter exception", null);
                             return;
                         }
                         parameter1 = frontEndControlCode.getAuxiliaryId();
                     }else {
-                        log.error("[辅助开关失败] 未知的指令 {}", frontEndControlCode.getCode());
-                        callback.run(ErrorCode.ERROR100.getCode(), "未知的指令", null);
+                        log.error("[Auxiliary switch failed] unknown command {}", frontEndControlCode.getCode());
+                        callback.run(ErrorCode.ERROR100.getCode(), "unknown command", null);
                     }
                 }
             }
             ptzService.frontEndCommand(channel, cmdCode, parameter1, parameter2, parameter3);
             callback.run(ErrorCode.SUCCESS.getCode(), ErrorCode.SUCCESS.getMsg(), null);
         }catch (Exception e) {
-            log.error("[辅助开关失败] ", e);
+            log.error("[Auxiliary switch failed] ", e);
             callback.run(ErrorCode.ERROR100.getCode(), e.getMessage(), null);
         }
     }
@@ -331,15 +331,15 @@ public class SourcePTZServiceForGbImpl implements ISourcePTZService {
                     } else if (frontEndControlCode.getCode() == 2) {
                         cmdCode = 0x8D;
                     }else {
-                        log.error("[雨刷开关失败] 未知的指令 {}", frontEndControlCode.getCode());
-                        callback.run(ErrorCode.ERROR100.getCode(), "未知的指令", null);
+                        log.error("[Wiper switch failed] unknown command {}", frontEndControlCode.getCode());
+                        callback.run(ErrorCode.ERROR100.getCode(), "unknown command", null);
                     }
                 }
             }
             ptzService.frontEndCommand(channel, cmdCode, parameter1, parameter2, parameter3);
             callback.run(ErrorCode.SUCCESS.getCode(), ErrorCode.SUCCESS.getMsg(), null);
         }catch (Exception e) {
-            log.error("[雨刷开关失败] ", e);
+            log.error("[Wiper switch failed] ", e);
             callback.run(ErrorCode.ERROR100.getCode(), e.getMessage(), null);
         }
     }

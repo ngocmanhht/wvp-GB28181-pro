@@ -12,7 +12,7 @@ import lombok.Getter;
 import org.springframework.context.ApplicationEvent;
 
 /**
- * 终端通用应答
+ * Terminal universal response
  *
  * @author QingtaiJiang
  * @date 2023/4/27 18:04
@@ -24,7 +24,7 @@ public class J0001 extends Re {
     int respNo;
     String respId;
     /**
-     * 0：成功/确认；1：失败；2：消息有误；3：不支持
+     * 0：success/Confirm; 1: Failed; 2: The message is wrong; 3: Not supported
      */
     int result;
 

@@ -38,7 +38,7 @@ export default {
       drawThinId: null,
       timer: null,
       errorTimer: null,
-      msg: '正在同步'
+      msg: 'Synchronizing'
     }
   },
   computed: {},

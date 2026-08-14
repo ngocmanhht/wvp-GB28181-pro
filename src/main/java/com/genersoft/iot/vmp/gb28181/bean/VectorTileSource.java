@@ -16,19 +16,19 @@ import java.util.concurrent.TimeUnit;
 public class VectorTileSource implements Delayed {
 
     /**
-     * 抽稀的图层数据
+     * Thinning layer data
      */
     private Map<String, byte[]> vectorTileMap = new ConcurrentHashMap<>();
 
     /**
-     * 抽稀的原始数据
+     * Raw data of thinning
      */
     private List<CommonGBChannel> channelList = new ArrayList<>();
 
     private String id;
 
     /**
-     * 创建时间， 大于6小时后删除
+     * Creation time, deleted after more than 6 hours
      */
     private long time;
 

@@ -7,22 +7,22 @@ public class DeviceChannelExtend {
 
 
 	/**
-	 * 数据库自增ID
+	 * Database auto-incrementID
 	 */
 	private int id;
 
 	/**
-	 * 通道id
+	 * channelid
 	 */
 	private String channelId;
 
 	/**
-	 * 设备id
+	 * Equipmentid
 	 */
 	private String deviceId;
 	
 	/**
-	 * 通道名
+	 * Channel name
 	 */
 	private String name;
 
@@ -31,183 +31,183 @@ public class DeviceChannelExtend {
 	private boolean deviceOnline;
 	
 	/**
-	 * 生产厂商
+	 * Manufacturer
 	 */
 	private String manufacture;
 	
 	/**
-	 * 型号
+	 * Model
 	 */
 	private String model;
 	
 	/**
-	 * 设备归属
+	 * Equipment ownership
 	 */
 	private String owner;
 	
 	/**
-	 * 行政区域
+	 * Administrative region
 	 */
 	private String civilCode;
 	
 	/**
-	 * 警区
+	 * police district
 	 */
 	private String block;
 
 	/**
-	 * 安装地址
+	 * Installation address
 	 */
 	private String address;
 	
 	/**
-	 * 是否有子设备 1有, 0没有
+	 * Whether there are sub-devices: 1 yes, 0 no
 	 */
 	private int parental;
 	
 	/**
-	 * 父级id
+	 * parentid
 	 */
 	private String parentId;
 	
 	/**
-	 * 信令安全模式  缺省为0; 0:不采用; 2: S/MIME签名方式; 3: S/ MIME加密签名同时采用方式; 4:数字摘要方式
+	 * Signaling security mode The default is0; 0:Not adopted; 2: S/MIMESignature method; 3: S/ MIMEEncrypted signature simultaneous use method; 4:digital summary method
 	 */
 	private int safetyWay;
 	
 	/**
-	 * 注册方式 缺省为1;1:符合IETFRFC3261标准的认证注册模 式; 2:基于口令的双向认证注册模式; 3:基于数字证书的双向认证注册模式
+	 * Registration method Default is1;1:Certification registration model that complies with IETFRFC3261 standard; 2:Password-based two-way authentication registration mode; 3:Two-way authentication registration mode based on digital certificate
 	 */
 	private int registerWay;
 	
 	/**
-	 * 证书序列号
+	 * Certificate serial number
 	 */
 	private String certNum;
 	
 	/**
-	 * 证书有效标识 缺省为0;证书有效标识:0:无效1: 有效
+	 * Certificate valid ID Default is0;Certificate valid identification: 0: invalid 1: valid
 	 */
 	private int certifiable;
 	
 	/**
-	 * 证书无效原因码
+	 * Certificate invalid reason code
 	 */
 	private int errCode;
 	
 	/**
-	 * 证书终止有效期
+	 * Certificate expiry date
 	 */
 	private String endTime;
 	
 	/**
-	 * 保密属性 缺省为0; 0:不涉密, 1:涉密
+	 * Confidential attribute defaults to0; 0:Not confidential, 1: confidential
 	 */
 	private String secrecy;
 	
 	/**
-	 * IP地址
+	 * IPaddress
 	 */
 	private String ipAddress;
 	
 	/**
-	 * 端口号
+	 * port number
 	 */
 	private int port;
 	
 	/**
-	 * 密码
+	 * Password
 	 */
 	private String password;
 
 	/**
-	 * 云台类型
+	 * PTZ type
 	 */
 	private int PTZType;
 
 	/**
-	 * 云台类型描述字符串
+	 * PTZ type description string
 	 */
 	private String PTZTypeText;
 
 	/**
-	 * 创建时间
+	 * creation time
 	 */
 	private String createTime;
 
 	/**
-	 * 更新时间
+	 * Update time
 	 */
 	private String updateTime;
 	
 	/**
-	 * 在线/离线
-	 * 1在线,0离线
-	 * 默认在线
-	 * 信令:
+	 * online/Offline
+	 * 1Online, 0 offline
+	 * Default online
+	 * signaling:
 	 * <Status>ON</Status>
 	 * <Status>OFF</Status>
-	 * 遇到过NVR下的IPC下发信令可以推流， 但是 Status 响应 OFF
+	 * I have encountered that the IPC signaling under NVR can push the stream, but the Status response OFF
 	 */
 	private String status;
 
 	/**
-	 * 经度
+	 * longitude
 	 */
 	private double longitude;
 	
 	/**
-	 * 纬度
+	 * Latitude
 	 */
 	private double latitude;
 
 	/**
-	 * 经度 GCJ02
+	 * longitude GCJ02
 	 */
 	private double longitudeGcj02;
 
 	/**
-	 * 纬度 GCJ02
+	 * Latitude GCJ02
 	 */
 	private double latitudeGcj02;
 
 	/**
-	 * 经度 WGS84
+	 * longitude WGS84
 	 */
 	private double longitudeWgs84;
 
 	/**
-	 * 纬度 WGS84
+	 * Latitude WGS84
 	 */
 	private double latitudeWgs84;
 
 	/**
-	 * 子设备数
+	 * Number of sub-devices
 	 */
 	private int subCount;
 
 	/**
-	 * 流唯一编号，存在表示正在直播
+	 * The unique number of the stream. If it exists, it means it is live broadcasting.
 	 */
 	private String  streamId;
 
 	/**
-	 *  是否含有音频
+	 *  Does it contain audio
 	 */
 	private boolean hasAudio;
 
 	/**
-	 * 标记通道的类型，0->国标通道 1->直播流通道 2->业务分组/虚拟组织/行政区划
+	 * Mark channel type，0->National standard channel 1->Live streaming channel 2->business grouping/virtual organization/Administrative division
 	 */
 	private int channelType;
 
 	/**
-	 * 业务分组
+	 * business grouping
 	 */
 	private String businessGroupId;
 
 	/**
-	 * GPS的更新时间
+	 * GPSupdate time
 	 */
 	private String gpsTime;
 
@@ -216,19 +216,19 @@ public class DeviceChannelExtend {
 		this.PTZType = PTZType;
 		switch (PTZType) {
 			case 0:
-				this.PTZTypeText = "未知";
+				this.PTZTypeText = "unknown";
 				break;
 			case 1:
-				this.PTZTypeText = "球机";
+				this.PTZTypeText = "ball machine";
 				break;
 			case 2:
-				this.PTZTypeText = "半球";
+				this.PTZTypeText = "hemisphere";
 				break;
 			case 3:
-				this.PTZTypeText = "固定枪机";
+				this.PTZTypeText = "Fixed bolt";
 				break;
 			case 4:
-				this.PTZTypeText = "遥控枪机";
+				this.PTZTypeText = "remote control gun";
 				break;
 		}
 	}

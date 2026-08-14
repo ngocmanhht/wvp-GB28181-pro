@@ -3,7 +3,7 @@
     <el-dialog
       v-if="showVideoDialog"
       v-el-drag-dialog
-      title="视频播放"
+      title="video playback"
       top="10vh"
       width="65vw"
       :close-on-click-modal="false"
@@ -22,25 +22,25 @@
         <div class="control-side">
           <jtDevicePtzPanel v-if="showPtz" :device-id="deviceId" :channel-id="channelId" />
           <el-tabs v-model="tabActiveName" @tab-click="tabHandleClick" class="control-tabs">
-            <el-tab-pane label="实时视频" name="media">
+            <el-tab-pane label="real time video" name="media">
               <streamMediaPanel v-if="tabActiveName === 'media'" :player-url="playerUrlInfo.playerUrl" :play-url="playerUrlInfo.playUrl" :stream-info="streamInfo" />
             </el-tab-pane>
-            <el-tab-pane label="编码信息" name="codec">
+            <el-tab-pane label="encoded information" name="codec">
               <mediaInfo v-if="tabActiveName === 'codec'" ref="mediaInfo" :app="app" :stream="streamId" :media-server-id="mediaServerId" />
             </el-tab-pane>
-            <el-tab-pane label="辅助开关" name="switch">
+            <el-tab-pane label="Auxiliary switch" name="switch">
               <div style="display: flex; gap: 12px; justify-content: center; margin-top: 16px;">
                 <el-button-group>
-                  <el-button size="small" type="primary" @click="wiper('on')">开启雨刷</el-button>
-                  <el-button size="small" @click="wiper('off')">关闭雨刷</el-button>
+                  <el-button size="small" type="primary" @click="wiper('on')">Turn on wipers</el-button>
+                  <el-button size="small" @click="wiper('off')">Turn off wipers</el-button>
                 </el-button-group>
                 <el-button-group>
-                  <el-button size="small" type="primary" @click="fillLight('on')">开补光灯</el-button>
-                  <el-button size="small" @click="fillLight('off')">关补光灯</el-button>
+                  <el-button size="small" type="primary" @click="fillLight('on')">Turn on fill light</el-button>
+                  <el-button size="small" @click="fillLight('off')">Turn off fill light</el-button>
                 </el-button-group>
               </div>
             </el-tab-pane>
-            <el-tab-pane label="语音对讲" name="broadcast">
+            <el-tab-pane label="Voice intercom" name="broadcast">
               <div class="trank" style="text-align: center; width: 100%;">
                 <el-button
                   :type="getBroadcastStatus()"
@@ -51,10 +51,10 @@
                   @click="broadcastStatusClick()"
                 />
                 <p>
-                  <span v-if="broadcastStatus === -2">正在释放资源</span>
-                  <span v-if="broadcastStatus === -1">点击开始对讲</span>
-                  <span v-if="broadcastStatus === 0">等待接通中...</span>
-                  <span v-if="broadcastStatus === 1">请说话</span>
+                  <span v-if="broadcastStatus === -2">Releasing resources</span>
+                  <span v-if="broadcastStatus === -1">Click to start intercom</span>
+                  <span v-if="broadcastStatus === 0">Waiting to be connected...</span>
+                  <span v-if="broadcastStatus === 1">please speak</span>
                 </p>
               </div>
             </el-tab-pane>
@@ -211,7 +211,7 @@ export default {
           }
           const pushKey = data.pushKey
           url += '&sign=' + crypto.createHash('md5').update(pushKey, 'utf8').digest('hex')
-          console.log('开始语音喊话： ' + url)
+          console.log('Start voice call： ' + url)
           this.broadcastRtc = new ZLMRTCClient.Endpoint({
             debug: true,
             zlmsdpUrl: url,
@@ -223,25 +223,25 @@ export default {
           })
 
           this.broadcastRtc.on(ZLMRTCClient.Events.WEBRTC_NOT_SUPPORT, (e) => {
-            console.error('不支持webrtc', e)
-            this.$message({ showClose: true, message: '不支持webrtc, 无法进行语音喊话', type: 'error' })
+            console.error('Not supportedwebrtc', e)
+            this.$message({ showClose: true, message: 'Does not support webrtc and cannot make voice calls.', type: 'error' })
             this.broadcastStatus = -1
           })
 
           this.broadcastRtc.on(ZLMRTCClient.Events.WEBRTC_ICE_CANDIDATE_ERROR, (e) => {
-            console.error('ICE 协商出错')
-            this.$message({ showClose: true, message: 'ICE 协商出错', type: 'error' })
+            console.error('ICE Negotiation error')
+            this.$message({ showClose: true, message: 'ICE Negotiation error', type: 'error' })
             this.broadcastStatus = -1
           })
 
           this.broadcastRtc.on(ZLMRTCClient.Events.WEBRTC_OFFER_ANWSER_EXCHANGE_FAILED, (e) => {
-            console.error('offer anwser 交换失败', e)
-            this.$message({ showClose: true, message: 'offer anwser 交换失败' + e, type: 'error' })
+            console.error('offer anwser Exchange failed', e)
+            this.$message({ showClose: true, message: 'offer anwser Exchange failed' + e, type: 'error' })
             this.broadcastStatus = -1
           })
 
           this.broadcastRtc.on(ZLMRTCClient.Events.WEBRTC_ON_CONNECTION_STATE_CHANGE, (e) => {
-            console.log('状态改变', e)
+            console.log('status change', e)
             if (e === 'connecting') {
               this.broadcastStatus = 0
             } else if (e === 'connected') {
@@ -252,8 +252,8 @@ export default {
           })
 
           this.broadcastRtc.on(ZLMRTCClient.Events.CAPTURE_STREAM_FAILED, (e) => {
-            console.log('捕获流失败', e)
-            this.$message({ showClose: true, message: '捕获流失败' + e, type: 'error' })
+            console.log('Failed to capture stream', e)
+            this.$message({ showClose: true, message: 'Failed to capture stream' + e, type: 'error' })
             this.broadcastStatus = -1
           })
         }).catch(e => {

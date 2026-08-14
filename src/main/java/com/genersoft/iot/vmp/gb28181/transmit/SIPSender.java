@@ -24,7 +24,7 @@ import javax.sip.message.Response;
 import java.text.ParseException;
 
 /**
- * 发送SIP消息
+ * Send SIP message
  *
  * @author lin
  */
@@ -60,7 +60,7 @@ public class SIPSender {
         ViaHeader viaHeader = (ViaHeader) message.getHeader(ViaHeader.NAME);
         String transport = "UDP";
         if (viaHeader == null) {
-            log.warn("[消息头缺失]： ViaHeader， 使用默认的UDP方式处理数据");
+            log.warn("[Missing message header]： ViaHeader， Use the default UDP method to process data");
         } else {
             transport = viaHeader.getTransport();
         }
@@ -68,7 +68,7 @@ public class SIPSender {
             try {
                 message.addHeader(SipUtils.createUserAgentHeader(gitUtil));
             } catch (ParseException e) {
-                log.error("添加UserAgentHeader失败", e);
+                log.error("Adding UserAgentHeader failed", e);
             }
         }
         CallIdHeader callIdHeader = (CallIdHeader) message.getHeader(CallIdHeader.NAME);
@@ -114,7 +114,7 @@ public class SIPSender {
             if ("TCP".equals(transport)) {
                 SipProviderImpl tcpSipProvider = sipLayer.getTcpSipProvider(ip);
                 if (tcpSipProvider == null) {
-                    log.error("[发送信息失败] 未找到tcp://{}的监听信息", ip);
+                    log.error("[Failed to send message] not foundtcp://{}monitoring information", ip);
                     return;
                 }
                 if (message instanceof Request) {
@@ -126,7 +126,7 @@ public class SIPSender {
             } else if ("UDP".equals(transport)) {
                 SipProviderImpl sipProvider = sipLayer.getUdpSipProvider(ip);
                 if (sipProvider == null) {
-                    log.error("[发送信息失败] 未找到udp://{}的监听信息", ip);
+                    log.error("[Failed to send message] not foundudp://{}monitoring information", ip);
                     return;
                 }
                 if (message instanceof Request) {
@@ -162,7 +162,7 @@ public class SIPSender {
         if (sipProvider != null) {
             return sipProvider.getNewCallId();
         } else {
-            log.warn("[新建CallIdHeader失败]， ip={}, transport={}", ip, transport);
+            log.warn("[Failed to create new CallIdHeader]， ip={}, transport={}", ip, transport);
             return null;
         }
     }

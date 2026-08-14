@@ -26,7 +26,7 @@ import org.springframework.web.context.request.async.DeferredResult;
 import java.util.*;
 
 /**
- * API兼容：设备信息
+ * APICompatible: device information
  */
 @SuppressWarnings("unchecked")
 @Slf4j
@@ -48,7 +48,7 @@ public class ApiDeviceController {
 
 
     /**
-     * 分页获取设备列表 现在直接返回，尚未实现分页
+     * Get the device list through paging. Now return directly, paging has not been implemented yet.
      * @param start
      * @param limit
      * @param q
@@ -62,7 +62,7 @@ public class ApiDeviceController {
                             @RequestParam(required = false)Boolean online ){
 
 //        if (logger.isDebugEnabled()) {
-//            logger.debug("查询所有视频设备API调用");
+//            logger.debug("Query all video device API calls");
 //        }
 
         JSONObject result = new JSONObject();
@@ -84,8 +84,8 @@ public class ApiDeviceController {
             deviceJsonObject.put("Type", "GB");
             deviceJsonObject.put("ChannelCount", device.getChannelCount());
             deviceJsonObject.put("RecvStreamIP", "");
-            deviceJsonObject.put("CatalogInterval", 3600); // 通道目录抓取周期
-            deviceJsonObject.put("SubscribeInterval", device.getSubscribeCycleForCatalog()); // 订阅周期(秒), 0 表示后台不周期订阅
+            deviceJsonObject.put("CatalogInterval", 3600); // Channel directory crawl cycle
+            deviceJsonObject.put("SubscribeInterval", device.getSubscribeCycleForCatalog()); // Subscription cycle(seconds), 0 Indicates that the background does not subscribe periodically
             deviceJsonObject.put("Online", device.isOnLine());
             deviceJsonObject.put("Password", "");
             deviceJsonObject.put("MediaTransport", device.getTransport());
@@ -141,32 +141,32 @@ public class ApiDeviceController {
             deviceJOSNChannel.put("DeviceID", deviceChannelExtend.getDeviceId());
             deviceJOSNChannel.put("DeviceName", deviceChannelExtend.getDeviceName());
             deviceJOSNChannel.put("DeviceOnline", deviceChannelExtend.isDeviceOnline());
-            deviceJOSNChannel.put("Channel", 0); // TODO 自定义序号
+            deviceJOSNChannel.put("Channel", 0); // TODO Custom serial number
             deviceJOSNChannel.put("Name", deviceChannelExtend.getName());
             deviceJOSNChannel.put("Custom", false);
             deviceJOSNChannel.put("CustomName", "");
-            deviceJOSNChannel.put("SubCount", deviceChannelExtend.getSubCount()); // TODO ? 子节点数, SubCount > 0 表示该通道为子目录
+            deviceJOSNChannel.put("SubCount", deviceChannelExtend.getSubCount()); // TODO ? Number of child nodes, SubCount > 0 Indicates that the channel is a subdirectory
             deviceJOSNChannel.put("SnapURL", "");
             deviceJOSNChannel.put("Manufacturer ", deviceChannelExtend.getManufacture());
             deviceJOSNChannel.put("Model", deviceChannelExtend.getModel());
             deviceJOSNChannel.put("Owner", deviceChannelExtend.getOwner());
             deviceJOSNChannel.put("CivilCode", deviceChannelExtend.getCivilCode());
             deviceJOSNChannel.put("Address", deviceChannelExtend.getAddress());
-            deviceJOSNChannel.put("Parental", deviceChannelExtend.getParental()); // 当为通道设备时, 是否有通道子设备, 1-有,0-没有
-            deviceJOSNChannel.put("ParentID", deviceChannelExtend.getParentId()); // 直接上级编号
+            deviceJOSNChannel.put("Parental", deviceChannelExtend.getParental()); // When it is a channel device, whether there is a channel sub-device, 1-Yes,0-No
+            deviceJOSNChannel.put("ParentID", deviceChannelExtend.getParentId()); // Direct superior number
             deviceJOSNChannel.put("Secrecy", deviceChannelExtend.getSecrecy());
-            deviceJOSNChannel.put("RegisterWay", 1); // 注册方式, 缺省为1, 允许值: 1, 2, 3
+            deviceJOSNChannel.put("RegisterWay", 1); // Registration method, default is 1, allowed values: 1, 2, 3
             // 1-IETF RFC3261,
-            // 2-基于口令的双向认证,
-            // 3-基于数字证书的双向认证
+            // 2-Password-based two-way authentication,
+            // 3-Digital certificate-based two-way authentication
             deviceJOSNChannel.put("Status", deviceChannelExtend.getStatus());
             deviceJOSNChannel.put("Longitude", deviceChannelExtend.getLongitude());
             deviceJOSNChannel.put("Latitude", deviceChannelExtend.getLatitude());
-            deviceJOSNChannel.put("PTZType ", deviceChannelExtend.getPTZType()); // 云台类型, 0 - 未知, 1 - 球机, 2 - 半球,
-            //   3 - 固定枪机, 4 - 遥控枪机
+            deviceJOSNChannel.put("PTZType ", deviceChannelExtend.getPTZType()); // PTZ type, 0 - unknown, 1 - ball machine, 2 - hemisphere,
+            //   3 - Fixed bolt, 4 - remote control gun
             deviceJOSNChannel.put("CustomPTZType", "");
-            deviceJOSNChannel.put("StreamID", deviceChannelExtend.getStreamId()); // StreamID 直播流ID, 有值表示正在直播
-            deviceJOSNChannel.put("NumOutputs ", -1); // 直播在线人数
+            deviceJOSNChannel.put("StreamID", deviceChannelExtend.getStreamId()); // StreamID Live stream ID, a value indicates that the live broadcast is ongoing
+            deviceJOSNChannel.put("NumOutputs ", -1); // Number of people online during live broadcast
             channleJSONList.add(deviceJOSNChannel);
         });
         result.put("ChannelList", channleJSONList);
@@ -174,12 +174,12 @@ public class ApiDeviceController {
     }
 
     /**
-     * 设备信息 - 获取下级通道预置位
-     * @param serial 设备编号
-     * @param code 通道编号,通过 /api/v1/device/channellist 获取的 ChannelList.ID, 该参数和 channel 二选一传递即可
-     * @param channel 通道序号, 默认值: 1
-     * @param fill 是否填充空置预置位，当下级返回预置位，但不够255个时，自动填充空置预置位到255个， 默认值: true， 允许值: true, false
-     * @param timeout 超时时间(秒) 默认值: 15
+     * Device information - Get the lower channel preset position
+     * @param serial Device number
+     * @param code Channel number, pass /api/v1/device/channellist obtained ChannelList.ID, You can choose to pass this parameter or channel.
+     * @param channel Channel number, default value: 1
+     * @param fill Whether to fill the vacant preset positions. When the subordinate returns preset positions but there are not enough 255, the vacant preset positions will be automatically filled to 255. Default value: true, allowed value: true, false
+     * @param timeout timeout(seconds) Default value: 15
      * @return
      */
     @GetMapping(value = "/fetchpreset")
@@ -190,12 +190,12 @@ public class ApiDeviceController {
                       @RequestParam(required = false)Integer timeout){
 
         if (log.isDebugEnabled()) {
-            log.debug("<模拟接口> 获取下级通道预置位 API调用，deviceId：{} ，channel：{} ，code：{} ，fill：{} ，timeout：{} ",
+            log.debug("<Analog interface> Get lower-level channel preset position API call，deviceId：{} ，channel：{} ，code：{} ，fill：{} ，timeout：{} ",
                     serial, channel, code, fill, timeout);
         }
 
         Device device = deviceService.getDeviceByDeviceId(serial);
-        Assert.notNull(device, "设备不存在");
+        Assert.notNull(device, "Device does not exist");
         DeferredResult<WVPResult<Object>> deferredResult = new DeferredResult<> (timeout * 1000L);
         deviceService.queryPreset(device, code, (resultCode, msg, data) -> {
             if (resultCode == ErrorCode.SUCCESS.getCode()) {
@@ -220,7 +220,7 @@ public class ApiDeviceController {
         });
 
         deferredResult.onTimeout(()->{
-            log.warn("[获取设备预置位] 超时, {}", device.getDeviceId());
+            log.warn("[Get device preset position] timeout, {}", device.getDeviceId());
             deferredResult.setResult(WVPResult.fail(ErrorCode.ERROR100.getCode(), "wait for presetquery timeout["+timeout+"s]"));
         });
         return deferredResult;

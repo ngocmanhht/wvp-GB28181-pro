@@ -6,64 +6,64 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * 定时拍照控制
+ * Timing photo control
  */
 @Setter
 @Getter
 public class JTCameraTimer implements JTDeviceSubConfig{
     /**
-     * 摄像通道1 定时拍照开关标志
+     * Camera channel 1 timing photo switch sign
      */
     private boolean switchForChannel1;
     /**
-     * 摄像通道2 定时拍照开关标志
+     * Camera channel 2 timing photo switch sign
      */
     private boolean switchForChannel2;
     /**
-     * 摄像通道3 定时拍照开关标志
+     * Camera channel 3 timing photo switch sign
      */
     private boolean switchForChannel3;
     /**
-     * 摄像通道4 定时拍照开关标志
+     * Camera channel 4 timing photo switch sign
      */
     private boolean switchForChannel4;
     /**
-     * 摄像通道5 定时拍照开关标志
+     * Camera channel 5 timing photo switch sign
      */
     private boolean switchForChannel5;
 
     /**
-     * 摄像通道1 定时拍照存储标志, true: 上传， false： 存储
+     * Camera channel 1 scheduled photo storage flag, true: upload, false: storage
      */
     private boolean storageFlagsForChannel1;
 
     /**
-     * 摄像通道2 定时拍照存储标志 true: 上传， false： 存储
+     * Camera channel 2 scheduled photo storage flag true: upload, false: storage
      */
     private boolean storageFlagsForChannel2;
 
     /**
-     * 摄像通道3 定时拍照存储标志 true: 上传， false： 存储
+     * Camera channel 3 scheduled photo storage flag true: upload, false: storage
      */
     private boolean storageFlagsForChannel3;
 
     /**
-     * 摄像通道4 定时拍照存储标志 true: 上传， false： 存储
+     * Camera channel 4 scheduled photo storage flag true: upload, false: storage
      */
     private boolean storageFlagsForChannel4;
 
     /**
-     * 摄像通道5 定时拍照存储标志 true: 上传， false： 存储
+     * Camera channel 5 scheduled photo storage flag true: upload, false: storage
      */
     private boolean storageFlagsForChannel5;
 
     /**
-     * 定时时间单位,true: 分， false： 秒，当数值小于5s时，终端按5s处理
+     * Timing time unit, true: minutes, false: seconds, when the value is less than 5s, the terminal processes it as 5s
      */
     private boolean timeUnit;
 
     /**
-     * 定时时间间隔
+     * scheduled time interval
      */
     private Integer timeInterval;
 

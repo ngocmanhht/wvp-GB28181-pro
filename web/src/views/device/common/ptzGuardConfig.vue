@@ -1,23 +1,23 @@
 <template>
   <div>
     <el-form label-width="120px" class="guard-form">
-      <el-form-item label="启用">
+      <el-form-item label="enable">
         <el-switch v-model="enabled" />
       </el-form-item>
-      <el-form-item label="预置位">
-        <el-select v-model="presetIndex" style="width: 180px" placeholder="选择预置位">
+      <el-form-item label="Preset position">
+        <el-select v-model="presetIndex" style="width: 180px" placeholder="Select preset position">
           <el-option v-for="p in allPresetList" :key="p.presetId"
-                     :label="p.presetId + '-' + (p.presetName || ('预置点' + p.presetId))"
+                     :label="p.presetId + '-' + (p.presetName || ('preset point' + p.presetId))"
                      :value="Number(p.presetId)" />
         </el-select>
       </el-form-item>
-      <el-form-item label="自动归位（秒）">
+      <el-form-item label="Automatic homing (seconds）">
         <el-input-number v-model="resetTime" :min="1" :max="999999" controls-position="right" style="width: 180px" />
       </el-form-item>
       <el-form-item>
         <div class="guard-actions">
-          <el-button @click="loadPresets">刷新</el-button>
-          <el-button type="primary" :loading="submitting" :disabled="submitting" @click="confirmSave">保存</el-button>
+          <el-button @click="loadPresets">Refresh</el-button>
+          <el-button type="primary" :loading="submitting" :disabled="submitting" @click="confirmSave">save</el-button>
         </div>
       </el-form-item>
     </el-form>
@@ -50,16 +50,16 @@ export default {
           this.allPresetList = data || []
         })
         .catch(error => {
-          console.log('[看守位] 加载预置点列表失败', error)
+          console.log('[guard position] Failed to load preset point list', error)
         })
     },
     confirmSave() {
       if (!this.enabled && !this.presetIndex) {
-        this.$message({ showClose: true, message: '请选择预置位编号', type: 'warning' })
+        this.$message({ showClose: true, message: 'Please select a preset number', type: 'warning' })
         return
       }
       if (this.resetTime == null || this.resetTime < 1) {
-        this.$message({ showClose: true, message: '请输入有效的归位时间', type: 'warning' })
+        this.$message({ showClose: true, message: 'Please enter a valid return time', type: 'warning' })
         return
       }
       this.submitting = true
@@ -76,10 +76,10 @@ export default {
       }
       this.$store.dispatch('device/homePosition', params)
         .then(() => {
-          this.$message({ showClose: true, message: '保存成功', type: 'success' })
+          this.$message({ showClose: true, message: 'Saved successfully', type: 'success' })
         })
         .catch(error => {
-          this.$message({ showClose: true, message: error || '保存失败', type: 'error' })
+          this.$message({ showClose: true, message: error || 'Save failed', type: 'error' })
         })
         .finally(() => {
           this.submitting = false

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration debug="false">
-	<!--定义日志文件的存储地址 -->
+	<!--Define the storage address of the log file -->
 	<springProperty scop="context" name="spring.application.name" source="spring.application.name" defaultValue=""/>
 	<property name="LOG_HOME" value="logs" />
 
@@ -10,16 +10,16 @@
 	<conversionRule conversionWord="wex" converterClass="org.springframework.boot.logging.logback.WhitespaceThrowableProxyConverter"/>
 	<conversionRule conversionWord="wEx" converterClass="org.springframework.boot.logging.logback.ExtendedWhitespaceThrowableProxyConverter"/>
 
-	<!-- 控制台输出 -->
+	<!-- console output -->
 	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
 		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-			<!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符 -->
+			<!--Formatted output: %d represents the date, %thread represents the thread name，%-5level：Level displays 5 characters width from left %msg: log message, %n is newline character -->
 			<pattern>${log.pattern}</pattern>
 			<charset>UTF-8</charset>
 		</encoder>
 		<filter class="ch.qos.logback.classic.filter.ThresholdFilter" >
-			<!--与ThresholdFilter的区别,允许onmatch-->
-			<!--设置日志级别 接收info级别的日志-->
+			<!--The difference with ThresholdFilter, allowingonmatch-->
+			<!--Set the log level to receive info level logs-->
 			<level>DEBUG</level>
 		</filter>
 	</appender>
@@ -32,47 +32,47 @@
 		</encoder>
 	</appender>
 
-	<!-- 按照每天生成日志文件 DEBUG以上级别的日志,仅用于测试环境,正式环境为info级别以上的日志-->
+	<!-- Log files are generated every day. Logs of DEBUG level and above are only used in the test environment. For the official environment, logs of info level and above are used.-->
 	<appender name="RollingFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
 
-		<!-- 文件路径 -->
+		<!-- file path -->
 		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-			<!--历史日志文件输出的文件名 -->
+			<!--The file name of the historical log file output -->
 			<FileNamePattern>${LOG_HOME}/wvp-%d{yyyy-MM-dd}.%i.log</FileNamePattern>
-			<!--日志文件保留天数 -->
+			<!--Number of days to retain log files -->
 			<MaxHistory>30</MaxHistory>
 			<maxFileSize>20MB</maxFileSize>
 		</rollingPolicy>
 		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-			<!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符 -->
+			<!--Formatted output: %d represents the date, %thread represents the thread name，%-5level：Level displays 5 characters width from left %msg: log message, %n is newline character -->
 			<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50}:%L - %msg%n</pattern>
 			<charset>UTF-8</charset>
 		</encoder>
 		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-			<!--与ThresholdFilter的区别,允许onmatch-->
-			<!--设置日志级别 接收info级别的日志-->
+			<!--The difference with ThresholdFilter, allowingonmatch-->
+			<!--Set the log level to receive info level logs-->
 			<level>DEBUG</level>
 		</filter>
 	</appender>
 
-	<!-- 生成 SIP日志追加 -->
+	<!-- Generate SIP log append -->
 	<appender name="SipRollingFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-			<!--历史日志文件输出的文件名 -->
+			<!--The file name of the historical log file output -->
 			<FileNamePattern>${LOG_HOME}/sip-%d{yyyy-MM-dd}.%i.log</FileNamePattern>
-			<!--日志文件保留天数 -->
+			<!--Number of days to retain log files -->
 			<MaxHistory>30</MaxHistory>
 			<maxFileSize>50MB</maxFileSize>
 		</rollingPolicy>
 		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-			<!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符 -->
+			<!--Formatted output: %d represents the date, %thread represents the thread name，%-5level：Level displays 5 characters width from left %msg: log message, %n is newline character -->
 			<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50}:%L - %msg%n</pattern>
 			<charset>UTF-8</charset>
 		</encoder>
 	</appender>
 
 
-	<!-- 日志输出级别 -->
+	<!-- Log output level -->
 	<root level="INFO">
 		<appender-ref ref="STDOUT" />
 		<appender-ref ref="websocket" />

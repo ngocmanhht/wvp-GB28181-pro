@@ -15,57 +15,57 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 视频信息
+ * Video information
  */
 @Data
-@Schema(description = "视频信息")
+@Schema(description = "Video information")
 public class MediaInfo {
-    @Schema(description = "应用名")
+    @Schema(description = "Application name")
     private String app;
-    @Schema(description = "流ID")
+    @Schema(description = "flowID")
     private String stream;
-    @Schema(description = "流媒体节点")
+    @Schema(description = "Streaming media node")
     private MediaServer mediaServer;
-    @Schema(description = "协议")
+    @Schema(description = "Agreement")
     private String schema;
 
-    @Schema(description = "观看人数")
+    @Schema(description = "Number of viewers")
     private Integer readerCount;
-    @Schema(description = "视频编码类型")
+    @Schema(description = "Video encoding type")
     private String videoCodec;
-    @Schema(description = "视频宽度")
+    @Schema(description = "video width")
     private Integer width;
-    @Schema(description = "视频高度")
+    @Schema(description = "video height")
     private Integer height;
     @Schema(description = "FPS")
     private Integer fps;
-    @Schema(description = "丢包率")
+    @Schema(description = "Packet loss rate")
     private Integer loss;
-    @Schema(description = "音频编码类型")
+    @Schema(description = "Audio encoding type")
     private String audioCodec;
-    @Schema(description = "音频通道数")
+    @Schema(description = "Number of audio channels")
     private Integer audioChannels;
-    @Schema(description = "音频采样率")
+    @Schema(description = "Audio sample rate")
     private Integer audioSampleRate;
-    @Schema(description = "时长")
+    @Schema(description = "duration")
     private Long duration;
-    @Schema(description = "在线")
+    @Schema(description = "online")
     private Boolean online;
     @Schema(description = "unknown = 0,rtmp_push=1,rtsp_push=2,rtp_push=3,pull=4,ffmpeg_pull=5,mp4_vod=6,device_chn=7,rtc_push=8")
     private Integer originType;
-    @Schema(description = "originType的文本描述")
+    @Schema(description = "originTypetext description of")
     private String originTypeStr;
-    @Schema(description = "产生流的源流地址")
+    @Schema(description = "The source stream address of the generated stream")
     private String originUrl;
-    @Schema(description = "存活时间，单位秒")
+    @Schema(description = "Survival time in seconds")
     private Long aliveSecond;
-    @Schema(description = "数据产生速度，单位byte/s")
+    @Schema(description = "Data generation speed, unitbyte/s")
     private Long bytesSpeed;
-    @Schema(description = "鉴权参数")
+    @Schema(description = "Authentication parameters")
     private String callId;
-    @Schema(description = "额外参数")
+    @Schema(description = "extra parameters")
     private Map<String, String> paramMap;
-    @Schema(description = "服务ID")
+    @Schema(description = "serviceID")
     private String serverId;
 
 

@@ -126,10 +126,10 @@ public class RedisRpcPlayServiceImpl implements IRedisRpcPlayService {
         request.setToId(serverId);
         RedisRpcResponse response = redisRpcConfig.request(request, 5, TimeUnit.SECONDS);
         if (response == null) {
-            log.info("[RPC 暂停回放] 失败, streamId: {}", streamId);
+            log.info("[RPC Pause playback] failed, streamId: {}", streamId);
         }else {
             if (response.getStatusCode() != ErrorCode.SUCCESS.getCode()) {
-                log.info("[RPC 暂停回放] 失败, {},  streamId: {}", response.getBody(), streamId);
+                log.info("[RPC Pause playback] failed, {},  streamId: {}", response.getBody(), streamId);
             }
         }
     }
@@ -140,10 +140,10 @@ public class RedisRpcPlayServiceImpl implements IRedisRpcPlayService {
         request.setToId(serverId);
         RedisRpcResponse response = redisRpcConfig.request(request, 5, TimeUnit.SECONDS);
         if (response == null) {
-            log.info("[RPC 恢复回放] 失败, streamId: {}", streamId);
+            log.info("[RPC Resume playback] failed, streamId: {}", streamId);
         }else {
             if (response.getStatusCode() != ErrorCode.SUCCESS.getCode()) {
-                log.info("[RPC 恢复回放] 失败, {},  streamId: {}", response.getBody(), streamId);
+                log.info("[RPC Resume playback] failed, {},  streamId: {}", response.getBody(), streamId);
             }
         }
     }
@@ -233,9 +233,9 @@ public class RedisRpcPlayServiceImpl implements IRedisRpcPlayService {
         RedisRpcRequest request = buildRequest("streamProxy/stop", id);
         RedisRpcResponse response = redisRpcConfig.request(request, userSetting.getPlayTimeout(), TimeUnit.SECONDS);
         if (response != null && response.getStatusCode() == ErrorCode.SUCCESS.getCode()) {
-            log.info("[rpc 拉流代理] 停止成功： id: {}", id);
+            log.info("[rpc Streaming agent] stop successfully： id: {}", id);
         }else {
-            log.info("[rpc 拉流代理] 停止失败 id: {}", id);
+            log.info("[rpc Streaming agent] Stop failed id: {}", id);
         }
     }
 

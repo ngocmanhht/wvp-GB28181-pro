@@ -1,7 +1,7 @@
 <template>
   <el-dialog
     v-el-drag-dialog
-    title="选择待重置字段"
+    title="Select the field to be reset"
     width="45rem"
     top="10rem"
     center
@@ -18,13 +18,13 @@
     <div slot="footer">
       <el-form size="small">
         <el-form-item style="text-align: left">
-          <el-button @click="checkedSome" size="mini" >常用</el-button>
-          <el-button @click="checkedAll" size="mini" >全选</el-button>
-          <el-button @click="clearChecked" size="mini" >清空</el-button>
+          <el-button @click="checkedSome" size="mini" >Commonly used</el-button>
+          <el-button @click="checkedAll" size="mini" >Select all</el-button>
+          <el-button @click="clearChecked" size="mini" >Clear</el-button>
         </el-form-item>
         <el-form-item style="text-align: right">
-          <el-button type="primary" @click="handleOk">保存</el-button>
-          <el-button @click="closeModel" >取消</el-button>
+          <el-button type="primary" @click="handleOk">save</el-button>
+          <el-button @click="closeModel" >Cancel</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -58,151 +58,151 @@ export default {
     initData: function() {
       this.allVal = [
         {
-          name: '名称',
+          name: 'Name',
           field: 'gbName',
           checked: true,
           disable: false
         },
         {
-          name: '编码',
+          name: 'encoding',
           field: 'gbDeviceId',
           checked: true,
           disable: false
         },
         {
-          name: '设备厂商',
+          name: 'Equipment manufacturer',
           field: 'gbManufacturer',
           checked: true,
           disable: false
         },
         {
-          name: '设备型号',
+          name: 'Device model',
           field: 'gbModel',
           checked: true,
           disable: false
         },
         {
-          name: '行政区域',
+          name: 'Administrative region',
           field: 'gbCivilCode',
           checked: true,
           disable: false
         },
         {
-          name: '安装地址',
+          name: 'Installation address',
           field: 'gbAddress',
           checked: true,
           disable: false
         },
         {
-          name: '监视方位',
+          name: 'Monitoring position',
           field: 'gbDirectionType',
           checked: true,
           disable: false
         },
         {
-          name: '父节点编码',
+          name: 'Parent node encoding',
           field: 'gbParentId',
           checked: true,
           disable: false
         },
         {
-          name: '设备状态',
+          name: 'Device status',
           field: 'gbStatus',
           checked: true,
           disable: false
         },
         {
-          name: '经度',
+          name: 'longitude',
           field: 'gbLongitude',
           checked: true,
           disable: false
         },
         {
-          name: '纬度',
+          name: 'Latitude',
           field: 'gbLatitude',
           checked: true,
           disable: false
         },
         {
-          name: '摄像机类型',
+          name: 'Camera type',
           field: 'gbPtzType',
           checked: true,
           disable: false
         },
         {
-          name: '业务分组',
+          name: 'business grouping',
           field: 'gbBusinessGroupId',
           checked: true,
           disable: false
         },
         {
-          name: '警区',
+          name: 'police district',
           field: 'gbBlock',
           checked: true,
           disable: false
         },
         {
-          name: '保密属性',
+          name: 'Confidential attribute',
           field: 'gbSecrecy',
           checked: true,
           disable: false
         },
         {
-          name: 'IP地址',
+          name: 'IPaddress',
           field: 'gbIpAddress',
           checked: true,
           disable: false
         },
         {
-          name: '端口',
+          name: 'port',
           field: 'gbPort',
           checked: true,
           disable: false
         },
         {
-          name: '设备归属',
+          name: 'Equipment ownership',
           field: 'gbOwner',
           checked: true,
           disable: false
         },
         {
-          name: '是否有子设备',
+          name: 'Is there a sub-device?',
           field: 'gbParental',
           checked: true,
           disable: false
         },
         {
-          name: '位置类型',
+          name: 'location type',
           field: 'gbPositionType',
           checked: true,
           disable: false
         },
         {
-          name: '室内/室外',
+          name: 'indoor/outdoor',
           field: 'gbRoomType',
           checked: true,
           disable: false
         },
         {
-          name: '用途',
+          name: 'Purpose',
           field: 'gbUseType',
           checked: true,
           disable: false
         },
         {
-          name: '补光',
+          name: 'fill light',
           field: 'gbSupplyLightType',
           checked: true,
           disable: false
         },
         {
-          name: '分辨率',
+          name: 'resolution',
           field: 'gbResolution',
           checked: true,
           disable: false
         },
         {
-          name: '下载倍速',
+          name: 'Download twice as fast',
           field: 'gbDownloadSpeed',
           checked: true,
           disable: false

@@ -7,15 +7,15 @@
     <div class="right-menu">
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
-          欢迎，{{ name }}
+          Welcome，{{ name }}
           <i class="el-icon-caret-bottom" />
         </div>
         <el-dropdown-menu slot="dropdown" class="user-dropdown">
           <el-dropdown-item @click.native="changePassword">
-            <span style="display:block;">修改密码</span>
+            <span style="display:block;">Change password</span>
           </el-dropdown-item>
           <el-dropdown-item @click.native="logout">
-            <span style="display:block;">注销</span>
+            <span style="display:block;">Log out</span>
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>

@@ -1,7 +1,7 @@
 package com.genersoft.iot.vmp.jt1078.util;
 
 /**
- * BCD码转换
+ * BCDcode conversion
  */
 public class BCDUtil {
 
@@ -12,8 +12,8 @@ public class BCDUtil {
         // BCD
         StringBuilder stringBuffer = new StringBuilder(bytes.length * 2);
         for (int i = 0; i < bytes.length; i++) {
-            // 每次取出四位的值，一个byte是八位，第一取出高四位，第二次取出低四位，
-            // 这里也可以先 & 0xf0再右移4位，0xf0二进制为11110000，与运算后，可以得到高4位是值，低四位清零的结果
+            // Each time a four-digit value is taken out, a byte is eight bits. The first four bits are taken out, and the second time the four low bits are taken out.，
+            // You can also start here & 0xf0Then shift 4 bits to the right, 0xf0 is 11110000 in binary. After AND operation, you can get the result that the upper 4 bits are the value and the lower four bits are cleared.
             stringBuffer.append((byte) ((bytes[i]  >>> 4 & 0xf)));
             stringBuffer.append((byte) (bytes[i] & 0x0f));
         }
@@ -21,9 +21,9 @@ public class BCDUtil {
     }
 
     /**
-     * 字符串转BCD码
-     * 来自： https://www.cnblogs.com/ranandrun/p/BCD.html
-     * @param asc ASCII字符串
+     * Convert string to BCD code
+     * from： https://www.cnblogs.com/ranandrun/p/BCD.html
+     * @param asc ASCIIstring
      * @return BCD
      */
     public static byte[] strToBcd(String asc) {

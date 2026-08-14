@@ -10,7 +10,7 @@ import java.util.concurrent.Delayed;
 import java.util.concurrent.TimeUnit;
 
 /**
- * 平台心跳任务
+ * Platform heartbeat task
  */
 @Slf4j
 public class PlatformKeepaliveTask implements Delayed {
@@ -19,20 +19,20 @@ public class PlatformKeepaliveTask implements Delayed {
     private String platformServerId;
 
     /**
-     * 超时时间(单位： 毫秒)
+     * timeout(Unit: millisecond)
      */
     @Getter
     @Setter
     private long delayTime;
 
     /**
-     * 到期回调
+     * Expiration callback
      */
     @Getter
     private PlatformKeepaliveCallback callback;
 
     /**
-     * 心跳发送失败次数
+     * Number of heartbeat sending failures
      */
     @Getter
     @Setter
@@ -46,7 +46,7 @@ public class PlatformKeepaliveTask implements Delayed {
 
     public void expired() {
         if (callback == null) {
-            log.info("[平台心跳到期] 未找到到期处理回调， 平台上级编号： {}", platformServerId);
+            log.info("[Platform heartbeat expires] Expiration processing callback not found, platform superior number： {}", platformServerId);
             return;
         }
         getCallback().run(platformServerId, failCount);

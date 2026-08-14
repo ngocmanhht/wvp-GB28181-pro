@@ -32,8 +32,8 @@ import java.util.UUID;
 /**
  * @author panlinlin
  * @version 1.0.0
- * @description JAIN SIP的工具类
- * @createTime 2021年09月27日 15:12:00
+ * @description JAIN SIPTool class
+ * @createTime 2021September 27, 15:12:00
  */
 @Slf4j
 public class SipUtils {
@@ -43,12 +43,12 @@ public class SipUtils {
         return getUserIdFromFromHeader(fromHeader);
     }
     /**
-     * 从subject读取channelId
+     * Read from subjectchannelId
      * */
     public static String[] getChannelIdFromRequest(Request request) {
         SubjectHeader subject = (Subject)request.getHeader("subject");
         if (subject == null) {
-            // 如果缺失subject
+            // if missingsubject
             return null;
         }
         String[] result = new String[2];
@@ -100,30 +100,30 @@ public class SipUtils {
 
 
     /**
-     * 云台指令码计算
+     * PTZ instruction code calculation
      *
-     * @param leftRight  镜头左移右移 0:停止 1:左移 2:右移
-     * @param upDown     镜头上移下移 0:停止 1:上移 2:下移
-     * @param inOut      镜头放大缩小 0:停止 1:缩小 2:放大
-     * @param moveSpeed  镜头移动速度 默认 0XFF (0-255)
-     * @param zoomSpeed  镜头缩放速度 默认 0X1 (0-255)
+     * @param leftRight  Camera moves left and right 0: Stop 1: Move left 2: Move right
+     * @param upDown     Lens moves up and down 0: Stop 1: Move up 2: Move down
+     * @param inOut      Lens zoom in and out 0: Stop 1: Zoom out 2: Zoom in
+     * @param moveSpeed  Lens movement speed Default 0XFF (0-255)
+     * @param zoomSpeed  Lens zoom speed Default 0X1 (0-255)
      */
     public static String cmdString(int leftRight, int upDown, int inOut, int moveSpeed, int zoomSpeed) {
         int cmdCode = 0;
         if (leftRight == 2) {
-            cmdCode|=0x01;		// 右移
+            cmdCode|=0x01;		// Move right
         } else if(leftRight == 1) {
-            cmdCode|=0x02;		// 左移
+            cmdCode|=0x02;		// Shift left
         }
         if (upDown == 2) {
-            cmdCode|=0x04;		// 下移
+            cmdCode|=0x04;		// move down
         } else if(upDown == 1) {
-            cmdCode|=0x08;		// 上移
+            cmdCode|=0x08;		// move up
         }
         if (inOut == 2) {
-            cmdCode |= 0x10;	// 放大
+            cmdCode |= 0x10;	// Zoom in
         } else if(inOut == 1) {
-            cmdCode |= 0x20;	// 缩小
+            cmdCode |= 0x20;	// zoom out
         }
         StringBuilder builder = new StringBuilder("A50F01");
         String strTmp;
@@ -133,14 +133,14 @@ public class SipUtils {
         builder.append(strTmp, 0, 2);
         builder.append(strTmp, 0, 2);
 
-        //优化zoom低倍速下的变倍速率
+        //Optimize the zoom rate at low zoom speeds
         if ((zoomSpeed > 0) && (zoomSpeed <16))
         {
             zoomSpeed = 16;
         }
         strTmp = String.format("%X", zoomSpeed);
         builder.append(strTmp, 0, 1).append("0");
-        //计算校验码
+        //Calculate check code
         int checkCode = (0XA5 + 0X0F + 0X01 + cmdCode + moveSpeed + moveSpeed + (zoomSpeed /*<< 4*/ & 0XF0)) % 0X100;
         strTmp = String.format("%02X", checkCode);
         builder.append(strTmp, 0, 2);
@@ -159,7 +159,7 @@ public class SipUtils {
     }
 
     /**
-     * 判断是否是前端外围设备
+     * Determine whether it is a front-end peripheral device
      * @param deviceId
      * @return
      */
@@ -168,10 +168,10 @@ public class SipUtils {
         return typeCodeFromGbCode > 130 && typeCodeFromGbCode < 199;
     }
     /**
-     * 从请求中获取设备ip地址和端口号
-     * @param request 请求
-     * @param sipUseSourceIpAsRemoteAddress  false 从via中获取地址， true 直接获取远程地址
-     * @return 地址信息
+     * Get the device ip address and port number from the request
+     * @param request Request
+     * @param sipUseSourceIpAsRemoteAddress  false Get the address from via, true to get the remote address directly
+     * @return Address information
      */
     public static RemoteAddressInfo getRemoteAddressFromRequest(SIPRequest request, boolean sipUseSourceIpAsRemoteAddress) {
 
@@ -182,11 +182,11 @@ public class SipUtils {
             remotePort = request.getPeerPacketSourcePort();
 
         }else {
-            // 判断RPort是否改变，改变则说明路由nat信息变化，修改设备信息
-            // 获取到通信地址等信息
+            // Determine whether the RPort has changed. Changes indicate changes in routing NAT information and modify device information.
+            // Obtain information such as mailing address
             remoteAddress = request.getTopmostViaHeader().getReceived();
             remotePort = request.getTopmostViaHeader().getRPort();
-            // 解析本地地址替代
+            // Resolve local address substitution
             if (ObjectUtils.isEmpty(remoteAddress) || remotePort == -1) {
                 if (request.getPeerPacketSourceAddress() != null) {
                     remoteAddress = request.getPeerPacketSourceAddress().getHostAddress();
@@ -206,10 +206,10 @@ public class SipUtils {
 
     public static Gb28181Sdp parseSDP(String sdpStr) throws SdpParseException {
 
-        // jainSip不支持y= f=字段， 移除以解析。
+        // jainSipNot supportedy= f=Field, removed for parsing。
         int ssrcIndex = sdpStr.indexOf("y=");
         int mediaDescriptionIndex = sdpStr.indexOf("f=");
-        // 检查是否有y字段
+        // Check if there is a y field
         SessionDescription sdp;
         String ssrc = null;
         String mediaDescription = null;
@@ -234,7 +234,7 @@ public class SipUtils {
 
     public static String getSsrcFromSdp(String sdpStr) {
 
-        // jainSip不支持y= f=字段， 移除以解析。
+        // jainSipNot supportedy= f=Field, removed for parsing。
         int ssrcIndex = sdpStr.indexOf("y=");
         if (ssrcIndex == 0) {
             return null;
@@ -259,7 +259,7 @@ public class SipUtils {
             try {
                 localDateTime = LocalDateTime.parse(timeStr, DateUtil.formatterISO8601);
             }catch (DateTimeParseException e2) {
-                log.error("[格式化时间] 无法格式化时间： {}", timeStr);
+                log.error("[Format time] Unable to format time： {}", timeStr);
                 return null;
             }
         }
@@ -277,11 +277,11 @@ public class SipUtils {
             try {
                 localDateTime = LocalDateTime.parse(timeStr, DateUtil.formatterISO8601);
             }catch (DateTimeParseException e2) {
-                log.error("[格式化时间] 无法格式化时间： {}", timeStr);
+                log.error("[Format time] Unable to format time： {}", timeStr);
                 return null;
             }
         }
-        // 返回毫秒值
+        // Returns millisecond value
         return localDateTime.atZone(ZoneId.of(DateUtil.zoneStr)).toInstant().toEpochMilli();
 
     }

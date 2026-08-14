@@ -26,7 +26,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * 管理zlm流媒体节点的状态
+ * Manage the status of zlm streaming nodes
  */
 @Component
 @Slf4j
@@ -70,7 +70,7 @@ public class ABLMediaServerStatusManger {
             if (!type.equals(mediaServer.getType())) {
                 continue;
             }
-            log.info("[ABL-添加待上线节点] ID：" + mediaServer.getId());
+            log.info("[ABL-Add node to be online] ID：" + mediaServer.getId());
             offlineABLPrimaryMap.put(mediaServer.getId(), mediaServer);
             offlineAblTimeMap.put(mediaServer.getId(), System.currentTimeMillis());
         }
@@ -89,7 +89,7 @@ public class ABLMediaServerStatusManger {
         if (serverItem == null) {
             return;
         }
-        log.info("[ABL-HOOK事件-服务启动] ID：" + event.getMediaServerItem().getId());
+        log.info("[ABL-HOOKevent-Service start] ID：" + event.getMediaServerItem().getId());
         online(serverItem, null);
     }
 
@@ -103,7 +103,7 @@ public class ABLMediaServerStatusManger {
         if (serverItem == null) {
             return;
         }
-        log.info("[ABL-HOOK事件-心跳] ID：" + event.getMediaServerItem().getId());
+        log.info("[ABL-HOOKevent-heartbeat] ID：" + event.getMediaServerItem().getId());
         online(serverItem, null);
     }
 
@@ -113,15 +113,15 @@ public class ABLMediaServerStatusManger {
         if (event.getMediaServer() == null) {
             return;
         }
-        log.info("[ABL-节点被移除] ID：" + event.getMediaServer().getServerId());
+        log.info("[ABL-node removed] ID：" + event.getMediaServer().getServerId());
         offlineABLPrimaryMap.remove(event.getMediaServer().getServerId());
         offlineAblsecondaryMap.remove(event.getMediaServer().getServerId());
         offlineAblTimeMap.remove(event.getMediaServer().getServerId());
     }
 
-    @Scheduled(fixedDelay = 10*1000)   //每隔10秒检查一次
+    @Scheduled(fixedDelay = 10*1000)   //Check every 10 seconds
     public void execute(){
-        // 初次加入的离线节点会在30分钟内，每间隔十秒尝试一次，30分钟后如果仍然没有上线，则每隔30分钟尝试一次连接
+        // The offline node that joins for the first time will try every ten seconds within 30 minutes. If it is still not online after 30 minutes, it will try to connect every 30 minutes.
         if (offlineABLPrimaryMap.isEmpty() && offlineAblsecondaryMap.isEmpty()) {
             return;
         }
@@ -133,17 +133,17 @@ public class ABLMediaServerStatusManger {
                     offlineABLPrimaryMap.remove(mediaServerItem.getId());
                     continue;
                 }
-                log.info("[ABL-尝试连接] ID：{}, 地址： {}:{}", mediaServerItem.getId(), mediaServerItem.getIp(), mediaServerItem.getHttpPort());
+                log.info("[ABL-try to connect] ID：{}, address： {}:{}", mediaServerItem.getId(), mediaServerItem.getIp(), mediaServerItem.getHttpPort());
                 ABLResult ablResult = ablResTfulUtils.getServerConfig(mediaServerItem);
                 AblServerConfig ablServerConfig = null;
                 if (ablResult.getCode() != 0) {
-                    log.info("[ABL-尝试连接]失败, ID：{}, 地址： {}:{}", mediaServerItem.getId(), mediaServerItem.getIp(), mediaServerItem.getHttpPort());
+                    log.info("[ABL-try to connect]failed, ID：{}, address： {}:{}", mediaServerItem.getId(), mediaServerItem.getIp(), mediaServerItem.getHttpPort());
                     continue;
                 }
                 JSONArray params = ablResult.getParams();
 
                 if (params == null || params.isEmpty()) {
-                    log.info("[ABL-尝试连接]失败, ID：{}, 地址： {}:{}", mediaServerItem.getId(), mediaServerItem.getIp(), mediaServerItem.getHttpPort());
+                    log.info("[ABL-try to connect]failed, ID：{}, address： {}:{}", mediaServerItem.getId(), mediaServerItem.getIp(), mediaServerItem.getHttpPort());
                 }else {
                     ablServerConfig = AblServerConfig.getInstance(params);
                     initPort(mediaServerItem, ablServerConfig);
@@ -157,17 +157,17 @@ public class ABLMediaServerStatusManger {
                 if (lastTryTime != null && lastTryTime < System.currentTimeMillis() - 30*60*1000) {
                     continue;
                 }
-                log.info("[ABL-尝试连接] ID：{}, 地址： {}:{}", mediaServerItem.getId(), mediaServerItem.getIp(), mediaServerItem.getHttpPort());
+                log.info("[ABL-try to connect] ID：{}, address： {}:{}", mediaServerItem.getId(), mediaServerItem.getIp(), mediaServerItem.getHttpPort());
                 ABLResult ablResult = ablResTfulUtils.getServerConfig(mediaServerItem);
                 AblServerConfig ablServerConfig = null;
                 if (ablResult.getCode() != 0) {
-                    log.info("[ABL-尝试连接]失败, ID：{}, 地址： {}:{}", mediaServerItem.getId(), mediaServerItem.getIp(), mediaServerItem.getHttpPort());
+                    log.info("[ABL-try to connect]failed, ID：{}, address： {}:{}", mediaServerItem.getId(), mediaServerItem.getIp(), mediaServerItem.getHttpPort());
                     offlineAblTimeMap.put(mediaServerItem.getId(), System.currentTimeMillis());
                     continue;
                 }
                 JSONArray params = ablResult.getParams();
                 if (params == null || params.isEmpty()) {
-                    log.info("[ABL-尝试连接]失败, ID：{}, 地址： {}:{}", mediaServerItem.getId(), mediaServerItem.getIp(), mediaServerItem.getHttpPort());
+                    log.info("[ABL-try to connect]failed, ID：{}, address： {}:{}", mediaServerItem.getId(), mediaServerItem.getIp(), mediaServerItem.getHttpPort());
                     offlineAblTimeMap.put(mediaServerItem.getId(), System.currentTimeMillis());
                 }else {
                     ablServerConfig = AblServerConfig.getInstance(params);
@@ -185,33 +185,33 @@ public class ABLMediaServerStatusManger {
             if (data != null && !data.isEmpty()) {
                 config = AblServerConfig.getInstance(data);
             }else {
-                log.info("[ABL-连接成功] 读取流媒体配置失败 ID：{}, 地址： {}:{}", mediaServer.getId(), mediaServer.getIp(), mediaServer.getHttpPort());
+                log.info("[ABL-Connection successful] Failed to read streaming configuration ID：{}, address： {}:{}", mediaServer.getId(), mediaServer.getIp(), mediaServer.getHttpPort());
                 return;
             }
         }
         offlineABLPrimaryMap.remove(mediaServer.getId());
         offlineAblsecondaryMap.remove(mediaServer.getId());
         offlineAblTimeMap.remove(mediaServer.getId());
-        log.info("[ABL-连接成功] ID：{}, 地址： {}:{}", mediaServer.getId(), mediaServer.getIp(), mediaServer.getHttpPort());
+        log.info("[ABL-Connection successful] ID：{}, address： {}:{}", mediaServer.getId(), mediaServer.getIp(), mediaServer.getHttpPort());
         mediaServer.setStatus(true);
         mediaServer.setHookAliveInterval(10F);
         initPort(mediaServer, config);
-        // 发送上线通知
+        // Send online notification
         eventPublisher.mediaServerOnlineEventPublish(mediaServer);
         mediaServerService.update(mediaServer);
-        // 设置两次心跳未收到则认为zlm离线
+        // If two heartbeats are not received, zlm will be considered offline.
         String key = "ABL-keepalive-" + mediaServer.getId();
         dynamicTask.startDelay(key, ()->{
-            log.warn("[ABL-心跳超时] ID：{}", mediaServer.getId());
+            log.warn("[ABL-Heartbeat timeout] ID：{}", mediaServer.getId());
             mediaServer.setStatus(false);
             offlineABLPrimaryMap.put(mediaServer.getId(), mediaServer);
             offlineAblTimeMap.put(mediaServer.getId(), System.currentTimeMillis());
-            // TODO 发送离线通知
+            // TODO Send offline notification
             mediaServerService.update(mediaServer);
         }, (int)(mediaServer.getHookAliveInterval() * 2 * 1000));
     }
     private void initPort(MediaServer mediaServer, AblServerConfig ablServerConfig) {
-        // 端口只会从配置中读取一次，一旦自己配置或者读取过了将不在配置
+        // The port will only be read from the configuration once. Once configured or read, it will no longer be configured.
         if (ablServerConfig.getRtmpPort() != null && mediaServer.getRtmpPort() != ablServerConfig.getRtmpPort()) {
             mediaServer.setRtmpPort(ablServerConfig.getRtmpPort());
         }
@@ -239,18 +239,18 @@ public class ABLMediaServerStatusManger {
     public void setAblConfig(MediaServer mediaServerItem, boolean restart, AblServerConfig config) {
         try {
             if (config.getHookEnable() == 0) {
-                log.info("[媒体服务节点-ABL]  开启HOOK功能 ：{}", mediaServerItem.getId());
+                log.info("[media service node-ABL]  Turn on HOOK function ：{}", mediaServerItem.getId());
                 ABLResult ablResult = ablResTfulUtils.setConfigParamValue(mediaServerItem, "hook_enable", "1");
                 if (ablResult.getCode() == 0) {
-                    log.info("[媒体服务节点-ABL]  开启HOOK功能成功 ：{}", mediaServerItem.getId());
+                    log.info("[media service node-ABL]  Turn on HOOK function successfully ：{}", mediaServerItem.getId());
                 }else {
-                    log.info("[媒体服务节点-ABL]  开启HOOK功能失败 ：{}->{}", mediaServerItem.getId(), ablResult.getMemo());
+                    log.info("[media service node-ABL]  Failed to enable HOOK function ：{}->{}", mediaServerItem.getId(), ablResult.getMemo());
                 }
             }
         }catch (Exception e) {
-            log.info("[媒体服务节点-ABL]  开启HOOK功能失败 ：{}", mediaServerItem.getId(), e);
+            log.info("[media service node-ABL]  Failed to enable HOOK function ：{}", mediaServerItem.getId(), e);
         }
-        // 设置相关的HOOK
+        // settings relatedHOOK
         String[] hookUrlArray = {
                 "on_stream_arrive",
                 "on_stream_none_reader",
@@ -277,20 +277,20 @@ public class ABLMediaServerStatusManger {
                         if (configKeyId.value().equals(hook)) {
                             String hookUrl =  String.format("%s/%s", hookPrefix, hook);
                             field.setAccessible(true);
-                            // 利用反射获取值后对比是否与配置中相同，不同则进行设置
+                            // Use reflection to obtain the value and compare it to see if it is the same as the configuration. If it is different, set it.
                             if (!hookUrl.equals(field.get(config))) {
                                 ABLResult ablResult = ablResTfulUtils.setConfigParamValue(mediaServerItem, hook, hookUrl);
                                 if (ablResult.getCode() == 0) {
-                                    log.info("[媒体服务节点-ABL]  设置HOOK {} 成功 ：{}", hook, mediaServerItem.getId());
+                                    log.info("[media service node-ABL]  settingsHOOK {} success ：{}", hook, mediaServerItem.getId());
                                 }else {
-                                    log.info("[媒体服务节点-ABL]  设置HOOK {} 失败 ：{}->{}", hook, mediaServerItem.getId(), ablResult.getMemo());
+                                    log.info("[media service node-ABL]  settingsHOOK {} failed ：{}->{}", hook, mediaServerItem.getId(), ablResult.getMemo());
                                 }
                             }
                         }
                     }
                 }
             }catch (Exception e) {
-                log.info("[媒体服务节点-ABL]  设置HOOK 失败 ：{}", mediaServerItem.getId(), e);
+                log.info("[media service node-ABL]  Failed to set HOOK ：{}", mediaServerItem.getId(), e);
             }
         }
 
@@ -321,13 +321,13 @@ public class ABLMediaServerStatusManger {
 //        param.put("hook.on_record_mp4",String.format("%s/on_record_mp4", hookPrefix));
 //        param.put("hook.timeoutSec","30");
 //        param.put("hook.alive_interval", mediaServerItem.getHookAliveInterval());
-//        // 推流断开后可以在超时时间内重新连接上继续推流，这样播放器会接着播放。
-//        // 置0关闭此特性(推流断开会导致立即断开播放器)
-//        // 此参数不应大于播放器超时时间
-//        // 优化此消息以更快的收到流注销事件
+//        // After the push stream is disconnected, you can reconnect within the timeout period to continue pushing the stream, so that the player will continue to play.。
+//        // Set to 0 to disable this feature(Disconnection of the push stream will cause the player to be disconnected immediately)
+//        // This parameter should not be greater than the player timeout
+//        // Optimize this message to receive stream logout events faster
 //        param.put("protocol.continue_push_ms", "3000" );
-//        // 最多等待未初始化的Track时间，单位毫秒，超时之后会忽略未初始化的Track, 设置此选项优化那些音频错误的不规范流，
-//        // 等zlm支持给每个rtpServer设置关闭音频的时候可以不设置此选项
+//        // The maximum waiting time for uninitialized tracks, in milliseconds. After the timeout, uninitialized tracks will be ignored. Set this option to optimize irregular streams with audio errors.，
+//        // When zlm supports setting to turn off audio for each rtpServer, you can not set this option.
 //        if (mediaServerItem.isRtpEnable() && !ObjectUtils.isEmpty(mediaServerItem.getRtpPortRange())) {
 //            param.put("rtp_proxy.port_range", mediaServerItem.getRtpPortRange().replace(",", "-"));
 //        }
@@ -343,15 +343,15 @@ public class ABLMediaServerStatusManger {
 //
 //        if (responseJSON != null && responseJSON.getInteger("code") == 0) {
 //            if (restart) {
-//                log.info("[媒体服务节点] 设置成功,开始重启以保证配置生效 {} -> {}:{}",
+//                log.info("[media service node] The setting is successful, restart to ensure that the configuration takes effect. {} -> {}:{}",
 //                        mediaServerItem.getId(), mediaServerItem.getIp(), mediaServerItem.getHttpPort());
 //                ablResTfulUtils.restartServer(mediaServerItem);
 //            }else {
-//                log.info("[媒体服务节点] 设置成功 {} -> {}:{}",
+//                log.info("[media service node] Setup successful {} -> {}:{}",
 //                        mediaServerItem.getId(), mediaServerItem.getIp(), mediaServerItem.getHttpPort());
 //            }
 //        }else {
-//            log.info("[媒体服务节点] 设置媒体服务节点失败 {} -> {}:{}",
+//            log.info("[media service node] Failed to set up media service node {} -> {}:{}",
 //                    mediaServerItem.getId(), mediaServerItem.getIp(), mediaServerItem.getHttpPort());
 //        }
     }

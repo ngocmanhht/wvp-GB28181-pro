@@ -12,16 +12,16 @@
             </div>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item :command="0" >
-                <span v-if="layerType !== 0">图层关闭</span>
-                <span v-if="layerType === 0" style="color: rgb(64, 158, 255);">图层关闭</span>
+                <span v-if="layerType !== 0">Layer off</span>
+                <span v-if="layerType === 0" style="color: rgb(64, 158, 255);">Layer off</span>
               </el-dropdown-item>
               <el-dropdown-item :command="1" >
-                <span v-if="layerType !== 1">直接展示</span>
-                <span v-if="layerType === 1" style="color: rgb(64, 158, 255);">直接展示</span>
+                <span v-if="layerType !== 1">Direct display</span>
+                <span v-if="layerType === 1" style="color: rgb(64, 158, 255);">Direct display</span>
               </el-dropdown-item>
               <el-dropdown-item :command="2">
-                <span v-if="layerType !== 2">抽稀图层</span>
-                <span v-if="layerType === 2" style="color: rgb(64, 158, 255);">抽稀图层</span>
+                <span v-if="layerType !== 2">thin layer</span>
+                <span v-if="layerType === 2" style="color: rgb(64, 158, 255);">thin layer</span>
               </el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
@@ -52,22 +52,22 @@
       </div>
       <div class="map-tool-box-top-left">
         <div class="map-tool-btn-group">
-          <div class="map-tool-btn" title="图层抽稀" @click="showDrawThinBox(true)">
-            <i class="iconfont icon-mti-sandian"></i> <span>图层抽稀</span>
+          <div class="map-tool-btn" title="Layer thinning" @click="showDrawThinBox(true)">
+            <i class="iconfont icon-mti-sandian"></i> <span>Layer thinning</span>
           </div>
         </div>
       </div>
       <transition name="el-zoom-in-top">
         <div v-show="showDrawThin"  class="map-tool-draw-thin">
           <div class="map-tool-draw-thin-density">
-            <span style="line-height: 36px; font-size: 15px">间隔： </span>
+            <span style="line-height: 36px; font-size: 15px">interval： </span>
             <el-slider v-model="diffPixels" show-input :min="1" :max="200" input-size="mini" ></el-slider>
             <div style="margin-left: 10px; line-height: 38px;">
-              <el-button :loading="quicklyDrawThinLoading" @click="quicklyDrawThin" size="mini">快速抽稀</el-button>
-              <el-button :loading="boxDrawThinLoading" size="mini" @click="boxDrawThin" >局部抽稀</el-button>
-              <el-button size="mini" @click="resetDrawThinData()">数据还原</el-button>
-              <el-button :loading="saveDrawThinLoading" type="primary" :disabled="drawThinId === null" size="mini" @click="saveDrawThin()">保存</el-button>
-              <el-button type="warning" size="mini" @click="showDrawThinBox(false)">取消</el-button>
+              <el-button :loading="quicklyDrawThinLoading" @click="quicklyDrawThin" size="mini">Fast thinning</el-button>
+              <el-button :loading="boxDrawThinLoading" size="mini" @click="boxDrawThin" >local thinning</el-button>
+              <el-button size="mini" @click="resetDrawThinData()">Data restoration</el-button>
+              <el-button :loading="saveDrawThinLoading" type="primary" :disabled="drawThinId === null" size="mini" @click="saveDrawThin()">save</el-button>
+              <el-button type="warning" size="mini" @click="showDrawThinBox(false)">Cancel</el-button>
             </div>
           </div>
         </div>
@@ -75,10 +75,10 @@
 
 <!--      <div class="map-tool-box-top-right">-->
 <!--        <div class="map-tool-btn-group">-->
-<!--          <div class="map-tool-btn" title="抽稀">-->
+<!--          <div class="map-tool-btn" title="Dilute">-->
 <!--            <i class="iconfont icon-mti-sandian"></i>-->
 <!--          </div>-->
-<!--          <div class="map-tool-btn" title="聚合">-->
+<!--          <div class="map-tool-btn" title="aggregation">-->
 <!--            <i class="iconfont icon-mti-jutai"></i>-->
 <!--          </div>-->
 
@@ -88,15 +88,15 @@
         <transition name="el-zoom-in-center">
           <div class="infobox-content" v-if="channel">
             <el-descriptions class="margin-top" :title="channel.gbName" :column="1" :colon="true" size="mini" :labelStyle="labelStyle" >
-              <el-descriptions-item label="编号" >{{channel.gbDeviceId}}</el-descriptions-item>
-              <el-descriptions-item label="生产厂商">{{channel.gbManufacture}}</el-descriptions-item>
-              <el-descriptions-item label="安装地址" >{{channel.gbAddress == null?'未知': channel.gbAddress}}</el-descriptions-item>
+              <el-descriptions-item label="No." >{{channel.gbDeviceId}}</el-descriptions-item>
+              <el-descriptions-item label="Manufacturer">{{channel.gbManufacture}}</el-descriptions-item>
+              <el-descriptions-item label="Installation address" >{{channel.gbAddress == null?'unknown': channel.gbAddress}}</el-descriptions-item>
             </el-descriptions>
             <div style="padding-top: 10px; margin: 0 auto; width: fit-content;">
-              <el-button v-bind:disabled="channel.gbStatus !== 'ON'" type="primary" size="small" title="播放" icon="el-icon-video-play" @click="play(channel)">播放</el-button>
-              <el-button type="primary" size="small" title="编辑" icon="el-icon-edit" @click="edit(channel)">编辑</el-button>
-              <el-button type="primary" size="small" title="位置" icon="el-icon-coordinate" @click="editPosition(channel)">位置</el-button>
-<!--              <el-button type="primary" size="small" title="轨迹查询" icon="el-icon-map-location" @click="getTrace(channel)">轨迹</el-button>-->
+              <el-button v-bind:disabled="channel.gbStatus !== 'ON'" type="primary" size="small" title="play" icon="el-icon-video-play" @click="play(channel)">play</el-button>
+              <el-button type="primary" size="small" title="Edit" icon="el-icon-edit" @click="edit(channel)">Edit</el-button>
+              <el-button type="primary" size="small" title="location" icon="el-icon-coordinate" @click="editPosition(channel)">location</el-button>
+<!--              <el-button type="primary" size="small" title="Track query" icon="el-icon-map-location" @click="getTrace(channel)">trajectory</el-button>-->
             </div>
             <span class="infobox-close el-icon-close" @click="closeInfoBox"></span>
           </div>
@@ -108,8 +108,8 @@
         <transition name="el-zoom-in-center">
           <div class="infobox-edit-content" v-if="dragChannel">
             <div style="width: 100%; line-height: 1.5rem; font-size: 14px">{{dragChannel.gbName}}  ({{dragChannel.gbDeviceId}})</div>
-            <span style="font-size: 14px">经度:</span> <el-input v-model="dragChannel.gbLongitude" placeholder="请输入经度" style="width: 7rem; margin-right: 10px"></el-input>
-            <span style="font-size: 14px">纬度: </span> <el-input v-model="dragChannel.gbLatitude" placeholder="请输入纬度" style="width: 7rem; "></el-input>
+            <span style="font-size: 14px">longitude:</span> <el-input v-model="dragChannel.gbLongitude" placeholder="Please enter longitude" style="width: 7rem; margin-right: 10px"></el-input>
+            <span style="font-size: 14px">Latitude: </span> <el-input v-model="dragChannel.gbLatitude" placeholder="Please enter latitude" style="width: 7rem; "></el-input>
             <el-button icon="el-icon-close" size="medium" type="text" @click="cancelEdit(dragChannel)" style="margin-left: 1rem; font-size: 18px; color: #2b2f3a"></el-button>
             <el-button icon="el-icon-check" size="medium" type="text" @click="submitEdit(dragChannel)" style="font-size: 18px; color: #0842e2"></el-button>
           </div>
@@ -176,7 +176,7 @@ export default {
   methods: {
     initChannelLayer: function () {
       this.mapTileList = this.$refs.mapComponent.mapTileList
-      // 获取所有有位置的通道
+      // Get all channels with positions
       this.closeInfoBox()
 
       let clientEvent = data => {
@@ -195,7 +195,7 @@ export default {
     refreshLayer(){
       this.closeInfoBox()
 
-      // 刷新瓦片图层
+      // Refresh tile layer
       if (channelLayer) {
         this.$refs.mapComponent.refreshLayer(channelLayer)
       }
@@ -210,7 +210,7 @@ export default {
           if (!data.gbLongitude || data.gbLongitude < 0 || !data.gbLatitude || data.gbLatitude < 0) {
             this.$message.warning({
               showClose: true,
-              message: '无位置信息'
+              message: 'No location information'
             })
             return
           }
@@ -229,7 +229,7 @@ export default {
     getContextmenu: function (event) {
         return [
           {
-            label: '播放通道',
+            label: 'Playback channel',
             icon: 'el-icon-video-play',
             type: 1,
             onClick: (event, data, node) => {
@@ -248,7 +248,7 @@ export default {
             }
           },
           {
-            label: '修改位置',
+            label: 'Modify location',
             icon: 'el-icon-coordinate',
             type: 1,
             onClick: (event, data, node) => {
@@ -266,7 +266,7 @@ export default {
             }
           },
           {
-            label: '编辑通道',
+            label: 'Edit channel',
             icon: 'el-icon-edit',
             type: 1,
             onClick: (event, data, node) => {
@@ -287,7 +287,7 @@ export default {
     },
     showChannelInfo: function(data) {
       this.channel = data
-      // 此时增加临时图标
+      // Add a temporary icon at this time
       let position = [data.gbLongitude, data.gbLatitude]
       let cameraData = {
         id: data.gbId,
@@ -305,7 +305,7 @@ export default {
       if (this.showDrawThin) {
         this.$message.warning({
           showClose: true,
-          message: '抽稀操作进行中，禁止切换图层'
+          message: 'The thinning operation is in progress, switching layers is prohibited.'
         })
         return
       }
@@ -352,7 +352,7 @@ export default {
     play: function (channel) {
       const loading = this.$loading({
         lock: true,
-        text: '正在请求视频',
+        text: 'Requesting video',
         spinner: 'el-icon-loading',
         background: 'rgba(0, 0, 0, 0.7)'
       })
@@ -379,7 +379,7 @@ export default {
     },
     editPosition: function (channel) {
       this.closeInfoBox()
-      // 开启图标可拖动
+      // Enable the icon to be dragged
       this.$refs.mapComponent.dragInteraction.addFeatureId(channel.gbId,
         {
           startEvent: event => {
@@ -415,14 +415,14 @@ export default {
         this.showEditInfo(channel)
       }
 
-      // 标记可编辑图标为红色
+      // Mark editable icon red
       this.$refs.mapComponent.setFeaturePositionById(channelLayer, channel.gbId, {
         id: channel.gbId,
         position: position,
         data: channel,
         status: 'checked'
       })
-      // 如果开启了瓦片图层，此时应该让瓦片图层不再显示这个feature
+      // If the tile layer is turned on, the tile layer should no longer display this at this time.feature
       if (channelTileLayer) {
         this.$refs.mapComponent.hideFeature(channelTileLayer, channel.gbId)
       }
@@ -453,7 +453,7 @@ export default {
         .then(data => {
           this.$message.success({
             showClose: true,
-            message: '保存成功'
+            message: 'Saved successfully'
           })
           this.closeInfoBox()
           channel['edit'] = false
@@ -465,7 +465,7 @@ export default {
             data: channel,
             status: channel.gbStatus
           })
-          // 刷星树菜单
+          // Refresh the star tree menu
           this.$refs.deviceTree.refresh('channel' + channel.gbId)
 
         })
@@ -481,9 +481,9 @@ export default {
       this.showDrawThin = show
       if (!show) {
         setTimeout(() => {
-          // 关闭抽稀预览
+          // Turn off thinning preview
           if (this.drawThinId !== null) {
-            // 发送消息 清空抽稀结果
+            // Send message Clear thinning results
             this.$store.dispatch('commonChanel/clearThin', this.drawThinId)
               .catch((error) => {
                 this.$message({
@@ -498,7 +498,7 @@ export default {
             this.$refs.mapComponent.removeLayer(this.drawThinLayer)
             this.drawThinLayer = null
           }
-          // 展示图层
+          // Presentation layer
           if (this.layerType > 0) {
             this.changeLayerType(this.layerType)
           }
@@ -518,20 +518,20 @@ export default {
         this.drawThinLayer = null
       }
       this.quicklyDrawThinLoading = true
-      // 获取每一个图层的抽稀参数
+      // Get the thinning parameters of each layer
       this.$store.dispatch('commonChanel/drawThin', {
         zoomParam: this.getDrawThinParam()
       })
         .then(drawThinId => {
-          // 显示抽稀进度
+          // Show thinning progress
           this.drawThinId = drawThinId
           this.$refs.drawThinProgress.openDialog(drawThinId, () => {
             this.closeInfoBox()
             this.$message.success({
               showClose: true,
-              message: '抽稀完成，请预览无误后保存抽稀结果'
+              message: 'The thinning is completed, please save the thinning results after previewing them correctly.'
             })
-            // 展示抽稀结果
+            // Show thinning results
             this.showDrawThinLayer(drawThinId)
           })
         })
@@ -551,7 +551,7 @@ export default {
         this.$refs.mapComponent.removeLayer(this.drawThinLayer)
         this.drawThinLayer = null
       }
-      // 展示抽稀结果
+      // Show thinning results
       let geoCoordSys = this.$refs.mapComponent.getCoordSys()
       const baseUrl = window.baseUrl ? window.baseUrl : ''
       let baseApi = ((process.env.NODE_ENV === 'development') ? process.env.VUE_APP_BASE_API : baseUrl)
@@ -561,12 +561,12 @@ export default {
     boxDrawThin: function (){
       this.$message.warning({
         showClose: true,
-        message: '点击地图进行框选'
+        message: 'Click on the map to make a frame selection'
       })
-      // 绘制框
+      // draw box
       this.$refs.mapComponent.startDrawBox((extent) => {
 
-        // 清理默认的摄像头图层
+        // Clean up the default camera layer
         if (channelLayer) {
           this.$refs.mapComponent.removeLayer(channelLayer)
         }
@@ -578,7 +578,7 @@ export default {
           this.drawThinLayer = null
         }
         this.boxDrawThinLoading = true
-        // 获取每一个图层的抽稀参数
+        // Get the thinning parameters of each layer
         this.$store.dispatch('commonChanel/drawThin', {
           zoomParam: this.getDrawThinParam(),
           extent: {
@@ -590,15 +590,15 @@ export default {
           geoCoordSys: 'GCJ02'
         })
           .then(drawThinId => {
-            // 显示抽稀进度
+            // Show thinning progress
             this.drawThinId = drawThinId
             this.$refs.drawThinProgress.openDialog(drawThinId, () => {
               this.closeInfoBox()
               this.$message.success({
                 showClose: true,
-                message: '抽稀完成，请预览无误后保存抽稀结果'
+                message: 'The thinning is completed, please save the thinning results after previewing them correctly.'
               })
-              // 展示抽稀结果
+              // Show thinning results
               this.showDrawThinLayer(drawThinId)
             })
           })
@@ -615,12 +615,12 @@ export default {
       })
     },
     getDrawThinParam() {
-      // 获取全部层级
+      // Get all levels
       let zoomExtent = this.$refs.mapComponent.getZoomExtent()
       let zoomMap = {}
       let zoom = zoomExtent[0]
       while (zoom <= zoomExtent[1]) {
-        // 计算经纬度差值
+        // Calculate the difference between latitude and longitude
         let diff = this.$refs.mapComponent.computeDiff(this.diffPixels, zoom)
         if (diff && diff > 0) {
           zoomMap[zoom] = diff
@@ -639,7 +639,7 @@ export default {
         .then((data) => {
           this.$message.success({
             showClose: true,
-            message: '保存成功'
+            message: 'Saved successfully'
           })
           this.showDrawThinBox(false)
         })
@@ -655,16 +655,16 @@ export default {
         })
     },
     resetDrawThinData(){
-      this.$confirm('确定移除抽稀结果?', '操作提示', {
-        confirmButtonText: '确认',
-        cancelButtonText: '取消',
+      this.$confirm('Confirm removal of thinning results?', 'Operation tips', {
+        confirmButtonText: 'Confirm',
+        cancelButtonText: 'Cancel',
         type: 'warning'
       }).then(() => {
         this.$store.dispatch('commonChanel/resetLevel')
           .then(() => {
             this.$message.success({
               showClose: true,
-              message: '数据还原成功'
+              message: 'Data restored successfully'
             })
           })
           .catch((error) => {

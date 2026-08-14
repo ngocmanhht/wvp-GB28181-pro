@@ -37,7 +37,7 @@ public class MobilePositionServiceImpl implements IMobilePositionService {
     private final PlatformMapper platformMapper;
 
     /**
-     * 查询移动位置轨迹
+     * Query mobile location trajectory
      */
     @Override
     public synchronized List<MobilePosition> queryMobilePositions(Integer channelId, String startTime, String endTime) {
@@ -58,7 +58,7 @@ public class MobilePositionServiceImpl implements IMobilePositionService {
     }
 
     /**
-     * 查询最新移动位置
+     * Query the latest mobile location
      */
     @Override
     public MobilePosition queryLatestPosition(Integer channelId) {
@@ -77,13 +77,13 @@ public class MobilePositionServiceImpl implements IMobilePositionService {
         }
         for (ISourceOtherService sourceOtherService : sourceOtherServiceMap.values()) {
             try {
-                // 此时已经完成了通道ID的添加，以及坐标系的转换，后续只需要将数据保存到数据库即可
+                // At this point, the addition of the channel ID and the conversion of the coordinate system have been completed. You only need to save the data to the database later.
                 Boolean addResult = sourceOtherService.addChannelIdForMobilePosition(event.getMobilePositionList());
                 if (addResult != null && addResult) {
                     mobilePositionQueue.addAll(event.getMobilePositionList());
                 }
             }catch (Exception e) {
-                log.error("[移动位置事件] 处理移动位置事件失败", e);
+                log.error("[mobile location event] Failed to handle mobile location event", e);
             }
         }
     }
@@ -106,10 +106,10 @@ public class MobilePositionServiceImpl implements IMobilePositionService {
         }
         List<MobilePosition> mobilePositionList = handlerCatchDataList.stream().filter(
                 mobilePosition -> mobilePosition.getChannelId() != 0).toList();
-        // 发送通知，方便国标级联转发给上级
+        // Send notifications to facilitate national standard cascade forwarding to superiors
         Thread.startVirtualThread(() -> platformChannelService.notifyMobilePosition(mobilePositionList));
 
-        // 批量保存到数据库
+        // Batch save to database
         int batchSize = 1000;
         for (int i = 0; i < mobilePositionList.size(); i += batchSize) {
             int end = Math.min(i + batchSize, mobilePositionList.size());

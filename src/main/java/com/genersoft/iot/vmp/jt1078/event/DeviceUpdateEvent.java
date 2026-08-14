@@ -8,7 +8,7 @@ import org.springframework.context.ApplicationEvent;
 import java.io.Serial;
 
 /**
- * 设备更新事件
+ * Device update event
  */
 public class DeviceUpdateEvent extends ApplicationEvent {
 

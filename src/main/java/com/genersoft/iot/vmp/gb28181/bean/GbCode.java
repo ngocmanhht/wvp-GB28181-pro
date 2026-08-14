@@ -4,29 +4,29 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 /**
- * 国标编码对象
+ * National standard encoding object
  */
 @Data
-@Schema(description = "国标编码对象")
+@Schema(description = "National standard encoding object")
 public class GbCode {
 
-    @Schema(description = "中心编码,由监控中心所在地的行政区划代码确定,符合GB/T2260—2007的要求")
+    @Schema(description = "The center code is determined by the administrative division code where the monitoring center is located and conforms toGB/T2260—2007requirements")
     private String centerCode;
 
-    @Schema(description = "行业编码")
+    @Schema(description = "Industry code")
     private String industryCode;
 
-    @Schema(description = "类型编码")
+    @Schema(description = "type encoding")
     private String typeCode;
 
-    @Schema(description = "网络标识")
+    @Schema(description = "Network ID")
     private String netCode;
 
-    @Schema(description = "序号")
+    @Schema(description = "serial number")
     private String sn;
 
     /**
-     * 解析国标编号
+     * Analyze the national standard number
      */
     public static GbCode decode(String code){
         if (code == null || code.trim().length() != 20 || !code.matches("\\d{20}")) {

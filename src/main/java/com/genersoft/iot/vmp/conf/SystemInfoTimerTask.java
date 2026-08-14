@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 获取系统信息写入redis
+ * Get system information writtenredis
  */
 @Slf4j
 @Component
@@ -20,7 +20,7 @@ public class SystemInfoTimerTask {
     @Autowired
     private IRedisCatchStorage redisCatchStorage;
 
-    @Scheduled(fixedRate = 2000)   //每1秒执行一次
+    @Scheduled(fixedRate = 2000)   //Executed every 1 second
     public void execute(){
         try {
             double cpuInfo = SystemInfoUtils.getCpuInfo();
@@ -32,7 +32,7 @@ public class SystemInfoTimerTask {
             List<Map<String, Object>> diskInfo =SystemInfoUtils.getDiskInfo();
             redisCatchStorage.addDiskInfo(diskInfo);
         } catch (InterruptedException e) {
-            log.error("[获取系统信息失败] {}", e.getMessage());
+            log.error("[Failed to obtain system information] {}", e.getMessage());
         }
 
     }

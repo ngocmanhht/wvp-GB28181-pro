@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>WVP-PRO文档</title>
+    <title>WVP-PRODocumentation</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
     <meta name="description" content="Description">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
@@ -16,32 +16,32 @@
     </style>
 </head>
 <body>
-<div id="app">加载中</div>
+<div id="app">Loading</div>
 <script>
     window.$docsify = {
-        name: 'WVP-RPO使用文档',
+        name: 'WVP-RPOUse documentation',
         repo: 'https://github.com/648540858/wvp-GB28181-pro',
-        loadSidebar: true, // 开启侧边栏
-        loadNavbar: true, // 开启导航栏
-        coverpage: true, // 开启封面
+        loadSidebar: true, // Enable sidebar
+        loadNavbar: true, // Enable navigation bar
+        coverpage: true, // Open cover
 
         subMaxLevel: 3,
         plantuml: {
             skin: 'default',
         },
         search: {
-            maxAge: 86400000, // 过期时间，单位毫秒，默认一天
+            maxAge: 86400000, // Expiration time, in milliseconds, defaults to one day
             paths: 'auto', // or 'auto'
-            placeholder: '搜索',
-            noData: '找不到结果',
-            // 搜索标题的最大层级, 1 - 6
+            placeholder: 'Search',
+            noData: 'No results found',
+            // Maximum level of search titles, 1 - 6
             depth: 4,
-            hideOtherSidebarContent: false, // 是否隐藏其他侧边栏内容
+            hideOtherSidebarContent: false, // Whether to hide other sidebar content
         },
         copyCode: {
-            buttonText: '复制',
-            errorText: '错误',
-            successText: '已复制'
+            buttonText: 'Copy',
+            errorText: 'Error',
+            successText: 'Copied'
         },
         // disqus: 'shortname'
     }

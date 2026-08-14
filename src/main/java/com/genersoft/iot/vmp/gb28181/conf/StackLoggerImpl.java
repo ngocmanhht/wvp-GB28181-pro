@@ -11,12 +11,12 @@ import java.util.Properties;
 public class StackLoggerImpl implements StackLogger {
 
 	/**
-	 * 完全限定类名(Fully Qualified Class Name)，用于定位日志位置
+	 * fully qualified class name(Fully Qualified Class Name)，Used to locate log location
 	 */
 	private static final String FQCN = StackLoggerImpl.class.getName();
 
 	/**
-	 * 获取栈中类信息(以便底层日志记录系统能够提取正确的位置信息(方法名、行号))
+	 * Get class information in the stack(so that the underlying logging system can extract the correct location information(Method name, line number))
 	 * @return LocationAwareLogger
 	 */
 	private static LocationAwareLogger getLocationAwareLogger() {
@@ -25,9 +25,9 @@ public class StackLoggerImpl implements StackLogger {
 
 
 	/**
-	 * 封装打印日志的位置信息
-	 * @param level   日志级别
-	 * @param message 日志事件的消息
+	 * Encapsulate the location information of the print log
+	 * @param level   Log level
+	 * @param message Log event messages
 	 */
 	private static void log(int level, String message) {
 		LocationAwareLogger locationAwareLogger = getLocationAwareLogger();
@@ -35,9 +35,9 @@ public class StackLoggerImpl implements StackLogger {
 	}
 
 	/**
-	 * 封装打印日志的位置信息
-	 * @param level   日志级别
-	 * @param message 日志事件的消息
+	 * Encapsulate the location information of the print log
+	 * @param level   Log level
+	 * @param message Log event messages
 	 */
 	private static void log(int level, String message, Throwable throwable) {
 		LocationAwareLogger locationAwareLogger = getLocationAwareLogger();

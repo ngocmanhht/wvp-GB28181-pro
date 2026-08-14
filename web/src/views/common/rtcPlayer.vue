@@ -46,20 +46,20 @@ export default {
       })
       const player = webrtcPlayer[this._uid]
       player.on(ZLMRTCClient.Events.WEBRTC_ICE_CANDIDATE_ERROR, (e) => {
-        console.error('ICE 协商出错')
-        this.eventcallbacK('ICE ERROR', 'ICE 协商出错')
+        console.error('ICE Negotiation error')
+        this.eventcallbacK('ICE ERROR', 'ICE Negotiation error')
       })
 
       player.on(ZLMRTCClient.Events.WEBRTC_ON_REMOTE_STREAMS, (e) => {
-        console.log('播放成功', e.streams)
-        this.eventcallbacK('playing', '播放成功')
+        console.log('Played successfully', e.streams)
+        this.eventcallbacK('playing', 'Played successfully')
       })
 
       player.on(ZLMRTCClient.Events.WEBRTC_OFFER_ANWSER_EXCHANGE_FAILED, (e) => {
-        console.error('offer anwser 交换失败', e)
-        this.eventcallbacK('OFFER ANSWER ERROR ', 'offer anwser 交换失败')
-        if (e.code == -400 && e.msg == '流不存在') {
-          console.log('流不存在')
+        console.error('offer anwser Exchange failed', e)
+        this.eventcallbacK('OFFER ANSWER ERROR ', 'offer anwser Exchange failed')
+        if (e.code == -400 && e.msg == 'Stream does not exist') {
+          console.log('Stream does not exist')
           this.timer = setTimeout(() => {
             player.close()
             this.play(url)
@@ -68,7 +68,7 @@ export default {
       })
 
       player.on(ZLMRTCClient.Events.WEBRTC_ON_LOCAL_STREAM, (s) => {
-        this.eventcallbacK('LOCAL STREAM', '获取到了本地流')
+        this.eventcallbacK('LOCAL STREAM', 'Obtained local stream')
       })
     },
     pause: function() {
@@ -81,7 +81,7 @@ export default {
       this.pause()
     },
     eventcallbacK: function(type, message) {
-      console.log('player 事件回调')
+      console.log('player event callback')
       console.log(type)
       console.log(message)
     },
@@ -133,7 +133,7 @@ export default {
         max-height: 100%;
         background-color: #000;
     }
-    /* 隐藏logo */
+    /* hidelogo */
     /* .iconqingxiLOGO {
         display: none !important;
     } */

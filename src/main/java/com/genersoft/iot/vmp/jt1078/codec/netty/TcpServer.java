@@ -75,27 +75,27 @@ public class TcpServer {
                         }
                     });
             ChannelFuture channelFuture = bootstrap.bind(port).sync();
-            // 监听设备TCP端口是否启动成功
+            // Check whether the TCP port of the listening device is started successfully.
             channelFuture.addListener(future -> {
                 if (!future.isSuccess()) {
                     log.error("Binding port:{} fail!  cause: {}", port, future.cause().getCause(), future.cause());
                 }
             });
-            log.info("服务:JT808 Server 启动成功, port:{}", port);
+            log.info("Service: JT808 Server started successfully, port:{}", port);
             channelFuture.channel().closeFuture().sync();
         } catch (Exception e) {
-            log.warn("服务:JT808 Server 启动异常, port:{},{}", port, e.getMessage(), e);
+            log.warn("Service: JT808 Server startup exception, port:{},{}", port, e.getMessage(), e);
         } finally {
             stop();
         }
     }
 
     /**
-     * 开启一个新的线程,拉起来Netty
+     * Start a new thread and pull it upNetty
      */
     public synchronized void start() {
         if (this.isRunning) {
-            log.warn("服务:JT808 Server 已经启动, port:{}", port);
+            log.warn("Service: JT808 Server has been started, port:{}", port);
             return;
         }
         this.isRunning = true;
@@ -104,17 +104,17 @@ public class TcpServer {
 
     public synchronized void stop() {
         if (!this.isRunning) {
-            log.warn("服务:JT808 Server 已经停止, port:{}", port);
+            log.warn("Service: JT808 Server has stopped, port:{}", port);
         }
         this.isRunning = false;
         Future<?> future = this.bossGroup.shutdownGracefully();
         if (!future.isSuccess()) {
-            log.warn("bossGroup 无法正常停止", future.cause());
+            log.warn("bossGroup Unable to stop normally", future.cause());
         }
         future = this.workerGroup.shutdownGracefully();
         if (!future.isSuccess()) {
-            log.warn("workerGroup 无法正常停止", future.cause());
+            log.warn("workerGroup Unable to stop normally", future.cause());
         }
-        log.warn("服务:JT808 Server 已经停止, port:{}", port);
+        log.warn("Service: JT808 Server has stopped, port:{}", port);
     }
 }

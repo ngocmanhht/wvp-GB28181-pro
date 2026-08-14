@@ -2,7 +2,7 @@
   <div id="commonChannelEditDialog">
     <el-dialog
       v-el-drag-dialog
-      title="通道编辑"
+      title="Channel editing"
       width="90%"
       top="2rem"
       :append-to-body="true"

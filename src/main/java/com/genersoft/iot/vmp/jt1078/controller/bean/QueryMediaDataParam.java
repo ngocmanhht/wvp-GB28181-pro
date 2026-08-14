@@ -8,25 +8,25 @@ import lombok.Setter;
 
 @Setter
 @Getter
-@Schema(description = "存储多媒体数据参数")
+@Schema(description = "Store multimedia data parameters")
 public class QueryMediaDataParam {
 
-    @Schema(description = "终端手机号")
+    @Schema(description = "Terminal mobile phone number")
     private String phoneNumber;
 
-    @Schema(description = "多媒体 ID, 单条存储多媒体数据检索上传时有效")
+    @Schema(description = "Multimedia ID, valid when retrieving and uploading a single piece of stored multimedia data")
     private Long mediaId;
 
-    @Schema(description = "删除标志, 单条存储多媒体数据检索上传时有效")
+    @Schema(description = "Delete flag, valid when retrieving and uploading a single piece of stored multimedia data")
     private int delete;
 
-    @Schema(description = "存储多媒体数据参数")
+    @Schema(description = "Store multimedia data parameters")
     private JTQueryMediaDataCommand queryMediaDataCommand;
 
     @Override
     public String toString() {
         return "QueryMediaDataParam{" +
-                "设备手机号='" + phoneNumber + '\'' +
+                "Device mobile phone number='" + phoneNumber + '\'' +
                 ", mediaId=" + mediaId +
                 ", queryMediaDataCommand=" + queryMediaDataCommand +
                 '}';

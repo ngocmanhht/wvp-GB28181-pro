@@ -12,7 +12,7 @@ public class DrawThinParam {
     private Extent extent;
 
     /**
-     * 地理坐标系， WGS84/GCJ02， 用来标识 extent 参数的坐标系
+     * geographical coordinate system， WGS84/GCJ02， The coordinate system used to identify the extent parameter
      */
     private String geoCoordSys;
 }

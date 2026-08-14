@@ -12,18 +12,18 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Redis工具类
+ * RedisTools
  *
  * @author swwheihei
- * @date 2020年5月6日 下午8:27:29
+ * @date 2020May 6, 2018, afternoon8:27:29
  */
 @SuppressWarnings(value = {"rawtypes", "unchecked"})
 public class RedisUtil {
 
     /**
-     * 模糊查询
+     * fuzzy query
      *
-     * @param query 查询参数
+     * @param query query parameters
      * @return
      */
     public static List<Object> scan(RedisTemplate redisTemplate, String query) {

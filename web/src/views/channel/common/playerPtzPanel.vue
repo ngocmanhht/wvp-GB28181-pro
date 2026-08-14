@@ -48,7 +48,7 @@ export default {
           })
         })
         .catch(e => {
-          this.$message({ showClose: true, message: e || '播放失败', type: 'error' })
+          this.$message({ showClose: true, message: e || 'Play failed', type: 'error' })
         })
     },
     stopPlay() {
@@ -61,8 +61,8 @@ export default {
         params.deviceId = this.channelId
         params.channelId = this.channelId
         const action = this.dragZoomDirection === 'in' ? 'commonChanel/dragZoomIn' : 'commonChanel/dragZoomOut'
-        const successMsg = this.dragZoomDirection === 'in' ? '拉框放大成功' : '拉框缩小成功'
-        const failMsg = this.dragZoomDirection === 'in' ? '拉框放大失败' : '拉框缩小失败'
+        const successMsg = this.dragZoomDirection === 'in' ? 'Pull frame to enlarge successfully' : 'The frame was successfully reduced'
+        const failMsg = this.dragZoomDirection === 'in' ? 'Failed to enlarge the frame' : 'Failed to shrink the frame'
         this.$store.dispatch(action, params).then(() => {
           this.$message({ showClose: true, message: successMsg, type: 'success' })
         }).catch(() => {

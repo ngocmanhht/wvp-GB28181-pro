@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 /**
- * 用于存储上级平台
+ * Used to store the upper-level platform
  */
 @Mapper
 @Repository

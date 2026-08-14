@@ -6,18 +6,18 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * 人工确认报警消息参数
+ * Manually confirm alarm message parameters
  */
 @Setter
 @Getter
-@Schema(description = "人工确认报警消息参数")
+@Schema(description = "Manually confirm alarm message parameters")
 public class ConfirmationAlarmMessageParam {
 
-    @Schema(description = "终端手机号")
+    @Schema(description = "Terminal mobile phone number")
     private String phoneNumber;
-    @Schema(description = "报警消息流水号")
+    @Schema(description = "Alarm message serial number")
     private int alarmPackageNo;
-    @Schema(description = "人工确认报警类型")
+    @Schema(description = "Manual confirmation alarm type")
     private JTConfirmationAlarmMessageType alarmMessageType;
 
     @Override

@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * catalog事件
+ * catalogevent
  */
 @Slf4j
 //@Component
@@ -46,24 +46,24 @@ public class CatalogEventLister implements ApplicationListener<CatalogEvent> {
     public void onApplicationEvent(CatalogEvent event) {
         SubscribeInfo subscribe = null;
         Platform parentPlatform = null;
-        log.info("[Catalog事件: {}]通道数量： {}", event.getType(), event.getChannels().size());
+        log.info("[Catalogevent: {}]Number of channels： {}", event.getType(), event.getChannels().size());
         Map<String, List<Platform>> platformMap = new HashMap<>();
         Map<String, CommonGBChannel> channelMap = new HashMap<>();
         if (event.getPlatform() != null) {
             parentPlatform = event.getPlatform();
             if (parentPlatform.getServerGBId() == null) {
-                log.info("[Catalog事件: {}] 平台服务国标编码未找到", event.getType());
+                log.info("[Catalogevent: {}] Platform service national standard code not found", event.getType());
                 return;
             }
             subscribe = subscribeHolder.getCatalogSubscribe(parentPlatform.getServerGBId());
             if (subscribe == null) {
-                log.info("[Catalog事件: {}] 未订阅目录事件", event.getType());
+                log.info("[Catalogevent: {}] Not subscribed to directory events", event.getType());
                 return;
             }
 
         }else {
             List<Platform> allPlatform = platformService.queryAll(userSetting.getServerId());
-            // 获取所用订阅
+            // Get the subscription used
             List<String> platforms = subscribeHolder.getAllCatalogSubscribePlatform(allPlatform);
             if (event.getChannels() != null) {
                 if (!platforms.isEmpty()) {
@@ -74,10 +74,10 @@ public class CatalogEventLister implements ApplicationListener<CatalogEvent> {
                         channelMap.put(deviceChannel.getGbDeviceId(), deviceChannel);
                     }
                 }else {
-                    log.info("[Catalog事件: {}] 未订阅目录事件", event.getType());
+                    log.info("[Catalogevent: {}] Not subscribed to directory events", event.getType());
                 }
             }else {
-                log.info("[Catalog事件: {}] 事件内通道数为0", event.getType());
+                log.info("[Catalogevent: {}] The number of channels within the event is0", event.getType());
             }
         }
         switch (event.getType()) {
@@ -91,12 +91,12 @@ public class CatalogEventLister implements ApplicationListener<CatalogEvent> {
                         channels.addAll(event.getChannels());
                     }
                     if (!channels.isEmpty()) {
-                        log.info("[Catalog事件: {}]平台：{}，影响通道{}个", event.getType(), parentPlatform.getServerGBId(), channels.size());
+                        log.info("[Catalogevent: {}]platform：{}，influence channel{}a", event.getType(), parentPlatform.getServerGBId(), channels.size());
                         try {
                             sipCommanderFroPlatform.sendNotifyForCatalogOther(event.getType(), parentPlatform, channels, subscribe, null);
                         } catch (InvalidArgumentException | ParseException | NoSuchFieldException | SipException |
                                  IllegalAccessException e) {
-                            log.error("[命令发送失败] 国标级联 Catalog通知: {}", e.getMessage());
+                            log.error("[Command sending failed] National Standard Cascade Catalog Notice: {}", e.getMessage());
                         }
                     }
                 }else if (!platformMap.keySet().isEmpty()) {
@@ -108,7 +108,7 @@ public class CatalogEventLister implements ApplicationListener<CatalogEvent> {
                                 if (subscribeInfo == null) {
                                     continue;
                                 }
-                                log.info("[Catalog事件: {}]平台：{}，影响通道{}", event.getType(), platform.getServerGBId(), serverGbId);
+                                log.info("[Catalogevent: {}]platform：{}，influence channel{}", event.getType(), platform.getServerGBId(), serverGbId);
                                 List<CommonGBChannel> deviceChannelList = new ArrayList<>();
                                 CommonGBChannel deviceChannel = new CommonGBChannel();
                                 deviceChannel.setGbDeviceId(serverGbId);
@@ -117,11 +117,11 @@ public class CatalogEventLister implements ApplicationListener<CatalogEvent> {
                                     sipCommanderFroPlatform.sendNotifyForCatalogOther(event.getType(), platform, deviceChannelList, subscribeInfo, null);
                                 } catch (InvalidArgumentException | ParseException | NoSuchFieldException | SipException |
                                          IllegalAccessException e) {
-                                    log.error("[命令发送失败] 国标级联 Catalog通知: {}", e.getMessage());
+                                    log.error("[Command sending failed] National Standard Cascade Catalog Notice: {}", e.getMessage());
                                 }
                             }
                         }else {
-                            log.info("[Catalog事件: {}] 未找到上级平台： {}", event.getType(), serverGbId);
+                            log.info("[Catalogevent: {}] No parent platform found： {}", event.getType(), serverGbId);
                         }
                     }
                 }
@@ -138,12 +138,12 @@ public class CatalogEventLister implements ApplicationListener<CatalogEvent> {
                          deviceChannelList.addAll(event.getChannels());
                      }
                     if (!deviceChannelList.isEmpty()) {
-                        log.info("[Catalog事件: {}]平台：{}，影响通道{}个", event.getType(), parentPlatform.getServerGBId(), deviceChannelList.size());
+                        log.info("[Catalogevent: {}]platform：{}，influence channel{}a", event.getType(), parentPlatform.getServerGBId(), deviceChannelList.size());
                         try {
                             sipCommanderFroPlatform.sendNotifyForCatalogAddOrUpdate(event.getType(), parentPlatform, deviceChannelList, subscribe, null);
                         } catch (InvalidArgumentException | ParseException | NoSuchFieldException | SipException |
                                  IllegalAccessException e) {
-                            log.error("[命令发送失败] 国标级联 Catalog通知: {}", e.getMessage());
+                            log.error("[Command sending failed] National Standard Cascade Catalog Notice: {}", e.getMessage());
                         }
                     }
                 }else if (!platformMap.keySet().isEmpty()) {
@@ -155,7 +155,7 @@ public class CatalogEventLister implements ApplicationListener<CatalogEvent> {
                                 if (subscribeInfo == null) {
                                     continue;
                                 }
-                                log.info("[Catalog事件: {}]平台：{}，影响通道{}", event.getType(), platform.getServerGBId(), gbId);
+                                log.info("[Catalogevent: {}]platform：{}，influence channel{}", event.getType(), platform.getServerGBId(), gbId);
                                 List<CommonGBChannel> channelList = new ArrayList<>();
                                 CommonGBChannel deviceChannel = channelMap.get(gbId);
                                 channelList.add(deviceChannel);
@@ -164,7 +164,7 @@ public class CatalogEventLister implements ApplicationListener<CatalogEvent> {
                                     sipCommanderFroPlatform.sendNotifyForCatalogAddOrUpdate(event.getType(), platform, channelList, subscribeInfo, null);
                                 } catch (InvalidArgumentException | ParseException | NoSuchFieldException |
                                          SipException | IllegalAccessException e) {
-                                    log.error("[命令发送失败] 国标级联 Catalog通知: {}", e.getMessage());
+                                    log.error("[Command sending failed] National Standard Cascade Catalog Notice: {}", e.getMessage());
                                 }
                             }
                         }

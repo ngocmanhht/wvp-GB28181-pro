@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-// 国标设备API
+// National standard equipmentAPI
 
 export function queryDeviceSyncStatus(deviceId) {
   return request({

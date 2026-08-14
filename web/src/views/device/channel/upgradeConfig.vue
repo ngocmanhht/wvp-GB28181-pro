@@ -1,8 +1,8 @@
 <template>
   <div class="upgrade-form">
     <div class="reboot-section">
-      <h4>远程启动</h4>
-      <el-button type="warning" @click="handleReboot">设备重启</el-button>
+      <h4>remote start</h4>
+      <el-button type="warning" @click="handleReboot">Device restart</el-button>
     </div>
   </div>
 </template>
@@ -25,13 +25,13 @@ export default {
   },
   methods: {
     handleReboot() {
-      this.$confirm('确定远程重启该设备？', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+      this.$confirm('Confirm remote restart of the device？', 'Tips', {
+        confirmButtonText: 'OK',
+        cancelButtonText: 'Cancel',
         type: 'warning'
       }).then(() => {
         this.$store.dispatch('device/teleboot', this.deviceId).then(() => {
-          this.$message({ showClose: true, message: '远程启动命令已发送', type: 'success' })
+          this.$message({ showClose: true, message: 'Remote start command sent', type: 'success' })
         }).catch(error => {
           this.$message({ showClose: true, message: error.message, type: 'error' })
         })

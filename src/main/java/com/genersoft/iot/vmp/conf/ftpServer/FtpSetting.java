@@ -6,7 +6,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 /**
- * 配置文件 user-settings 映射的配置信息
+ * Configuration file user-settings Mapping configuration information
  */
 @Component
 @ConfigurationProperties(prefix = "ftp", ignoreInvalidFields = true)

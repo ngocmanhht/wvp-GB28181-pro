@@ -5,38 +5,38 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * JT 终端属性
+ * JT terminal properties
  */
 @Setter
 @Getter
-@Schema(description = "JT终端属性")
+@Schema(description = "JTterminal properties")
 public class JTDeviceAttribute {
 
-    @Schema(description = "终端类型")
+    @Schema(description = "terminal type")
     private JTDeviceType type;
 
-    @Schema(description = "制造商 ID")
+    @Schema(description = "manufacturer ID")
     private String makerId;
 
-    @Schema(description = "终端型号")
+    @Schema(description = "Terminal model")
     private String deviceModel;
 
-    @Schema(description = "终端 ID")
+    @Schema(description = "terminal ID")
     private String terminalId;
 
-    @Schema(description = "终端 SIM卡 ICCID")
+    @Schema(description = "Terminal SIM card ICCID")
     private String iccId;
 
-    @Schema(description = "终端硬件版本号")
+    @Schema(description = "Terminal hardware version number")
     private String hardwareVersion;
 
-    @Schema(description = "固件版本号")
+    @Schema(description = "Firmware version number")
     private String firmwareVersion ;
 
-    @Schema(description = "GNSS 模块属性")
+    @Schema(description = "GNSS module properties")
     private JTGnssAttribute gnssAttribute ;
 
-    @Schema(description = "通信模块属性")
+    @Schema(description = "Communication module properties")
     private JTCommunicationModuleAttribute communicationModuleAttribute ;
 
     @Override

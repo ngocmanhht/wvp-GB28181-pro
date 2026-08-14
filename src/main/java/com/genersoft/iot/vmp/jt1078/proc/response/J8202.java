@@ -7,7 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * 临时位置跟踪控制
+ * Temporary location tracking control
  */
 @Setter
 @Getter
@@ -15,12 +15,12 @@ import lombok.Setter;
 public class J8202 extends Rs {
 
     /**
-     * 时间间隔,单位为秒,时间间隔为0 时停止跟踪,停止跟踪无需带后继字段
+     * Time interval, unit is second, stop tracking when the time interval is 0, no subsequent fields are required to stop tracking.
      */
     private int timeInterval;
 
     /**
-     * 位置跟踪有效期, 单位为秒,终端在接收到位置跟踪控制消息后,在有效期截止时间之前依据消息中的时间间隔发送位置汇报
+     * Location tracking validity period, in seconds. After receiving the location tracking control message, the terminal will send a location report according to the time interval in the message before the expiration date of the validity period.
      */
     private long validityPeriod;
 

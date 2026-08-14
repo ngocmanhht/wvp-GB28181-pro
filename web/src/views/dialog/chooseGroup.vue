@@ -2,7 +2,7 @@
   <div id="chooseGroup">
     <el-dialog
       v-el-drag-dialog
-      title="选择虚拟组织"
+      title="Select a virtual organization"
       width="30%"
       top="5rem"
       :append-to-body="true"
@@ -23,8 +23,8 @@
       <el-form>
         <el-form-item>
           <div style="text-align: right">
-            <el-button type="primary" @click="onSubmit">保存</el-button>
-            <el-button @click="close">取消</el-button>
+            <el-button type="primary" @click="onSubmit">save</el-button>
+            <el-button @click="close">Cancel</el-button>
           </div>
         </el-form-item>
       </el-form>

@@ -7,7 +7,7 @@ import io.netty.buffer.Unpooled;
 import java.util.Arrays;
 
 /**
- * 查询终端参数
+ * Query terminal parameters
  */
 @MsgId(id = "8104")
 public class J8104 extends Rs {

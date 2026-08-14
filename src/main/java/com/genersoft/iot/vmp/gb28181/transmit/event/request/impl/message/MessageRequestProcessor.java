@@ -56,7 +56,7 @@ public class MessageRequestProcessor extends SIPRequestProcessorParent implement
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        // 添加消息处理的订阅
+        // Add message processing subscription
         sipProcessorObserver.addRequestProcessor(method, this);
     }
 
@@ -67,20 +67,20 @@ public class MessageRequestProcessor extends SIPRequestProcessorParent implement
     @Override
     public void process(RequestEvent evt) {
         SIPRequest sipRequest = (SIPRequest)evt.getRequest();
-//        logger.info("接收到消息：" + evt.getRequest());
+//        logger.info("message received：" + evt.getRequest());
         String deviceId = SipUtils.getUserIdFromFromHeader(evt.getRequest());
         CallIdHeader callIdHeader = sipRequest.getCallIdHeader();
         CSeqHeader cSeqHeader = sipRequest.getCSeqHeader();
-        // 先从会话内查找
+        // Search within the session first
         SsrcTransaction ssrcTransaction = sessionManager.getSsrcTransactionByCallId(callIdHeader.getCallId());
-        // 兼容海康 媒体通知 消息from字段不是设备ID的问题
+        // Compatible with Hikvision media notification. The message from field is not the device ID.
         if (ssrcTransaction != null) {
             deviceId = ssrcTransaction.getDeviceId();
         }
         SIPRequest request = (SIPRequest) evt.getRequest();
-        // 查询设备是否存在
+        // Check if the device exists
         Device device = redisCatchStorage.getDevice(deviceId);
-        // 查询上级平台是否存在
+        // Check whether the upper-level platform exists
         Platform parentPlatform = platformService.queryPlatformByServerGBId(deviceId);
         try {
             if (device != null && parentPlatform != null) {
@@ -93,9 +93,9 @@ public class MessageRequestProcessor extends SIPRequestProcessorParent implement
                 }
             }
             if (device == null && parentPlatform == null) {
-                // 不存在则回复404
+                // Reply if it does not exist404
                 responseAck(request, Response.NOT_FOUND, "device "+ deviceId +" not found");
-                log.warn("[设备未找到 ]deviceId: {}, callId: {}", deviceId, callIdHeader.getCallId());
+                log.warn("[Device not found ]deviceId: {}, callId: {}", deviceId, callIdHeader.getCallId());
                 SipEvent sipEvent = sipSubscribe.getSubscribe(callIdHeader.getCallId() + cSeqHeader.getSeqNumber());
                 if (sipEvent != null && sipEvent.getErrorEvent() != null){
                     DeviceNotFoundEvent deviceNotFoundEvent = new DeviceNotFoundEvent(callIdHeader.getCallId());
@@ -107,7 +107,7 @@ public class MessageRequestProcessor extends SIPRequestProcessorParent implement
                 try {
                     rootElement = getRootElement(evt);
                     if (rootElement == null) {
-                        log.error("处理MESSAGE请求  未获取到消息体{}", evt.getRequest());
+                        log.error("Processing MESSAGE request, message body not obtained{}", evt.getRequest());
                         responseAck(request, Response.BAD_REQUEST, "content is null");
                         return;
                     }
@@ -116,27 +116,27 @@ public class MessageRequestProcessor extends SIPRequestProcessorParent implement
                     if (messageHandler != null) {
                         if (device != null) {
                             messageHandler.handForDevice(evt, device, rootElement);
-                        }else { // 由于上面已经判断都为null则直接返回，所以这里device和parentPlatform必有一个不为null
+                        }else { // Since the above has been judged to be null, it will be returned directly, so one of the device and parentPlatform must be different.null
                             messageHandler.handForPlatform(evt, parentPlatform, rootElement);
                         }
-                        // 存在handler则由handler自行决定回复什么。
+                        // If there is a handler, it is up to the handler to decide what to reply.。
                     }else {
-                        // 不支持的message
-                        // 不存在则回复415
+                        // Not supportedmessage
+                        // Reply if it does not exist415
                         responseAck(request, Response.UNSUPPORTED_MEDIA_TYPE, "Unsupported message type, must Control/Notify/Query/Response");
                     }
                 } catch (DocumentException e) {
-                    log.warn("解析XML消息内容异常", e);
-                    // 不存在则回复404
+                    log.warn("Exception in parsing XML message content", e);
+                    // Reply if it does not exist404
                     responseAck(request, Response.BAD_REQUEST, e.getMessage());
                 }
             }
         } catch (SipException e) {
-            log.warn("SIP 回复错误", e);
+            log.warn("SIP Reply to error", e);
         } catch (InvalidArgumentException e) {
-            log.warn("参数无效", e);
+            log.warn("Invalid parameter", e);
         } catch (ParseException e) {
-            log.warn("SIP回复时解析异常", e);
+            log.warn("SIPParse exception when replying", e);
         }
     }
 

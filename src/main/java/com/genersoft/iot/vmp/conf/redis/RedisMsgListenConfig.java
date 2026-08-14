@@ -13,9 +13,9 @@ import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 
 
 /**
- * @description:Redis中间件配置类，使用spring-data-redis集成，自动从application.yml中加载redis配置
+ * @description:RedisMiddleware configuration class, usespring-data-redisIntegrated, automatically loads redis configuration from application.yml
  * @author: swwheihei
- * @date: 2019年5月30日 上午10:58:25
+ * @date: 2019May 30, morning10:58:25
  *
  */
 @Configuration
@@ -51,8 +51,8 @@ public class RedisMsgListenConfig {
 
 
 	/**
-	 * redis消息监听器容器 可以添加多个监听不同话题的redis监听器，只需要把消息监听器和相应的消息订阅处理器绑定，该消息监听器
-	 * 通过反射技术调用消息订阅处理器的相关方法进行一些业务处理
+	 * redisThe message listener container can add multiple redis listeners that listen to different topics. You only need to bind the message listener to the corresponding message subscription processor. The message listener
+	 * Call the relevant methods of the message subscription processor through reflection technology to perform some business processing
 	 *
 	 * @param connectionFactory
 	 * @return

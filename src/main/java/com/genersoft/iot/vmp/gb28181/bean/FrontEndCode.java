@@ -5,7 +5,7 @@ import lombok.Data;
 
 
 /**
- * 解析收到的前端控制指令
+ * Parse the received front-end control instructions
  */
 @Data
 public class FrontEndCode {
@@ -22,7 +22,7 @@ public class FrontEndCode {
         String cmdCodeStr = cmdStr.substring(6, 8);
         int cmdCode = Integer.parseInt(cmdCodeStr, 16);
         if (cmdCode < 39) {
-            // PTZ指令
+            // PTZinstructions
             FrontEndControlCodeForPTZ codeForPTZ = new FrontEndControlCodeForPTZ();
             int zoomOut = cmdCode >> 5 & 1;
             if (zoomOut == 1) {
@@ -56,7 +56,7 @@ public class FrontEndCode {
             codeForPTZ.setZoomSpeed(Integer.parseInt(param3Str, 16));
             return codeForPTZ;
         }else if (cmdCode < 74) {
-            // FI指令
+            // FIinstructions
             FrontEndControlCodeForFI codeForFI = new FrontEndControlCodeForFI();
             int irisOut = cmdCode >> 3 & 1;
             if (irisOut == 1) {
@@ -81,45 +81,45 @@ public class FrontEndCode {
             codeForFI.setIrisSpeed(Integer.parseInt(param2Str, 16));
             return codeForFI;
         }else if (cmdCode < 131) {
-            // 预置位指令
+            // Preset command
             FrontEndControlCodeForPreset  codeForPreset = new FrontEndControlCodeForPreset();
             switch (cmdCode) {
-                case 0x81: // 设置预置位
+                case 0x81: // Set preset position
                     codeForPreset.setCode(1);
                     break;
-                case 0x82: // 调用预置位
+                case 0x82: // Call preset position
                     codeForPreset.setCode(2);
                     break;
-                case 0x83: // 删除预置位
+                case 0x83: // Delete preset position
                     codeForPreset.setCode(3);
                     break;
                 default:
                     return null;
             }
-            // 预置位编号
+            // Preset number
             String param2Str = cmdStr.substring(10, 12);
             codeForPreset.setPresetId(Integer.parseInt(param2Str, 16));
             return codeForPreset;
         }else if (cmdCode < 136) {
-            // 巡航指令
+            // cruise command
             FrontEndControlCodeForTour  codeForTour = new FrontEndControlCodeForTour();
             String param3Str = cmdStr.substring(12, 13);
             switch (cmdCode) {
-                case 0x84: // 加入巡航点
+                case 0x84: // Join a cruise spot
                     codeForTour.setCode(1);
                     break;
-                case 0x85: // 删除一个巡航点
+                case 0x85: // Delete a cruise point
                     codeForTour.setCode(2);
                     break;
-                case 0x86: // 设置巡航速度
+                case 0x86: // Set cruise speed
                     codeForTour.setCode(3);
                     codeForTour.setTourSpeed(Integer.parseInt(param3Str, 16));
                     break;
-                case 0x87: // 设置巡航停留时间
+                case 0x87: // Set cruise stop time
                     codeForTour.setCode(4);
                     codeForTour.setTourTime(Integer.parseInt(param3Str, 16));
                     break;
-                case 0x88: // 开始巡航
+                case 0x88: // start cruise
                     codeForTour.setCode(5);
                     break;
                 default:
@@ -131,25 +131,25 @@ public class FrontEndCode {
             codeForTour.setPresetId(Integer.parseInt(param2Str, 16));
             return codeForTour;
         }else if (cmdCode < 138) {
-            // 扫描指令
+            // scan command
             FrontEndControlCodeForScan  controlCodeForScan = new FrontEndControlCodeForScan();
             String param2Str = cmdStr.substring(10, 11);
             int param2Code = Integer.parseInt(param2Str, 16);
             switch (cmdCode) {
                 case 0x89:
                     switch (param2Code) {
-                        case 0x00: // 开始自动扫描
+                        case 0x00: // Start automatic scan
                             controlCodeForScan.setCode(1);
                             break;
-                        case 0x01: // 设置自动扫描左边界
+                        case 0x01: // Set up automatic scanning of the left border
                             controlCodeForScan.setCode(2);
                             break;
-                        case 0x02: // 设置自动扫描右边界
+                        case 0x02: // Set up automatic scanning of the right border
                             controlCodeForScan.setCode(3);
                             break;
                     }
                     break;
-                case 0x8A: // 删除一个巡航点
+                case 0x8A: // Delete a cruise point
                     controlCodeForScan.setCode(4);
                     String param3Str = cmdStr.substring(12, 13);
                     controlCodeForScan.setScanSpeed(Integer.parseInt(param3Str, 16));
@@ -161,19 +161,19 @@ public class FrontEndCode {
             controlCodeForScan.setScanId(Integer.parseInt(param1Str, 16));
             return controlCodeForScan;
         }else if (cmdCode < 141) {
-            // 辅助开关
+            // Auxiliary switch
             FrontEndControlCodeForAuxiliary  codeForAuxiliary = new FrontEndControlCodeForAuxiliary();
             switch (cmdCode) {
-                case 0x8C: // 开
+                case 0x8C: // open
                     codeForAuxiliary.setCode(1);
                     break;
-                case 0x8D: // 关
+                case 0x8D: // close
                     codeForAuxiliary.setCode(2);
                     break;
                 default:
                     return null;
             }
-            // 预置位编号
+            // Preset number
             String param2Str = cmdStr.substring(10, 12);
             codeForAuxiliary.setAuxiliaryId(Integer.parseInt(param2Str, 16));
             return codeForAuxiliary;

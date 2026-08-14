@@ -21,14 +21,14 @@ public class MessageSubscribe {
 
     private final DelayQueue<MessageEvent<?>> delayQueue = new DelayQueue<>();
 
-    @Scheduled(fixedDelay = 200)   //每200毫秒执行
+    @Scheduled(fixedDelay = 200)   //Executed every 200 milliseconds
     public void execute(){
         while (!delayQueue.isEmpty()) {
             try {
                 MessageEvent<?> take = delayQueue.take();
-                // 出现超时异常
+                // A timeout exception occurred
                 if(take.getCallback() != null) {
-                    take.getCallback().run(ErrorCode.ERROR486.getCode(), "消息超时未回复", null);
+                    take.getCallback().run(ErrorCode.ERROR486.getCode(), "Message timed out and no reply was received", null);
                 }
                 subscribes.remove(take.getKey());
             } catch (InterruptedException e) {

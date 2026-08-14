@@ -2,11 +2,11 @@
   <div id="recordPLan" class="app-container">
     <div style="height: calc(100vh - 124px);">
       <el-form :inline="true" size="mini">
-        <el-form-item label="搜索">
+        <el-form-item label="Search">
           <el-input
             v-model="searchStr"
             style="margin-right: 1rem; width: auto;"
-            placeholder="关键字"
+            placeholder="Keywords"
             prefix-icon="el-icon-search"
             clearable
             @input="search"
@@ -14,7 +14,7 @@
         </el-form-item>
         <el-form-item>
           <el-button size="mini" type="primary" @click="add()">
-            添加
+            add
           </el-button>
         </el-form-item>
         <el-form-item style="float: right;">
@@ -30,15 +30,15 @@
         header-row-class-name="table-header"
       >
         <el-table-column type="selection" width="55" />
-        <el-table-column prop="name" label="名称" />
-        <el-table-column prop="channelCount" label="关联通道" />
-        <el-table-column prop="updateTime" label="更新时间" />
-        <el-table-column prop="createTime" label="创建时间" />
-        <el-table-column label="操作" width="300" fixed="right">
+        <el-table-column prop="name" label="Name" />
+        <el-table-column prop="channelCount" label="associated channel" />
+        <el-table-column prop="updateTime" label="Update time" />
+        <el-table-column prop="createTime" label="creation time" />
+        <el-table-column label="Operation" width="300" fixed="right">
           <template v-slot:default="scope">
-            <el-button size="medium" icon="el-icon-link" type="text" @click="link(scope.row)">关联通道</el-button>
-            <el-button size="medium" icon="el-icon-edit" type="text" @click="edit(scope.row)">编辑</el-button>
-            <el-button size="medium" icon="el-icon-delete" style="color: #f56c6c" type="text" @click="deletePlan(scope.row)">删除</el-button>
+            <el-button size="medium" icon="el-icon-link" type="text" @click="link(scope.row)">associated channel</el-button>
+            <el-button size="medium" icon="el-icon-edit" type="text" @click="edit(scope.row)">Edit</el-button>
+            <el-button size="medium" icon="el-icon-delete" style="color: #f56c6c" type="text" @click="deletePlan(scope.row)">Delete</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -106,7 +106,7 @@ export default {
         .then(data => {
           this.total = data.total
           this.recordPlanList = data.list
-          // 防止出现表格错位
+          // Prevent form misalignment
           this.$nextTick(() => {
             this.$refs.recordPlanListTable.doLayout()
           })
@@ -143,16 +143,16 @@ export default {
       })
     },
     deletePlan: function(plan) {
-      this.$confirm('确定删除?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+      this.$confirm('Confirm deletion?', 'Tips', {
+        confirmButtonText: 'OK',
+        cancelButtonText: 'Cancel',
         type: 'warning'
       }).then(() => {
         this.$store.dispatch('recordPlan/deletePlan', plan.id)
           .then(() => {
             this.$message({
               showClose: true,
-              message: '删除成功',
+              message: 'Delete successfully',
               type: 'success'
             })
             this.initData()

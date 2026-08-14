@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-// 通用通道API
+// Universal channelAPI
 
 export function queryOne(id) {
   return request({
@@ -303,7 +303,7 @@ export function broadcastStop(channelId) {
 }
 
 
-// 前端控制
+// front-end control
 
 export function setSpeedForScan({ channelId, scanId, speed }) {
   return request({
@@ -480,7 +480,7 @@ export function deletePreset({ channelId, presetId }) {
 }
 
 /**
- * command: on 开启， off 关闭
+ * command: on on, off off
  */
 export function auxiliary({ channelId, command, auxiliaryId }) {
   return request({
@@ -494,7 +494,7 @@ export function auxiliary({ channelId, command, auxiliaryId }) {
   })
 }
 /**
- * command: on 开启， off 关闭
+ * command: on on, off off
  */
 export function wiper({ channelId, command }) {
   return request({

@@ -14,7 +14,7 @@ import lombok.Setter;
 import org.springframework.context.ApplicationEvent;
 
 /**
- * 数据上行透传
+ * Data uplink transparent transmission
  */
 @Setter
 @Getter
@@ -22,12 +22,12 @@ import org.springframework.context.ApplicationEvent;
 public class J0900 extends Re {
 
     /**
-     * 透传消息类型, 0x00: GNSS 模块详细定位数据, 0X0B: 道路运输证 IC卡信息, 0X41: 串口1 透传, 0X42: 串口2 透传, 0XF0 ~ 0XFF: 用户自定义透传
+     * Transparent transmission message type, 0x00: GNSS module detailed positioning data, 0X0B: Road transportation certificate IC card information, 0X41: Serial port 1 transparent transmission, 0X42: Serial port 2 transparent transmission, 0XF0 ~ 0XFF: User-defined transparent transmission
      */
     private Integer type;
 
     /**
-     * 透传消息内容
+     * Transparent message content
      */
     private byte[] content;
 

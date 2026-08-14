@@ -1,7 +1,7 @@
 package com.genersoft.iot.vmp.jt1078.util;
 
 /**
- * 32位整型的二进制读写
+ * 32Bit integer binary reading and writing
  */
 public class Bin {
 
@@ -15,17 +15,17 @@ public class Bin {
     }
 
     /**
-     * 读取n的第i位
+     * Read the i-th bit of n
      *
      * @param n int32
-     * @param i 取值范围0-31
+     * @param i Value range0-31
      */
     public static boolean get(int n, int i) {
         return (n & bits[i]) == bits[i];
     }
 
     /**
-     * 不足位数从左边加0
+     * The missing digits are added from the left0
      */
     public static String strHexPaddingLeft(String data, int length) {
         int dataLength = data.length();

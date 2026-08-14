@@ -6,7 +6,7 @@
           <el-progress :percentage="percentage" style="height: 28px; line-height: 25px;"/>
         </div>
         <div>
-          <el-button v-if="downloadFile" icon="el-icon-download" size="mini" title="点击下载" @click="downloadFileClientEvent()">下载</el-button>
+          <el-button v-if="downloadFile" icon="el-icon-download" size="mini" title="Click to download" @click="downloadFileClientEvent()">Download</el-button>
         </div>
       </div>
     </el-dialog>
@@ -22,7 +22,7 @@ export default {
   directives: { elDragDialog },
   data() {
     return {
-      title: '下载中...',
+      title: 'Downloading...',
       deviceId: '',
       channelId: '',
       app: '',

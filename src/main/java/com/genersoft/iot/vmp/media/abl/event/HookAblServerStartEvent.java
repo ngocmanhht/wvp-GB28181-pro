@@ -4,7 +4,7 @@ import com.genersoft.iot.vmp.media.bean.MediaServer;
 import org.springframework.context.ApplicationEvent;
 
 /**
- * zlm server_start事件
+ * zlm server_startevent
  */
 public class HookAblServerStartEvent extends ApplicationEvent {
 

@@ -52,7 +52,7 @@ public class CatalogQueryMessageHandler extends SIPRequestProcessorParent implem
     @Override
     public void handForDevice(RequestEvent evt, Device device, Element element) {
         try {
-            // 回复200 OK
+            // Reply200 OK
             responseAck((SIPRequest) evt.getRequest(), Response.FORBIDDEN);
         } catch (SipException | InvalidArgumentException | ParseException ignored) {}
     }
@@ -62,10 +62,10 @@ public class CatalogQueryMessageHandler extends SIPRequestProcessorParent implem
 
         FromHeader fromHeader = (FromHeader) evt.getRequest().getHeader(FromHeader.NAME);
         try {
-            // 回复200 OK
+            // Reply200 OK
              responseAck((SIPRequest) evt.getRequest(), Response.OK);
         } catch (SipException | InvalidArgumentException | ParseException e) {
-            log.error("[命令发送失败] 国标级联 目录查询回复200OK: {}", e.getMessage());
+            log.error("[Command sending failed] National Standard Cascade Catalog Query Reply200OK: {}", e.getMessage());
         }
         Element snElement = rootElement.element("SN");
         String sn = snElement.getText();
@@ -75,11 +75,11 @@ public class CatalogQueryMessageHandler extends SIPRequestProcessorParent implem
             if (!channelList.isEmpty()) {
                 cmderFroPlatform.catalogQuery(channelList, platform, sn, fromHeader.getTag());
             }else {
-                // 回复无通道
+                // Reply no channel
                 cmderFroPlatform.catalogQuery(Collections.emptyList(), platform, sn, fromHeader.getTag());
             }
         } catch (SipException | InvalidArgumentException | ParseException e) {
-            log.error("[命令发送失败] 国标级联 目录查询回复: {}", e.getMessage());
+            log.error("[Command sending failed] National Standard Cascade Catalog Query Reply: {}", e.getMessage());
         }
     }
 }

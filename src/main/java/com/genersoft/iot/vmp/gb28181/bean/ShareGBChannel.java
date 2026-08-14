@@ -7,10 +7,10 @@ import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-@Schema(description = "国标共享通道")
+@Schema(description = "National standard shared channel")
 public class ShareGBChannel extends CommonGBChannel{
 
-    @Schema(description = "平台ID")
+    @Schema(description = "platformID")
     private int platformId;
 
 

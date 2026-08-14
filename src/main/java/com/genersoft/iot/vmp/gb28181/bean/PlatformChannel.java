@@ -11,198 +11,198 @@ public class PlatformChannel extends CommonGBChannel {
     @Schema(description = "Id")
     private int id;
 
-    @Schema(description = "平台ID")
+    @Schema(description = "platformID")
     private int platformId;
 
-    @Schema(description = "国标-编码")
+    @Schema(description = "National standard-encoding")
     private String customDeviceId;
 
-    @Schema(description = "国标-名称")
+    @Schema(description = "National standard-Name")
     private String customName;
 
-    @Schema(description = "国标-设备厂商")
+    @Schema(description = "National standard-Equipment manufacturer")
     private String customManufacturer;
 
-    @Schema(description = "国标-设备型号")
+    @Schema(description = "National standard-Device model")
     private String customModel;
 
     // 2016
-    @Schema(description = "国标-设备归属")
+    @Schema(description = "National standard-Equipment ownership")
     private String customOwner;
 
-    @Schema(description = "国标-行政区域")
+    @Schema(description = "National standard-Administrative region")
     private String customCivilCode;
 
-    @Schema(description = "国标-警区")
+    @Schema(description = "National standard-police district")
     private String customBlock;
 
-    @Schema(description = "国标-安装地址")
+    @Schema(description = "National standard-Installation address")
     private String customAddress;
 
-    @Schema(description = "国标-是否有子设备")
+    @Schema(description = "National standard-Is there a sub-device?")
     private Integer customParental;
 
-    @Schema(description = "国标-父节点ID")
+    @Schema(description = "National standard-parent nodeID")
     private String customParentId;
 
     // 2016
-    @Schema(description = "国标-信令安全模式")
+    @Schema(description = "National standard-Signaling security mode")
     private Integer customSafetyWay;
 
-    @Schema(description = "国标-注册方式")
+    @Schema(description = "National standard-Registration method")
     private Integer customRegisterWay;
 
     // 2016
-    @Schema(description = "国标-证书序列号")
+    @Schema(description = "National standard-Certificate serial number")
     private Integer customCertNum;
 
     // 2016
-    @Schema(description = "国标-证书有效标识")
+    @Schema(description = "National standard-Certificate valid identifier")
     private Integer customCertifiable;
 
     // 2016
-    @Schema(description = "国标-无效原因码(有证书且证书无效的设备必选)")
+    @Schema(description = "National standard-Invalid reason code(Required for devices with certificates and invalid certificates)")
     private Integer customErrCode;
 
     // 2016
-    @Schema(description = "国标-证书终止有效期(有证书且证书无效的设备必选)")
+    @Schema(description = "National standard-Certificate expiry date(Required for devices with certificates and invalid certificates)")
     private Integer customEndTime;
 
     // 2022
-    @Schema(description = "国标-摄像机安全能力等级代码")
+    @Schema(description = "National standard-Camera security capability level code")
     private String customSecurityLevelCode;
 
-    @Schema(description = "国标-保密属性(必选)缺省为0;0-不涉密,1-涉密")
+    @Schema(description = "National standard-Confidential attribute(Required)The default is0;0-Not confidential,1-Confidential")
     private Integer customSecrecy;
 
-    @Schema(description = "国标-设备/系统IPv4/IPv6地址")
+    @Schema(description = "National standard-Equipment/systemIPv4/IPv6address")
     private String customIpAddress;
 
-    @Schema(description = "国标-设备/系统端口")
+    @Schema(description = "National standard-Equipment/system port")
     private Integer customPort;
 
-    @Schema(description = "国标-设备口令")
+    @Schema(description = "National standard-Device password")
     private String customPassword;
 
-    @Schema(description = "国标-设备状态")
+    @Schema(description = "National standard-Device status")
     private String customStatus;
 
-    @Schema(description = "国标-经度 WGS-84坐标系")
+    @Schema(description = "National standard-longitude WGS-84coordinate system")
     private Double customLongitude;
 
-    @Schema(description = "国标-纬度 WGS-84坐标系")
+    @Schema(description = "National standard-Latitude WGS-84coordinate system")
     private Double customLatitude;
 
-    @Schema(description = "国标-虚拟组织所属的业务分组ID")
+    @Schema(description = "National standard-The business group to which the virtual organization belongsID")
     private String customBusinessGroupId;
 
-    @Schema(description = "国标-摄像机结构类型,标识摄像机类型: 1-球机; 2-半球; 3-固定枪机; 4-遥控枪机;5-遥控半球;6-多目设备的全景/拼接通道;7-多目设备的分割通道")
+    @Schema(description = "National standard-Camera structure type, identifying camera type: 1-ball machine; 2-hemisphere; 3-Fixed bolt; 4-remote control gun;5-remote controlled hemisphere;6-Panoramic view of multi-view equipment/Splicing channel;7-Split channels for multi-channel equipment")
     private Integer customPtzType;
 
     // 2016
-    @Schema(description = "-摄像机位置类型扩展。1-省际检查站、2-党政机关、3-车站码头、4-中心广场、5-体育场馆、6-商业中心、7-宗教场所、" +
-            "8-校园周边、9-治安复杂区域、10-交通干线。当目录项为摄像机时可选。")
+    @Schema(description = "-Camera position type extension。1-interprovincial checkpoint、2-Party and government organs、3-Station Pier、4-central square、5-sports venues、6-business center、7-religious place、" +
+            "8-Around campus、9-Complex security area、10-Traffic arteries. Optional when the directory item is a camera。")
     private Integer customPositionType;
 
-    @Schema(description = "国标-摄像机光电成像类型。1-可见光成像;2-热成像;3-雷达成像;4-X光成像;5-深度光场成像;9-其他。可多值,")
+    @Schema(description = "National standard-Camera photoelectric imaging type。1-visible light imaging;2-thermal imaging;3-radar imaging;4-Xlight imaging;5-Deep light field imaging;9-Others. Can be multi-valued,")
     private String customPhotoelectricImagingTyp;
 
-    @Schema(description = "国标-摄像机采集部位类型")
+    @Schema(description = "National standard-Camera acquisition part type")
     private String customCapturePositionType;
 
-    @Schema(description = "国标-摄像机安装位置室外、室内属性。1-室外、2-室内。")
+    @Schema(description = "National standard-Camera installation location outdoor and indoor attributes。1-outdoor、2-indoor。")
     private Integer customRoomType;
 
     // 2016
-    @Schema(description = "国标-用途属性")
+    @Schema(description = "National standard-Usage attribute")
     private Integer customUseType;
 
-    @Schema(description = "国标-摄像机补光属性。1-无补光;2-红外补光;3-白光补光;4-激光补光;9-其他")
+    @Schema(description = "National standard-Camera fill light properties。1-No fill light;2-Infrared fill light;3-white light fill light;4-Laser fill light;9-Others")
     private Integer customSupplyLightType;
 
-    @Schema(description = "国标-摄像机监视方位(光轴方向)属性。1-东(西向东)、2-西(东向西)、3-南(北向南)、4-北(南向北)、" +
-            "5-东南(西北到东南)、6-东北(西南到东北)、7-西南(东北到西南)、8-西北(东南到西北)")
+    @Schema(description = "National standard-Camera surveillance location(Optical axis direction)Properties。1-East(west to east)、2-west(east to west)、3-South(north to south)、4-north(south to north)、" +
+            "5-Southeast(northwest to southeast)、6-Northeast(Southwest to Northeast)、7-Southwest(Northeast to Southwest)、8-Northwest(southeast to northwest)")
     private Integer customDirectionType;
 
-    @Schema(description = "国标-摄像机支持的分辨率,可多值")
+    @Schema(description = "National standard-The resolution supported by the camera, which can be multi-value")
     private String customResolution;
 
     // 2022
-    @Schema(description = "国标-摄像机支持的码流编号列表,用于实时点播时指定码流编号(可选)")
+    @Schema(description = "National standard-List of code stream numbers supported by the camera, used to specify the code stream number during real-time on-demand playback(Optional)")
     private String customStreamNumberList;
 
-    @Schema(description = "国标-下载倍速(可选),可多值")
+    @Schema(description = "National standard-Download twice as fast(Optional),Can be multi-valued")
     private String customDownloadSpeed;
 
-    @Schema(description = "国标-空域编码能力,取值0-不支持;1-1级增强(1个增强层);2-2级增强(2个增强层);3-3级增强(3个增强层)")
+    @Schema(description = "National standard-Airspace coding capability, value0-Not supported;1-1level enhancement(1enhancement layer);2-2level enhancement(2enhancement layer);3-3level enhancement(3enhancement layer)")
     private Integer customSvcSpaceSupportMod;
 
-    @Schema(description = "国标-时域编码能力,取值0-不支持;1-1级增强;2-2级增强;3-3级增强(可选)")
+    @Schema(description = "National standard-Time domain coding capability, value0-Not supported;1-1level enhancement;2-2level enhancement;3-3level enhancement(Optional)")
     private Integer customSvcTimeSupportMode;
 
     // 2022
-    @Schema(description = "国标- SSVC增强层与基本层比例能力 ")
+    @Schema(description = "National standard- SSVCEnhancement layer and base layer ratio capabilities ")
     private String customSsvcRatioSupportList;
 
     // 2022
-    @Schema(description = "国标-移动采集设备类型(仅移动采集设备适用,必选);1-移动机器人载摄像机;2-执法记录仪;3-移动单兵设备;" +
-            "4-车载视频记录设备;5-无人机载摄像机;9-其他")
+    @Schema(description = "National standard-Mobile collection device type(Only applicable to mobile collection devices, required);1-Mobile robot carrying camera;2-law enforcement recorder;3-Mobile individual equipment;" +
+            "4-Vehicle-mounted video recording equipment;5-drone mounted camera;9-Others")
     private Integer customMobileDeviceType;
 
     // 2022
-    @Schema(description = "国标-摄像机水平视场角(可选),取值范围大于0度小于等于360度")
+    @Schema(description = "National standard-Camera horizontal field of view(Optional),The value range is greater than 0 degrees and less than or equal to 360 degrees.")
     private Double customHorizontalFieldAngle;
 
     // 2022
-    @Schema(description = "国标-摄像机竖直视场角(可选),取值范围大于0度小于等于360度 ")
+    @Schema(description = "National standard-Camera vertical field of view(Optional),The value range is greater than 0 degrees and less than or equal to 360 degrees. ")
     private Double customVerticalFieldAngle;
 
     // 2022
-    @Schema(description = "国标-摄像机可视距离(可选),单位:米")
+    @Schema(description = "National standard-Camera viewing distance(Optional),Unit: meter")
     private Double customMaxViewDistance;
 
     // 2022
-    @Schema(description = "国标-基层组织编码(必选,非基层建设时为“000000”)")
+    @Schema(description = "National standard-grassroots organization code(Required, if not for grassroots construction“000000”)")
     private String customGrassrootsCode;
 
     // 2022
-    @Schema(description = "国标-监控点位类型(当为摄像机时必选),1-一类视频监控点;2-二类视频监控点;3-三类视频监控点;9-其他点位。")
+    @Schema(description = "National standard-Monitoring point type(Required when it is a camera),1-A type of video surveillance point;2-Class II video surveillance point;3-Three types of video surveillance points;9-Other points。")
     private Integer customPoType;
 
     // 2022
-    @Schema(description = "国标-点位俗称")
+    @Schema(description = "National standard-Point commonly known as")
     private String customPoCommonName;
 
     // 2022
-    @Schema(description = "国标-设备MAC地址(可选),用“XX-XX-XX-XX-XX-XX”格式表达")
+    @Schema(description = "National standard-Device MAC address(Optional),use“XX-XX-XX-XX-XX-XX”format expression")
     private String customMac;
 
     // 2022
-    @Schema(description = "国标-摄像机卡口功能类型,01-人脸卡口;02-人员卡口;03-机动车卡口;04-非机动车卡口;05-物品卡口;99-其他")
+    @Schema(description = "National standard-Camera mount function type,01-Face mount;02-Personnel bayonet;03-Motor vehicle bayonet;04-Non-motor vehicle bayonet;05-Item bay;99-Others")
     private String customFunctionType;
 
     // 2022
-    @Schema(description = "国标-摄像机视频编码格式")
+    @Schema(description = "National standard-Camera video encoding format")
     private String customEncodeType;
 
     // 2022
-    @Schema(description = "国标-摄像机安装使用时间")
+    @Schema(description = "National standard-Camera installation and usage time")
     private String customInstallTime;
 
     // 2022
-    @Schema(description = "国标-摄像机所属管理单位名称")
+    @Schema(description = "National standard-The name of the management unit to which the camera belongs")
     private String customManagementUnit;
 
     // 2022
-    @Schema(description = "国标-摄像机所属管理单位联系人的联系方式(电话号码,可多值,用英文半角“/”分割)")
+    @Schema(description = "National standard-Contact information of the contact person of the management unit to which the camera belongs(Phone number, can be multiple values, use English half-width“/”split)")
     private String customContactInfo;
 
     // 2022
-    @Schema(description = "国标-录像保存天数(可选)")
+    @Schema(description = "National standard-Video storage days(Optional)")
     private Integer customRecordSaveDays;
 
     // 2022
-    @Schema(description = "国标-国民经济行业分类代码(可选)")
+    @Schema(description = "National standard-National Economic Industry Classification Code(Optional)")
     private String customIndustrialClassification;
     
 }

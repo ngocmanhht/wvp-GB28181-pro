@@ -1,7 +1,7 @@
 <template>
   <div id="mediaServerManger" class="app-container" style="height: calc(100vh - 124px);">
     <el-form :inline="true" size="mini" style="margin-bottom: 1rem">
-      <el-button icon="el-icon-plus" size="mini" style="margin-right: 1rem;" type="primary" @click="add">添加节点</el-button>
+      <el-button icon="el-icon-plus" size="mini" style="margin-right: 1rem;" type="primary" @click="add">Add node</el-button>
     </el-form>
     <el-row :gutter="12">
       <el-col v-for="item in mediaServerList" :key="item.id" :span="getNumberByWidth()">
@@ -21,9 +21,9 @@
               <span style="font-size: 14px; color: #999; margin-top: 5px; float: right;">{{ item.createTime }}</span>
             </div>
           </div>
-          <i v-if="item.status" class="iconfont icon-online server-card-status-online" title="在线" />
-          <i v-if="!item.status" class="iconfont icon-online server-card-status-offline" title="离线" />
-          <i v-if="item.defaultServer" class="server-card-default">默认</i>
+          <i v-if="item.status" class="iconfont icon-online server-card-status-online" title="online" />
+          <i v-if="!item.status" class="iconfont icon-online server-card-status-offline" title="Offline" />
+          <i v-if="item.defaultServer" class="server-card-default">Default</i>
         </el-card>
       </el-col>
     </el-row>
@@ -40,7 +40,7 @@ export default {
   },
   data() {
     return {
-      mediaServerList: [], // 设备列表
+      mediaServerList: [], // Device list
       updateLooper: false,
       currentPage: 1,
       count: 15,
@@ -79,16 +79,16 @@ export default {
       this.$refs.edit.openDialog(row, this.initData)
     },
     del: function(row) {
-      this.$confirm('确认删除此节点？', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+      this.$confirm('Confirm to delete this node？', 'Tips', {
+        confirmButtonText: 'OK',
+        cancelButtonText: 'Cancel',
         type: 'warning'
       }).then(() => {
         this.$store.dispatch('server/deleteMediaServer', row.id)
           .then((data) => {
             this.$message({
               type: 'success',
-              message: '删除成功!'
+              message: 'Delete successfully!'
             })
             this.getServerList()
           })

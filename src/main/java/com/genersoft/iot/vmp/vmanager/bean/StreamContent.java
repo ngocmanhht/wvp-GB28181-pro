@@ -7,111 +7,111 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 @Data
-@Schema(description = "流信息")
+@Schema(description = "flow information")
 public class StreamContent {
 
-    @Schema(description = "应用名")
+    @Schema(description = "Application name")
     private String app;
 
-    @Schema(description = "流ID")
+    @Schema(description = "flowID")
     private String stream;
 
     @Schema(description = "IP")
     private String ip;
 
-    @Schema(description = "HTTP-FLV流地址")
+    @Schema(description = "HTTP-FLVstream address")
     private String flv;
 
-    @Schema(description = "HTTPS-FLV流地址")
+    @Schema(description = "HTTPS-FLVstream address")
     private String https_flv;
 
-    @Schema(description = "Websocket-FLV流地址")
+    @Schema(description = "Websocket-FLVstream address")
     private String ws_flv;
 
-    @Schema(description = "Websockets-FLV流地址")
+    @Schema(description = "Websockets-FLVstream address")
     private String wss_flv;
 
-    @Schema(description = "HTTP-FMP4流地址")
+    @Schema(description = "HTTP-FMP4stream address")
     private String fmp4;
 
-    @Schema(description = "HTTPS-FMP4流地址")
+    @Schema(description = "HTTPS-FMP4stream address")
     private String https_fmp4;
 
-    @Schema(description = "Websocket-FMP4流地址")
+    @Schema(description = "Websocket-FMP4stream address")
     private String ws_fmp4;
 
-    @Schema(description = "Websockets-FMP4流地址")
+    @Schema(description = "Websockets-FMP4stream address")
     private String wss_fmp4;
 
-    @Schema(description = "HLS流地址")
+    @Schema(description = "HLSstream address")
     private String hls;
 
-    @Schema(description = "HTTPS-HLS流地址")
+    @Schema(description = "HTTPS-HLSstream address")
     private String https_hls;
 
-    @Schema(description = "Websocket-HLS流地址")
+    @Schema(description = "Websocket-HLSstream address")
     private String ws_hls;
 
-    @Schema(description = "Websockets-HLS流地址")
+    @Schema(description = "Websockets-HLSstream address")
     private String wss_hls;
 
-    @Schema(description = "HTTP-TS流地址")
+    @Schema(description = "HTTP-TSstream address")
     private String ts;
 
-    @Schema(description = "HTTPS-TS流地址")
+    @Schema(description = "HTTPS-TSstream address")
     private String https_ts;
 
-    @Schema(description = "Websocket-TS流地址")
+    @Schema(description = "Websocket-TSstream address")
     private String ws_ts;
 
-    @Schema(description = "Websockets-TS流地址")
+    @Schema(description = "Websockets-TSstream address")
     private String wss_ts;
 
-    @Schema(description = "RTMP流地址")
+    @Schema(description = "RTMPstream address")
     private String rtmp;
 
-    @Schema(description = "RTMPS流地址")
+    @Schema(description = "RTMPSstream address")
     private String rtmps;
 
-    @Schema(description = "RTSP流地址")
+    @Schema(description = "RTSPstream address")
     private String rtsp;
 
-    @Schema(description = "RTSPS流地址")
+    @Schema(description = "RTSPSstream address")
     private String rtsps;
 
-    @Schema(description = "RTC流地址")
+    @Schema(description = "RTCstream address")
     private String rtc;
 
-    @Schema(description = "RTCS流地址")
+    @Schema(description = "RTCSstream address")
     private String rtcs;
 
-    @Schema(description = "流媒体ID")
+    @Schema(description = "streaming mediaID")
     private String mediaServerId;
 
-    @Schema(description = "流编码信息")
+    @Schema(description = "Stream encoding information")
     private MediaInfo mediaInfo;
 
-    @Schema(description = "开始时间")
+    @Schema(description = "start time")
     private String startTime;
 
-    @Schema(description = "结束时间")
+    @Schema(description = "end time")
     private String endTime;
 
-    @Schema(description = "时长(回放时使用)")
+    @Schema(description = "duration(used during playback)")
     private Double duration;
 
-    @Schema(description = "文件下载地址（录像下载使用）")
+    @Schema(description = "File download address (use for video downloads）")
     private DownloadFileInfo downLoadFilePath;
 
-    @Schema(description = "转码后的视频流")
+    @Schema(description = "Transcoded video stream")
     private StreamContent transcodeStream;
 
     private double progress;
 
-    @Schema(description = "拉流代理返回的KEY")
+    @Schema(description = "Returned by the streaming agentKEY")
     private String key;
 
-    @Schema(description = "使用的WVP ID")
+    @Schema(description = "usedWVP ID")
     private String serverId;
 
     public StreamContent(StreamInfo streamInfo) {

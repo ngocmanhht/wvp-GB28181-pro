@@ -14,31 +14,31 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 国标通道业务类
+ * National standard channel business class
  * @author lin
  */
 public interface IDeviceChannelService {
 
     /**
-     * 批量添加设备通道
+     * Add device channels in batches
      */
     int updateChannels(Device device, List<DeviceChannel> channels);
 
     /**
-     * 获取统计信息
+     * Get statistics
      * @return
      */
     ResourceBaseInfo getOverview();
 
     /**
-     *  获取一个通道
+     *  Get a channel
      */
     DeviceChannel getOne(String deviceId, String channelId);
 
     DeviceChannel getOneForSource(String deviceId, String channelId);
 
     /**
-     * 修改通道的码流类型
+     * Modify the code stream type of the channel
      */
     void updateChannelStreamIdentification(DeviceChannel channel);
 

@@ -4,57 +4,57 @@ import com.alibaba.fastjson2.annotation.JSONField;
 
 public class VersionPo {
     /**
-     * git的全版本号
+     * gitfull version number
      */
     @JSONField(name="GIT_Revision")
     private String GIT_Revision;
     /**
-     * maven版本
+     * mavenversion
      */
     @JSONField(name = "Create_By")
     private String Create_By;
     /**
-     * git的分支
+     * gitbranches
      */
     @JSONField(name = "GIT_BRANCH")
     private String GIT_BRANCH;
     /**
-     * git的url
+     * gitofurl
      */
     @JSONField(name = "GIT_URL")
     private String GIT_URL;
     /**
-     * 构建日期
+     * Build date
      */
     @JSONField(name = "BUILD_DATE")
     private String BUILD_DATE;
     /**
-     * 构建日期
+     * Build date
      */
     @JSONField(name = "GIT_DATE")
     private String GIT_DATE;
     /**
-     * 项目名称 配合pom使用
+     * Project name used with pom
      */
     @JSONField(name = "artifactId")
     private String artifactId;
     /**
-     * git局部版本号
+     * gitlocal version number
      */
     @JSONField(name = "GIT_Revision_SHORT")
     private String GIT_Revision_SHORT;
     /**
-     * 项目的版本如2.0.1.0 配合pom使用
+     * The project version is such as 2.0.1.0, used with pom
      */
     @JSONField(name = "version")
     private String version;
     /**
-     * 子系统名称
+     * Subsystem name
      */
     @JSONField(name = "project")
     private String project;
     /**
-     * jdk版本
+     * jdkversion
      */
     @JSONField(name="Build_Jdk")
     private String Build_Jdk;

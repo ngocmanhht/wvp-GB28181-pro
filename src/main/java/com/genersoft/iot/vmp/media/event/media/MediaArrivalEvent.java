@@ -11,7 +11,7 @@ import lombok.Setter;
 import java.util.Map;
 
 /**
- * 流到来事件
+ * flow incoming events
  */
 
 public class MediaArrivalEvent extends MediaEvent {

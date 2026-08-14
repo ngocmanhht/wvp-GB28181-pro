@@ -9,7 +9,7 @@ import io.netty.buffer.ByteBuf;
 import org.springframework.context.ApplicationEvent;
 
 /**
- * 查询服务器时间
+ * Query server time
  *
  * @author QingtaiJiang
  * @date 2023/4/27 18:06

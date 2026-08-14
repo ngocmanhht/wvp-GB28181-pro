@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 /**
- * 用于存储设备信息
+ * Used to store device information
  */
 @Mapper
 @Repository

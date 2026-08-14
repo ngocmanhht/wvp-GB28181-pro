@@ -5,17 +5,17 @@ import org.jetbrains.annotations.NotNull;
 public class IndustryCodeType implements Comparable<IndustryCodeType>{
 
     /**
-     * 接入类型码
+     * Access type code
      */
     private String name;
 
     /**
-     * 名称
+     * Name
      */
     private String code;
 
     /**
-     * 备注
+     * Remarks
      */
     private String notes;
 

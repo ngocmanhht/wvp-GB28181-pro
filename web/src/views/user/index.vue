@@ -4,14 +4,14 @@
       <el-form :inline="true" size="mini">
         <el-form-item>
           <el-button icon="el-icon-plus" size="mini" style="margin-right: 1rem;" type="primary" @click="addUser">
-            添加用户
+            Add user
           </el-button>
         </el-form-item>
         <el-form-item style="float: right;">
           <!--        <el-button icon="el-icon-refresh-right" circle @click="refresh()" />-->
         </el-form-item>
       </el-form>
-      <!--用户列表-->
+      <!--User list-->
       <el-table
         size="small"
         :data="userList"
@@ -19,16 +19,16 @@
         height="calc(100% - 64px)"
         header-row-class-name="table-header"
       >
-        <el-table-column prop="username" label="用户名" min-width="160" />
+        <el-table-column prop="username" label="Username" min-width="160" />
         <el-table-column prop="pushKey" label="pushkey" min-width="160" />
-        <el-table-column prop="role.name" label="类型" min-width="160" />
-        <el-table-column label="操作" min-width="450" fixed="right">
+        <el-table-column prop="role.name" label="Type" min-width="160" />
+        <el-table-column label="Operation" min-width="450" fixed="right">
           <template v-slot:default="scope">
-            <el-button size="medium" icon="el-icon-edit" type="text" @click="edit(scope.row)">修改密码</el-button>
+            <el-button size="medium" icon="el-icon-edit" type="text" @click="edit(scope.row)">Change password</el-button>
             <el-divider direction="vertical" />
-            <el-button size="medium" icon="el-icon-edit" type="text" @click="changePushKey(scope.row)">修改pushkey</el-button>
+            <el-button size="medium" icon="el-icon-edit" type="text" @click="changePushKey(scope.row)">Modifypushkey</el-button>
             <el-divider direction="vertical" />
-            <el-button size="medium" icon="el-icon-edit" type="text" @click="showUserApiKeyManager(scope.row)">管理ApiKey</el-button>
+            <el-button size="medium" icon="el-icon-edit" type="text" @click="showUserApiKeyManager(scope.row)">managementApiKey</el-button>
             <el-divider direction="vertical" />
             <el-button
               size="medium"
@@ -36,7 +36,7 @@
               type="text"
               style="color: #f56c6c"
               @click="deleteUser(scope.row)"
-            >删除
+            >Delete
             </el-button>
           </template>
         </el-table-column>
@@ -75,8 +75,8 @@ export default {
   },
   data() {
     return {
-      userList: [], // 设备列表
-      currentUser: {}, // 当前操作设备对象
+      userList: [], // Device list
+      currentUser: {}, // Current operating device object
       videoComponentList: [],
       currentUserLenth: 0,
       currentPage: 1,
@@ -122,21 +122,21 @@ export default {
         this.$refs.changePasswordForAdmin.close()
         this.$message({
           showClose: true,
-          message: '密码修改成功',
+          message: 'Password changed successfully',
           type: 'success'
         })
         setTimeout(this.getUserList, 200)
       })
     },
     deleteUser: function(row) {
-      let msg = '确定删除此用户？'
+      let msg = 'Confirm to delete this user？'
       if (row.online !== 0) {
-        msg = '<strong>确定删除此用户？</strong>'
+        msg = '<strong>Confirm to delete this user？</strong>'
       }
-      this.$confirm(msg, '提示', {
+      this.$confirm(msg, 'Tips', {
         dangerouslyUseHTMLString: true,
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+        confirmButtonText: 'OK',
+        cancelButtonText: 'Cancel',
         center: true,
         type: 'warning'
       }).then(() => {
@@ -161,7 +161,7 @@ export default {
         this.$refs.changePushKey.close()
         this.$message({
           showClose: true,
-          message: 'pushKey修改成功',
+          message: 'pushKeyModification successful',
           type: 'success'
         })
         setTimeout(this.getUserList, 200)
@@ -173,7 +173,7 @@ export default {
         this.$refs.addUser.close()
         this.$message({
           showClose: true,
-          message: '用户添加成功',
+          message: 'User added successfully',
           type: 'success'
         })
         setTimeout(this.getUserList, 200)

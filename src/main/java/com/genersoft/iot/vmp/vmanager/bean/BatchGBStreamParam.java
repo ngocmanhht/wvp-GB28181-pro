@@ -8,9 +8,9 @@ import java.util.List;
 /**
  * @author lin
  */
-@Schema(description = "多个推流信息")
+@Schema(description = "Multiple push information")
 public class BatchGBStreamParam {
-    @Schema(description = "推流信息列表")
+    @Schema(description = "Push information list")
     private List<GbStream> gbStreams;
 
     public List<GbStream> getGbStreams() {

@@ -4,19 +4,19 @@ public class JwtUser {
 
     public enum TokenStatus{
         /**
-         * 正常的使用状态
+         * normal usage status
          */
         NORMAL,
         /**
-         * 过期而失效
+         * invalid after expiration
          */
         EXPIRED,
         /**
-         * 即将过期
+         * Expires soon
          */
         EXPIRING_SOON,
         /**
-         * 异常
+         * Abnormal
          */
         EXCEPTION
     }

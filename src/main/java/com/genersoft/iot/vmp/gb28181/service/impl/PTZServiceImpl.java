@@ -50,18 +50,18 @@ public class PTZServiceImpl implements IPTZService {
         try {
             cmder.frontEndCmd(device, channelId, cmdCode, horizonSpeed, verticalSpeed, zoomSpeed);
         } catch (SipException | InvalidArgumentException | ParseException e) {
-            log.error("[命令发送失败] 云台控制: {}", e.getMessage());
-            throw new ControllerException(ErrorCode.ERROR100.getCode(), "命令发送失败: " + e.getMessage());
+            log.error("[Command sending failed] PTZ control: {}", e.getMessage());
+            throw new ControllerException(ErrorCode.ERROR100.getCode(), "Command sending failed: " + e.getMessage());
         }
     }
 
     @Override
     public void frontEndCommand(Device device, String channelId, int cmdCode, int parameter1, int parameter2, int combindCode2) {
-        // 判断设备是否属于当前平台, 如果不属于则发起自动调用
+        // Determine whether the device belongs to the current platform, if not, initiate an automatic call
         if (!userSetting.getServerId().equals(device.getServerId())) {
-            // 通道ID
+            // channelID
             DeviceChannel deviceChannel = deviceChannelService.getOneForSource(device.getDeviceId(), channelId);
-            Assert.notNull(deviceChannel, "通道不存在");
+            Assert.notNull(deviceChannel, "Channel does not exist");
             String msg = redisRpcPlayService.frontEndCommand(device.getServerId(), deviceChannel.getId(), cmdCode, parameter1, parameter2, combindCode2);
             if (msg != null) {
                 throw new ControllerException(ErrorCode.ERROR100.getCode(), msg);
@@ -71,21 +71,21 @@ public class PTZServiceImpl implements IPTZService {
         try {
             cmder.frontEndCmd(device, channelId, cmdCode, parameter1, parameter2, combindCode2);
         } catch (SipException | InvalidArgumentException | ParseException e) {
-            log.error("[命令发送失败] 前端控制: {}", e.getMessage());
-            throw new ControllerException(ErrorCode.ERROR100.getCode(), "命令发送失败: " + e.getMessage());
+            log.error("[Command sending failed] front-end control: {}", e.getMessage());
+            throw new ControllerException(ErrorCode.ERROR100.getCode(), "Command sending failed: " + e.getMessage());
         }
     }
 
     @Override
     public void frontEndCommand(CommonGBChannel channel, Integer cmdCode, Integer parameter1, Integer parameter2, Integer combindCode2) {
         if (channel.getDataType() != ChannelDataType.GB28181) {
-            // 只有国标通道的支持云台控制
-            log.warn("[INFO 消息] 只有国标通道的支持云台控制， 通道ID： {}", channel.getGbId());
-            throw new ControllerException(ErrorCode.ERROR100.getCode(), "不支持");
+            // Only the national standard channel supports PTZ control
+            log.warn("[INFO news] Only the national standard channel supports PTZ control, the channelID： {}", channel.getGbId());
+            throw new ControllerException(ErrorCode.ERROR100.getCode(), "Not supported");
         }
         Device device = deviceService.getDevice(channel.getDataDeviceId());
         if (device == null) {
-            throw new ControllerException(ErrorCode.ERROR100.getCode(), "未找到设备ID");
+            throw new ControllerException(ErrorCode.ERROR100.getCode(), "Device not foundID");
         }
         DeviceChannel deviceChannel = deviceChannelService.getOneForSourceById(channel.getGbId());
         frontEndCommand(device, deviceChannel.getDeviceId(), cmdCode, parameter1, parameter2, combindCode2);
@@ -94,12 +94,12 @@ public class PTZServiceImpl implements IPTZService {
     @Override
     public void dragZoomIn(CommonGBChannel channel, int length, int width, int midPointX, int midPointY, int lengthX, int lengthY) {
         if (channel.getDataType() != ChannelDataType.GB28181) {
-            log.warn("[INFO 消息] 只有国标通道的支持云台控制， 通道ID： {}", channel.getGbId());
-            throw new ControllerException(ErrorCode.ERROR100.getCode(), "不支持");
+            log.warn("[INFO news] Only the national standard channel supports PTZ control, the channelID： {}", channel.getGbId());
+            throw new ControllerException(ErrorCode.ERROR100.getCode(), "Not supported");
         }
         Device device = deviceService.getDevice(channel.getDataDeviceId());
         if (device == null) {
-            throw new ControllerException(ErrorCode.ERROR100.getCode(), "未找到设备ID");
+            throw new ControllerException(ErrorCode.ERROR100.getCode(), "Device not foundID");
         }
         DeviceChannel deviceChannel = deviceChannelService.getOneForSourceById(channel.getGbId());
         deviceService.dragZoomIn(device, deviceChannel.getDeviceId(), length, width, midPointX, midPointY, lengthX, lengthY);
@@ -108,12 +108,12 @@ public class PTZServiceImpl implements IPTZService {
     @Override
     public void dragZoomOut(CommonGBChannel channel, int length, int width, int midPointX, int midPointY, int lengthX, int lengthY) {
         if (channel.getDataType() != ChannelDataType.GB28181) {
-            log.warn("[INFO 消息] 只有国标通道的支持云台控制， 通道ID： {}", channel.getGbId());
-            throw new ControllerException(ErrorCode.ERROR100.getCode(), "不支持");
+            log.warn("[INFO news] Only the national standard channel supports PTZ control, the channelID： {}", channel.getGbId());
+            throw new ControllerException(ErrorCode.ERROR100.getCode(), "Not supported");
         }
         Device device = deviceService.getDevice(channel.getDataDeviceId());
         if (device == null) {
-            throw new ControllerException(ErrorCode.ERROR100.getCode(), "未找到设备ID");
+            throw new ControllerException(ErrorCode.ERROR100.getCode(), "Device not foundID");
         }
         DeviceChannel deviceChannel = deviceChannelService.getOneForSourceById(channel.getGbId());
         deviceService.dragZoomOut(device, deviceChannel.getDeviceId(), length, width, midPointX, midPointY, lengthX, lengthY);
@@ -122,16 +122,16 @@ public class PTZServiceImpl implements IPTZService {
     @Override
     public void homePosition(CommonGBChannel channel, Boolean enabled, Integer resetTime, Integer presetIndex, ErrorCallback<String> callback) {
         if (channel.getDataType() != ChannelDataType.GB28181) {
-            log.warn("[INFO 消息] 只有国标通道支持看守位，通道ID：{}", channel.getGbId());
-            throw new ControllerException(ErrorCode.ERROR100.getCode(), "不支持");
+            log.warn("[INFO news] Only the national standard channel supports the guard bit, and the channelID：{}", channel.getGbId());
+            throw new ControllerException(ErrorCode.ERROR100.getCode(), "Not supported");
         }
         Device device = deviceService.getDevice(channel.getDataDeviceId());
         if (device == null) {
-            throw new ControllerException(ErrorCode.ERROR100.getCode(), "未找到设备");
+            throw new ControllerException(ErrorCode.ERROR100.getCode(), "Device not found");
         }
         DeviceChannel deviceChannel = deviceChannelService.getOneForSourceById(channel.getGbId());
         if (deviceChannel == null) {
-            throw new ControllerException(ErrorCode.ERROR100.getCode(), "未找到通道");
+            throw new ControllerException(ErrorCode.ERROR100.getCode(), "Channel not found");
         }
         deviceService.homePosition(device, deviceChannel.getDeviceId(), enabled, resetTime, presetIndex, callback);
     }
@@ -139,17 +139,17 @@ public class PTZServiceImpl implements IPTZService {
     @Override
     public void queryPresetList(CommonGBChannel channel, ErrorCallback<List<Preset>> callback) {
         if (channel.getDataType() != ChannelDataType.GB28181) {
-            // 只有国标通道的支持云台控制
-            log.warn("[INFO 消息] 只有国标通道的支持云台控制， 通道ID： {}", channel.getGbId());
-            throw new ControllerException(ErrorCode.ERROR100.getCode(), "不支持");
+            // Only the national standard channel supports PTZ control
+            log.warn("[INFO news] Only the national standard channel supports PTZ control, the channelID： {}", channel.getGbId());
+            throw new ControllerException(ErrorCode.ERROR100.getCode(), "Not supported");
         }
         Device device = deviceService.getDevice(channel.getDataDeviceId());
         if (device == null) {
-            throw new ControllerException(ErrorCode.ERROR100.getCode(), "未找到设备");
+            throw new ControllerException(ErrorCode.ERROR100.getCode(), "Device not found");
         }
         DeviceChannel deviceChannel = deviceChannelService.getOneForSourceById(channel.getGbId());
         if (deviceChannel == null) {
-            throw new ControllerException(ErrorCode.ERROR100.getCode(), "未找到通道");
+            throw new ControllerException(ErrorCode.ERROR100.getCode(), "Channel not found");
         }
         deviceService.queryPreset(device, deviceChannel.getDeviceId(), callback);
     }

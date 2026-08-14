@@ -33,7 +33,7 @@ public class SubscribeTaskRunner{
 
     private final String prefix = "VMP_DEVICE_SUBSCRIBE";
 
-    // 订阅过期检查
+    // Subscription expiration check
     @Scheduled(fixedDelay = 500, timeUnit = TimeUnit.MILLISECONDS)
     public void expirationCheck(){
         while (!delayQueue.isEmpty()) {
@@ -44,10 +44,10 @@ public class SubscribeTaskRunner{
                     removeSubscribe(take.getKey());
                     take.expired();
                 }catch (Exception e) {
-                    log.error("[设备订阅到期] {} 到期处理时出现异常， 设备编号: {} ", take.getName(), take.getDeviceId());
+                    log.error("[Device subscription expires] {} Exception occurred during expiration processing, device number: {} ", take.getName(), take.getDeviceId());
                 }
             } catch (InterruptedException e) {
-                log.error("[设备订阅任务] ", e);
+                log.error("[Device subscription task] ", e);
             }
         }
     }
@@ -74,7 +74,7 @@ public class SubscribeTaskRunner{
         if (delayQueue.contains(task)) {
             boolean remove = delayQueue.remove(task);
             if (!remove) {
-                log.info("[移除订阅任务] 从延时队列内移除失败： {}", key);
+                log.info("[Remove subscription task] Removal from delay queue failed： {}", key);
             }
         }
         return true;
@@ -93,7 +93,7 @@ public class SubscribeTaskRunner{
         if (task == null) {
             return false;
         }
-        log.info("[更新订阅任务时间] {}, 编号： {}", task.getName(), key);
+        log.info("[Update subscription task time] {}, No.： {}", task.getName(), key);
         delayQueue.remove(task);
         task.setDelayTime(expirationTime);
         delayQueue.offer(task);

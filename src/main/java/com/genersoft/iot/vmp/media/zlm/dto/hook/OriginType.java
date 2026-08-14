@@ -1,7 +1,7 @@
 package com.genersoft.iot.vmp.media.zlm.dto.hook;
 
 public enum OriginType {
-    // 不可调整顺序
+    // The order cannot be adjusted
     UNKNOWN("UNKNOWN"),
     RTMP_PUSH("PUSH"),
     RTSP_PUSH("PUSH"),

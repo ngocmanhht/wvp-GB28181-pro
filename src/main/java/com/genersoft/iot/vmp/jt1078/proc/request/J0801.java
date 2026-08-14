@@ -13,7 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEvent;
 
 /**
- * 多媒体数据上传
+ * Multimedia data upload
  */
 @Slf4j
 @MsgId(id = "0801")
@@ -22,7 +22,7 @@ public class J0801 extends Re {
     @Override
     protected Rs decode0(ByteBuf buf, Header header, Session session) {
         JTMediaEventInfo mediaEventInfo = JTMediaEventInfo.decode(buf);
-        log.info("[JT-多媒体数据上传]: {}", mediaEventInfo);
+        log.info("[JT-Multimedia data upload]: {}", mediaEventInfo);
 //        try {
 //            if (mediaEventInfo.getMediaData() != null) {
 //                File file = new File("./source.jpg");
@@ -35,7 +35,7 @@ public class J0801 extends Re {
 //                fileOutputStream.close();
 //            }
 //        }catch (Exception e) {
-//            log.error("[JT-多媒体数据上传] 写入文件异常", e);
+//            log.error("[JT-Multimedia data upload] Exception writing to file", e);
 //        }
         SessionManager.INSTANCE.response(header.getPhoneNumber(), "0801", null, mediaEventInfo);
         return null;

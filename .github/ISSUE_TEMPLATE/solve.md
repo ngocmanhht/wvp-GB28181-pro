@@ -1,31 +1,31 @@
 ---
-name: "[ 技术咨询 ] "
-about: 对于使用中遇到问题
-title: '技术咨询'
-labels: '技术咨询'
+name: "[Technical Consulting] "
+about: For problems encountered during use
+title: 'Technical Consulting'
+labels: 'technical consulting'
 assignees: ''
 
 ---
 
-**环境信息:**
+**Environmental Information:**
 
- - 1. 部署方式 wvp-pro docker / zlm(docker) + 编译wvp-pro/ wvp-prp + zlm都是编译部署/
- - 2. 部署环境 windows / ubuntu/ centos ...
- - 3. 端口开放情况
- - 4. 是否是公网部署 
- - 5. 是否使用https
- - 6. 方便的话提供下使用的设备品牌或平台
- - 7. 你做过哪些尝试
- - 8. 代码更新时间（旧版本请更新最新版本代码测试）
+- 1. Deployment method wvp-pro docker / zlm (docker) + compile wvp-pro/ wvp-prp + zlm are all compiled and deployed /
+- 2. Deployment environment windows/ubuntu/centos...
+- 3. Port opening status
+- 4. Whether it is deployed on public network
+- 5. Whether to use https
+- 6. If convenient, please provide the device brand or platform used.
+- 7. What have you tried?
+- 8. Code update time (for old versions, please update to the latest version for code testing)
 
 
-**内容描述:**
+**Content description:**
 
-**截图**  
+**screenshot**
 
-**抓包文件**
+**Packet capture file**
   
-**日志**
+**log**
 ```
-日志内容放这里， 文件的话请直接上传
+The log content is placed here. If you want to file, please upload it directly.
 ```

@@ -40,7 +40,7 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.util.List;
 
-@Tag(name  = "国标设备查询", description = "国标设备查询")
+@Tag(name  = "National standard equipment inquiry", description = "National standard equipment inquiry")
 @SuppressWarnings("rawtypes")
 @Slf4j
 @RestController
@@ -71,8 +71,8 @@ public class DeviceQuery {
 	@Autowired
 	private IRedisRpcService redisRpcService;
 
-	@Operation(summary = "查询国标设备", security = @SecurityRequirement(name = JwtUtils.HEADER))
-	@Parameter(name = "deviceId", description = "设备国标编号", required = true)
+	@Operation(summary = "Query national standard equipment", security = @SecurityRequirement(name = JwtUtils.HEADER))
+	@Parameter(name = "deviceId", description = "Equipment national standard number", required = true)
 	@GetMapping("/devices/{deviceId}")
 	public Device devices(@PathVariable String deviceId){
 
@@ -80,11 +80,11 @@ public class DeviceQuery {
 	}
 
 
-	@Operation(summary = "分页查询国标设备", security = @SecurityRequirement(name = JwtUtils.HEADER))
-	@Parameter(name = "page", description = "当前页", required = true)
-	@Parameter(name = "count", description = "每页查询数量", required = true)
-	@Parameter(name = "query", description = "搜索", required = false)
-	@Parameter(name = "status", description = "状态", required = false)
+	@Operation(summary = "Query national standard equipment by page", security = @SecurityRequirement(name = JwtUtils.HEADER))
+	@Parameter(name = "page", description = "Current page", required = true)
+	@Parameter(name = "count", description = "Number of queries per page", required = true)
+	@Parameter(name = "query", description = "Search", required = false)
+	@Parameter(name = "status", description = "Status", required = false)
 	@GetMapping("/devices")
 	@Options()
 	public PageInfo<Device> devices(int page, int count, String query, Boolean status){
@@ -96,13 +96,13 @@ public class DeviceQuery {
 
 
 	@GetMapping("/devices/{deviceId}/channels")
-	@Operation(summary = "分页查询通道", security = @SecurityRequirement(name = JwtUtils.HEADER))
-	@Parameter(name = "deviceId", description = "设备国标编号", required = true)
-	@Parameter(name = "page", description = "当前页", required = true)
-	@Parameter(name = "count", description = "每页查询数量", required = true)
-	@Parameter(name = "query", description = "查询内容")
-	@Parameter(name = "online", description = "是否在线")
-	@Parameter(name = "channelType", description = "设备/子目录-> false/true")
+	@Operation(summary = "Paging query channel", security = @SecurityRequirement(name = JwtUtils.HEADER))
+	@Parameter(name = "deviceId", description = "Equipment national standard number", required = true)
+	@Parameter(name = "page", description = "Current page", required = true)
+	@Parameter(name = "count", description = "Number of queries per page", required = true)
+	@Parameter(name = "query", description = "Query content")
+	@Parameter(name = "online", description = "Is online")
+	@Parameter(name = "channelType", description = "Equipment/subdirectory-> false/true")
 	public PageInfo<DeviceChannel> channels(@PathVariable String deviceId,
 											   int page, int count,
 											   @RequestParam(required = false) String query,
@@ -116,10 +116,10 @@ public class DeviceQuery {
 	}
 
 	@GetMapping("/streams")
-	@Operation(summary = "分页查询存在流的通道", security = @SecurityRequirement(name = JwtUtils.HEADER))
-	@Parameter(name = "page", description = "当前页", required = true)
-	@Parameter(name = "count", description = "每页查询数量", required = true)
-	@Parameter(name = "query", description = "查询内容")
+	@Operation(summary = "Paging query for channels with existing streams", security = @SecurityRequirement(name = JwtUtils.HEADER))
+	@Parameter(name = "page", description = "Current page", required = true)
+	@Parameter(name = "count", description = "Number of queries per page", required = true)
+	@Parameter(name = "query", description = "Query content")
 	public PageInfo<DeviceChannel> streamChannels(int page, int count,
 												  @RequestParam(required = false) String query) {
 		if (ObjectUtils.isEmpty(query)) {
@@ -129,50 +129,50 @@ public class DeviceQuery {
 		return deviceChannelService.queryChannels(query, true, null, null, true, page, count);
 	}
 
-	@Operation(summary = "同步设备通道", security = @SecurityRequirement(name = JwtUtils.HEADER))
-	@Parameter(name = "deviceId", description = "设备国标编号", required = true)
+	@Operation(summary = "Sync device channels", security = @SecurityRequirement(name = JwtUtils.HEADER))
+	@Parameter(name = "deviceId", description = "Equipment national standard number", required = true)
 	@GetMapping("/devices/{deviceId}/sync")
 	public WVPResult<SyncStatus> devicesSync(@PathVariable String deviceId){
 
 		if (log.isDebugEnabled()) {
-			log.debug("设备通道信息同步API调用，deviceId：" + deviceId);
+			log.debug("Device channel information synchronization API call，deviceId：" + deviceId);
 		}
 		Device device = deviceService.getDeviceByDeviceId(deviceId);
-		Assert.notNull(device, "设备不存在");
+		Assert.notNull(device, "Device does not exist");
 		if (device.getTransport() == null) {
 			WVPResult<SyncStatus> wvpResult = new WVPResult<>();
 			wvpResult.setCode(ErrorCode.ERROR100.getCode());
-			wvpResult.setMsg("设备尚未注册过");
+			wvpResult.setMsg("The device has not been registered yet");
 			return wvpResult;
 		}
 		return deviceService.devicesSync(device);
 
 	}
 
-	@Operation(summary = "移除设备", security = @SecurityRequirement(name = JwtUtils.HEADER))
-	@Parameter(name = "deviceId", description = "设备国标编号", required = true)
+	@Operation(summary = "Remove device", security = @SecurityRequirement(name = JwtUtils.HEADER))
+	@Parameter(name = "deviceId", description = "Equipment national standard number", required = true)
 	@DeleteMapping("/devices/{deviceId}/delete")
 	public String delete(@PathVariable String deviceId){
 
 		if (log.isDebugEnabled()) {
-			log.debug("设备信息删除API调用，deviceId：" + deviceId);
+			log.debug("Device information deletion API call，deviceId：" + deviceId);
 		}
 
-		// 清除 redis 记录
+		// Clear redis records
 		deviceService.delete(deviceId);
 		JSONObject json = new JSONObject();
 		json.put("deviceId", deviceId);
 		return json.toString();
 	}
 
-	@Operation(summary = "分页查询子目录通道", security = @SecurityRequirement(name = JwtUtils.HEADER))
-	@Parameter(name = "deviceId", description = "设备国标编号", required = true)
-	@Parameter(name = "channelId", description = "通道国标编号", required = true)
-	@Parameter(name = "page", description = "当前页", required = true)
-	@Parameter(name = "count", description = "每页查询数量", required = true)
-	@Parameter(name = "query", description = "查询内容")
-	@Parameter(name = "online", description = "是否在线")
-	@Parameter(name = "channelType", description = "设备/子目录-> false/true")
+	@Operation(summary = "Paging query subdirectory channel", security = @SecurityRequirement(name = JwtUtils.HEADER))
+	@Parameter(name = "deviceId", description = "Equipment national standard number", required = true)
+	@Parameter(name = "channelId", description = "Channel national standard number", required = true)
+	@Parameter(name = "page", description = "Current page", required = true)
+	@Parameter(name = "count", description = "Number of queries per page", required = true)
+	@Parameter(name = "query", description = "Query content")
+	@Parameter(name = "online", description = "Is online")
+	@Parameter(name = "channelType", description = "Equipment/subdirectory-> false/true")
 	@GetMapping("/sub_channels/{deviceId}/{channelId}/channels")
 	public PageInfo<DeviceChannel> subChannels(@PathVariable String deviceId,
 												  @PathVariable String channelId,
@@ -190,48 +190,48 @@ public class DeviceQuery {
 		return deviceChannelService.getSubChannels(deviceChannel.getDataDeviceId(), channelId, query, channelType, online, page, count);
 	}
 
-	@Operation(summary = "开启/关闭通道的音频", security = @SecurityRequirement(name = JwtUtils.HEADER))
-	@Parameter(name = "channelId", description = "通道的数据库ID", required = true)
-	@Parameter(name = "audio", description = "开启/关闭音频", required = true)
+	@Operation(summary = "turn on/Turn off channel audio", security = @SecurityRequirement(name = JwtUtils.HEADER))
+	@Parameter(name = "channelId", description = "channel databaseID", required = true)
+	@Parameter(name = "audio", description = "turn on/Turn off audio", required = true)
 	@PostMapping("/channel/audio")
 	public void changeAudio(Integer channelId, Boolean audio){
-		Assert.notNull(channelId, "通道的数据库ID不可为NULL");
-		Assert.notNull(audio, "开启/关闭音频不可为NULL");
+		Assert.notNull(channelId, "The database ID of the channel cannot beNULL");
+		Assert.notNull(audio, "turn on/Turning off audio is not possibleNULL");
 		deviceChannelService.changeAudio(channelId, audio);
 	}
 
-	@Operation(summary = "修改通道的码流类型", security = @SecurityRequirement(name = JwtUtils.HEADER))
+	@Operation(summary = "Modify the code stream type of the channel", security = @SecurityRequirement(name = JwtUtils.HEADER))
 	@PostMapping("/channel/stream/identification/update/")
 	public void updateChannelStreamIdentification(DeviceChannel channel){
 		deviceChannelService.updateChannelStreamIdentification(channel);
 	}
-	@Operation(summary = "获取单个通道详情", security = @SecurityRequirement(name = JwtUtils.HEADER))
-	@Parameter(name = "deviceId", description = "设备的国标编码", required = true)
-	@Parameter(name = "channelDeviceId", description = "通道的国标编码", required = true)
+	@Operation(summary = "Get individual channel details", security = @SecurityRequirement(name = JwtUtils.HEADER))
+	@Parameter(name = "deviceId", description = "National standard code of equipment", required = true)
+	@Parameter(name = "channelDeviceId", description = "The national standard code of the channel", required = true)
 	@GetMapping("/channel/one")
 	public DeviceChannel getChannel(String deviceId, String channelDeviceId){
 		return deviceChannelService.getOne(deviceId, channelDeviceId);
 	}
 
 
-	@Operation(summary = "修改数据流传输模式", security = @SecurityRequirement(name = JwtUtils.HEADER))
-	@Parameter(name = "deviceId", description = "设备国标编号", required = true)
-	@Parameter(name = "streamMode", description = "数据流传输模式, 取值：" +
-			"UDP（udp传输），TCP-ACTIVE（tcp主动模式），TCP-PASSIVE（tcp被动模式）", required = true)
+	@Operation(summary = "Modify data streaming mode", security = @SecurityRequirement(name = JwtUtils.HEADER))
+	@Parameter(name = "deviceId", description = "Equipment national standard number", required = true)
+	@Parameter(name = "streamMode", description = "Data stream transmission mode, value：" +
+			"UDP（udptransmission），TCP-ACTIVE（tcpActive mode），TCP-PASSIVE（tcppassive mode）", required = true)
 	@PostMapping("/transport/{deviceId}/{streamMode}")
 	public void updateTransport(@PathVariable String deviceId, @PathVariable String streamMode){
 		Assert.isTrue(streamMode.equalsIgnoreCase("UDP")
 				|| streamMode.equalsIgnoreCase("TCP-ACTIVE")
-				|| streamMode.equalsIgnoreCase("TCP-PASSIVE"), "数据流传输模式, 取值：UDP/TCP-ACTIVE/TCP-PASSIVE");
+				|| streamMode.equalsIgnoreCase("TCP-PASSIVE"), "Data stream transmission mode, value：UDP/TCP-ACTIVE/TCP-PASSIVE");
 		Device device = deviceService.getDeviceByDeviceId(deviceId);
-		Assert.notNull(device, "设备不存在");
+		Assert.notNull(device, "Device does not exist");
 		device.setStreamMode(streamMode.toUpperCase());
 		deviceService.updateCustomDevice(device);
 	}
 
 
-	@Operation(summary = "添加设备信息", security = @SecurityRequirement(name = JwtUtils.HEADER))
-	@Parameter(name = "device", description = "设备", required = true)
+	@Operation(summary = "Add device information", security = @SecurityRequirement(name = JwtUtils.HEADER))
+	@Parameter(name = "device", description = "Equipment", required = true)
 	@PostMapping("/device/add")
 	public void addDevice(@RequestBody Device device){
 
@@ -239,17 +239,17 @@ public class DeviceQuery {
 			throw new ControllerException(ErrorCode.ERROR400);
 		}
 
-		// 查看deviceId是否存在
+		// Check if deviceId exists
 		boolean exist = deviceService.isExist(device.getDeviceId());
 		if (exist) {
-			throw new ControllerException(ErrorCode.ERROR100.getCode(), "设备编号已存在");
+			throw new ControllerException(ErrorCode.ERROR100.getCode(), "Device number already exists");
 		}
 		deviceService.addCustomDevice(device);
 	}
 
 
-	@Operation(summary = "更新设备信息", security = @SecurityRequirement(name = JwtUtils.HEADER))
-	@Parameter(name = "device", description = "设备", required = true)
+	@Operation(summary = "Update device information", security = @SecurityRequirement(name = JwtUtils.HEADER))
+	@Parameter(name = "device", description = "Equipment", required = true)
 	@PostMapping("/device/update")
 	public void updateDevice(@RequestBody Device device){
 		if (device == null || device.getDeviceId() == null || device.getId() <= 0) {
@@ -258,35 +258,35 @@ public class DeviceQuery {
 		deviceService.updateCustomDevice(device);
 	}
 
-	@Operation(summary = "设备状态查询", security = @SecurityRequirement(name = JwtUtils.HEADER))
-	@Parameter(name = "deviceId", description = "设备国标编号", required = true)
+	@Operation(summary = "Equipment status query", security = @SecurityRequirement(name = JwtUtils.HEADER))
+	@Parameter(name = "deviceId", description = "Equipment national standard number", required = true)
 	@GetMapping("/devices/{deviceId}/status")
 	public DeferredResult<WVPResult<String>> deviceStatusApi(@PathVariable String deviceId) {
 		if (log.isDebugEnabled()) {
-			log.debug("设备状态查询API调用");
+			log.debug("Device status query API call");
 		}
 		Device device = deviceService.getDeviceByDeviceId(deviceId);
-		Assert.notNull(device, "设备不存在");
+		Assert.notNull(device, "Device does not exist");
 		DeferredResult<WVPResult<String>> result = new DeferredResult<>();
 		deviceService.deviceStatus(device, (code, msg, data) -> {
 			result.setResult(new WVPResult<>(code, msg, data));
 		});
 		result.onTimeout(() -> {
-			log.warn("[设备状态查询] 操作超时, 设备未返回应答指令, {}", deviceId);
-			result.setResult(WVPResult.fail(ErrorCode.ERROR100.getCode(), "操作超时, 设备未应答"));
+			log.warn("[Equipment status query] The operation timed out and the device did not return a response command., {}", deviceId);
+			result.setResult(WVPResult.fail(ErrorCode.ERROR100.getCode(), "The operation timed out and the device did not respond."));
 		});
 		return result;
 	}
 
-	@Operation(summary = "设备报警查询", security = @SecurityRequirement(name = JwtUtils.HEADER))
-	@Parameter(name = "deviceId", description = "设备国标编号", required = true)
-	@Parameter(name = "startPriority", description = "报警起始级别, 0为全部,1为一级警情,2为二级警情,3为三级警情,4为四级警情")
-	@Parameter(name = "endPriority", description = "报警终止级别, ,0为全部,1为一级警情,2为二级警情,3为三级警情,4为四级警情")
-	@Parameter(name = "alarmMethod", description = "报警方式条件,取值0为全部,1为电话报警,2为设备报警,3为短信报警,4为GPS报警," +
-			"5为视频报警,6为设备故障报警,7其他报警;可以为直接组合如12为电话报警或设备报警")
-	@Parameter(name = "alarmType", description = "报警类型")
-	@Parameter(name = "startTime", description = "报警发生起始时间")
-	@Parameter(name = "endTime", description = "报警发生终止时间")
+	@Operation(summary = "Equipment alarm query", security = @SecurityRequirement(name = JwtUtils.HEADER))
+	@Parameter(name = "deviceId", description = "Equipment national standard number", required = true)
+	@Parameter(name = "startPriority", description = "Alarm starting level, 0 is all, 1 is first-level alarm, 2 is second-level alarm, 3 is third-level alarm, 4 is fourth-level alarm")
+	@Parameter(name = "endPriority", description = "Alarm termination level, 0 is all, 1 is first-level alarm, 2 is second-level alarm, 3 is third-level alarm, 4 is fourth-level alarm")
+	@Parameter(name = "alarmMethod", description = "Alarm mode conditions, the value 0 is all, 1 is phone alarm, 2 is device alarm, 3 is SMS alarm, 4 is GPS alarm," +
+			"5For video alarm, 6 for equipment failure alarm, 7 for other alarms;It can be a direct combination such as 12 for telephone alarm or equipment alarm.")
+	@Parameter(name = "alarmType", description = "Alarm type")
+	@Parameter(name = "startTime", description = "Alarm occurrence start time")
+	@Parameter(name = "endTime", description = "Alarm occurrence end time")
 	@GetMapping("/alarm")
 	public DeferredResult<WVPResult<Object>> alarmApi(String deviceId,
 														@RequestParam(required = false) String startPriority,
@@ -296,59 +296,59 @@ public class DeviceQuery {
 														@RequestParam(required = false) String startTime,
 														@RequestParam(required = false) String endTime) {
 		if (log.isDebugEnabled()) {
-			log.debug("设备报警查询API调用");
+			log.debug("Device alarm query API call");
 		}
 		Device device = deviceService.getDeviceByDeviceId(deviceId);
-		Assert.notNull(device, "设备不存在");
+		Assert.notNull(device, "Device does not exist");
 		DeferredResult<WVPResult<Object>> result = new DeferredResult<>();
 		deviceService.alarm(device, startPriority,endPriority ,alarmMethod ,alarmType ,startTime ,endTime, (code, msg, data) -> {
 			result.setResult(new WVPResult<>(code, msg, data));
 		});
 		result.onTimeout(() -> {
-			log.warn("[设备报警查询] 操作超时, 设备未返回应答指令, {}", deviceId);
-			result.setResult(WVPResult.fail(ErrorCode.ERROR100.getCode(), "操作超时, 设备未应答"));
+			log.warn("[Equipment alarm query] The operation timed out and the device did not return a response command., {}", deviceId);
+			result.setResult(WVPResult.fail(ErrorCode.ERROR100.getCode(), "The operation timed out and the device did not respond."));
 		});
 		return result;
 	}
 
-	@Operation(summary = "设备信息查询", security = @SecurityRequirement(name = JwtUtils.HEADER))
-	@Parameter(name = "deviceId", description = "设备国标编号", required = true)
+	@Operation(summary = "Equipment information query", security = @SecurityRequirement(name = JwtUtils.HEADER))
+	@Parameter(name = "deviceId", description = "Equipment national standard number", required = true)
 	@GetMapping("/info")
 	public DeferredResult<WVPResult<Object>> deviceInfo(String deviceId) {
 		if (log.isDebugEnabled()) {
-			log.debug("设备信息查询API调用");
+			log.debug("Device information query API call");
 		}
 		Device device = deviceService.getDeviceByDeviceId(deviceId);
-		Assert.notNull(device, "设备不存在");
+		Assert.notNull(device, "Device does not exist");
 		DeferredResult<WVPResult<Object>> result = new DeferredResult<>();
 		deviceService.deviceInfo(device, (code, msg, data) -> {
 			result.setResult(new WVPResult<>(code, msg, data));
 		});
 		result.onTimeout(() -> {
-			log.warn("[设备信息查询] 操作超时, 设备未返回应答指令, {}", deviceId);
-			result.setResult(WVPResult.fail(ErrorCode.ERROR100.getCode(), "操作超时, 设备未应答"));
+			log.warn("[Equipment information query] The operation timed out and the device did not return a response command., {}", deviceId);
+			result.setResult(WVPResult.fail(ErrorCode.ERROR100.getCode(), "The operation timed out and the device did not respond."));
 		});
 		return result;
 	}
 
     /**
-     * 此接口保留仅作为兼容，后续将移除，请迁移至
+     * This interface is reserved for compatibility only and will be removed later. Please migrate to
      */
 	@GetMapping("/{deviceId}/sync_status")
-	@Operation(summary = "获取通道同步进度（此接口保留仅作为兼容，后续将移除，请迁移至 /sync_status?deviceId=）", security = @SecurityRequirement(name = JwtUtils.HEADER))
-	@Parameter(name = "deviceId", description = "设备国标编号", required = true)
+	@Operation(summary = "Get channel synchronization progress (this interface is reserved for compatibility only and will be removed later, please migrate to /sync_status?deviceId=）", security = @SecurityRequirement(name = JwtUtils.HEADER))
+	@Parameter(name = "deviceId", description = "Equipment national standard number", required = true)
 	public WVPResult<SyncStatus> getSyncStatusInPath(@PathVariable String deviceId) {
 		SyncStatus channelSyncStatus = deviceService.getChannelSyncStatus(deviceId);
 		WVPResult<SyncStatus> wvpResult = new WVPResult<>();
 		if (channelSyncStatus == null) {
 			wvpResult.setCode(ErrorCode.ERROR100.getCode());
-			wvpResult.setMsg("同步不存在");
+			wvpResult.setMsg("Sync does not exist");
 		}else if (channelSyncStatus.getErrorMsg() != null) {
 			wvpResult.setCode(ErrorCode.ERROR100.getCode());
 			wvpResult.setMsg(channelSyncStatus.getErrorMsg());
 		}else if (channelSyncStatus.getTotal() == null){
 			wvpResult.setCode(ErrorCode.SUCCESS.getCode());
-			wvpResult.setMsg("等待通道信息...");
+			wvpResult.setMsg("Waiting for channel information...");
 		}else if (channelSyncStatus.getTotal() == 0){
 			wvpResult.setCode(ErrorCode.SUCCESS.getCode());
             wvpResult.setMsg(ErrorCode.SUCCESS.getMsg());
@@ -362,23 +362,23 @@ public class DeviceQuery {
 	}
 
     /**
-     * 此接口保留仅作为兼容，后续将移除，请迁移至
+     * This interface is reserved for compatibility only and will be removed later. Please migrate to
      */
     @GetMapping("/sync_status")
-    @Operation(summary = "获取通道同步进度", security = @SecurityRequirement(name = JwtUtils.HEADER))
-    @Parameter(name = "deviceId", description = "设备国标编号", required = true)
+    @Operation(summary = "Get channel synchronization progress", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Parameter(name = "deviceId", description = "Equipment national standard number", required = true)
     public WVPResult<SyncStatus> getSyncStatus(String deviceId) {
         SyncStatus channelSyncStatus = deviceService.getChannelSyncStatus(deviceId);
         WVPResult<SyncStatus> wvpResult = new WVPResult<>();
         if (channelSyncStatus == null) {
             wvpResult.setCode(ErrorCode.ERROR100.getCode());
-            wvpResult.setMsg("同步不存在");
+            wvpResult.setMsg("Sync does not exist");
         }else if (channelSyncStatus.getErrorMsg() != null) {
             wvpResult.setCode(ErrorCode.ERROR100.getCode());
             wvpResult.setMsg(channelSyncStatus.getErrorMsg());
         }else if (channelSyncStatus.getTotal() == null){
             wvpResult.setCode(ErrorCode.SUCCESS.getCode());
-            wvpResult.setMsg("等待通道信息...");
+            wvpResult.setMsg("Waiting for channel information...");
         }else if (channelSyncStatus.getTotal() == 0){
             wvpResult.setCode(ErrorCode.SUCCESS.getCode());
             wvpResult.setMsg(ErrorCode.SUCCESS.getMsg());
@@ -392,10 +392,10 @@ public class DeviceQuery {
     }
 
 	@GetMapping("/snap/{deviceId}/{channelId}")
-	@Operation(summary = "请求截图")
-	@Parameter(name = "deviceId", description = "设备国标编号", required = true)
-	@Parameter(name = "channelId", description = "通道国标编号", required = true)
-	@Parameter(name = "mark", description = "标识", required = false)
+	@Operation(summary = "Request a screenshot")
+	@Parameter(name = "deviceId", description = "Equipment national standard number", required = true)
+	@Parameter(name = "channelId", description = "Channel national standard number", required = true)
+	@Parameter(name = "mark", description = "logo", required = false)
 	public void getSnap(HttpServletResponse resp, @PathVariable String deviceId, @PathVariable String channelId, @RequestParam(required = false) String mark) {
 
 		try {
@@ -411,33 +411,33 @@ public class DeviceQuery {
 	}
 
 	@GetMapping("/channel/raw")
-	@Operation(summary = "国标通道编辑时的数据回显")
-	@Parameter(name = "id", description = "通道的Id", required = true)
+	@Operation(summary = "Data echo when editing the national standard channel")
+	@Parameter(name = "id", description = "ChannelId", required = true)
 	public DeviceChannel getRawChannel(int id) {
 		return deviceChannelService.getRawChannel(id);
 	}
 
 	@GetMapping("/subscribe/catalog")
-	@Operation(summary = "开启/关闭目录订阅")
-	@Parameter(name = "id", description = "通道的Id", required = true)
-	@Parameter(name = "cycle", description = "订阅周期", required = true)
+	@Operation(summary = "turn on/Close directory subscription")
+	@Parameter(name = "id", description = "ChannelId", required = true)
+	@Parameter(name = "cycle", description = "Subscription cycle", required = true)
 	public void subscribeCatalog(int id, int cycle) {
 		deviceService.subscribeCatalog(id, cycle);
 	}
 
 	@GetMapping("/subscribe/mobile-position")
-	@Operation(summary = "开启/关闭移动位置订阅")
-	@Parameter(name = "id", description = "通道的Id", required = true)
-	@Parameter(name = "cycle", description = "订阅周期", required = true)
-	@Parameter(name = "interval", description = "报送间隔", required = true)
+	@Operation(summary = "turn on/Turn off mobile location subscriptions")
+	@Parameter(name = "id", description = "ChannelId", required = true)
+	@Parameter(name = "cycle", description = "Subscription cycle", required = true)
+	@Parameter(name = "interval", description = "Submission interval", required = true)
 	public void subscribeMobilePosition(int id, int cycle, int interval) {
 		deviceService.subscribeMobilePosition(id, cycle, interval);
 	}
 
 	@GetMapping("/statistics/keepalive")
-	@Operation(summary = "请求心跳统计")
-	@Parameter(name = "deviceId", description = "设备国标编号", required = true)
-	@Parameter(name = "count", description = "返回的数量，按时间正向排序，返回的最新的", required = true)
+	@Operation(summary = "Request heartbeat statistics")
+	@Parameter(name = "deviceId", description = "Equipment national standard number", required = true)
+	@Parameter(name = "count", description = "The quantity returned, sorted forward by time, the latest returned", required = true)
 	public List<TimeStatistics> getKeepaliveTimeStatistics(String deviceId, Integer count) {
 		if (ObjectUtils.isEmpty(deviceId)) {
 			return List.of();
@@ -446,9 +446,9 @@ public class DeviceQuery {
 	}
 
 	@GetMapping("/statistics/register")
-	@Operation(summary = "请求注册统计")
-	@Parameter(name = "deviceId", description = "设备国标编号", required = true)
-	@Parameter(name = "count", description = "返回的数量，按时间正向排序，返回的最新的", required = true)
+	@Operation(summary = "Request registration statistics")
+	@Parameter(name = "deviceId", description = "Equipment national standard number", required = true)
+	@Parameter(name = "count", description = "The quantity returned, sorted forward by time, the latest returned", required = true)
 	public List<TimeStatistics> getRegisterTimeStatistics(String deviceId, Integer count) {
 		if (ObjectUtils.isEmpty(deviceId)) {
 			return List.of();
@@ -457,9 +457,9 @@ public class DeviceQuery {
 	}
 
 	@GetMapping("/subscribe/alarm")
-	@Operation(summary = "开启/关闭报警订阅")
-	@Parameter(name = "id", description = "通道的Id", required = true)
-	@Parameter(name = "cycle", description = "订阅周期", required = true)
+	@Operation(summary = "turn on/Close alarm subscription")
+	@Parameter(name = "id", description = "ChannelId", required = true)
+	@Parameter(name = "cycle", description = "Subscription cycle", required = true)
 	public void subscribeAlarm(int id, int cycle) {
 		deviceService.subscribeAlarm(id, cycle);
 	}

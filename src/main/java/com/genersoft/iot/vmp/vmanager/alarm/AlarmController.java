@@ -22,7 +22,7 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.util.List;
 
-@Tag(name = "报警管理接口")
+@Tag(name = "Alarm management interface")
 @Slf4j
 @RestController
 @RequestMapping("/api/alarm")
@@ -33,12 +33,12 @@ public class AlarmController {
 
     @ResponseBody
     @GetMapping("/list")
-    @Operation(summary = "分页查询报警列表", security = @SecurityRequirement(name = JwtUtils.HEADER))
-    @Parameter(name = "page", description = "当前页", required = true)
-    @Parameter(name = "count", description = "每页查询数量", required = true)
-    @Parameter(name = "alarmType", description = "报警类型列表，多个类型用逗号分隔")
-    @Parameter(name = "beginTime", description = "开始时间，格式：yyyy-MM-dd HH:mm:ss")
-    @Parameter(name = "endTime", description = "结束时间，格式：yyyy-MM-dd HH:mm:ss")
+    @Operation(summary = "Query alarm list by page", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Parameter(name = "page", description = "Current page", required = true)
+    @Parameter(name = "count", description = "Number of queries per page", required = true)
+    @Parameter(name = "alarmType", description = "Alarm type list, multiple types separated by commas")
+    @Parameter(name = "beginTime", description = "start time, format：yyyy-MM-dd HH:mm:ss")
+    @Parameter(name = "endTime", description = "end time, format：yyyy-MM-dd HH:mm:ss")
     public PageInfo<Alarm> list(@RequestParam Integer page,
                                 @RequestParam Integer count,
                                 @RequestParam(required = false) List<AlarmType> alarmType,
@@ -49,18 +49,18 @@ public class AlarmController {
 
     @ResponseBody
     @DeleteMapping("/delete")
-    @Operation(summary = "删除报警信息", security = @SecurityRequirement(name = JwtUtils.HEADER))
-    @Parameter(name = "ids", description = "报警ID列表", required = true)
+    @Operation(summary = "Delete alarm information", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Parameter(name = "ids", description = "Alarm ID list", required = true)
     public void delete(@RequestBody List<Long> ids) {
         alarmService.deleteAlarmInfo(ids);
     }
 
     @ResponseBody
     @DeleteMapping("/clear")
-    @Operation(summary = "按筛选条件清空报警信息", security = @SecurityRequirement(name = JwtUtils.HEADER))
-    @Parameter(name = "alarmType", description = "报警类型列表，为空则不限类型")
-    @Parameter(name = "beginTime", description = "开始时间，格式：yyyy-MM-dd HH:mm:ss")
-    @Parameter(name = "endTime", description = "结束时间，格式：yyyy-MM-dd HH:mm:ss")
+    @Operation(summary = "Clear alarm information according to filter conditions", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Parameter(name = "alarmType", description = "Alarm type list, if empty, no type limit")
+    @Parameter(name = "beginTime", description = "start time, format：yyyy-MM-dd HH:mm:ss")
+    @Parameter(name = "endTime", description = "end time, format：yyyy-MM-dd HH:mm:ss")
     public int clear(@RequestParam(required = false) List<AlarmType> alarmType,
                      @RequestParam(required = false) String beginTime,
                      @RequestParam(required = false) String endTime) {
@@ -68,8 +68,8 @@ public class AlarmController {
     }
 
     @GetMapping("/snap/{id}")
-    @Operation(summary = "获取报警快照图片")
-    @Parameter(name = "id", description = "报警ID", required = true)
+    @Operation(summary = "Get alarm snapshot picture")
+    @Parameter(name = "id", description = "AlarmID", required = true)
     public void snap(HttpServletResponse resp, @PathVariable Long id) {
         String snapPath = alarmService.getAlarmSnapById(id);
         if (snapPath == null || snapPath.isEmpty()) {

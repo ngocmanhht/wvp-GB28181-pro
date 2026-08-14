@@ -35,7 +35,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * ABL 的hook事件监听
+ * ABL Hook event monitoring
  */
 @RestController
 @RequestMapping("/index/hook/abl")
@@ -86,7 +86,7 @@ public class ABLHttpHookListener {
     private ApplicationEventPublisher applicationEventPublisher;
 
     /**
-     * 服务器定时上报时间，上报间隔可配置，默认10s上报一次
+     * The server reports the time regularly, and the reporting interval is configurable. By default, it reports once every 10 seconds.
      */
     @ResponseBody
     @PostMapping(value = "/on_server_keepalive", produces = "application/json;charset=UTF-8")
@@ -99,13 +99,13 @@ public class ABLHttpHookListener {
                 applicationEventPublisher.publishEvent(event);
             }
         }catch (Exception e) {
-            logger.info("[ZLM-HOOK-心跳] 发送通知失败 ", e);
+            logger.info("[ZLM-HOOK-heartbeat] Failed to send notification ", e);
         }
         return HookResult.SUCCESS();
     }
 
     /**
-     * 播放器鉴权事件，rtsp/rtmp/http-flv/ws-flv/hls的播放都将触发此鉴权事件。
+     * Player authentication event，rtsp/rtmp/http-flv/ws-flv/hlsThe playback will trigger this authentication event。
      */
     @ResponseBody
     @PostMapping(value = "/on_play", produces = "application/json;charset=UTF-8")
@@ -117,27 +117,27 @@ public class ABLHttpHookListener {
         }
 
         Map<String, String> paramMap = urlParamToMap(param.getParams());
-        // 对于播放流进行鉴权
+        // Authentication for playback streams
         boolean authenticateResult = mediaService.authenticatePlay(param.getApp(), param.getStream(), paramMap.get("callId"));
         if (!authenticateResult) {
-            logger.info("[ABL HOOK] 播放鉴权 失败：{}->{}", param.getMediaServerId(), param);
+            logger.info("[ABL HOOK] Playback authentication failed：{}->{}", param.getMediaServerId(), param);
             ablresTfulUtils.closeStreams(mediaServer, param.getApp(), param.getStream());
 
         }
-        logger.info("[ABL HOOK] 播放鉴权成功：{}->{}", param.getMediaServerId(), param);
+        logger.info("[ABL HOOK] Playback authentication successful：{}->{}", param.getMediaServerId(), param);
         return HookResult.SUCCESS();
     }
 
     /**
-     * rtsp/rtmp/rtp推流鉴权事件。
+     * rtsp/rtmp/rtpPush authentication event。
      */
     @ResponseBody
     @PostMapping(value = "/on_publish", produces = "application/json;charset=UTF-8")
     public HookResult onPublish(@RequestBody OnPublishABLHookParam param) {
 
 
-        logger.info("[ABL HOOK] 推流鉴权：{}->{}/{}?{}", param.getMediaServerId(), param.getApp(), param.getStream(), param.getParams());
-        // TODO 加快处理速度
+        logger.info("[ABL HOOK] Push authentication：{}->{}/{}?{}", param.getMediaServerId(), param.getApp(), param.getStream(), param.getParams());
+        // TODO Speed up processing
 
         MediaServer mediaServer = mediaServerService.getOne(param.getMediaServerId());
         if (mediaServer == null) {
@@ -147,7 +147,7 @@ public class ABLHttpHookListener {
         try {
             ResultForOnPublish resultForOnPublish = mediaService.authenticatePublish(mediaServer, param.getApp(), param.getStream(), param.getParams());
             if (resultForOnPublish == null) {
-                logger.info("[ABL HOOK]推流鉴权 拒绝 响应：{}->{}", param.getMediaServerId(), param);
+                logger.info("[ABL HOOK]Push authentication reject response：{}->{}", param.getMediaServerId(), param);
                 ablresTfulUtils.closeStreams(mediaServer, param.getApp(), param.getStream());
             }
         }catch (ControllerException e) {
@@ -157,14 +157,14 @@ public class ABLHttpHookListener {
     }
 
     /**
-     * 如果某一个码流进行MP4录像（enable_mp4=1），会触发录像进度通知事件
+     * If a certain code stream is used for MP4 recording（enable_mp4=1），The recording progress notification event will be triggered.
      */
     @ResponseBody
     @PostMapping(value = "/on_record_progress", produces = "application/json;charset=UTF-8")
     public HookResult onRecordProgress(@RequestBody OnRecordProgressABLHookParam param) {
 
 
-        logger.info("[ABL HOOK] 录像进度通知：{}->{}/{}->{}/{}", param.getMediaServerId(), param.getApp(), param.getStream(), param.getCurrentFileDuration(), param.getTotalVideoDuration());
+        logger.info("[ABL HOOK] Recording progress notification：{}->{}/{}->{}/{}", param.getMediaServerId(), param.getApp(), param.getStream(), param.getCurrentFileDuration(), param.getTotalVideoDuration());
 
         try {
             MediaServer mediaServerItem = mediaServerService.getOne(param.getMediaServerId());
@@ -174,20 +174,20 @@ public class ABLHttpHookListener {
                 applicationEventPublisher.publishEvent(event);
             }
         }catch (Exception e) {
-            logger.info("[ZLM-HOOK-录像进度通知] 发送通知失败 ", e);
+            logger.info("[ZLM-HOOK-Recording progress notification] Failed to send notification ", e);
         }
         return HookResult.SUCCESS();
     }
 
     /**
-     * 当代理拉流、国标接入等等 码流不到达时会发出 码流不到达的事件通知
+     * When the code stream does not arrive when the proxy pulls the stream, national standard access, etc., an event notification of code stream not arriving will be issued.
      */
     @ResponseBody
     @PostMapping(value = "/on_stream_not_arrive", produces = "application/json;charset=UTF-8")
     public HookResult onStreamNotArrive(@RequestBody ABLHookParam param) {
 
 
-        logger.info("[ABL HOOK] 码流不到达通知：{}->{}/{}", param.getMediaServerId(), param.getApp(), param.getStream());
+        logger.info("[ABL HOOK] Notification of code stream not arriving：{}->{}/{}", param.getMediaServerId(), param.getApp(), param.getStream());
         try {
             if (MediaStreamUtil.RTP_APP.equals(param.getApp())) {
                 return HookResult.SUCCESS();
@@ -200,21 +200,21 @@ public class ABLHttpHookListener {
                 applicationEventPublisher.publishEvent(event);
             }
         }catch (Exception e) {
-            logger.info("[ABL-HOOK-码流不到达通知] 发送通知失败 ", e);
+            logger.info("[ABL-HOOK-Notification of code stream not arriving] Failed to send notification ", e);
         }
 
         return HookResult.SUCCESS();
     }
 
     /**
-     * 如果某一个码流进行MP4录像（enable_mp4=1），当某个MP4文件被删除会触发该事件通知
+     * If a certain code stream is used for MP4 recording（enable_mp4=1），This event notification will be triggered when an MP4 file is deleted
      */
     @ResponseBody
     @PostMapping(value = "/on_delete_record_mp4", produces = "application/json;charset=UTF-8")
     public HookResult onDeleteRecordMp4(@RequestBody OnRecordMp4ABLHookParam param) {
 
 
-        logger.info("[ABL HOOK] MP4文件被删除通知：{}->{}/{}", param.getMediaServerId(), param.getApp(), param.getStream());
+        logger.info("[ABL HOOK] MP4File deleted notification：{}->{}/{}", param.getMediaServerId(), param.getApp(), param.getStream());
 
 
         return HookResult.SUCCESS();
@@ -222,7 +222,7 @@ public class ABLHttpHookListener {
 
 
     /**
-     * rtsp/rtmp流注册或注销时触发此事件；此事件对回复不敏感。
+     * rtsp/rtmpThis event is triggered when a stream registers or logs out; this event is not sensitive to replies。
      */
     @ResponseBody
     @PostMapping(value = "/on_stream_arrive", produces = "application/json;charset=UTF-8")
@@ -233,20 +233,20 @@ public class ABLHttpHookListener {
             return HookResult.SUCCESS();
         }
 
-        logger.info("[ABL HOOK] 码流到达, {}->{}/{}", param.getMediaServerId(), param.getApp(), param.getStream());
+        logger.info("[ABL HOOK] Arrival of code stream, {}->{}/{}", param.getMediaServerId(), param.getApp(), param.getStream());
         MediaArrivalEvent mediaArrivalEvent = MediaArrivalEvent.getInstance(this, param, mediaServer);
         applicationEventPublisher.publishEvent(mediaArrivalEvent);
         return HookResult.SUCCESS();
     }
 
     /**
-     * 流无人观看时事件，用户可以通过此事件选择是否关闭无人看的流。
+     * Event when no one is watching the stream. Users can use this event to choose whether to close the stream when no one is watching it.。
      */
     @ResponseBody
     @PostMapping(value = "/on_stream_none_reader", produces = "application/json;charset=UTF-8")
     public JSONObject onStreamNoneReader(@RequestBody ABLHookParam param) {
 
-        logger.info("[ABL HOOK]流无人观看：{}->{}/{}", param.getMediaServerId(),
+        logger.info("[ABL HOOK]Stream unwatched：{}->{}/{}", param.getMediaServerId(),
                 param.getApp(), param.getStream());
         JSONObject ret = new JSONObject();
 
@@ -256,13 +256,13 @@ public class ABLHttpHookListener {
     }
 
     /**
-     * 当播放一个url，如果不存在时，会发出一个消息通知
+     * When playing a url, if it does not exist, a message notification will be sent
      */
     @ResponseBody
     @PostMapping(value = "/on_stream_not_found", produces = "application/json;charset=UTF-8")
     public HookResult onStreamNotFound(@RequestBody ABLHookParam param) {
 
-        logger.info("[ABL HOOK] 流未找到：{}->{}/{}", param.getMediaServerId(), param.getApp(), param.getStream());
+        logger.info("[ABL HOOK] Stream not found：{}->{}/{}", param.getMediaServerId(), param.getApp(), param.getStream());
         MediaServer mediaServer = mediaServerService.getOne(param.getMediaServerId());
         if (!userSetting.getAutoApplyPlay() || mediaServer == null) {
             return HookResult.SUCCESS();
@@ -273,13 +273,13 @@ public class ABLHttpHookListener {
     }
 
     /**
-     * ABLMediaServer启动时会发送上线通知
+     * ABLMediaServerOnline notification will be sent when starting
      */
     @ResponseBody
     @PostMapping(value = "/on_server_started", produces = "application/json;charset=UTF-8")
     public HookResult onServerStarted(HttpServletRequest request, @RequestBody OnServerStaredABLHookParam param) {
 
-        logger.info("[ABL HOOK] 启动 " + param.getMediaServerId());
+        logger.info("[ABL HOOK] start " + param.getMediaServerId());
         try {
             HookAblServerStartEvent event = new HookAblServerStartEvent(this);
             MediaServer mediaServerItem = mediaServerService.getOne(param.getMediaServerId());
@@ -288,22 +288,22 @@ public class ABLHttpHookListener {
                 applicationEventPublisher.publishEvent(event);
             }
         }catch (Exception e) {
-            logger.info("[ABL-HOOK-启动] 发送通知失败 ", e);
+            logger.info("[ABL-HOOK-start] Failed to send notification ", e);
         }
 
         return HookResult.SUCCESS();
     }
 
     /**
-     * TODO 发送rtp(startSendRtp)被动关闭时回调
+     * TODO sendrtp(startSendRtp)Callback when passively closed
      */
 //    @ResponseBody
 //    @PostMapping(value = "/on_send_rtp_stopped", produces = "application/json;charset=UTF-8")
 //    public HookResult onSendRtpStopped(HttpServletRequest request, @RequestBody OnSendRtpStoppedHookParam param) {
 //
-//        logger.info("[ZLM HOOK] rtp发送关闭：{}->{}/{}", param.getMediaServerId(), param.getApp(), param.getStream());
+//        logger.info("[ZLM HOOK] rtpSend Close：{}->{}/{}", param.getMediaServerId(), param.getApp(), param.getStream());
 //
-//        // 查找对应的上级推流，发送停止
+//        // Find the corresponding superior push stream and stop sending.
 //        if (!"rtp".equals(param.getApp())) {
 //            return HookResult.SUCCESS();
 //        }
@@ -315,19 +315,19 @@ public class ABLHttpHookListener {
 //                applicationEventPublisher.publishEvent(event);
 //            }
 //        }catch (Exception e) {
-//            logger.info("[ZLM-HOOK-rtp发送关闭] 发送通知失败 ", e);
+//            logger.info("[ZLM-HOOK-rtpSend Close] Failed to send notification ", e);
 //        }
 //
 //        return HookResult.SUCCESS();
 //    }
 
     /**
-     * TODO 录像完成事件
+     * TODO Recording completion event
      */
     @ResponseBody
     @PostMapping(value = "/on_record_mp4", produces = "application/json;charset=UTF-8")
     public HookResult onRecordMp4(HttpServletRequest request, @RequestBody OnRecordMp4ABLHookParam param) {
-        logger.info("[ABL HOOK] 录像完成事件：{}->{}", param.getMediaServerId(), param.getFileName());
+        logger.info("[ABL HOOK] Recording completion event：{}->{}", param.getMediaServerId(), param.getFileName());
 
         try {
             MediaServer mediaServerItem = mediaServerService.getOne(param.getMediaServerId());
@@ -337,19 +337,19 @@ public class ABLHttpHookListener {
                 applicationEventPublisher.publishEvent(event);
             }
         }catch (Exception e) {
-            logger.info("[ZLM-HOOK-rtpServer收流超时] 发送通知失败 ", e);
+            logger.info("[ZLM-HOOK-rtpServerTraffic collection timeout] Failed to send notification ", e);
         }
 
         return HookResult.SUCCESS();
     }
 
     /**
-     * 当某一路码流断开时会发送通知
+     * A notification will be sent when a certain stream is disconnected
      */
     @ResponseBody
     @PostMapping(value = "/on_stream_disconnect", produces = "application/json;charset=UTF-8")
     public HookResult onRecordMp4(HttpServletRequest request, @RequestBody ABLHookParam param) {
-        logger.info("[ABL HOOK] 码流断开事件, {}->{}/{}", param.getMediaServerId(), param.getApp(), param.getStream());
+        logger.info("[ABL HOOK] Stream disconnect event, {}->{}/{}", param.getMediaServerId(), param.getApp(), param.getStream());
 
         MediaServer mediaServer = mediaServerService.getOne(param.getMediaServerId());
         if (mediaServer == null) {

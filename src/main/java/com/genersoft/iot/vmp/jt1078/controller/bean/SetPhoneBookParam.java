@@ -10,26 +10,26 @@ import java.util.List;
 
 @Setter
 @Getter
-@Schema(description = "设置电话本")
+@Schema(description = "Set up phone book")
 public class SetPhoneBookParam {
 
-    @Schema(description = "终端手机号")
+    @Schema(description = "Terminal mobile phone number")
     private String phoneNumber;
 
-    @Schema(description = "设置类型:\n" +
-            "0: 删除终端上所有存储的联系人,\n" +
-            "1: 表示更新电话本, 删除终端中已有全部联系人并追加消息中的联系人,\n" +
-            "2: 表示追加电话本,\n" +
-            "3: 表示修改电话本$以联系人为索引")
+    @Schema(description = "Setting type:\n" +
+            "0: Delete all contacts stored on the terminal,\n" +
+            "1: Indicates updating the phone book, deleting all contacts in the terminal and appending contacts in messages.,\n" +
+            "2: Indicates adding a phone book,\n" +
+            "3: Indicates modifying the phone book $ with contacts as the index")
     private int type;
 
-    @Schema(description = "联系人")
+    @Schema(description = "Contact person")
     private List<JTPhoneBookContact> phoneBookContactList;
 
     @Override
     public String toString() {
         return "SetPhoneBookParam{" +
-                "设备手机号='" + phoneNumber + '\'' +
+                "Device mobile phone number='" + phoneNumber + '\'' +
                 ", type=" + type +
                 ", phoneBookContactList=" + phoneBookContactList +
                 '}';

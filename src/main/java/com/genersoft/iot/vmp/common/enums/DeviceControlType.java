@@ -12,42 +12,42 @@ import org.springframework.util.ObjectUtils;
 public enum DeviceControlType {
 
     /**
-     * 云台控制
-     * 上下左右，预置位，扫描，辅助功能，巡航
+     * PTZ control
+     * Up, down, left, right, preset, scan, auxiliary functions, cruise
      */
-    PTZ("PTZCmd","云台控制"),
+    PTZ("PTZCmd","PTZ control"),
     /**
-     * 远程启动
+     * remote start
      */
-    TELE_BOOT("TeleBoot","远程启动"),
+    TELE_BOOT("TeleBoot","remote start"),
     /**
-     * 录像控制
+     * Video control
      */
-    RECORD("RecordCmd","录像控制"),
+    RECORD("RecordCmd","Video control"),
     /**
-     * 布防撤防
+     * Arm and disarm
      */
-    GUARD("GuardCmd","布防撤防"),
+    GUARD("GuardCmd","Arm and disarm"),
     /**
-     * 告警控制
+     * Alarm control
      */
-    ALARM("AlarmCmd","告警控制"),
+    ALARM("AlarmCmd","Alarm control"),
     /**
-     * 强制关键帧
+     * Force keyframe
      */
-    I_FRAME("IFameCmd","强制关键帧"),
+    I_FRAME("IFameCmd","Force keyframe"),
     /**
-     * 拉框放大
+     * Scroll down to enlarge
      */
-    DRAG_ZOOM_IN("DragZoomIn","拉框放大"),
+    DRAG_ZOOM_IN("DragZoomIn","Scroll down to enlarge"),
     /**
-     * 拉框缩小
+     * Zoom out
      */
-    DRAG_ZOOM_OUT("DragZoomOut","拉框缩小"),
+    DRAG_ZOOM_OUT("DragZoomOut","Zoom out"),
     /**
-     * 看守位
+     * guard position
      */
-    HOME_POSITION("HomePosition","看守位");
+    HOME_POSITION("HomePosition","guard position");
 
     private final String val;
 

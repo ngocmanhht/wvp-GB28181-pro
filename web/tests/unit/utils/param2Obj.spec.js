@@ -8,7 +8,7 @@ describe('Utils:param2Obj', () => {
       age: '29',
       sex: '1',
       field: window.btoa('test'),
-      key: '测试'
+      key: 'test'
     })
   })
 })

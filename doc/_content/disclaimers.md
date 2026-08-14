@@ -1,5 +1,5 @@
-# 免责声明
+# Disclaimer
 
-WVP-PRO自有代码使用宽松的MIT协议，在保留版权信息的情况下可以自由应用于各自商用、非商业的项目。
-但是本项目也零碎的使用了一些其他的开源代码，在商用的情况下请自行替代或剔除； 由于使用本项目而产生的商业纠纷或侵权行为一概与本项目及开发者无关，请自行承担法律风险。
-在使用本项目代码时，也应该在授权协议中同时表明本项目依赖的第三方库的协议
+WVP-PRO's own code uses the loose MIT license and can be freely used in respective commercial and non-commercial projects while retaining copyright information.
+However, this project also uses some other open source codes piecemeal. In the case of commercial use, please replace or eliminate them by yourself; any commercial disputes or infringements arising from the use of this project have nothing to do with this project and the developer. Please bear the legal risks yourself.
+When using the code of this project, the license agreement should also indicate the agreements of the third-party libraries that this project relies on.

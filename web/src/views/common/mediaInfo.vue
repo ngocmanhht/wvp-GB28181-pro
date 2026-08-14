@@ -1,26 +1,26 @@
 <template>
   <div id="mediaInfo">
     <el-button style="position: absolute; right: 1rem;" icon="el-icon-refresh-right" circle size="mini" @click="getMediaInfo" />
-    <el-descriptions size="mini" :column="3" title="概况">
-      <el-descriptions-item label="观看人数">{{ info.readerCount }}</el-descriptions-item>
-      <el-descriptions-item label="网络">{{ formatByteSpeed() }}</el-descriptions-item>
-      <el-descriptions-item label="持续时间">{{ info.aliveSecond }}秒</el-descriptions-item>
+    <el-descriptions size="mini" :column="3" title="Overview">
+      <el-descriptions-item label="Number of viewers">{{ info.readerCount }}</el-descriptions-item>
+      <el-descriptions-item label="network">{{ formatByteSpeed() }}</el-descriptions-item>
+      <el-descriptions-item label="duration">{{ info.aliveSecond }}seconds</el-descriptions-item>
     </el-descriptions>
     <div style="display: grid; grid-template-columns: 1fr 1fr">
-      <el-descriptions v-if="info.videoCodec" size="mini" :column="2" title="视频信息">
-        <el-descriptions-item label="编码">{{ info.videoCodec }}</el-descriptions-item>
+      <el-descriptions v-if="info.videoCodec" size="mini" :column="2" title="Video information">
+        <el-descriptions-item label="encoding">{{ info.videoCodec }}</el-descriptions-item>
         <el-descriptions-item
-          label="分辨率"
+          label="resolution"
         >{{ info.width }}x{{ info.height }}
         </el-descriptions-item>
         <el-descriptions-item label="FPS">{{ info.fps }}</el-descriptions-item>
-        <el-descriptions-item label="丢包率">{{ info.loss }}</el-descriptions-item>
+        <el-descriptions-item label="Packet loss rate">{{ info.loss }}</el-descriptions-item>
       </el-descriptions>
-      <el-descriptions v-if="info.audioCodec" size="mini" :column="2" title="音频信息">
-        <el-descriptions-item label="编码">
+      <el-descriptions v-if="info.audioCodec" size="mini" :column="2" title="audio information">
+        <el-descriptions-item label="encoding">
           {{ info.audioCodec }}
         </el-descriptions-item>
-        <el-descriptions-item label="采样率">{{ info.audioSampleRate }}</el-descriptions-item>
+        <el-descriptions-item label="Sampling rate">{{ info.audioSampleRate }}</el-descriptions-item>
       </el-descriptions>
     </div>
 
@@ -83,9 +83,9 @@ export default {
 
       const hours = h < 10 ? '0' + h : h
       const formatSecond = second > 59 ? 59 : second
-      return `${hours > 0 ? `${hours}小时` : ''}${minute < 10 ? '0' + minute : minute}分${
+      return `${hours > 0 ? `${hours}hours` : ''}${minute < 10 ? '0' + minute : minute}points${
         formatSecond < 10 ? '0' + formatSecond : formatSecond
-      }秒`
+      }seconds`
     }
   }
 }

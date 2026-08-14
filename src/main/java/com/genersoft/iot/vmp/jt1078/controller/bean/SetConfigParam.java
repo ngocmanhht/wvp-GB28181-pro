@@ -7,13 +7,13 @@ import lombok.Setter;
 
 @Setter
 @Getter
-@Schema(description = "终端参数设置")
+@Schema(description = "Terminal parameter settings")
 public class SetConfigParam {
 
-    @Schema(description = "终端手机号")
+    @Schema(description = "Terminal mobile phone number")
     private String phoneNumber;
 
-    @Schema(description = "终端参数设置")
+    @Schema(description = "Terminal parameter settings")
     private JTDeviceConfig config;
 
     @Override

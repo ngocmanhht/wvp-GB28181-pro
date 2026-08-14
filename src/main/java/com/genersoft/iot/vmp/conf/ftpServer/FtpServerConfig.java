@@ -37,32 +37,32 @@ public class FtpServerConfig {
     public FtpServer ftpServer() {
         FtpServerFactory serverFactory = new FtpServerFactory();
         ListenerFactory listenerFactory = new ListenerFactory();
-        // 1、设置服务端口
+        // 1、Set service port
         listenerFactory.setPort(ftpSetting.getPort());
-        // 2、设置被动模式数据上传的接口范围,云服务器需要开放对应区间的端口给客户端
+        // 2、Set the interface range for passive mode data upload. The cloud server needs to open the port in the corresponding range to the client.
         DataConnectionConfigurationFactory dataConnectionConfFactory = new DataConnectionConfigurationFactory();
         dataConnectionConfFactory.setPassivePorts(ftpSetting.getPassivePorts());
         listenerFactory.setDataConnectionConfiguration(dataConnectionConfFactory.createDataConnectionConfiguration());
-        // 4、替换默认的监听器
+        // 4、Replace the default listener
         Listener listener = listenerFactory.createListener();
         serverFactory.addListener("default", listener);
-        // 5、配置自定义用户事件
+        // 5、Configure custom user events
         Map<String, org.apache.ftpserver.ftplet.Ftplet> ftpLets = new HashMap<>();
         ftpLets.put("ftpService", ftplet);
         serverFactory.setFtplets(ftpLets);
-        // 6、读取用户的配置信息
-        // 6.2、设置用信息
+        // 6、Read user configuration information
+        // 6.2、Setting information
         serverFactory.setUserManager(userManager);
         serverFactory.setFileSystem(fileSystemFactory);
-        // 7、实例化FTP Server
+        // 7、InstantiateFTP Server
         FtpServer server = serverFactory.createServer();
         try {
             server.start();
             if (!server.isStopped()) {
-                log.info("[FTP服务] 已启动, 端口： {}", ftpSetting.getPort());
+                log.info("[FTPservice] started, port： {}", ftpSetting.getPort());
             }
         } catch (FtpException e) {
-            log.info("[FTP服务] 启动失败 ", e);
+            log.info("[FTPservice] Startup failed ", e);
         }
         return server;
     }

@@ -1,7 +1,7 @@
 version: '3'
 services:
   polaris-redis:
-    image: redis:latest  # 使用官方Redis镜像
+    image: redis:latest  # Use the official Redis image
     restart: unless-stopped
     healthcheck:
       test: [ "CMD", "redis-cli", "--raw", "incr", "ping" ]
@@ -21,7 +21,7 @@ services:
     command: redis-server /opt/polaris/redis/redis.conf --appendonly yes
 
   polaris-mysql:
-    image: mysql:8  # 使用官方MySQL 8镜像
+    image: mysql:8  # Use the official MySQL 8 image
     restart: unless-stopped
     healthcheck:
       test: [ "CMD", "bash", "-c", "cat < /dev/null > /dev/tcp/127.0.0.1/3306" ]
@@ -43,7 +43,7 @@ services:
       - ./mysql/conf:/etc/mysql/conf.d
       - ./logs/mysql:/logs
       - ./volumes/mysql/data:/var/lib/mysql  
-      - ../数据库/2.7.4/初始化-mysql-2.7.4.sql:/docker-entrypoint-initdb.d/init.sql  # 初始化SQL脚本目录
+      - ../database/2.7.4/initialization-mysql-2.7.4.sql:/docker-entrypoint-initdb.d/init.sql  # Initialization SQL script directory
     command: [
           # '--default-authentication-plugin=mysql_native_password',
           '--innodb-buffer-pool-size=80M',
@@ -54,21 +54,21 @@ services:
         ]
 
   polaris-media:
-    image: zlmediakit/zlmediakit:master  # 替换为官方镜像
+    image: zlmediakit/zlmediakit:master  # Replace with official image
     restart: always
     networks:
       - media-net
     ports:
-     #- "6080:80/tcp"     # [播流]HTTP  安全考虑-非测试阶段需要注释掉，改为由nginx代理播流地址
-     #- "4443:443/tcp"     # [播流]HTTPS 安全考虑-非测试阶段需要注释掉，改为由nginx代理播流地址
-      - "${MediaRtmp:-10935}:${MediaRtmp:-10935}/tcp"   # [收流]RTMP  
-      - "${MediaRtmp:-10935}:${MediaRtmp:-10935}/udp"   # [收流]RTMP  
-     #- "41935:41935/tcp"   # [收流]RTMPS 无效
-      - "${MediaRtsp:-5540}:${MediaRtsp:-5540}/tcp"     # [收流]RTSP  
-      - "${MediaRtsp:-5540}:${MediaRtsp:-5540}/udp"     # [收流]RTSP  
-     #- "45540:45540/tcp"   # [收流]RTSPS 无效
-      - "${MediaRtp:-10000}:${MediaRtp:-10000}/tcp"   # [收流]RTP   
-      - "${MediaRtp:-10000}:${MediaRtp:-10000}/udp"   # [收流]RTP   
+     #- "6080:80/tcp"     # [stream]HTTP  security considerations-It needs to be commented out during the non-testing phase, and the streaming address will be proxy by nginx instead.
+     #- "4443:443/tcp"     # [stream]HTTPS security considerations-It needs to be commented out during the non-testing phase, and the streaming address will be proxy by nginx instead.
+      - "${MediaRtmp:-10935}:${MediaRtmp:-10935}/tcp"   # [collect flow]RTMP  
+      - "${MediaRtmp:-10935}:${MediaRtmp:-10935}/udp"   # [collect flow]RTMP  
+     #- "41935:41935/tcp"   # [collect flow]RTMPS Invalid
+      - "${MediaRtsp:-5540}:${MediaRtsp:-5540}/tcp"     # [collect flow]RTSP  
+      - "${MediaRtsp:-5540}:${MediaRtsp:-5540}/udp"     # [collect flow]RTSP  
+     #- "45540:45540/tcp"   # [collect flow]RTSPS Invalid
+      - "${MediaRtp:-10000}:${MediaRtp:-10000}/tcp"   # [collect flow]RTP   
+      - "${MediaRtp:-10000}:${MediaRtp:-10000}/udp"   # [collect flow]RTP   
     volumes:
       - ./volumes/video:/opt/media/bin/www/record/
       - ./logs/media:/opt/media/log/
@@ -80,10 +80,10 @@ services:
     ]
 
   polaris-wvp:
-    # 显式指定构建上下文和Dockerfile路径
+    # Explicitly specify the build context and Dockerfile path
     build:
-      context: ..  # 构建上下文的根路径
-      dockerfile: ./docker/wvp/Dockerfile  # 相对于上下文路径的Dockerfile位置
+      context: ..  # The root path of the build context
+      dockerfile: ./docker/wvp/Dockerfile  # Dockerfile location relative to context path
     restart: always
     networks:
       - media-net
@@ -103,11 +103,11 @@ services:
       TZ: "Asia/Shanghai"
       # docker env
       RUN_ENV: "docker"
-      # 流链接的IP
+      # stream linkedIP
       Stream_IP: ${Stream_IP}
-      # SDP里的IP
+      # SDPinsideIP
       SDP_IP: ${SDP_IP}
-      # [可选] zlm服务器访问WVP所使用的IP, 默认使用127.0.0.1，zlm和wvp没有部署在同一台服务器时必须配置
+      # [Optional] zlmThe IP used by the server to access WVP. The default is 127.0.0.1. This must be configured when zlm and wvp are not deployed on the same server.
       ZLM_HOOK_HOST: polaris-wvp
       ZLM_HOST: polaris-media
       ZLM_SERCERT: su6TiedN2rVAmBbIDX0aa0QTiBJLBdcf
@@ -136,10 +136,10 @@ services:
       RecordPushLive: ${RecordPushLive}
 
   polaris-nginx:
-    # 显式指定构建上下文和Dockerfile路径
+    # Explicitly specify the build context and Dockerfile path
     build:
-      context: ..  # 构建上下文的根路径
-      dockerfile: ./docker/nginx/Dockerfile  # 相对于上下文路径的Dockerfile位置
+      context: ..  # The root path of the build context
+      dockerfile: ./docker/nginx/Dockerfile  # Dockerfile location relative to context path
     ports:
       - "${WebHttp:-8080}:8080"
     depends_on:
@@ -148,7 +148,7 @@ services:
       - ./nginx/templates/:/etc/nginx/templates
       - ./logs/nginx:/var/log/nginx
     environment:
-      # 流链接的IP
+      # stream linkedIP
       Stream_IP: ${Stream_IP}
     networks:
       - media-net

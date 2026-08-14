@@ -1,7 +1,7 @@
 package com.genersoft.iot.vmp.media.event.mediaServer;
 
 /**
- * zlm在线事件
+ * zlmonline events
  */
 public class MediaServerDeleteEvent extends MediaServerEventAbstract {
 

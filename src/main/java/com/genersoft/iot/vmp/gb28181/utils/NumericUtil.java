@@ -1,13 +1,13 @@
 package com.genersoft.iot.vmp.gb28181.utils;
 
 /**
- * 数值格式判断和处理
+ * Numeric format judgment and processing
  * @author lawrencehj
- * @date 2021年1月27日
+ * @date 2021January 27
  */
 public class NumericUtil {
     /**
-     * 判断是否Double格式
+     * Determine whether it is in Double format
      * @param str
      * @return true/false
      */
@@ -23,7 +23,7 @@ public class NumericUtil {
     }
 
     /**
-     * 判断是否Double格式
+     * Determine whether it is in Double format
      * @param str
      * @return true/false
      */

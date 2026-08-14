@@ -3,34 +3,34 @@
     <div class="basic-property-body">
       <div class="config-section">
         <el-form ref="formRef" :model="form" label-width="140px">
-          <el-form-item label="设备名称" prop="name">
+          <el-form-item label="Device name" prop="name">
             <el-input v-model="form.name" />
           </el-form-item>
-          <el-form-item label="注册过期时间(秒)" prop="expiration">
+          <el-form-item label="Registration expiration time(seconds)" prop="expiration">
             <el-input-number v-model="form.expiration" :min="60" :max="86400" />
           </el-form-item>
-          <el-form-item label="心跳间隔(秒)" prop="heartBeatInterval">
+          <el-form-item label="heartbeat interval(seconds)" prop="heartBeatInterval">
             <el-input-number v-model="form.heartBeatInterval" :min="5" :max="3600" />
           </el-form-item>
-          <el-form-item label="心跳超时次数" prop="heartBeatCount">
+          <el-form-item label="Number of heartbeat timeouts" prop="heartBeatCount">
             <el-input-number v-model="form.heartBeatCount" :min="1" :max="60" />
           </el-form-item>
-          <el-form-item label="定位功能" prop="positionCapability">
+          <el-form-item label="Positioning function" prop="positionCapability">
             <el-select v-model="form.positionCapability">
-              <el-option :value="0" label="不支持" />
-              <el-option :value="1" label="GPS定位" />
-              <el-option :value="2" label="北斗定位" />
+              <el-option :value="0" label="Not supported" />
+              <el-option :value="1" label="GPSPositioning" />
+              <el-option :value="2" label="Beidou positioning" />
             </el-select>
           </el-form-item>
-          <el-form-item label="经度" v-if="form.longitude !== null">
+          <el-form-item label="longitude" v-if="form.longitude !== null">
             <span class="readonly-field">{{ form.longitude }}</span>
           </el-form-item>
-          <el-form-item label="纬度" v-if="form.latitude !== null">
+          <el-form-item label="Latitude" v-if="form.latitude !== null">
             <span class="readonly-field">{{ form.latitude }}</span>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" :loading="saving" @click="handleSave">保存</el-button>
-            <el-button :loading="loading" @click="handleRefresh">刷新</el-button>
+            <el-button type="primary" :loading="saving" @click="handleSave">save</el-button>
+            <el-button :loading="loading" @click="handleRefresh">Refresh</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -82,7 +82,7 @@ export default {
       this.saving = true
       this.$store.dispatch('device/setBasicParam', this.form)
         .then(() => {
-          this.$message({ showClose: true, message: '保存成功', type: 'success' })
+          this.$message({ showClose: true, message: 'Saved successfully', type: 'success' })
         })
         .catch((error) => {
           this.$message({ showClose: true, message: error, type: 'error' })

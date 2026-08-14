@@ -5,212 +5,212 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 /**
- * 国标设备/平台
+ * National standard equipment/platform
  * @author lin
  */
 @Data
-@Schema(description = "国标设备/平台")
+@Schema(description = "National standard equipment/platform")
 public class Device {
 
-	@Schema(description = "数据库自增ID")
+	@Schema(description = "Database auto-incrementID")
 	private int id;
 
 	/**
-	 * 设备国标编号
+	 * Equipment national standard number
 	 */
-	@Schema(description = "设备国标编号")
+	@Schema(description = "Equipment national standard number")
 	private String deviceId;
 
 	/**
-	 * 设备名
+	 * Device name
 	 */
-	@Schema(description = "名称")
+	@Schema(description = "Name")
 	private String name;
 
 	/**
-	 * 生产厂商
+	 * Manufacturer
 	 */
-	@Schema(description = "生产厂商")
+	@Schema(description = "Manufacturer")
 	private String manufacturer;
 
 	/**
-	 * 型号
+	 * Model
 	 */
-	@Schema(description = "型号")
+	@Schema(description = "Model")
 	private String model;
 
 	/**
-	 * 固件版本
+	 * Firmware version
 	 */
-	@Schema(description = "固件版本")
+	@Schema(description = "Firmware version")
 	private String firmware;
 
 	/**
-	 * 传输协议
+	 * transport protocol
 	 * UDP/TCP
 	 */
-	@Schema(description = "传输协议（UDP/TCP）")
+	@Schema(description = "transport protocol（UDP/TCP）")
 	private String transport;
 
 	/**
-	 * 数据流传输模式
-	 * UDP:udp传输
-	 * TCP-ACTIVE：tcp主动模式
-	 * TCP-PASSIVE：tcp被动模式
+	 * Data streaming mode
+	 * UDP:udptransmission
+	 * TCP-ACTIVE：tcpActive mode
+	 * TCP-PASSIVE：tcppassive mode
 	 */
-	@Schema(description = "数据流传输模式")
+	@Schema(description = "Data streaming mode")
 	private String streamMode;
 
 	/**
-	 * wan地址_ip
+	 * wanaddress_ip
 	 */
 	@Schema(description = "IP")
 	private String  ip;
 
 	/**
-	 * wan地址_port
+	 * wanaddress_port
 	 */
-	@Schema(description = "端口")
+	@Schema(description = "port")
 	private int port;
 
 	/**
-	 * wan地址
+	 * wanaddress
 	 */
-	@Schema(description = "wan地址")
+	@Schema(description = "wanaddress")
 	private String  hostAddress;
 
 	/**
-	 * 在线
+	 * online
 	 */
-	@Schema(description = "是否在线，true为在线，false为离线")
+	@Schema(description = "Whether it is online, true means online, false means offline")
 	private boolean onLine;
 
 
 	/**
-	 * 注册时间
+	 * Registration time
 	 */
-	@Schema(description = "注册时间戳")
+	@Schema(description = "Registration timestamp")
 	private Long registerTimeStamp;
 
 
 	/**
-	 * 心跳时间
+	 * heartbeat time
 	 */
-	@Schema(description = "心跳时间")
+	@Schema(description = "heartbeat time")
 	private Long keepaliveTimeStamp;
 
 
 	/**
-	 * 心跳间隔
+	 * heartbeat interval
 	 */
-	@Schema(description = "心跳间隔")
+	@Schema(description = "heartbeat interval")
 	private Integer heartBeatInterval;
 
 
 	/**
-	 * 心跳超时次数
+	 * Number of heartbeat timeouts
 	 */
-	@Schema(description = "心跳超时次数")
+	@Schema(description = "Number of heartbeat timeouts")
 	private Integer heartBeatCount;
 
 
 	/**
-	 * 定位功能支持情况
+	 * Positioning function support
 	 */
-	@Schema(description = "定位功能支持情况。取值:0-不支持;1-支持 GPS定位;2-支持北斗定位(可选,默认取值为0")
+	@Schema(description = "Positioning feature support. value:0-Not supported;1-Support GPS positioning;2-Support Beidou positioning(Optional, the default value is0")
 	private Integer positionCapability;
 
 	/**
-	 * 通道个数
+	 * Number of channels
 	 */
-	@Schema(description = "通道个数")
+	@Schema(description = "Number of channels")
 	private int channelCount;
 
 	/**
-	 * 注册有效期
+	 * Registration validity period
 	 */
-	@Schema(description = "注册有效期")
+	@Schema(description = "Registration validity period")
 	private int expires;
 
 	/**
-	 * 创建时间
+	 * creation time
 	 */
-	@Schema(description = "创建时间")
+	@Schema(description = "creation time")
 	private String createTime;
 
 	/**
-	 * 更新时间
+	 * Update time
 	 */
-	@Schema(description = "更新时间")
+	@Schema(description = "Update time")
 	private String updateTime;
 
 	/**
-	 * 设备使用的媒体id, 默认为null
+	 * Media ID used by the device, default isnull
 	 */
-	@Schema(description = "设备使用的媒体id, 默认为null")
+	@Schema(description = "Media ID used by the device, default isnull")
 	private String mediaServerId;
 
 	/**
-	 * 字符集, 支持 UTF-8 与 GB2312
+	 * character set, support UTF-8 with GB2312
 	 */
-	@Schema(description = "符集, 支持 UTF-8 与 GB2312")
+	@Schema(description = "symbol set, support UTF-8 with GB2312")
 	private String charset ;
 
 	/**
-	 * 目录订阅周期，0为不订阅
+	 * Directory subscription period, 0 means no subscription
 	 */
-	@Schema(description = "目录订阅周期，o为不订阅")
+	@Schema(description = "Directory subscription period, o means no subscription")
 	private int subscribeCycleForCatalog;
 
 	/**
-	 * 移动设备位置订阅周期，0为不订阅
+	 * Mobile device location subscription period, 0 means no subscription
 	 */
-	@Schema(description = "移动设备位置订阅周期，0为不订阅")
+	@Schema(description = "Mobile device location subscription period, 0 means no subscription")
 	private int subscribeCycleForMobilePosition;
 
 	/**
-	 * 移动设备位置信息上报时间间隔,单位:秒,默认值5
+	 * Mobile device location information reporting time interval, unit: seconds, default value5
 	 */
-	@Schema(description = "移动设备位置信息上报时间间隔,单位:秒,默认值5")
+	@Schema(description = "Mobile device location information reporting time interval, unit: seconds, default value5")
 	private int mobilePositionSubmissionInterval = 5;
 
 	/**
-	 * 报警订阅周期，0为不订阅
+	 * Alarm subscription period, 0 means no subscription
 	 */
-	@Schema(description = "报警心跳时间订阅周期，0为不订阅")
+	@Schema(description = "Alarm heartbeat time subscription period, 0 means no subscription")
 	private int subscribeCycleForAlarm;
 
 	/**
-	 * 是否开启ssrc校验，默认关闭，开启可以防止串流
+	 * Whether to enable ssrc verification. It is turned off by default. Turning it on can prevent streaming.
 	 */
-	@Schema(description = "是否开启ssrc校验，默认关闭，开启可以防止串流")
+	@Schema(description = "Whether to enable ssrc verification. It is turned off by default. Turning it on can prevent streaming.")
 	private boolean ssrcCheck = false;
 
 	/**
-	 * 地理坐标系， 目前支持 WGS84,GCJ02, 此字段保留，暂无用
+	 * Geographic coordinate system, currently supports WGS84, GCJ02, this field is reserved and is currently unavailable
 	 */
-	@Schema(description = "地理坐标系， 目前支持 WGS84,GCJ02")
+	@Schema(description = "Geographic coordinate system, currently supported WGS84,GCJ02")
 	private String geoCoordSys;
 
-	@Schema(description = "密码")
+	@Schema(description = "Password")
 	private String password;
 
-	@Schema(description = "收流IP")
+	@Schema(description = "collect flowIP")
 	private String sdpIp;
 
-	@Schema(description = "SIP交互IP（设备访问平台的IP）")
+	@Schema(description = "SIPInteractive IP (device access platformIP）")
 	private String localIp;
 
-	@Schema(description = "是否作为消息通道")
+	@Schema(description = "Whether to serve as a message channel")
 	private boolean asMessageChannel;
 
-	@Schema(description = "设备注册的事务信息")
+	@Schema(description = "Device registration transaction information")
 	private SipTransactionInfo sipTransactionInfo;
 
-	@Schema(description = "控制语音对讲流程，释放收到ACK后发流")
+	@Schema(description = "Control the voice intercom process and release the stream after receiving ACK")
 	private boolean broadcastPushAfterAck;
 
-	@Schema(description = "所属服务Id")
+	@Schema(description = "ServicesId")
 	private String serverId;
 
     public boolean checkWgs84() {

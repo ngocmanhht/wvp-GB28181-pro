@@ -48,10 +48,10 @@ public class GbChannelPlayServiceImpl implements IGbChannelPlayService {
     @Override
     public void startInvite(CommonGBChannel channel, InviteMessageInfo inviteInfo, Platform platform, ErrorCallback<StreamInfo> callback) {
         if (channel == null || inviteInfo == null || callback == null || channel.getDataType() == null) {
-            log.warn("[通用通道点播] 参数异常, channel: {}, inviteInfo: {}, callback: {}", channel != null, inviteInfo != null, callback != null);
+            log.warn("[Universal channel on demand] Parameter exception, channel: {}, inviteInfo: {}, callback: {}", channel != null, inviteInfo != null, callback != null);
             throw new PlayException(Response.SERVER_INTERNAL_ERROR, "server internal error");
         }
-        log.info("[点播通用通道] 类型：{}， 通道： {}({})", inviteInfo.getSessionName(), channel.getGbName(), channel.getGbDeviceId());
+        log.info("[On-demand universal channel] Type：{}， channel： {}({})", inviteInfo.getSessionName(), channel.getGbName(), channel.getGbDeviceId());
 
         if ("Play".equalsIgnoreCase(inviteInfo.getSessionName())) {
             play(channel, platform, userSetting.getRecordSip(), callback);
@@ -59,11 +59,11 @@ public class GbChannelPlayServiceImpl implements IGbChannelPlayService {
             playback(channel, inviteInfo.getStartTime(), inviteInfo.getStopTime(), callback);
         }else if ("Download".equals(inviteInfo.getSessionName())) {
             Integer downloadSpeed = Integer.parseInt(inviteInfo.getDownloadSpeed());
-            // 国标通道
+            // National standard channel
             download(channel, inviteInfo.getStartTime(), inviteInfo.getStopTime(), downloadSpeed, callback);
         }else {
-            // 不支持的点播方式
-            log.error("[点播通用通道] 不支持的点播方式：{}， {}({})", inviteInfo.getSessionName(), channel.getGbName(), channel.getGbDeviceId());
+            // Unsupported on-demand method
+            log.error("[On-demand universal channel] Unsupported on-demand method：{}， {}({})", inviteInfo.getSessionName(), channel.getGbName(), channel.getGbDeviceId());
             throw new PlayException(Response.BAD_REQUEST, "bad request");
         }
     }
@@ -81,8 +81,8 @@ public class GbChannelPlayServiceImpl implements IGbChannelPlayService {
                 stopDownload(channel, stream);
                 break;
             default:
-                // 通道数据异常
-                log.error("[点播通用通道] 类型编号： {} 不支持此类型请求", type);
+                // Channel data abnormality
+                log.error("[On-demand universal channel] Type number： {} This type of request is not supported", type);
                 throw new PlayException(Response.BUSY_HERE, "channel not support");
         }
     }
@@ -91,17 +91,17 @@ public class GbChannelPlayServiceImpl implements IGbChannelPlayService {
 
     @Override
     public void play(CommonGBChannel channel, Platform platform, Boolean record, ErrorCallback<StreamInfo> callback) {
-        log.info("[通用通道] 播放， 类型： {}， 编号：{}", ChannelDataType.getDateTypeDesc(channel.getDataType()), channel.getGbDeviceId());
+        log.info("[Universal channel] play, type： {}， No.：{}", ChannelDataType.getDateTypeDesc(channel.getDataType()), channel.getGbDeviceId());
         Integer dataType = channel.getDataType();
         ISourcePlayService sourceChannelPlayService = sourcePlayServiceMap.get(ChannelDataType.PLAY_SERVICE + dataType);
         if (sourceChannelPlayService == null) {
-            // 通道数据异常
-            log.error("[点播通用通道] 类型编号： {} 不支持实时流预览", ChannelDataType.getDateTypeDesc(channel.getDataType()));
+            // Channel data abnormality
+            log.error("[On-demand universal channel] Type number： {} Live stream preview is not supported", ChannelDataType.getDateTypeDesc(channel.getDataType()));
             throw new PlayException(Response.BUSY_HERE, "channel not support");
         }
         sourceChannelPlayService.play(channel, platform, record, (code, msg, data) -> {
             if (code == InviteErrorCode.SUCCESS.getCode()) {
-                // 将流ID记录到数据库
+                // Log stream ID to database
                 if (channel.getDataType() != ChannelDataType.GB28181) {
                     channelMapper.updateStream(channel.getGbId(), data.getStream());
                 }
@@ -111,12 +111,12 @@ public class GbChannelPlayServiceImpl implements IGbChannelPlayService {
     }
     @Override
     public void playback(CommonGBChannel channel, Long startTime, Long stopTime, ErrorCallback<StreamInfo> callback) {
-        log.info("[通用通道] 回放， 类型： {}， 编号：{}", ChannelDataType.getDateTypeDesc(channel.getDataType()), channel.getGbDeviceId());
+        log.info("[Universal channel] playback, type： {}， No.：{}", ChannelDataType.getDateTypeDesc(channel.getDataType()), channel.getGbDeviceId());
         Integer dataType = channel.getDataType();
         ISourcePlaybackService playbackService = sourcePlaybackServiceMap.get(ChannelDataType.PLAYBACK_SERVICE + dataType);
         if (playbackService == null) {
-            // 通道数据异常
-            log.error("[点播通用通道] 类型编号： {} 不支持回放", dataType);
+            // Channel data abnormality
+            log.error("[On-demand universal channel] Type number： {} Playback is not supported", dataType);
             throw new PlayException(Response.BUSY_HERE, "channel not support");
         }
         playbackService.playback(channel, startTime, stopTime, callback);
@@ -125,12 +125,12 @@ public class GbChannelPlayServiceImpl implements IGbChannelPlayService {
     @Override
     public void download(CommonGBChannel channel, Long startTime, Long stopTime, Integer downloadSpeed,
                          ErrorCallback<StreamInfo> callback){
-        log.info("[通用通道] 录像下载， 类型： {}， 编号：{}", ChannelDataType.getDateTypeDesc(channel.getDataType()), channel.getGbDeviceId());
+        log.info("[Universal channel] Video download, type： {}， No.：{}", ChannelDataType.getDateTypeDesc(channel.getDataType()), channel.getGbDeviceId());
         Integer dataType = channel.getDataType();
         ISourceDownloadService downloadService = sourceDownloadServiceMap.get(ChannelDataType.DOWNLOAD_SERVICE + dataType);
         if (downloadService == null) {
-            // 通道数据异常
-            log.error("[点播通用通道] 类型编号： {} 不支持录像下载", dataType);
+            // Channel data abnormality
+            log.error("[On-demand universal channel] Type number： {} Video downloading is not supported", dataType);
             throw new PlayException(Response.BUSY_HERE, "channel not support");
         }
         downloadService.download(channel, startTime, stopTime, downloadSpeed, callback);
@@ -141,8 +141,8 @@ public class GbChannelPlayServiceImpl implements IGbChannelPlayService {
         Integer dataType = channel.getDataType();
         ISourcePlayService sourceChannelPlayService = sourcePlayServiceMap.get(ChannelDataType.PLAY_SERVICE + dataType);
         if (sourceChannelPlayService == null) {
-            // 通道数据异常
-            log.error("[点播通用通道] 类型编号： {} 不支持停止实时流", dataType);
+            // Channel data abnormality
+            log.error("[On-demand universal channel] Type number： {} Stopping live streaming is not supported", dataType);
             throw new PlayException(Response.BUSY_HERE, "channel not support");
         }
         sourceChannelPlayService.stopPlay(channel);
@@ -151,12 +151,12 @@ public class GbChannelPlayServiceImpl implements IGbChannelPlayService {
 
     @Override
     public void stopPlayback(CommonGBChannel channel, String stream) {
-        log.info("[通用通道] 停止回放， 类型： {}， 编号：{}", ChannelDataType.getDateTypeDesc(channel.getDataType()), channel.getGbDeviceId());
+        log.info("[Universal channel] Stop playback, type： {}， No.：{}", ChannelDataType.getDateTypeDesc(channel.getDataType()), channel.getGbDeviceId());
         Integer dataType = channel.getDataType();
         ISourcePlaybackService playbackService = sourcePlaybackServiceMap.get(ChannelDataType.PLAYBACK_SERVICE + dataType);
         if (playbackService == null) {
-            // 通道数据异常
-            log.error("[点播通用通道] 类型编号： {} 不支持回放", dataType);
+            // Channel data abnormality
+            log.error("[On-demand universal channel] Type number： {} Playback is not supported", dataType);
             throw new PlayException(Response.BUSY_HERE, "channel not support");
         }
         playbackService.stopPlayback(channel, stream);
@@ -164,12 +164,12 @@ public class GbChannelPlayServiceImpl implements IGbChannelPlayService {
 
     @Override
     public void stopDownload(CommonGBChannel channel, String stream) {
-        log.info("[通用通道] 停止录像下载， 类型： {}， 编号：{} stream: {}", ChannelDataType.getDateTypeDesc(channel.getDataType()), channel.getGbDeviceId(), stream);
+        log.info("[Universal channel] Stop video downloading, type： {}， No.：{} stream: {}", ChannelDataType.getDateTypeDesc(channel.getDataType()), channel.getGbDeviceId(), stream);
         Integer dataType = channel.getDataType();
         ISourceDownloadService downloadService = sourceDownloadServiceMap.get(ChannelDataType.DOWNLOAD_SERVICE + dataType);
         if (downloadService == null) {
-            // 通道数据异常
-            log.error("[点播通用通道] 类型编号： {} 不支持录像下载", dataType);
+            // Channel data abnormality
+            log.error("[On-demand universal channel] Type number： {} Video downloading is not supported", dataType);
             throw new PlayException(Response.BUSY_HERE, "channel not support");
         }
         downloadService.stopDownload(channel, stream);
@@ -177,12 +177,12 @@ public class GbChannelPlayServiceImpl implements IGbChannelPlayService {
 
     @Override
     public void playbackPause(CommonGBChannel channel, String stream) {
-        log.info("[通用通道] 回放暂停， 类型： {}， 编号：{} stream：{}", ChannelDataType.getDateTypeDesc(channel.getDataType()), channel.getGbDeviceId(), stream);
+        log.info("[Universal channel] Playback paused, type： {}， No.：{} stream：{}", ChannelDataType.getDateTypeDesc(channel.getDataType()), channel.getGbDeviceId(), stream);
         Integer dataType = channel.getDataType();
         ISourcePlaybackService playbackService = sourcePlaybackServiceMap.get(ChannelDataType.PLAYBACK_SERVICE + dataType);
         if (playbackService == null) {
-            // 通道数据异常
-            log.error("[点播通用通道] 类型编号： {} 不支持回放暂停", dataType);
+            // Channel data abnormality
+            log.error("[On-demand universal channel] Type number： {} Playback pause is not supported", dataType);
             throw new PlayException(Response.BUSY_HERE, "channel not support");
         }
         playbackService.playbackPause(channel, stream);
@@ -190,12 +190,12 @@ public class GbChannelPlayServiceImpl implements IGbChannelPlayService {
 
     @Override
     public void playbackResume(CommonGBChannel channel, String stream) {
-        log.info("[通用通道] 回放暂停恢复， 类型： {}， 编号：{} stream：{}", ChannelDataType.getDateTypeDesc(channel.getDataType()), channel.getGbDeviceId(), stream);
+        log.info("[Universal channel] Playback pause and resume, type： {}， No.：{} stream：{}", ChannelDataType.getDateTypeDesc(channel.getDataType()), channel.getGbDeviceId(), stream);
         Integer dataType = channel.getDataType();
         ISourcePlaybackService playbackService = sourcePlaybackServiceMap.get(ChannelDataType.PLAYBACK_SERVICE + dataType);
         if (playbackService == null) {
-            // 通道数据异常
-            log.error("[点播通用通道] 类型编号： {} 不支持回放暂停恢复", dataType);
+            // Channel data abnormality
+            log.error("[On-demand universal channel] Type number： {} Playback pause and resume is not supported", dataType);
             throw new PlayException(Response.BUSY_HERE, "channel not support");
         }
         playbackService.playbackResume(channel, stream);
@@ -203,12 +203,12 @@ public class GbChannelPlayServiceImpl implements IGbChannelPlayService {
 
     @Override
     public void playbackSeek(CommonGBChannel channel, String stream, long seekTime) {
-        log.info("[通用通道] 回放拖动播放， 类型： {}， 编号：{} stream：{}", ChannelDataType.getDateTypeDesc(channel.getDataType()), channel.getGbDeviceId(), stream);
+        log.info("[Universal channel] Playback drag play, type： {}， No.：{} stream：{}", ChannelDataType.getDateTypeDesc(channel.getDataType()), channel.getGbDeviceId(), stream);
         Integer dataType = channel.getDataType();
         ISourcePlaybackService playbackService = sourcePlaybackServiceMap.get(ChannelDataType.PLAYBACK_SERVICE + dataType);
         if (playbackService == null) {
-            // 通道数据异常
-            log.error("[点播通用通道] 类型编号： {} 不支持回放暂停恢复", dataType);
+            // Channel data abnormality
+            log.error("[On-demand universal channel] Type number： {} Playback pause and resume is not supported", dataType);
             throw new PlayException(Response.BUSY_HERE, "channel not support");
         }
         playbackService.playbackSeek(channel, stream, seekTime);
@@ -216,12 +216,12 @@ public class GbChannelPlayServiceImpl implements IGbChannelPlayService {
 
     @Override
     public void playbackSpeed(CommonGBChannel channel, String stream, Double speed) {
-        log.info("[通用通道] 回放倍速播放， 类型： {}， 编号：{} stream：{}", ChannelDataType.getDateTypeDesc(channel.getDataType()), channel.getGbDeviceId(), stream);
+        log.info("[Universal channel] Playback at double speed, type： {}， No.：{} stream：{}", ChannelDataType.getDateTypeDesc(channel.getDataType()), channel.getGbDeviceId(), stream);
         Integer dataType = channel.getDataType();
         ISourcePlaybackService playbackService = sourcePlaybackServiceMap.get(ChannelDataType.PLAYBACK_SERVICE + dataType);
         if (playbackService == null) {
-            // 通道数据异常
-            log.error("[点播通用通道] 类型编号： {} 不支持回放暂停恢复", dataType);
+            // Channel data abnormality
+            log.error("[On-demand universal channel] Type number： {} Playback pause and resume is not supported", dataType);
             throw new PlayException(Response.BUSY_HERE, "channel not support");
         }
         playbackService.playbackSpeed(channel, stream, speed);
@@ -229,12 +229,12 @@ public class GbChannelPlayServiceImpl implements IGbChannelPlayService {
 
     @Override
     public void queryRecord(CommonGBChannel channel, String startTime, String endTime, ErrorCallback<List<CommonRecordInfo>> callback) {
-        log.info("[通用通道] 录像查询， 类型： {}， 编号：{}", ChannelDataType.getDateTypeDesc(channel.getDataType()), channel.getGbDeviceId());
+        log.info("[Universal channel] Video query, type： {}， No.：{}", ChannelDataType.getDateTypeDesc(channel.getDataType()), channel.getGbDeviceId());
         Integer dataType = channel.getDataType();
         ISourcePlaybackService playbackService = sourcePlaybackServiceMap.get(ChannelDataType.PLAYBACK_SERVICE + dataType);
         if (playbackService == null) {
-            // 通道数据异常
-            log.error("[点播通用通道] 类型编号： {} 不支持回放暂停恢复", dataType);
+            // Channel data abnormality
+            log.error("[On-demand universal channel] Type number： {} Playback pause and resume is not supported", dataType);
             throw new PlayException(Response.BUSY_HERE, "channel not support");
         }
         playbackService.queryRecord(channel, startTime, endTime, callback);
@@ -242,12 +242,12 @@ public class GbChannelPlayServiceImpl implements IGbChannelPlayService {
 
     @Override
     public void getSnap(CommonGBChannel channel, ErrorCallback<byte[]> callback) {
-        log.info("[通用通道] 获取快照， 类型： {}， 编号：{}", ChannelDataType.getDateTypeDesc(channel.getDataType()), channel.getGbDeviceId());
+        log.info("[Universal channel] Get snapshot, type： {}， No.：{}", ChannelDataType.getDateTypeDesc(channel.getDataType()), channel.getGbDeviceId());
         Integer dataType = channel.getDataType();
         ISourcePlayService sourceChannelPlayService = sourcePlayServiceMap.get(ChannelDataType.PLAY_SERVICE + dataType);
         if (sourceChannelPlayService == null) {
-            // 通道数据异常
-            log.error("[通用通道] 获取快照 类型编号： {} 不支持实时流预览相关服务", ChannelDataType.getDateTypeDesc(channel.getDataType()));
+            // Channel data abnormality
+            log.error("[Universal channel] Get snapshot type number： {} Live stream preview related services are not supported", ChannelDataType.getDateTypeDesc(channel.getDataType()));
             throw new PlayException(Response.BUSY_HERE, "channel not support");
         }
         sourceChannelPlayService.getSnap(channel, callback);
@@ -255,11 +255,11 @@ public class GbChannelPlayServiceImpl implements IGbChannelPlayService {
 
     @Override
     public AudioTalkResult startTalk(CommonGBChannel channel) {
-        log.info("[通用通道] 开始对讲， 类型： {}， 编号：{}", ChannelDataType.getDateTypeDesc(channel.getDataType()), channel.getGbDeviceId());
+        log.info("[Universal channel] Start talkback, type： {}， No.：{}", ChannelDataType.getDateTypeDesc(channel.getDataType()), channel.getGbDeviceId());
         Integer dataType = channel.getDataType();
         ISourceBroadcastService broadcastService = sourceBroadcastServiceMap.get(ChannelDataType.BROADCAST_SERVICE + dataType);
         if (broadcastService == null) {
-            log.error("[通用通道] 类型编号： {} 不支持对讲", dataType);
+            log.error("[Universal channel] Type number： {} Does not support intercom", dataType);
             throw new PlayException(Response.BUSY_HERE, "channel not support");
         }
         return broadcastService.startTalk(channel);
@@ -267,11 +267,11 @@ public class GbChannelPlayServiceImpl implements IGbChannelPlayService {
 
     @Override
     public void stopTalk(CommonGBChannel channel) {
-        log.info("[通用通道] 停止对讲， 类型： {}， 编号：{}", ChannelDataType.getDateTypeDesc(channel.getDataType()), channel.getGbDeviceId());
+        log.info("[Universal channel] stop talk, type： {}， No.：{}", ChannelDataType.getDateTypeDesc(channel.getDataType()), channel.getGbDeviceId());
         Integer dataType = channel.getDataType();
         ISourceBroadcastService broadcastService = sourceBroadcastServiceMap.get(ChannelDataType.BROADCAST_SERVICE + dataType);
         if (broadcastService == null) {
-            log.error("[通用通道] 类型编号： {} 不支持对讲", dataType);
+            log.error("[Universal channel] Type number： {} Does not support intercom", dataType);
             throw new PlayException(Response.BUSY_HERE, "channel not support");
         }
         broadcastService.stopTalk(channel);
@@ -279,11 +279,11 @@ public class GbChannelPlayServiceImpl implements IGbChannelPlayService {
 
     @Override
     public AudioTalkResult startBroadcast(CommonGBChannel channel) {
-        log.info("[通用通道] 开始喊话， 类型： {}， 编号：{}", ChannelDataType.getDateTypeDesc(channel.getDataType()), channel.getGbDeviceId());
+        log.info("[Universal channel] Start shouting, type： {}， No.：{}", ChannelDataType.getDateTypeDesc(channel.getDataType()), channel.getGbDeviceId());
         Integer dataType = channel.getDataType();
         ISourceBroadcastService broadcastService = sourceBroadcastServiceMap.get(ChannelDataType.BROADCAST_SERVICE + dataType);
         if (broadcastService == null) {
-            log.error("[通用通道] 类型编号： {} 不支持喊话", dataType);
+            log.error("[Universal channel] Type number： {} Does not support shouting", dataType);
             throw new PlayException(Response.BUSY_HERE, "channel not support");
         }
         return broadcastService.startBroadcast(channel);
@@ -291,11 +291,11 @@ public class GbChannelPlayServiceImpl implements IGbChannelPlayService {
 
     @Override
     public void stopBroadcast(CommonGBChannel channel) {
-        log.info("[通用通道] 停止喊话， 类型： {}， 编号：{}", ChannelDataType.getDateTypeDesc(channel.getDataType()), channel.getGbDeviceId());
+        log.info("[Universal channel] stop shouting, type： {}， No.：{}", ChannelDataType.getDateTypeDesc(channel.getDataType()), channel.getGbDeviceId());
         Integer dataType = channel.getDataType();
         ISourceBroadcastService broadcastService = sourceBroadcastServiceMap.get(ChannelDataType.BROADCAST_SERVICE + dataType);
         if (broadcastService == null) {
-            log.error("[通用通道] 类型编号： {} 不支持喊话", dataType);
+            log.error("[Universal channel] Type number： {} Does not support shouting", dataType);
             throw new PlayException(Response.BUSY_HERE, "channel not support");
         }
         broadcastService.stopBroadcast(channel);

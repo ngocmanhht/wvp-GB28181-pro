@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-// 行政区划API
+// Administrative divisionAPI
 
 export function getTreeList(params) {
   const {query, parent, hasChannel} = params

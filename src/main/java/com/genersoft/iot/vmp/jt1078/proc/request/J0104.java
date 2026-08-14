@@ -23,7 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 查询终端参数应答
+ * Query terminal parameter response
  *
  */
 @MsgId(id = "0104")

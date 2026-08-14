@@ -2,12 +2,12 @@
   <div id="app" class="app-container">
     <div v-if="!platform" style="height: calc(100vh - 124px);">
       <el-form :inline="true" size="mini">
-        <el-form-item label="搜索">
+        <el-form-item label="Search">
           <el-input
             v-model="searchStr"
             style="margin-right: 1rem; width: auto;"
             size="mini"
-            placeholder="关键字"
+            placeholder="Keywords"
             prefix-icon="el-icon-search"
             clearable
             @input="queryList"
@@ -20,14 +20,14 @@
             style="margin-right: 1rem;"
             type="primary"
             @click="addParentPlatform"
-          >添加
+          >add
           </el-button>
         </el-form-item>
         <el-form-item style="float: right;">
           <el-button icon="el-icon-refresh-right" circle @click="refresh()" />
         </el-form-item>
       </el-form>
-      <!--设备列表-->
+      <!--Device list-->
       <el-table
         size="small"
         :data="platformList"
@@ -35,68 +35,68 @@
         height="calc(100% - 64px)"
         :loading="loading"
       >
-        <el-table-column prop="name" label="名称" />
-        <el-table-column prop="serverGBId" label="平台编号" min-width="200" />
-        <el-table-column label="是否启用" min-width="80">
+        <el-table-column prop="name" label="Name" />
+        <el-table-column prop="serverGBId" label="Platform number" min-width="200" />
+        <el-table-column label="Whether to enable" min-width="80">
           <template v-slot:default="scope">
             <div slot="reference" class="name-wrapper">
-              <el-tag v-if="scope.row.enable && myServerId !== scope.row.serverId" size="medium" style="border-color: #ecf1af">已启用</el-tag>
-              <el-tag v-if="scope.row.enable && myServerId === scope.row.serverId" size="medium">已启用</el-tag>
-              <el-tag v-if="!scope.row.enable" size="medium" type="info">未启用</el-tag>
+              <el-tag v-if="scope.row.enable && myServerId !== scope.row.serverId" size="medium" style="border-color: #ecf1af">Enabled</el-tag>
+              <el-tag v-if="scope.row.enable && myServerId === scope.row.serverId" size="medium">Enabled</el-tag>
+              <el-tag v-if="!scope.row.enable" size="medium" type="info">Not enabled</el-tag>
             </div>
           </template>
         </el-table-column>
-        <el-table-column label="状态" min-width="80">
+        <el-table-column label="Status" min-width="80">
           <template v-slot:default="scope">
             <div slot="reference" class="name-wrapper">
-              <el-tag v-if="scope.row.status" size="medium">在线</el-tag>
-              <el-tag v-if="!scope.row.status" size="medium" type="info">离线</el-tag>
+              <el-tag v-if="scope.row.status" size="medium">online</el-tag>
+              <el-tag v-if="!scope.row.status" size="medium" type="info">Offline</el-tag>
             </div>
           </template>
         </el-table-column>
-        <el-table-column label="地址" min-width="160">
+        <el-table-column label="address" min-width="160">
           <template v-slot:default="scope">
             <div slot="reference" class="name-wrapper">
               <el-tag size="medium">{{ scope.row.serverIp }}:{{ scope.row.serverPort }}</el-tag>
             </div>
           </template>
         </el-table-column>
-        <el-table-column prop="deviceGBId" label="设备国标编号" min-width="200" />
-        <el-table-column prop="transport" label="信令传输模式" min-width="120" />
-        <el-table-column prop="channelCount" label="通道数" min-width="120" />
-        <el-table-column label="订阅信息" min-width="120" fixed="right">
+        <el-table-column prop="deviceGBId" label="Equipment national standard number" min-width="200" />
+        <el-table-column prop="transport" label="Signaling transmission mode" min-width="120" />
+        <el-table-column prop="channelCount" label="Number of channels" min-width="120" />
+        <el-table-column label="Subscription information" min-width="120" fixed="right">
           <template v-slot:default="scope">
             <i
               v-if="scope.row.alarmSubscribe"
               style="font-size: 20px"
-              title="报警订阅"
+              title="Alarm subscription"
               class="iconfont icon-gbaojings subscribe-on "
             />
             <i
               v-if="!scope.row.alarmSubscribe"
               style="font-size: 20px"
-              title="报警订阅"
+              title="Alarm subscription"
               class="iconfont icon-gbaojings subscribe-off "
             />
-            <i v-if="scope.row.catalogSubscribe" title="目录订阅" class="iconfont icon-gjichus subscribe-on" />
-            <i v-if="!scope.row.catalogSubscribe" title="目录订阅" class="iconfont icon-gjichus subscribe-off" />
+            <i v-if="scope.row.catalogSubscribe" title="directory subscription" class="iconfont icon-gjichus subscribe-on" />
+            <i v-if="!scope.row.catalogSubscribe" title="directory subscription" class="iconfont icon-gjichus subscribe-off" />
             <i
               v-if="scope.row.mobilePositionSubscribe"
-              title="位置订阅"
+              title="location subscription"
               class="iconfont icon-gxunjians subscribe-on"
             />
             <i
               v-if="!scope.row.mobilePositionSubscribe"
-              title="位置订阅"
+              title="location subscription"
               class="iconfont icon-gxunjians subscribe-off"
             />
           </template>
         </el-table-column>
 
-        <el-table-column label="操作" min-width="260" fixed="right">
+        <el-table-column label="Operation" min-width="260" fixed="right">
           <template v-slot:default="scope">
-            <el-button size="medium" icon="el-icon-edit" type="text" @click="editPlatform(scope.row)">编辑</el-button>
-            <el-button size="medium" icon="el-icon-share" type="text" @click="chooseChannel(scope.row)">通道共享
+            <el-button size="medium" icon="el-icon-edit" type="text" @click="editPlatform(scope.row)">Edit</el-button>
+            <el-button size="medium" icon="el-icon-share" type="text" @click="chooseChannel(scope.row)">channel sharing
             </el-button>
             <el-button
               size="medium"
@@ -104,7 +104,7 @@
               type="text"
               :loading="pushChannelLoading"
               @click="pushChannel(scope.row)"
-            >推送通道
+            >push channel
             </el-button>
             <el-button
               size="medium"
@@ -112,7 +112,7 @@
               type="text"
               style="color: #f56c6c"
               @click="deletePlatform(scope.row)"
-            >删除
+            >Delete
             </el-button>
           </template>
         </el-table-column>
@@ -154,8 +154,8 @@ export default {
   data() {
     return {
       loading: false,
-      platformList: [], // 设备列表
-      deviceIps: [], // 设备列表
+      platformList: [], // Device list
+      deviceIps: [], // Device list
       defaultPlatform: null,
       platform: null,
       pushChannelLoading: false,
@@ -192,9 +192,9 @@ export default {
       this.getPlatformList()
     },
     deletePlatform: function(platform) {
-      this.$confirm('确认删除?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+      this.$confirm('Confirm deletion?', 'Tips', {
+        confirmButtonText: 'OK',
+        cancelButtonText: 'Cancel',
         type: 'warning'
       }).then(() => {
         this.deletePlatformCommit(platform)
@@ -206,7 +206,7 @@ export default {
         .then(() => {
           this.$message.success({
             showClose: true,
-            message: '删除成功'
+            message: 'Delete successfully'
           })
           this.initData()
         })
@@ -230,7 +230,7 @@ export default {
         .then((data) => {
           this.$message.success({
             showClose: true,
-            message: '推送成功'
+            message: 'Push successful'
           })
         })
         .catch((error) => {

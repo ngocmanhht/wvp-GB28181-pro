@@ -11,8 +11,8 @@ import org.springframework.stereotype.Component;
 import javax.sip.RequestEvent;
 
 /**
- * 命令类型： 请求动作的应答
- * 命令类型： 设备控制, 报警通知, 设备目录信息查询, 目录信息查询, 目录收到, 设备信息查询, 设备状态信息查询 ......
+ * Command type: Response to request action
+ * Command type: device control, alarm notification, device directory information query, directory information query, directory received, device information query, device status information query ......
  */
 @Component
 public class ResponseMessageHandler extends MessageHandlerAbstract implements InitializingBean  {

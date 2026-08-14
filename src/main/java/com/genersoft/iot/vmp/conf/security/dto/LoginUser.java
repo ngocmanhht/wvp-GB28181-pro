@@ -17,7 +17,7 @@ public class LoginUser implements UserDetails, CredentialsContainer {
     private static final long serialVersionUID = SpringSecurityCoreVersion.SERIAL_VERSION_UID;
 
     /**
-     * 用户
+     * User
      */
     private User user;
 
@@ -30,7 +30,7 @@ public class LoginUser implements UserDetails, CredentialsContainer {
     private String serverId;
 
     /**
-     * 登录时间
+     * Login time
      */
     private LocalDateTime loginTime;
 
@@ -56,7 +56,7 @@ public class LoginUser implements UserDetails, CredentialsContainer {
     }
 
     /**
-     * 账户是否未过期，过期无法验证
+     * Whether the account has not expired or not, it cannot be verified if it has expired.
      */
     @Override
     public boolean isAccountNonExpired() {
@@ -64,9 +64,9 @@ public class LoginUser implements UserDetails, CredentialsContainer {
     }
 
     /**
-     * 指定用户是否解锁，锁定的用户无法进行身份验证
+     * Specifies whether the user is unlocked. Locked users cannot authenticate.
      * <p>
-     * 密码锁定
+     * Password lock
      * </p>
      */
     @Override
@@ -75,7 +75,7 @@ public class LoginUser implements UserDetails, CredentialsContainer {
     }
 
     /**
-     * 指示是否已过期的用户的凭据(密码)，过期的凭据防止认证
+     * Indicates whether the user's credentials have expired(Password)，Expired credentials prevent authentication
      */
     @Override
     public boolean isCredentialsNonExpired() {
@@ -83,7 +83,7 @@ public class LoginUser implements UserDetails, CredentialsContainer {
     }
 
     /**
-     * 用户是否被启用或禁用。禁用的用户无法进行身份验证。
+     * Whether the user is enabled or disabled. Disabled users cannot authenticate。
      */
     @Override
     public boolean isEnabled() {
@@ -91,7 +91,7 @@ public class LoginUser implements UserDetails, CredentialsContainer {
     }
 
     /**
-     * 认证完成后，擦除密码
+     * After authentication is complete, erase the password
      */
     @Override
     public void eraseCredentials() {

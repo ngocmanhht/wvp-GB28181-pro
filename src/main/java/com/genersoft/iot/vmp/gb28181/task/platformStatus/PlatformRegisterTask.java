@@ -11,7 +11,7 @@ import java.util.concurrent.Delayed;
 import java.util.concurrent.TimeUnit;
 
 /**
- * 平台注册任务
+ * Platform registration tasks
  */
 @Slf4j
 public class PlatformRegisterTask implements Delayed {
@@ -20,7 +20,7 @@ public class PlatformRegisterTask implements Delayed {
     private String platformServerId;
 
     /**
-     * 超时时间(单位： 毫秒)
+     * timeout(Unit: millisecond)
      */
     @Getter
     @Setter
@@ -30,7 +30,7 @@ public class PlatformRegisterTask implements Delayed {
     private SipTransactionInfo sipTransactionInfo;
 
     /**
-     * 到期回调
+     * Expiration callback
      */
     @Getter
     private CommonCallback<String> callback;
@@ -45,7 +45,7 @@ public class PlatformRegisterTask implements Delayed {
 
     public void expired() {
         if (callback == null) {
-            log.info("[平台注册到期] 未找到到期处理回调， 平台上级编号： {}", platformServerId);
+            log.info("[Platform registration expires] Expiration processing callback not found, platform superior number： {}", platformServerId);
             return;
         }
         getCallback().run(platformServerId);

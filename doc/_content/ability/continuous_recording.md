@@ -1,16 +1,16 @@
-<!-- 7*24不间断录像 -->
+<!-- 7*24 uninterrupted recording -->
 
-# 7*24不间断录像
+# 7*24 uninterrupted video recording
 
-目前如果要实现不间断录像如果只是关闭无人观看停止推流是不够的，设备可能经历断网，重启，都会导致录像的中断，目前给大家提供一种可用的临时方案。
+At present, if you want to achieve uninterrupted recording, it is not enough to just turn off no one to watch and stop streaming. The device may experience network disconnection and restart, which will cause the interruption of recording. We currently provide you with an available temporary solution.
 
-**原理：** wvp支持使用流地址自动点播，即你拿到一个流地址直接去播放，即使设备处于未点播状态，wvp会自动帮你点播；ZLM
-的拉流代理成功后会无限重试，只要流一恢复就可以拉起来，基于这两个原理。  
-**方案如下：**
+**Principle:** wvp supports automatic on-demand playback using the stream address, that is, you get a stream address and play it directly. Even if the device is not on-demand, wvp will automatically help you on-demand playback; ZLM
+The streaming agent will retry infinitely after success. It can be pulled up as soon as the streaming is restored, based on these two principles.
+**The plan is as follows:**
 
-1. wvp的配置中user-settings->auto-apply-play设置为团true,开启自动点播；
-2. 点击你要录像的通道，点击播放页面左下角的“更多地址”，点击rtsp，此时复制了rtsp地址到剪贴板；
-3. 在拉流代理中添加一路流，地址填写你复制的地址，启用成功即可。  
-   **前提：**
-1. wvp使用多端口收流，不然你无法得到一个固定的流地址，也就无法实现自动点播。
+1. In the wvp configuration, user-settings->auto-apply-play is set to true to enable automatic on-demand play;
+2. Click the channel you want to record, click "More Addresses" in the lower left corner of the playback page, click rtsp, and copy the rtsp address to the clipboard;
+3. Add a stream to the streaming agent, fill in the address you copied, and enable it successfully.
+**premise:**
+1. WVP uses multiple ports to collect streams, otherwise you cannot get a fixed stream address and cannot achieve automatic on-demand.
 

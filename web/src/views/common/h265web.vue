@@ -3,7 +3,7 @@
     <div :id="'glplayer-' + _uid" ref="playerBox" style="width: 100%; height: 100%; margin: 0 auto;">
       <div v-if="playerLoading" class="play-loading">
         <i class="el-icon-loading" />
-        <span style="margin-left: 5px">视频加载中</span>
+        <span style="margin-left: 5px">Video loading</span>
       </div>
     </div>
 
@@ -34,7 +34,7 @@
 <script>
 const h265webPlayer = {}
 /**
- * 从github上复制的
+ * Copied from github
  * @see https://github.com/numberwolf/h265web.js/blob/master/example_normal/index.js
  */
 const token = 'base64:QXV0aG9yOmNoYW5neWFubG9uZ3xudW1iZXJ3b2xmLEdpdGh1YjpodHRwczovL2dpdGh1Yi5jb20vbnVtYmVyd29sZixFbWFpbDpwb3JzY2hlZ3QyM0Bmb3htYWlsLmNvbSxRUTo1MzEzNjU4NzIsSG9tZVBhZ2U6aHR0cDovL3h2aWRlby52aWRlbyxEaXNjb3JkOm51bWJlcndvbGYjODY5NCx3ZWNoYXI6bnVtYmVyd29sZjExLEJlaWppbmcsV29ya0luOkJhaWR1'
@@ -56,7 +56,7 @@ export default {
       videoInfo: null,
       volume: 1,
       rotate: 0,
-      vod: true, // 点播
+      vod: true, // on demand
       forceNoOffscreen: false,
       playerWidth: 0,
       playerHeight: 0,
@@ -142,14 +142,14 @@ export default {
         this.fullscreen = false
       }
       h265web.onReadyShowDone = () => {
-        // 准备好显示了，尝试自动播放
+        // Ready to show, try autoplay
         const result = h265web.play()
         this.playing = result
         this.playerLoading = false
       }
       h265web.onLoadFinish = () => {
         this.loaded = true
-        // 可以获取mediaInfo
+        // availablemediaInfo
         // @see https://github.com/numberwolf/h265web.js/blob/8b26a31ffa419bd0a0f99fbd5111590e144e36a8/example_normal/index.js#L252C9-L263C11
         this.mediaInfo = h265web.mediaInfo()
       }
@@ -166,7 +166,7 @@ export default {
         canvas.height = this.mediaInfo.meta.size.height
         h265webPlayer[this._uid].snapshot(canvas) // snapshot to canvas
 
-        // 下载截图
+        // Download screenshot
         const link = document.createElement('a')
         link.download = 'screenshot.png'
         link.href = canvas.toDataURL('image/png').replace('image/png', 'image/octet-stream')

@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 import java.util.Properties;
 
 /**
- * 获取sip默认配置
+ * Get sip default configuration
  * @author lin
  */
 public class DefaultProperties {
@@ -16,54 +16,54 @@ public class DefaultProperties {
         Properties properties = new Properties();
         properties.setProperty("javax.sip.STACK_NAME", name);
 //        properties.setProperty("javax.sip.IP_ADDRESS", ip);
-        // 关闭自动会话
+        // Turn off automated sessions
         properties.setProperty("javax.sip.AUTOMATIC_DIALOG_SUPPORT", "off");
 
         /**
-         * 完整配置参考 gov.nist.javax.sip.SipStackImpl，需要下载源码
+         * Full configuration reference gov.nist.javax.sip.SipStackImpl，Need to download source code
          * gov/nist/javax/sip/SipStackImpl.class
-         * sip消息的解析在 gov.nist.javax.sip.stack.UDPMessageChannel的processIncomingDataPacket方法
+         * sipThe message is parsed in gov.nist.javax.sip.stack.UDPMessageChannelofprocessIncomingDataPacketmethod
          */
 
-        // 接收所有notify请求，即使没有订阅
+        // Receive all notify requests, even if not subscribed
         properties.setProperty("gov.nist.javax.sip.DELIVER_UNSOLICITED_NOTIFY", "true");
         properties.setProperty("gov.nist.javax.sip.AUTOMATIC_DIALOG_ERROR_HANDLING", "false");
         properties.setProperty("gov.nist.javax.sip.CANCEL_CLIENT_TRANSACTION_CHECKED", "true");
-        // 为_NULL _对话框传递_终止的_事件
+        // Pass _terminated_event for _NULL_dialog
         properties.setProperty("gov.nist.javax.sip.DELIVER_TERMINATED_EVENT_FOR_NULL_DIALOG", "true");
-        // 是否自动计算content length的实际长度，默认不计算
+        // Whether to automatically calculate the actual length of content length, not calculated by default
         properties.setProperty("gov.nist.javax.sip.COMPUTE_CONTENT_LENGTH_FROM_MESSAGE_BODY", "true");
-        // 会话清理策略
+        // Session cleanup strategy
         properties.setProperty("gov.nist.javax.sip.RELEASE_REFERENCES_STRATEGY", "Normal");
-        // 处理由该服务器处理的基于底层TCP的保持生存超时
+        // Handles underlying TCP based keep alive timeouts handled by this server
         properties.setProperty("gov.nist.javax.sip.RELIABLE_CONNECTION_KEEP_ALIVE_TIMEOUT", "60");
-        // 获取实际内容长度，不使用header中的长度信息
+        // Get the actual content length without using the length information in the header
         properties.setProperty("gov.nist.javax.sip.COMPUTE_CONTENT_LENGTH_FROM_MESSAGE_BODY", "true");
-        // 线程可重入
+        // Threads are reentrant
         properties.setProperty("gov.nist.javax.sip.REENTRANT_LISTENER", "true");
-        // 定义应用程序打算多久审计一次 SIP 堆栈，了解其内部线程的健康状况（该属性指定连续审计之间的时间（以毫秒为单位））
+        // Defines how often the application intends to audit the SIP stack for the health of its internal threads (this property specifies the time in milliseconds between consecutive audits））
         properties.setProperty("gov.nist.javax.sip.THREAD_AUDIT_INTERVAL_IN_MILLISECS", "30000");
 
-        // 部分设备会在短时间内发送大量注册， 导致协议栈内存溢出， 开启此项可以防止这部分设备注册， 避免服务崩溃，但是会降低系统性能， 描述如下
-        // 默认值为 true。
-        // 将此设置为 false 会使 Stack 在 Server Transaction 进入 TERMINATED 状态后关闭服务器套接字。
-        // 这允许服务器防止客户端发起的基于 TCP 的拒绝服务攻击（即发起数百个客户端事务）。
-        // 如果为 true（默认作），则堆栈将保持套接字打开，以便以牺牲线程和内存资源为代价来最大化性能 - 使自身容易受到 DOS 攻击。
+        // Some devices will send a large number of registrations in a short period of time, causing the protocol stack memory to overflow. Turning this on can prevent these devices from registering and avoid service crashes, but it will reduce system performance, as described below.
+        // The default value is true。
+        // Setting this to false will cause the Stack to Server Transaction Close the server socket after entering the TERMINATED state。
+        // This allows the server to prevent client-initiated TCP-based denial-of-service attacks (i.e., initiating hundreds of client transactions）。
+        // If true (the default), the stack will keep the socket open to maximize performance at the expense of thread and memory resources - Make yourself vulnerable to DOS attacks。
         properties.setProperty("gov.nist.javax.sip.CACHE_SERVER_CONNECTIONS", String.valueOf(sipCacheServerConnections));
 
         properties.setProperty("gov.nist.javax.sip.MESSAGE_PROCESSOR_FACTORY", "com.genersoft.iot.vmp.gb28181.conf.CustomMessageProcessorFactory");
 
         /**
-         * sip_server_log.log 和 sip_debug_log.log ERROR, INFO, WARNING, OFF, DEBUG, TRACE
+         * sip_server_log.log and sip_debug_log.log ERROR, INFO, WARNING, OFF, DEBUG, TRACE
          */
         Logger log = LoggerFactory.getLogger(AlarmNotifyMessageHandler.class);
         if (sipLog) {
             properties.setProperty("gov.nist.javax.sip.STACK_LOGGER", "com.genersoft.iot.vmp.gb28181.conf.StackLoggerImpl");
             properties.setProperty("gov.nist.javax.sip.SERVER_LOGGER", "com.genersoft.iot.vmp.gb28181.conf.ServerLoggerImpl");
             properties.setProperty("gov.nist.javax.sip.LOG_MESSAGE_CONTENT", "true");
-            log.info("[SIP日志]已开启");
+            log.info("[SIPLog]Already turned on");
         }else {
-            log.info("[SIP日志]已关闭");
+            log.info("[SIPLog]Closed");
         }
         return properties;
     }

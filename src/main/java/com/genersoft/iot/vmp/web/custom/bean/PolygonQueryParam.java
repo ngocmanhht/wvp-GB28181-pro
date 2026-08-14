@@ -6,18 +6,18 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-@Schema(description = "多边形检索摄像头参数")
+@Schema(description = "Polygon retrieval camera parameters")
 public class PolygonQueryParam {
 
-    @Schema(description = "多边形位置，格式： [{'lng':116.32, 'lat': 39: 39.2}, {'lng':115.32, 'lat': 39: 38.2}, {'lng':125.32, 'lat': 39: 38.2}]")
+    @Schema(description = "polygon position, format： [{'lng':116.32, 'lat': 39: 39.2}, {'lng':115.32, 'lat': 39: 38.2}, {'lng':125.32, 'lat': 39: 38.2}]")
     private List<Point> position;
 
-    @Schema(description = "地图级别")
+    @Schema(description = "map level")
     private Integer level;
 
-    @Schema(description = "分组别名")
+    @Schema(description = "Group alias")
     private String groupAlias;
 
-    @Schema(description = "坐标系类型：WGS84,GCJ02、BD09")
+    @Schema(description = "Coordinate system type：WGS84,GCJ02、BD09")
     private String geoCoordSys;
 }

@@ -8,7 +8,7 @@ import com.genersoft.iot.vmp.service.bean.ErrorCallback;
 import java.util.List;
 
 /**
- * 资源能力接入-录像回放
+ * Resource capability access-Video playback
  */
 public interface ISourcePlaybackService {
 

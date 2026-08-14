@@ -7,7 +7,7 @@ import java.lang.annotation.*;
 @Documented
 public @interface RedisRpcController {
     /**
-     * 请求路径
+     * Request path
      */
     String value() default "";
 }

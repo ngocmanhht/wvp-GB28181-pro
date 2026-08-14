@@ -2,7 +2,7 @@
   <div id="remarkUserApiKey" v-loading="isLoading">
     <el-dialog
       v-el-drag-dialog
-      title="ApiKey备注"
+      title="ApiKeyRemarks"
       width="40%"
       top="2rem"
       :close-on-click-modal="false"
@@ -12,13 +12,13 @@
     >
       <div id="shared" style="margin-right: 20px;">
         <el-form ref="form" :rules="rules" status-icon label-width="80px">
-          <el-form-item label="备注" prop="oldPassword">
+          <el-form-item label="Remarks" prop="oldPassword">
             <el-input v-model="form.remark" type="textarea" autocomplete="off" :autosize="{ minRows: 5}" maxlength="255" show-word-limit />
           </el-form-item>
           <el-form-item>
             <div style="float: right;">
-              <el-button type="primary" @click="onSubmit">保存</el-button>
-              <el-button @click="close">取消</el-button>
+              <el-button type="primary" @click="onSubmit">save</el-button>
+              <el-button @click="close">Cancel</el-button>
             </div>
           </el-form-item>
         </el-form>
@@ -70,7 +70,7 @@ export default {
         .then(data => {
           this.$message({
             showClose: true,
-            message: '备注修改成功!',
+            message: 'Remarks modified successfully!',
             type: 'success'
           })
           this.listChangeCallback()

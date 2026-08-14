@@ -8,7 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * 录音开始/停止命令
+ * Recording starts/stop command
  */
 @Setter
 @Getter
@@ -16,22 +16,22 @@ import lombok.Setter;
 public class J8804 extends Rs {
 
     /**
-     * 录音命令， 0:停止录音；0X01:开始录音
+     * Recording command, 0: stop recording; 0X01: start recording
      */
     private int commond;
 
     /**
-     * 录音时长，单位为秒(s) ,0 表示一直录音
+     * Recording duration in seconds(s) ,0 Indicates always recording
      */
     private int duration;
 
     /**
-     * 保存标志， 0:实时上传；1:保存
+     * Save flag, 0: real-time upload; 1: save
      */
     private int save;
 
     /**
-     * 音频采样率， 0:8K；1:11K；2:23K；3:32K；其他保留
+     * Audio sample rate， 0:8K；1:11K；2:23K；3:32K；Other reservations
      */
     private int samplingRate;
 

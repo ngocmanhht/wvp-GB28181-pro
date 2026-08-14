@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Slf4j
-@Tag(name = "分组管理")
+@Tag(name = "Group management")
 @RestController
 @RequestMapping("/api/group")
 public class GroupController {
@@ -26,7 +26,7 @@ public class GroupController {
     @Autowired
     private IGroupService groupService;
 
-    @Operation(summary = "添加分组")
+    @Operation(summary = "Add group")
     @Parameter(name = "group", description = "group", required = true)
     @ResponseBody
     @PostMapping("/add")
@@ -34,9 +34,9 @@ public class GroupController {
         groupService.add(group);
     }
 
-    @Operation(summary = "查询分组节点")
-    @Parameter(name = "query", description = "要搜索的内容", required = true)
-    @Parameter(name = "parent", description = "所属分组编号", required = true)
+    @Operation(summary = "Query grouping nodes")
+    @Parameter(name = "query", description = "What to search for", required = true)
+    @Parameter(name = "parent", description = "Group number to which it belongs", required = true)
     @ResponseBody
     @GetMapping("/tree/list")
     public List<GroupTree> queryForTree(
@@ -50,9 +50,9 @@ public class GroupController {
         return groupService.queryForTree(query, parent, hasChannel);
     }
 
-    @Operation(summary = "查询分组")
-    @Parameter(name = "query", description = "要搜索的内容", required = true)
-    @Parameter(name = "channel", description = "true为查询通道，false为查询节点", required = true)
+    @Operation(summary = "Query grouping")
+    @Parameter(name = "query", description = "What to search for", required = true)
+    @Parameter(name = "channel", description = "trueis the query channel, false is the query node", required = true)
     @ResponseBody
     @GetMapping("/tree/query")
     public PageInfo<Group> queryTree(Integer page, Integer count,
@@ -61,7 +61,7 @@ public class GroupController {
         return groupService.queryList(page, count, query);
     }
 
-    @Operation(summary = "更新分组")
+    @Operation(summary = "Update group")
     @Parameter(name = "group", description = "Group", required = true)
     @ResponseBody
     @PostMapping("/update")
@@ -69,28 +69,28 @@ public class GroupController {
         groupService.update(group);
     }
 
-    @Operation(summary = "删除分组")
-    @Parameter(name = "id", description = "分组id", required = true)
+    @Operation(summary = "Delete group")
+    @Parameter(name = "id", description = "Groupid", required = true)
     @ResponseBody
     @DeleteMapping("/delete")
     public void delete(Integer id){
-        Assert.notNull(id, "分组id（deviceId）不需要存在");
+        Assert.notNull(id, "The group id (deviceId) does not need to exist");
         boolean result = groupService.delete(id);
         if (!result) {
-            throw new ControllerException(ErrorCode.ERROR100.getCode(), "移除失败");
+            throw new ControllerException(ErrorCode.ERROR100.getCode(), "Removal failed");
         }
     }
 
-    @Operation(summary = "获取所属的行政区划下的行政区划")
-    @Parameter(name = "deviceId", description = "当前的行政区划", required = false)
+    @Operation(summary = "Get the administrative division under the administrative division to which it belongs")
+    @Parameter(name = "deviceId", description = "Current administrative divisions", required = false)
     @ResponseBody
     @GetMapping("/path")
     public List<Group> getPath(String deviceId, String businessGroup){
         return groupService.getPath(deviceId, businessGroup);
     }
 
-//    @Operation(summary = "根据分组Id查询分组")
-//    @Parameter(name = "groupDeviceId", description = "分组节点编号", required = true)
+//    @Operation(summary = "Query groups based on group ID")
+//    @Parameter(name = "groupDeviceId", description = "Group node number", required = true)
 //    @ResponseBody
 //    @GetMapping("/one")
 //    public Group queryGroupByDeviceId(
@@ -100,7 +100,7 @@ public class GroupController {
 //        return groupService.queryGroupByDeviceId(deviceId);
 //    }
 
-//    @Operation(summary = "从通道中同步分组")
+//    @Operation(summary = "Synchronize packets from channels")
 //    @ResponseBody
 //    @GetMapping("/sync")
 //    public void sync(){

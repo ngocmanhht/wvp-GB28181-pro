@@ -31,23 +31,23 @@
     <div style="height: 40px; background-color: #383838; display: grid; grid-template-columns: 1fr auto 1fr">
       <div style="text-align: left;">
         <div class="cloud-record-record-play-control" style="background-color: transparent; box-shadow: 0 0 10px transparent">
-          <a v-if="showListCallback" target="_blank" class="cloud-record-record-play-control-item iconfont icon-list" title="列表" @click="sidebarControl()" />
-          <a target="_blank" class="cloud-record-record-play-control-item iconfont icon-camera1196054easyiconnet" title="截图" @click="snap()" />
+          <a v-if="showListCallback" target="_blank" class="cloud-record-record-play-control-item iconfont icon-list" title="list" @click="sidebarControl()" />
+          <a target="_blank" class="cloud-record-record-play-control-item iconfont icon-camera1196054easyiconnet" title="screenshot" @click="snap()" />
         </div>
       </div>
       <div style="text-align: center;">
         <div class="cloud-record-record-play-control">
-          <a v-if="!lastDiable" target="_blank" class="cloud-record-record-play-control-item iconfont icon-diyigeshipin" title="上一个" @click="playLast()" />
-          <a v-else style="color: #acacac; cursor: not-allowed" target="_blank" class="cloud-record-record-play-control-item iconfont icon-diyigeshipin" title="上一个" />
-          <a target="_blank" class="cloud-record-record-play-control-item iconfont icon-kuaijin" title="快退五秒" @click="seekBackward()" />
-          <a target="_blank" class="cloud-record-record-play-control-item iconfont icon-stop1" style="font-size: 14px" title="停止" @click="stopPLay()" />
-          <a v-if="playing" target="_blank" class="cloud-record-record-play-control-item iconfont icon-zanting" title="暂停" @click="pausePlay()" />
-          <a v-if="!playing" target="_blank" class="cloud-record-record-play-control-item iconfont icon-kaishi" title="播放" @click="play()" />
-          <a target="_blank" class="cloud-record-record-play-control-item iconfont icon-houtui" title="快进五秒" @click="seekForward()" />
-          <a v-if="!nextDiable" target="_blank" class="cloud-record-record-play-control-item iconfont icon-zuihouyigeshipin" title="下一个" @click="playNext()" />
-          <a v-else style="color: #acacac; cursor: not-allowed" target="_blank" class="cloud-record-record-play-control-item iconfont icon-zuihouyigeshipin" title="下一个" @click="playNext()" />
+          <a v-if="!lastDiable" target="_blank" class="cloud-record-record-play-control-item iconfont icon-diyigeshipin" title="Previous" @click="playLast()" />
+          <a v-else style="color: #acacac; cursor: not-allowed" target="_blank" class="cloud-record-record-play-control-item iconfont icon-diyigeshipin" title="Previous" />
+          <a target="_blank" class="cloud-record-record-play-control-item iconfont icon-kuaijin" title="Go back five seconds" @click="seekBackward()" />
+          <a target="_blank" class="cloud-record-record-play-control-item iconfont icon-stop1" style="font-size: 14px" title="stop" @click="stopPLay()" />
+          <a v-if="playing" target="_blank" class="cloud-record-record-play-control-item iconfont icon-zanting" title="pause" @click="pausePlay()" />
+          <a v-if="!playing" target="_blank" class="cloud-record-record-play-control-item iconfont icon-kaishi" title="play" @click="play()" />
+          <a target="_blank" class="cloud-record-record-play-control-item iconfont icon-houtui" title="Fast forward five seconds" @click="seekForward()" />
+          <a v-if="!nextDiable" target="_blank" class="cloud-record-record-play-control-item iconfont icon-zuihouyigeshipin" title="next" @click="playNext()" />
+          <a v-else style="color: #acacac; cursor: not-allowed" target="_blank" class="cloud-record-record-play-control-item iconfont icon-zuihouyigeshipin" title="next" @click="playNext()" />
           <el-dropdown @command="changePlaySpeed" :popper-append-to-body='false' >
-            <a target="_blank" class="cloud-record-record-play-control-item record-play-control-speed" title="倍速播放">{{ playSpeed }}X</a>
+            <a target="_blank" class="cloud-record-record-play-control-item record-play-control-speed" title="Play at double speed">{{ playSpeed }}X</a>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item
                 v-for="item in playSpeedRange"
@@ -63,14 +63,14 @@
           <div class="cloud-record-record-play-control-item record-play-control-player">
 
             <el-dropdown @command="changePlayerType" :popper-append-to-body='false' >
-              <a target="_blank" class="cloud-record-record-play-control-item record-play-control-speed" title="选择播放器">{{ playerLabel }}</a>
+              <a target="_blank" class="cloud-record-record-play-control-item record-play-control-speed" title="Select player">{{ playerLabel }}</a>
               <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item v-for="p in playerList" :key="p.key" :command="p.key">{{ p.label }}</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
           </div>
-          <a v-if="!isFullScreen" target="_blank" class="cloud-record-record-play-control-item iconfont icon-fangdazhanshi" title="全屏" @click="fullScreen()" />
-          <a v-else target="_blank" class="cloud-record-record-play-control-item iconfont icon-suoxiao1" title="全屏" @click="fullScreen()" />
+          <a v-if="!isFullScreen" target="_blank" class="cloud-record-record-play-control-item iconfont icon-fangdazhanshi" title="full screen" @click="fullScreen()" />
+          <a v-else target="_blank" class="cloud-record-record-play-control-item iconfont icon-suoxiao1" title="full screen" @click="fullScreen()" />
         </div>
       </div>
     </div>

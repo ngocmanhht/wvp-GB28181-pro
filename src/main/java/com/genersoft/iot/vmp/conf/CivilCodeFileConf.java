@@ -19,7 +19,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
 /**
- * 启动时读取行政区划表
+ * Read the administrative division table at startup
  */
 @Slf4j
 @Configuration
@@ -32,7 +32,7 @@ public class CivilCodeFileConf implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         if (ObjectUtils.isEmpty(userSetting.getCivilCodeFile())) {
-            log.warn("[行政区划] 文件未设置，可能造成目录刷新结果不完整");
+            log.warn("[Administrative division] The file is not set, which may result in incomplete directory refresh results.");
             return;
         }
         InputStream inputStream;
@@ -40,7 +40,7 @@ public class CivilCodeFileConf implements CommandLineRunner {
             String filePath = userSetting.getCivilCodeFile().substring("classpath:".length());
             ClassPathResource civilCodeFile = new ClassPathResource(filePath);
             if (!civilCodeFile.exists()) {
-                log.warn("[行政区划] 文件<{}>不存在，可能造成目录刷新结果不完整", userSetting.getCivilCodeFile());
+                log.warn("[Administrative division] File<{}>Does not exist, which may result in incomplete directory refresh results.", userSetting.getCivilCodeFile());
                 return;
             }
             inputStream = civilCodeFile.getInputStream();
@@ -48,7 +48,7 @@ public class CivilCodeFileConf implements CommandLineRunner {
         }else {
             File civilCodeFile = new File(userSetting.getCivilCodeFile());
             if (!civilCodeFile.exists()) {
-                log.warn("[行政区划] 文件<{}>不存在，可能造成目录刷新结果不完整", userSetting.getCivilCodeFile());
+                log.warn("[Administrative division] File<{}>Does not exist, which may result in incomplete directory refresh results.", userSetting.getCivilCodeFile());
                 return;
             }
             inputStream = Files.newInputStream(civilCodeFile.toPath());
@@ -69,9 +69,9 @@ public class CivilCodeFileConf implements CommandLineRunner {
         inputStreamReader.close();
         inputStream.close();
         if (CivilCodeUtil.INSTANCE.isEmpty()) {
-            log.warn("[行政区划] 文件内容为空，可能造成目录刷新结果不完整");
+            log.warn("[Administrative division] The file content is empty, which may cause the directory refresh result to be incomplete.");
         }else {
-            log.info("[行政区划] 加载成功，共加载数据{}条", CivilCodeUtil.INSTANCE.size());
+            log.info("[Administrative division] Loading successful, total data loaded{}Article", CivilCodeUtil.INSTANCE.size());
         }
     }
 }

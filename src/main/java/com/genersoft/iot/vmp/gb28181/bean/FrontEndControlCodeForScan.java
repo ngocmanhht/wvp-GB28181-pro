@@ -14,21 +14,21 @@ public class FrontEndControlCodeForScan implements  IFrontEndControlCode {
     }
 
     /**
-     * 预置位指令： 1为开始自动扫描， 2为设置自动扫描左边界， 3为设置自动扫描右边界， 4为设置自动扫描速度， 5为停止自动扫描
+     * Preset position instructions: 1 is to start automatic scanning, 2 is to set the automatic scanning left boundary, 3 is to set the automatic scanning right boundary, 4 is to set the automatic scanning speed, 5 is to stop the automatic scanning
      */
     @Getter
     @Setter
     private Integer code;
 
     /**
-     * 自动扫描速度
+     * Auto scan speed
      */
     @Getter
     @Setter
     private Integer scanSpeed;
 
     /**
-     * 扫描组号
+     * Scan group number
      */
     @Getter
     @Setter

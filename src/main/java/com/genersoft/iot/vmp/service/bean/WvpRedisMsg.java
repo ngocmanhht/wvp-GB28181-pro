@@ -20,13 +20,13 @@ public class WvpRedisMsg {
 
     private String toId;
     /**
-     * req 请求, res 回复
+     * req request, res reply
      */
     private String type;
     private String cmd;
 
     /**
-     * 消息的ID
+     * newsID
      */
     private String serial;
     private String content;

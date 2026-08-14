@@ -1,18 +1,18 @@
-<!-- 反馈bug -->
+<!-- Report bug -->
 
-# 反馈bug
+# Report bug
 
-代码是在不断的完善的，不断修改会修复旧的问题也有可能引入新的问题，所以遇到BUG是很正常的一件事。所以遇到问题不要烦燥，咱们就事论事就好了。
+The code is constantly being improved. Continuous modifications will fix old problems and may introduce new ones, so it is normal to encounter BUGs. So don't be upset when you encounter problems, let's just discuss them.
 
-## 如何反馈
+## How to give feedback
 
-1. 在知识星球提问。
-2. 更新代码，很可能你遇到问题别人已经更早的遇到了，或者是作者自己发现了，已经解决了，所以你可以更新代码再次进行测试;
-3. 可以在github提ISSUE，我几乎每天都会去看issue，你的问题我会尽快给予答复;
+1. Ask a question on Knowledge Planet.
+2. Update the code. It is very likely that someone else has encountered the problem you encountered earlier, or the author discovered it himself and solved it, so you can update the code and test again;
+3. You can raise an ISSUE on github. I check the issue almost every day and I will reply to your question as soon as possible;
 
-> 有偿支持可以给我发邮件， 648540858@qq.com
+> For paid support, you can send me an email, 648540858@qq.com
 
-## 社群
+## Community
 
-[![社群](../../_media/shequ.png "shequ")](https://t.zsxq.com/0d8VAD3Dm)
-> 收费是为了提供更好的服务，也是对作者更大的激励。加入星球的用户三天后可以私信我留下微信号，我会拉大家入群。加入三天内不满意可以直接退款，大家不需要有顾虑，来白嫖三天也不是不可以。
+ [![Community](../../_media/shequ.png "shequ") ](https://t.zsxq.com/0d8VAD3Dm)
+> Charging is to provide better services and is also a greater incentive for authors. Users who join Planet can send me a private message and leave their WeChat ID three days later, and I will recruit everyone into the group. If you are not satisfied within three days of joining, you can get a refund directly. You don’t need to worry. It’s not impossible to come and have sex for free for three days.

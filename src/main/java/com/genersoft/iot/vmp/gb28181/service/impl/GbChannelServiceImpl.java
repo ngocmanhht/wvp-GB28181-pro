@@ -84,7 +84,7 @@ public class GbChannelServiceImpl implements IGbChannelService {
 
     @EventListener(ApplicationReadyEvent.class)
     public void onApplicationReady() {
-        // 启动时重新发布抽稀图层
+        // Republish thinned layers on startup
         List<CommonGBChannel> channelList = commonGBChannelMapper.queryAllWithPosition();
         Map<Integer, List<CommonGBChannel>> zoomCameraMap = new ConcurrentHashMap<>();
 
@@ -100,9 +100,9 @@ public class GbChannelServiceImpl implements IGbChannelService {
         List<CommonGBChannel> beforeData = new ArrayList<>();
         for (Integer zoom : zoomCameraMap.keySet()) {
             beforeData.addAll(zoomCameraMap.get(zoom));
-            log.info("[抽稀-发布mvt矢量瓦片] ID：{}，当前层级： {}, ", id, zoom);
-            // 按照 z/x/y 数据组织数据， 矢量数据暂时保存在内存中
-            // 按照范围生成 x y范围，
+            log.info("[Dilute-Publish mvt vector tiles] ID：{}，current level： {}, ", id, zoom);
+            // follow z/x/y Data organization data, vector data is temporarily stored in memory
+            // Generate x y range according to range，
             saveTile(id, zoom, "WGS84", beforeData);
             saveTile(id, zoom, "GCJ02", beforeData);
         }
@@ -121,23 +121,23 @@ public class GbChannelServiceImpl implements IGbChannelService {
     @Override
     public int add(CommonGBChannel commonGBChannel) {
         if (commonGBChannel.getDataType() == null || commonGBChannel.getDataDeviceId() == null) {
-            throw new ControllerException(ErrorCode.ERROR100.getCode(), "缺少通道数据类型或通道数据关联设备ID");
+            throw new ControllerException(ErrorCode.ERROR100.getCode(), "Missing channel data type or channel data associated deviceID");
         }
         CommonGBChannel commonGBChannelInDb =  commonGBChannelMapper.queryByDataId(commonGBChannel.getDataType(), commonGBChannel.getDataDeviceId());
-        Assert.isNull(commonGBChannelInDb, "此推流已经关联通道");
+        Assert.isNull(commonGBChannelInDb, "This push stream has been associated with a channel");
 
-        // 检验国标编号是否重复
+        // Check whether the national standard number is repeated
         List<CommonGBChannel> channelList = commonGBChannelMapper.queryByDeviceId(commonGBChannel.getGbDeviceId());
-        Assert.isTrue(channelList.isEmpty(), "国标编号已经存在");
+        Assert.isTrue(channelList.isEmpty(), "The national standard number already exists");
 
         commonGBChannel.setCreateTime(DateUtil.getNow());
         commonGBChannel.setUpdateTime(DateUtil.getNow());
         int result = commonGBChannelMapper.insert(commonGBChannel);
         try {
-            // 发送通知
+            // Send notification
             eventPublisher.channelEventPublish(commonGBChannel, ChannelEvent.ChannelEventMessageType.ADD);
         } catch (Exception e) {
-            log.warn("[通道移除通知] 发送失败，{}", commonGBChannel.getGbDeviceId(), e);
+            log.warn("[Channel removal notification] Sending failed，{}", commonGBChannel.getGbDeviceId(), e);
         }
         return result;
     }
@@ -145,21 +145,21 @@ public class GbChannelServiceImpl implements IGbChannelService {
     @Override
     @Transactional
     public int delete(int gbId) {
-        // 移除国标级联关联的信息
+        // Remove information related to national standard cascade
         try {
             platformChannelService.removeChannel(gbId);
         }catch (Exception e) {
-            log.error("[移除通道国标级联共享失败]", e);
+            log.error("[Failed to remove channel national standard cascade sharing]", e);
         }
 
         CommonGBChannel channel = commonGBChannelMapper.queryById(gbId);
         if (channel != null) {
             commonGBChannelMapper.delete(gbId);
             try {
-                // 发送通知
+                // Send notification
                 eventPublisher.channelEventPublish(channel, ChannelEvent.ChannelEventMessageType.DEL);
             } catch (Exception e) {
-                log.warn("[通道移除通知] 发送失败，{}", channel.getGbDeviceId(), e);
+                log.warn("[Channel removal notification] Sending failed，{}", channel.getGbDeviceId(), e);
             }
         }
         return 1;
@@ -168,11 +168,11 @@ public class GbChannelServiceImpl implements IGbChannelService {
     @Override
     @Transactional
     public void delete(Collection<Integer> ids) {
-        // 移除国标级联关联的信息
+        // Remove information related to national standard cascade
         try {
             platformChannelService.removeChannels(new ArrayList<>(ids));
         }catch (Exception e) {
-            log.error("[移除通道国标级联共享失败]", e);
+            log.error("[Failed to remove channel national standard cascade sharing]", e);
         }
         List<CommonGBChannel> channelListInDb = commonGBChannelMapper.queryByIds(ids);
         if (channelListInDb.isEmpty()) {
@@ -180,24 +180,24 @@ public class GbChannelServiceImpl implements IGbChannelService {
         }
         commonGBChannelMapper.batchDelete(channelListInDb);
         try {
-            // 发送通知
+            // Send notification
             eventPublisher.channelEventPublish(channelListInDb, ChannelEvent.ChannelEventMessageType.DEL);
         } catch (Exception e) {
-            log.warn("[通道移除通知] 发送失败", e);
+            log.warn("[Channel removal notification] Sending failed", e);
         }
     }
 
     @Override
     public int update(CommonGBChannel commonGBChannel) {
-        log.info("[更新通道] 通道ID: {}, ", commonGBChannel.toString());
+        log.info("[update channel] channelID: {}, ", commonGBChannel.toString());
         if (commonGBChannel.getGbId() <= 0) {
-            log.warn("[更新通道] 未找到数据库ID，更新失败， {}({})", commonGBChannel.getGbName(), commonGBChannel.getGbDeviceId());
+            log.warn("[update channel] Database ID not found, update failed， {}({})", commonGBChannel.getGbName(), commonGBChannel.getGbDeviceId());
             return 0;
         }
-        // 确定编号是否重复
+        // Determine if numbers are duplicated
         List<CommonGBChannel> channels = commonGBChannelMapper.queryByDeviceId(commonGBChannel.getGbDeviceId());
         if (channels.size() > 1) {
-            throw new ControllerException(ErrorCode.ERROR100.getCode(), "国标编号重复，请修改编号后保存");
+            throw new ControllerException(ErrorCode.ERROR100.getCode(), "The national standard number is duplicated. Please modify the number and save it.");
         }
         CommonGBChannel oldChannel = commonGBChannelMapper.queryById(commonGBChannel.getGbId());
         commonGBChannel.setUpdateTime(DateUtil.getNow());
@@ -206,7 +206,7 @@ public class GbChannelServiceImpl implements IGbChannelService {
         if (result > 0) {
             try {
                 CommonGBChannel newChannel = commonGBChannelMapper.queryById(commonGBChannel.getGbId());
-                // 发送通知
+                // Send notification
                 eventPublisher.channelEventPublishForUpdate(newChannel, oldChannel);
 
                 if (newChannel.getGbLongitude() != null && !Objects.equals(oldChannel.getGbLongitude(), newChannel.getGbLongitude())
@@ -222,7 +222,7 @@ public class GbChannelServiceImpl implements IGbChannelService {
                 }
 
             } catch (Exception e) {
-                log.warn("[更新通道通知] 发送失败，{}", JSONObject.toJSONString(commonGBChannel), e);
+                log.warn("[Update channel notification] Sending failed，{}", JSONObject.toJSONString(commonGBChannel), e);
             }
         }
         return result;
@@ -231,16 +231,16 @@ public class GbChannelServiceImpl implements IGbChannelService {
     @Override
     public int offline(CommonGBChannel commonGBChannel) {
         if (commonGBChannel.getGbId() <= 0) {
-            log.warn("[通道离线] 未找到数据库ID，更新失败， {}({})", commonGBChannel.getGbName(), commonGBChannel.getGbDeviceId());
+            log.warn("[Channel offline] Database ID not found, update failed， {}({})", commonGBChannel.getGbName(), commonGBChannel.getGbDeviceId());
             return 0;
         }
         int result = commonGBChannelMapper.updateStatusById(commonGBChannel.getGbId(), "OFF");
         if (result > 0) {
             try {
-                // 发送通知
+                // Send notification
                 eventPublisher.channelEventPublish(commonGBChannel, ChannelEvent.ChannelEventMessageType.OFF);
             } catch (Exception e) {
-                log.warn("[通道离线通知] 发送失败，{}", commonGBChannel.getGbDeviceId(), e);
+                log.warn("[Channel offline notification] Sending failed，{}", commonGBChannel.getGbDeviceId(), e);
             }
         }
         return result;
@@ -250,10 +250,10 @@ public class GbChannelServiceImpl implements IGbChannelService {
     @Transactional
     public int offline(List<CommonGBChannel> commonGBChannelList, boolean permission) {
         if (commonGBChannelList.isEmpty()) {
-            log.warn("[多个通道离线] 通道数量为0，更新失败");
+            log.warn("[Multiple channels offline] The number of channels is 0 and the update failed.");
             return 0;
         }
-        log.info("[通道离线] 共 {} 个", commonGBChannelList.size());
+        log.info("[Channel offline] total {} a", commonGBChannelList.size());
         int result = 0;
         if (permission) {
             int limitCount = 1000;
@@ -262,13 +262,13 @@ public class GbChannelServiceImpl implements IGbChannelService {
                 List<CommonGBChannel> batchList = commonGBChannelList.subList(i, end);
                 result += commonGBChannelMapper.updateStatusForListById(batchList, "OFF");
             }
-            log.info("[通道离线] 保存入库 共 {} 个改变", result);
+            log.info("[Channel offline] Saved to the database in total {} changes", result);
         }
         try {
-            // 发送catalog
+            // sendcatalog
             eventPublisher.channelEventPublish(commonGBChannelList, ChannelEvent.ChannelEventMessageType.OFF);
         } catch (Exception e) {
-            log.warn("[多个通道离线] 发送失败，数量：{}", commonGBChannelList.size(), e);
+            log.warn("[Multiple channels offline] Failed to send, quantity：{}", commonGBChannelList.size(), e);
         }
         return result;
     }
@@ -276,16 +276,16 @@ public class GbChannelServiceImpl implements IGbChannelService {
     @Override
     public int online(CommonGBChannel commonGBChannel) {
         if (commonGBChannel.getGbId() <= 0) {
-            log.warn("[通道上线] 未找到数据库ID，更新失败， {}({})", commonGBChannel.getGbName(), commonGBChannel.getGbDeviceId());
+            log.warn("[Channel online] Database ID not found, update failed， {}({})", commonGBChannel.getGbName(), commonGBChannel.getGbDeviceId());
             return 0;
         }
         int result = commonGBChannelMapper.updateStatusById(commonGBChannel.getGbId(), "ON");
         if (result > 0) {
             try {
-                // 发送通知
+                // Send notification
                 eventPublisher.channelEventPublish(commonGBChannel, ChannelEvent.ChannelEventMessageType.ON);
             } catch (Exception e) {
-                log.warn("[通道上线通知] 发送失败，{}", commonGBChannel.getGbDeviceId(), e);
+                log.warn("[Channel online notification] Sending failed，{}", commonGBChannel.getGbDeviceId(), e);
             }
         }
         return 0;
@@ -295,12 +295,12 @@ public class GbChannelServiceImpl implements IGbChannelService {
     @Transactional
     public int online(List<CommonGBChannel> commonGBChannelList, boolean permission) {
         if (commonGBChannelList.isEmpty()) {
-            log.warn("[多个通道上线] 通道数量为0，更新失败");
+            log.warn("[Multiple channels online] The number of channels is 0 and the update failed.");
             return 0;
         }
         int result = 0;
         if (permission) {
-            // 批量更新
+            // Batch update
             int limitCount = 1000;
             for (int i = 0; i < commonGBChannelList.size(); i += limitCount) {
                 int end = Math.min(i + limitCount, commonGBChannelList.size());
@@ -309,10 +309,10 @@ public class GbChannelServiceImpl implements IGbChannelService {
             }
         }
         try {
-            // 发送catalog
+            // sendcatalog
             eventPublisher.channelEventPublish(commonGBChannelList, ChannelEvent.ChannelEventMessageType.ON);
         } catch (Exception e) {
-            log.warn("[多个通道上线] 发送失败，数量：{}", commonGBChannelList.size(), e);
+            log.warn("[Multiple channels online] Failed to send, quantity：{}", commonGBChannelList.size(), e);
         }
 
         return result;
@@ -322,10 +322,10 @@ public class GbChannelServiceImpl implements IGbChannelService {
     @Transactional
     public void batchAdd(List<CommonGBChannel> commonGBChannels) {
         if (commonGBChannels.isEmpty()) {
-            log.warn("[新增多个通道] 通道数量为0，更新失败");
+            log.warn("[Add multiple channels] The number of channels is 0 and the update failed.");
             return;
         }
-        // 批量保存（使用UPSERT防重复）
+        // Save in batches (use UPSERT to prevent duplication）
         int limitCount = 1000;
         int result = 0;
         for (int i = 0; i < commonGBChannels.size(); i += limitCount) {
@@ -334,23 +334,23 @@ public class GbChannelServiceImpl implements IGbChannelService {
             result += commonGBChannelMapper.batchUpsert(batchList);
         }
         try {
-            // 发送catalog
+            // sendcatalog
             eventPublisher.channelEventPublish(commonGBChannels, ChannelEvent.ChannelEventMessageType.ADD);
         } catch (Exception e) {
-            log.warn("[多个通道新增] 发送失败，数量：{}", commonGBChannels.size(), e);
+            log.warn("[Multiple channels added] Failed to send, quantity：{}", commonGBChannels.size(), e);
         }
-        log.warn("[新增多个通道] 通道数量为{}，成功保存：{}", commonGBChannels.size(), result);
+        log.warn("[Add multiple channels] The number of channels is{}，Saved successfully：{}", commonGBChannels.size(), result);
     }
 
     @Override
     public void batchUpdateForStreamPushRedisMsg(List<CommonGBChannel> commonGBChannels, boolean permission) {
         if (commonGBChannels.isEmpty()) {
-            log.warn("[更新多个通道] 通道数量为0，更新失败");
+            log.warn("[Update multiple channels] The number of channels is 0 and the update failed.");
             return;
         }
         List<CommonGBChannel> oldCommonGBChannelList = commonGBChannelMapper.queryOldChanelListByChannels(commonGBChannels);
         if (permission) {
-            // 批量保存
+            // Save in batches
             int limitCount = 1000;
             int result = 0;
             for (int i = 0; i < commonGBChannels.size(); i += limitCount) {
@@ -358,14 +358,14 @@ public class GbChannelServiceImpl implements IGbChannelService {
                 List<CommonGBChannel> batchList = commonGBChannels.subList(i, end);
                 result += commonGBChannelMapper.batchUpdate(batchList);
             }
-            log.info("[更新多个通道] 通道数量为{}，成功保存：{}", commonGBChannels.size(), result);
+            log.info("[Update multiple channels] The number of channels is{}，Saved successfully：{}", commonGBChannels.size(), result);
         }
-        // 发送通过更新通知
+        // Send via update notification
         try {
-            // 发送通知
+            // Send notification
             eventPublisher.channelEventPublishForUpdate(commonGBChannels, oldCommonGBChannelList);
         } catch (Exception e) {
-            log.warn("[更新多个通道] 发送失败，{}个", commonGBChannels.size(), e);
+            log.warn("[Update multiple channels] Sending failed，{}a", commonGBChannels.size(), e);
         }
     }
 
@@ -373,7 +373,7 @@ public class GbChannelServiceImpl implements IGbChannelService {
     @Transactional
     public void updateStatus(List<CommonGBChannel> commonGBChannels) {
         if (commonGBChannels.isEmpty()) {
-            log.warn("[更新多个通道状态] 通道数量为0，更新失败");
+            log.warn("[Update multiple channel status] The number of channels is 0 and the update failed.");
             return;
         }
         List<CommonGBChannel> oldChanelListByChannels = commonGBChannelMapper.queryOldChanelListByChannels(commonGBChannels);
@@ -384,13 +384,13 @@ public class GbChannelServiceImpl implements IGbChannelService {
             List<CommonGBChannel> batchList = commonGBChannels.subList(i, end);
             result += commonGBChannelMapper.updateStatus(batchList);
         }
-        log.warn("[更新多个通道状态] 通道数量为{}，成功保存：{}", commonGBChannels.size(), result);
-        // 发送通过更新通知
+        log.warn("[Update multiple channel status] The number of channels is{}，Saved successfully：{}", commonGBChannels.size(), result);
+        // Send via update notification
         try {
-            // 发送通知
+            // Send notification
             eventPublisher.channelEventPublishForUpdate(commonGBChannels, oldChanelListByChannels);
         } catch (Exception e) {
-            log.warn("[更新多个通道] 发送失败，{}个", commonGBChannels.size(), e);
+            log.warn("[Update multiple channels] Sending failed，{}a", commonGBChannels.size(), e);
         }
     }
 
@@ -436,16 +436,16 @@ public class GbChannelServiceImpl implements IGbChannelService {
 
     @Override
     public void reset(int id, List<String> chanelFields) {
-        log.info("[重置国标通道] id: {}", id);
-        Assert.notEmpty(chanelFields, "待重置字段为空");
+        log.info("[Reset the national standard channel] id: {}", id);
+        Assert.notEmpty(chanelFields, "The field to be reset is empty");
         CommonGBChannel channel = getOne(id);
         if (channel == null) {
-            log.warn("[重置国标通道] 未找到对应Id的通道: id: {}", id);
+            log.warn("[Reset the national standard channel] The channel corresponding to the Id was not found: id: {}", id);
             throw new ControllerException(ErrorCode.ERROR400);
         }
         if (channel.getDataType() != ChannelDataType.GB28181) {
-            log.warn("[重置国标通道] 非国标下级通道无法重置: id: {}", id);
-            throw new ControllerException(ErrorCode.ERROR100.getCode(), "非国标下级通道无法重置");
+            log.warn("[Reset the national standard channel] Non-national standard lower-level channels cannot be reset: id: {}", id);
+            throw new ControllerException(ErrorCode.ERROR100.getCode(), "Non-national standard lower-level channels cannot be reset");
         }
         List<String> dbFields = new ArrayList<>();
 
@@ -455,17 +455,17 @@ public class GbChannelServiceImpl implements IGbChannelService {
                 dbFields.add(CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, chanelField));
             }
         }
-        Assert.notEmpty(dbFields, "待重置字段为空");
+        Assert.notEmpty(dbFields, "The field to be reset is empty");
 
-        // 这个多加一个参数,为了防止将非国标的通道通过此方法清空内容,导致意外发生
+        // This adds an extra parameter to prevent non-national standard channels from clearing their contents through this method, causing accidents.
         commonGBChannelMapper.reset(id, dbFields, DateUtil.getNow());
         CommonGBChannel channelNew = getOne(id);
-        // 发送通过更新通知
+        // Send via update notification
         try {
-            // 发送通知
+            // Send notification
             eventPublisher.channelEventPublishForUpdate(channelNew, channel);
         } catch (Exception e) {
-            log.warn("[通道移除通知] 发送失败，{}", channelNew.getGbDeviceId(), e);
+            log.warn("[Channel removal notification] Sending failed，{}", channelNew.getGbDeviceId(), e);
         }
     }
 
@@ -496,7 +496,7 @@ public class GbChannelServiceImpl implements IGbChannelService {
     @Override
     public void removeCivilCode(List<Region> allChildren) {
         commonGBChannelMapper.removeCivilCode(allChildren);
-        // TODO 是否需要通知上级, 或者等添加新的行政区划时发送更新通知
+        // TODO Do you need to notify your superiors, or wait until a new administrative division is added to send an update notification?
 
     }
 
@@ -504,21 +504,21 @@ public class GbChannelServiceImpl implements IGbChannelService {
     public void addChannelToRegion(String civilCode, List<Integer> channelIds) {
         List<CommonGBChannel> channelList = commonGBChannelMapper.queryByIds(channelIds);
         if (channelList.isEmpty()) {
-            throw new ControllerException(ErrorCode.ERROR100.getCode(), "所有通道Id不存在");
+            throw new ControllerException(ErrorCode.ERROR100.getCode(), "All channel IDs do not exist");
         }
         List<CommonGBChannel> channelListForOld = new ArrayList<>(channelList);
         for (CommonGBChannel channel : channelList) {
             channel.setGbCivilCode(civilCode);
         }
         int result = commonGBChannelMapper.updateRegion(civilCode, channelList);
-        // 发送通知
+        // Send notification
         if (result > 0) {
             platformChannelService.checkRegionAdd(channelList);
             try {
-                // 发送catalog
+                // sendcatalog
                 eventPublisher.channelEventPublishForUpdate(channelList, channelListForOld);
             } catch (Exception e) {
-                log.warn("[多个通道添加行政区划] 发送失败，数量：{}", channelList.size(), e);
+                log.warn("[Add administrative divisions to multiple channels] Failed to send, quantity：{}", channelList.size(), e);
             }
         }
     }
@@ -538,7 +538,7 @@ public class GbChannelServiceImpl implements IGbChannelService {
     public void deleteChannelToRegionByCivilCode(String civilCode) {
         List<CommonGBChannel> channelList = commonGBChannelMapper.queryByCivilCode(civilCode);
         if (channelList.isEmpty()) {
-            throw new ControllerException(ErrorCode.ERROR100.getCode(), "所有通道Id不存在");
+            throw new ControllerException(ErrorCode.ERROR100.getCode(), "All channel IDs do not exist");
         }
         int result = commonGBChannelMapper.removeCivilCodeByChannels(channelList);
         Region region = regionMapper.queryByDeviceId(civilCode);
@@ -549,13 +549,13 @@ public class GbChannelServiceImpl implements IGbChannelService {
             regionList.add(region);
             platformChannelService.checkRegionRemove(channelList, regionList);
         }
-        // TODO 发送通知
+        // TODO Send notification
 //        if (result > 0) {
 //            try {
-//                // 发送catalog
+//                // sendcatalog
 //                eventPublisher.catalogEventPublish(null, channelList, CatalogEvent.UPDATE);
 //            }catch (Exception e) {
-//                log.warn("[多个通道添加行政区划] 发送失败，数量：{}", channelList.size(), e);
+//                log.warn("[Add administrative divisions to multiple channels] Failed to send, quantity：{}", channelList.size(), e);
 //            }
 //        }
     }
@@ -564,18 +564,18 @@ public class GbChannelServiceImpl implements IGbChannelService {
     public void deleteChannelToRegionByChannelIds(List<Integer> channelIds) {
         List<CommonGBChannel> channelList = commonGBChannelMapper.queryByIds(channelIds);
         if (channelList.isEmpty()) {
-            throw new ControllerException(ErrorCode.ERROR100.getCode(), "所有通道Id不存在");
+            throw new ControllerException(ErrorCode.ERROR100.getCode(), "All channel IDs do not exist");
         }
         int result = commonGBChannelMapper.removeCivilCodeByChannels(channelList);
 
         platformChannelService.checkRegionRemove(channelList, null);
-        // TODO 发送通知
+        // TODO Send notification
 //        if (result > 0) {
 //            try {
-//                // 发送catalog
+//                // sendcatalog
 //                eventPublisher.catalogEventPublish(null, channelList, CatalogEvent.UPDATE);
 //            }catch (Exception e) {
-//                log.warn("[多个通道添加行政区划] 发送失败，数量：{}", channelList.size(), e);
+//                log.warn("[Add administrative divisions to multiple channels] Failed to send, quantity：{}", channelList.size(), e);
 //            }
 //        }
     }
@@ -584,20 +584,20 @@ public class GbChannelServiceImpl implements IGbChannelService {
     public void addChannelToRegionByGbDevice(String civilCode, List<Integer> deviceIds) {
         List<CommonGBChannel> channelList = commonGBChannelMapper.queryByDataTypeAndDeviceIds(ChannelDataType.GB28181, deviceIds);
         if (channelList.isEmpty()) {
-            throw new ControllerException(ErrorCode.ERROR100.getCode(), "所有通道Id不存在");
+            throw new ControllerException(ErrorCode.ERROR100.getCode(), "All channel IDs do not exist");
         }
         List<CommonGBChannel> channelListForOld = new ArrayList<>(channelList);
         for (CommonGBChannel channel : channelList) {
             channel.setGbCivilCode(civilCode);
         }
         int result = commonGBChannelMapper.updateRegion(civilCode, channelList);
-        // 发送通知
+        // Send notification
         if (result > 0) {
             try {
-                // 发送catalog
+                // sendcatalog
                 eventPublisher.channelEventPublishForUpdate(channelList, channelListForOld);
             } catch (Exception e) {
-                log.warn("[多个通道添加行政区划] 发送失败，数量：{}", channelList.size(), e);
+                log.warn("[Add administrative divisions to multiple channels] Failed to send, quantity：{}", channelList.size(), e);
             }
         }
     }
@@ -606,7 +606,7 @@ public class GbChannelServiceImpl implements IGbChannelService {
     public void deleteChannelToRegionByGbDevice(List<Integer> deviceIds) {
         List<CommonGBChannel> channelList = commonGBChannelMapper.queryByDataTypeAndDeviceIds(ChannelDataType.GB28181, deviceIds);
         if (channelList.isEmpty()) {
-            throw new ControllerException(ErrorCode.ERROR100.getCode(), "所有通道Id不存在");
+            throw new ControllerException(ErrorCode.ERROR100.getCode(), "All channel IDs do not exist");
         }
         int result = commonGBChannelMapper.removeCivilCodeByChannels(channelList);
         platformChannelService.checkRegionRemove(channelList, null);
@@ -639,7 +639,7 @@ public class GbChannelServiceImpl implements IGbChannelService {
     public void updateBusinessGroup(String oldBusinessGroup, String newBusinessGroup) {
         List<CommonGBChannel> channelList = commonGBChannelMapper.queryByBusinessGroup(oldBusinessGroup);
         if (channelList.isEmpty()) {
-            log.info("[更新业务分组] 发现未关联任何通道： {}", oldBusinessGroup);
+            log.info("[Update business group] Found no channel associated： {}", oldBusinessGroup);
             return;
         }
         List<CommonGBChannel> channelListForOld = new ArrayList<>(channelList);
@@ -648,11 +648,11 @@ public class GbChannelServiceImpl implements IGbChannelService {
             for (CommonGBChannel channel : channelList) {
                 channel.setGbBusinessGroupId(newBusinessGroup);
             }
-            // 发送catalog
+            // sendcatalog
             try {
                 eventPublisher.channelEventPublishForUpdate(channelList, channelListForOld);
             } catch (Exception e) {
-                log.warn("[多个通道业务分组] 发送失败，数量：{}", channelList.size(), e);
+                log.warn("[Multiple channel business groups] Failed to send, quantity：{}", channelList.size(), e);
             }
         }
     }
@@ -669,11 +669,11 @@ public class GbChannelServiceImpl implements IGbChannelService {
             for (CommonGBChannel channel : channelList) {
                 channel.setGbParentId(newParentId);
             }
-            // 发送catalog
+            // sendcatalog
             try {
                 eventPublisher.channelEventPublishForUpdate(channelList, channelListForOld);
             } catch (Exception e) {
-                log.warn("[多个通道业务分组] 发送失败，数量：{}", channelList.size(), e);
+                log.warn("[Multiple channel business groups] Failed to send, quantity：{}", channelList.size(), e);
             }
         }
     }
@@ -683,7 +683,7 @@ public class GbChannelServiceImpl implements IGbChannelService {
     public void addChannelToGroup(String parentId, String businessGroup, List<Integer> channelIds) {
         List<CommonGBChannel> channelList = commonGBChannelMapper.queryByIds(channelIds);
         if (channelList.isEmpty()) {
-            throw new ControllerException(ErrorCode.ERROR100.getCode(), "所有通道Id不存在");
+            throw new ControllerException(ErrorCode.ERROR100.getCode(), "All channel IDs do not exist");
         }
         List<CommonGBChannel> channelListForOld = new ArrayList<>(channelList);
         int result = commonGBChannelMapper.updateGroup(parentId, businessGroup, channelList);
@@ -692,14 +692,14 @@ public class GbChannelServiceImpl implements IGbChannelService {
             commonGBChannel.setGbBusinessGroupId(businessGroup);
         }
 
-        // 发送通知
+        // Send notification
         if (result > 0) {
             platformChannelService.checkGroupAdd(channelList);
             try {
-                // 发送catalog
+                // sendcatalog
                 eventPublisher.channelEventPublishForUpdate(channelList, channelListForOld);
             } catch (Exception e) {
-                log.warn("[多个通道添加行政区划] 发送失败，数量：{}", channelList.size(), e);
+                log.warn("[Add administrative divisions to multiple channels] Failed to send, quantity：{}", channelList.size(), e);
             }
         }
     }
@@ -708,7 +708,7 @@ public class GbChannelServiceImpl implements IGbChannelService {
     public void deleteChannelToGroup(String parentId, String businessGroup, List<Integer> channelIds) {
         List<CommonGBChannel> channelList = commonGBChannelMapper.queryByIds(channelIds);
         if (channelList.isEmpty()) {
-            throw new ControllerException(ErrorCode.ERROR100.getCode(), "所有通道Id不存在");
+            throw new ControllerException(ErrorCode.ERROR100.getCode(), "All channel IDs do not exist");
         }
         commonGBChannelMapper.removeParentIdByChannels(channelList);
 
@@ -727,7 +727,7 @@ public class GbChannelServiceImpl implements IGbChannelService {
     public void addChannelToGroupByGbDevice(String parentId, String businessGroup, List<Integer> deviceIds) {
         List<CommonGBChannel> channelList = commonGBChannelMapper.queryByDataTypeAndDeviceIds(ChannelDataType.GB28181, deviceIds);
         if (channelList.isEmpty()) {
-            throw new ControllerException(ErrorCode.ERROR100.getCode(), "所有通道Id不存在");
+            throw new ControllerException(ErrorCode.ERROR100.getCode(), "All channel IDs do not exist");
         }
         List<CommonGBChannel>  channelListForOld = new ArrayList<>(channelList);
 
@@ -741,14 +741,14 @@ public class GbChannelServiceImpl implements IGbChannelService {
             commonGBChannel.setGbParentId(parentId);
             commonGBChannel.setGbBusinessGroupId(businessGroup);
         }
-        // 发送通知
+        // Send notification
         if (result > 0) {
             platformChannelService.checkGroupAdd(channelList);
             try {
-                // 发送catalog
+                // sendcatalog
                 eventPublisher.channelEventPublishForUpdate(channelList, channelListForOld);
             } catch (Exception e) {
-                log.warn("[多个通道添加行政区划] 发送失败，数量：{}", channelList.size(), e);
+                log.warn("[Add administrative divisions to multiple channels] Failed to send, quantity：{}", channelList.size(), e);
             }
         }
     }
@@ -757,7 +757,7 @@ public class GbChannelServiceImpl implements IGbChannelService {
     public void deleteChannelToGroupByGbDevice(List<Integer> deviceIds) {
         List<CommonGBChannel> channelList = commonGBChannelMapper.queryByDataTypeAndDeviceIds(ChannelDataType.GB28181, deviceIds);
         if (channelList.isEmpty()) {
-            throw new ControllerException(ErrorCode.ERROR100.getCode(), "所有通道Id不存在");
+            throw new ControllerException(ErrorCode.ERROR100.getCode(), "All channel IDs do not exist");
         }
         commonGBChannelMapper.removeParentIdByChannels(channelList);
         platformChannelService.checkGroupRemove(channelList, null);
@@ -765,7 +765,7 @@ public class GbChannelServiceImpl implements IGbChannelService {
 
     @Override
     public CommonGBChannel queryOneWithPlatform(Integer platformId, String channelDeviceId) {
-        // 防止共享的通道编号重复
+        // Prevent shared channel numbers from being duplicated
         List<CommonGBChannel> channelList = platformChannelMapper.queryOneWithPlatform(platformId, channelDeviceId);
         if (!channelList.isEmpty()) {
             return channelList.get(channelList.size() - 1);
@@ -786,11 +786,11 @@ public class GbChannelServiceImpl implements IGbChannelService {
             for (CommonGBChannel channel : channelList) {
                 channel.setGbCivilCode(newCivilCode);
             }
-            // 发送catalog
+            // sendcatalog
             try {
                 eventPublisher.channelEventPublishForUpdate(channelList, channelListForOld);
             } catch (Exception e) {
-                log.warn("[多个通道业务分组] 发送失败，数量：{}", channelList.size(), e);
+                log.warn("[Multiple channel business groups] Failed to send, quantity：{}", channelList.size(), e);
             }
         }
     }
@@ -865,7 +865,7 @@ public class GbChannelServiceImpl implements IGbChannelService {
         if (gpsMsgInfoList == null || gpsMsgInfoList.isEmpty()) {
             return;
         }
-        // 此处来源默认为WGS84, 所以直接入库
+        // The source here defaults to WGS84, so it is stored directly.
         commonGBChannelMapper.updateGpsByDeviceId(gpsMsgInfoList);
 //
 //        Map<String, GPSMsgInfo> gpsMsgInfoMap = new ConcurrentReferenceHashMap<>();
@@ -939,14 +939,14 @@ public class GbChannelServiceImpl implements IGbChannelService {
                 maxLat = maxPosition[1];
             }
         }
-        // 从数据库查询对应的数据
+        // Query the corresponding data from the database
         List<CommonGBChannel> channelList = commonGBChannelMapper.queryCameraChannelInBox(minLon, maxLon, minLat, maxLat);
         VectorTileEncoder encoder = new VectorTileEncoder();
         if (!channelList.isEmpty()) {
             channelList.forEach(commonGBChannel -> {
                 double lon = commonGBChannel.getGbLongitude();
                 double lat = commonGBChannel.getGbLatitude();
-                // 转换为目标坐标系
+                // Convert to target coordinate system
                 if (geoCoordSys != null) {
                     if (geoCoordSys.equalsIgnoreCase("GCJ02")) {
                         Double[] minPosition = Coordtransform.WGS84ToGCJ02(lon, lat);
@@ -955,7 +955,7 @@ public class GbChannelServiceImpl implements IGbChannelService {
                     }
                 }
 
-                // 将 lon/lat 转为瓦片内像素坐标（0..256）
+                // will lon/lat Convert to pixel coordinates within the tile（0..256）
                 double[] px = TileUtils.lonLatToTilePixel(lon, lat, z, x, y);
                 Point pointGeom = geometryFactory.createPoint(new Coordinate(px[0], px[1]));
                 Map<String, Object> beanMap = getStringObjectMap(commonGBChannel);
@@ -988,7 +988,7 @@ public class GbChannelServiceImpl implements IGbChannelService {
         String id = UUID.randomUUID().toString();
         List<CommonGBChannel> channelListInExtent;
         if (extent == null) {
-            log.info("[抽稀] ID: {}, 未设置范围，从数据库读取摄像头的范围", id);
+            log.info("[Dilute] ID: {}, The range is not set, the range of the camera is read from the database", id);
             extent = commonGBChannelMapper.queryExtent();
             channelListInExtent = commonGBChannelMapper.queryAllWithPosition();
         }else {
@@ -1002,22 +1002,22 @@ public class GbChannelServiceImpl implements IGbChannelService {
                 extent.setMinLng(minPosition[0]);
                 extent.setMinLat(minPosition[1]);
             }
-            // 获取数据源
+            // Get data source
             channelListInExtent = commonGBChannelMapper.queryListInExtent(extent.getMinLng(), extent.getMaxLng(), extent.getMinLat(), extent.getMaxLat());
         }
-        Assert.isTrue(!channelListInExtent.isEmpty(), "通道数据为空");
+        Assert.isTrue(!channelListInExtent.isEmpty(), "Channel data is empty");
 
-        log.info("[开始抽稀] ID： {}， 范围，[{}, {}, {}, {}]", id, extent.getMinLng(), extent.getMinLat(), extent.getMaxLng(), extent.getMaxLat());
+        log.info("[Begin to thin out] ID： {}， scope，[{}, {}, {}, {}]", id, extent.getMinLng(), extent.getMinLat(), extent.getMaxLng(), extent.getMaxLat());
 
         Extent finalExtent = extent;
-        // 记录进度
-        saveProcess(id, 0, "开始抽稀");
+        // Record progress
+        saveProcess(id, 0, "Begin to thin out");
         dynamicTask.startDelay(id, () -> {
             try {
-                // 存储每层的抽稀结果， key为层级（zoom），value为摄像头数组
+                // Store the thinning results of each layer. The key is the level (zoom) and the value is the camera array.
                 Map<Integer, Collection<CommonGBChannel>> zoomCameraMap = new HashMap<>();
 
-                // 冗余一份已经处理过的摄像头的数据， 避免多次循环获取
+                // Redundant data from already processed cameras to avoid multiple loop acquisitions
                 Map<Integer, CommonGBChannel> useCameraMap = new HashMap<>();
                 AtomicReference<Double> process = new AtomicReference<>((double) 0);
                 for (Integer zoom : zoomParam.keySet()) {
@@ -1026,21 +1026,21 @@ public class GbChannelServiceImpl implements IGbChannelService {
                     Map<String, CommonGBChannel> cameraMapForZoom = new HashMap<>();
 
                     if (Objects.equals(zoom, Collections.max(zoomParam.keySet()))) {
-                        // 最大层级不进行抽稀， 将未进行抽稀的数据直接存储到这个层级
+                        // The maximum level does not perform thinning, and the data that has not been thinned is stored directly in this level.
                         for (CommonGBChannel channel : channelListInExtent) {
                             if (!useCameraMap.containsKey(channel.getGbId())) {
                                 channel.setMapLevel(zoom);
-                                // 这个的key跟后面的不一致是因为无需抽稀， 直接存储原始数据
+                                // This key is inconsistent with the following one because there is no need to thin out and the original data is stored directly.
                                 cameraMapForZoom.put(channel.getGbId() + "", channel);
                                 useCameraMap.put(channel.getGbId(), channel);
                             }
                         }
                     }else {
                         Double diff = zoomParam.get(zoom);
-                        // 对这个层级展开抽稀
-                        log.info("[抽稀] ID：{}，当前层级： {}, 坐标间隔： {}", id, zoom, diff);
+                        // Expand thinning on this level
+                        log.info("[Dilute] ID：{}，current level： {}, coordinate interval： {}", id, zoom, diff);
 
-                        // 更新上级图层的数据到当前层级，确保当前层级展示时考虑到之前层级的数据
+                        // Update the data of the upper-level layer to the current level to ensure that the data of the previous level is taken into account when displaying the current level.
                         for (CommonGBChannel channel : useCameraMap.values()) {
                             int lngGrid = (int)(channel.getGbLongitude() / diff);
                             int latGrid = (int)(channel.getGbLatitude() / diff);
@@ -1048,22 +1048,22 @@ public class GbChannelServiceImpl implements IGbChannelService {
                             useCameraMapForZoom.put(gridKey, channel);
                         }
 
-                        // 对数据开始执行抽稀
+                        // Start thinning the data
                         for (CommonGBChannel channel : channelListInExtent) {
-                            // 已经分配再其他层级的，本层级不再使用
+                            // If it has been allocated to other levels, it will no longer be used at this level.
                             if (useCameraMap.containsKey(channel.getGbId())) {
                                 continue;
                             }
                             int lngGrid = (int)(channel.getGbLongitude() / diff);
                             int latGrid = (int)(channel.getGbLatitude() / diff);
-                            // 数据网格Id
+                            // data gridId
                             String gridKey = latGrid + ":" + lngGrid;
                             if (useCameraMapForZoom.containsKey(gridKey)) {
                                 continue;
                             }
                             if (cameraMapForZoom.containsKey(gridKey)) {
                                 CommonGBChannel oldChannel = cameraMapForZoom.get(gridKey);
-                                // 如果一个网格存在多个数据，则选择最接近中心点的， 目前只选择了经度方向作为参考
+                                // If there is multiple data in a grid, the one closest to the center point is selected. Currently, only the longitude direction is selected as the reference.
                                 if (channel.getGbLongitude() % diff < oldChannel.getGbLongitude() % diff) {
                                     channel.setMapLevel(zoom);
                                     cameraMapForZoom.put(gridKey, channel);
@@ -1078,31 +1078,31 @@ public class GbChannelServiceImpl implements IGbChannelService {
                             }
                         }
                     }
-                    // 存储
+                    // storage
                     zoomCameraMap.put(zoom, cameraMapForZoom.values());
                     process.updateAndGet(v -> (v + 0.5 / zoomParam.size()));
-                    saveProcess(id, process.get(), "抽稀图层： " + zoom);
+                    saveProcess(id, process.get(), "thin layer： " + zoom);
                 }
 
-                // 抽稀完成, 对数据发布mvt矢量瓦片
+                // Thinning is completed, and mvt vector tiles are released to the data.
                 List<CommonGBChannel> beforeData = new ArrayList<>();
                 for (Integer zoom : zoomCameraMap.keySet()) {
                     beforeData.addAll(zoomCameraMap.get(zoom));
-                    log.info("[抽稀-发布mvt矢量瓦片] ID：{}，当前层级： {}", id, zoom);
-                    // 按照 z/x/y 数据组织数据， 矢量数据暂时保存在内存中
-                    // 按照范围生成 x y范围，
+                    log.info("[Dilute-Publish mvt vector tiles] ID：{}，current level： {}", id, zoom);
+                    // follow z/x/y Data organization data, vector data is temporarily stored in memory
+                    // Generate x y range according to range，
                     saveTile(id, zoom, "WGS84", beforeData);
                     saveTile(id, zoom, "GCJ02", beforeData);
                     process.updateAndGet(v -> (v + 0.5 / zoomParam.size()));
-                    saveProcess(id, process.get(), "发布矢量瓦片： " + zoom);
+                    saveProcess(id, process.get(), "Publish vector tiles： " + zoom);
                 }
-                // 记录原始数据，未保存做准备
+                // Record raw data, not saved for preparation
                 vectorTileCatch.addSource(id, new ArrayList<>(useCameraMap.values()));
 
-                log.info("[抽稀完成] ID：{}, 耗时： {}ms", id, (System.currentTimeMillis() - time));
-                saveProcess(id, 1, "抽稀完成");
+                log.info("[Thinning completed] ID：{}, Time consuming： {}ms", id, (System.currentTimeMillis() - time));
+                saveProcess(id, 1, "Thinning completed");
             } catch (Exception e) {
-                log.info("[抽稀] 失败 ID：{}", id, e);
+                log.info("[Dilute] failed ID：{}", id, e);
             }
 
         }, 1);
@@ -1129,7 +1129,7 @@ public class GbChannelServiceImpl implements IGbChannelService {
                 encoder = new VectorTileEncoder();
                 encoderMap.put(key, encoder);
             }
-            // 将 lon/lat 转为瓦片内像素坐标（0..256）
+            // will lon/lat Convert to pixel coordinates within the tile（0..256）
             double[] px = TileUtils.lonLatToTilePixel(lon, lat, z, x, y);
             Point pointGeom = geometryFactory.createPoint(new Coordinate(px[0], px[1]));
             Map<String, Object> beanMap = getStringObjectMap(commonGBChannel);

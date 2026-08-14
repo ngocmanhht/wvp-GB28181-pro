@@ -9,11 +9,11 @@ public class TileUtils {
     private static final double MAX_LATITUDE = 85.05112878;
 
     /**
-     * 根据坐标获取指定层级的x y 值
+     * Get the x y value of the specified level based on the coordinates
      *
-     * @param lon 经度
-     * @param lat 纬度
-     * @param z   层级
+     * @param lon longitude
+     * @param lat Latitude
+     * @param z   Hierarchy
      * @return double[2] = {xTileFloat, yTileFloat}
      */
     public static double[] lonLatToTileXY(double lon, double lat, int z) {
@@ -29,7 +29,7 @@ public class TileUtils {
     }
 
     /**
-     * 根据坐标范围获取指定层级的x y 范围
+     * Get the x y range of the specified level based on the coordinate range
      *
      * @param bbox array length 4: {minLon, minLat, maxLon, maxLat}
      * @param z    zoom level

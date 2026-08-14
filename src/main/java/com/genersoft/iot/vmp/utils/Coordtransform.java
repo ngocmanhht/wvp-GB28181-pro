@@ -1,9 +1,9 @@
 package com.genersoft.iot.vmp.utils;
 
 /**
- * 坐标转换
- * 一个提供了百度坐标（BD09）、国测局坐标（火星坐标，GCJ02）、和WGS84坐标系之间的转换的工具类
- * 参考https://github.com/wandergis/coordtransform 写的Java版本
+ * Coordinate transformation
+ * A tool class that provides conversion between Baidu coordinates (BD09), National Survey Bureau coordinates (Mars coordinates, GCJ02), and WGS84 coordinate systems
+ * Referencehttps://github.com/wandergis/coordtransform Java version written
  * @author Xinconan
  * @date 2016-03-18
  * @url https://github.com/xinconan/coordtransform
@@ -16,8 +16,8 @@ public class Coordtransform {
 	private static double ee = 0.00669342162296594323;
 	
 	/**
-	 * 百度坐标系 (BD-09) 与 火星坐标系 (GCJ-02)的转换
-     * 即 百度 转 谷歌、高德
+	 * Baidu coordinate system (BD-09) With Mars coordinate system (GCJ-02)conversion
+     * That is, Baidu to Google, Amap
 	 * @param bd_lon
 	 * @param bd_lat
 	 * @return Double[lon,lat]
@@ -34,8 +34,8 @@ public class Coordtransform {
 	}
 	
 	/**
-	 * 火星坐标系 (GCJ-02) 与百度坐标系 (BD-09) 的转换
-     * 即谷歌、高德 转 百度
+	 * Mars coordinate system (GCJ-02) With Baidu coordinate system (BD-09) conversion
+     * That is, Google, Amap to Baidu
 	 * @param gcj_lon
 	 * @param gcj_lat
 	 * @return Double[lon,lat]
@@ -50,7 +50,7 @@ public class Coordtransform {
 	}
 	
 	/**
-	 * WGS84转GCJ02
+	 * WGS84turnGCJ02
 	 * @param wgs_lon
 	 * @param wgs_lat
 	 * @return Double[lon,lat]
@@ -74,7 +74,7 @@ public class Coordtransform {
 	}
 	
 	/**
-	 * GCJ02转WGS84
+	 * GCJ02turnWGS84
 	 * @param gcj_lon
 	 * @param gcj_lat
 	 * @return Double[lon,lat]
@@ -114,7 +114,7 @@ public class Coordtransform {
 	
 	/**
 	 * outOfChina
-	 * @描述: 判断是否在国内，不在国内则不做偏移
+	 * @Description: Determine whether it is in the country. If not, no offset will be made.
 	 * @param lng
 	 * @param lat
 	 * @return {boolean}

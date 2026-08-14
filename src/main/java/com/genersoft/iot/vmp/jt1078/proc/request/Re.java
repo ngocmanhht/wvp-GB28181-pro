@@ -33,7 +33,7 @@ public abstract class Re {
         if (rs == null && rsHand != null) {
             rs = rsHand;
         } else if (rs != null && rsHand != null) {
-            log.warn("decode0:{} 与 handler:{} 返回值冲突,采用decode0返回值", rs, rsHand);
+            log.warn("decode0:{} with handler:{} Return value conflict, use decode0 return value", rs, rsHand);
         }
         if (rs != null) {
             rs.setHeader(header);

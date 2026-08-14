@@ -5,7 +5,7 @@ import com.genersoft.iot.vmp.gb28181.bean.CommonGBChannel;
 import com.genersoft.iot.vmp.service.bean.ErrorCallback;
 
 /**
- * 资源能力接入-录像下载
+ * Resource capability access-Video download
  */
 public interface ISourceDownloadService {
 

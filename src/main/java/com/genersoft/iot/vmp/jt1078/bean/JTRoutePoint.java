@@ -8,40 +8,40 @@ import lombok.Setter;
 
 @Setter
 @Getter
-@Schema(description = "路线拐点")
+@Schema(description = "Route turning point")
 public class JTRoutePoint {
 
-    @Schema(description = "拐点 ID")
+    @Schema(description = "turning point ID")
     private long id;
 
-    @Schema(description = "路段 ID")
+    @Schema(description = "road section ID")
     private long routeSectionId;
 
-    @Schema(description = "拐点纬度")
+    @Schema(description = "Turning point latitude")
     private Double latitude;
 
-    @Schema(description = "拐点经度")
+    @Schema(description = "Inflection point longitude")
     private Double longitude;
 
-    @Schema(description = "路段宽度")
+    @Schema(description = "road section width")
     private int routeSectionAttributeWidth;
 
-    @Schema(description = "路段属性")
+    @Schema(description = "Road segment attributes")
     private JTRouteSectionAttribute routeSectionAttribute;
 
-    @Schema(description = "路段行驶过长國值")
+    @Schema(description = "The road section is too long")
     private int routeSectionMaxLength;
 
-    @Schema(description = "路段行驶不足國值")
+    @Schema(description = "The road section is not traveled enough to meet the national value")
     private int routeSectionMinLength;
 
-    @Schema(description = "路段最高速度")
+    @Schema(description = "road section maximum speed")
     private int routeSectionMaxSpeed;
 
-    @Schema(description = "路段超速持续时间")
+    @Schema(description = "Road section speeding duration")
     private int routeSectionOverSpeedDuration;
 
-    @Schema(description = "路段夜间最高速度")
+    @Schema(description = "Road section maximum speed at night")
     private int routeSectionNighttimeMaxSpeed;
 
     public ByteBuf encode(){

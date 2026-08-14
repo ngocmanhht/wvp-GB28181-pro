@@ -5,22 +5,22 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 
 
-@Schema(description = "流地址信息")
+@Schema(description = "Stream address information")
 public class StreamURL implements Serializable,Cloneable {
 
-    @Schema(description = "协议")
+    @Schema(description = "Agreement")
     private String protocol;
 
-    @Schema(description = "主机地址")
+    @Schema(description = "host address")
     private String host;
 
-    @Schema(description = "端口")
+    @Schema(description = "port")
     private int port = -1;
 
-    @Schema(description = "定位位置")
+    @Schema(description = "Location")
     private String file;
 
-    @Schema(description = "拼接后的地址")
+    @Schema(description = "The spliced address")
     private String url;
 
     public StreamURL() {

@@ -11,37 +11,37 @@ import java.nio.charset.Charset;
 
 @Data
 @Slf4j
-@Schema(description = "驾驶员身份信息")
+@Schema(description = "driver identification information")
 public class JTDriverInformation {
 
-    @Schema(description = "0x01:从业资格证 IC卡插入( 驾驶员上班)；0x02:从 业资格证 IC卡拔出(驾驶员下班)")
+    @Schema(description = "0x01:Business qualification certificate IC card insertion( Driver goes to work)；0x02:Pull out the professional qualification certificate IC card(Driver off work)")
     private int status;
 
-    @Schema(description = "插卡/拔卡时间 ,以下字段在状 态为0x01 时才有效并做填充")
+    @Schema(description = "plug-in card/Card removal time, the following fields are only valid and filled when the status is 0x01")
     private String time;
 
-    @Schema(description = "IC卡读取结果:" +
-            "0x00:IC卡读卡成功；" +
-            "0x01:读卡失败 ,原因为卡片密钥认证未通过；" +
-            "0x02:读卡失败 ,原因为卡片已被锁定；" +
-            "0x03:读卡失败 ,原因为卡片被拔出；" +
-            "0x04:读卡失败 ,原因为数据校验错误。" +
-            "以下字段在 IC卡读取结果等于0x00 时才有效")
+    @Schema(description = "ICCard reading result:" +
+            "0x00:ICCard reading successful；" +
+            "0x01:The card reading failed because the card key authentication failed.；" +
+            "0x02:Card reading failed because the card has been locked；" +
+            "0x03:Card reading failed because the card was pulled out；" +
+            "0x04:Card reading failed due to data verification error。" +
+            "The following fields are valid only when the IC card reading result is equal to 0x00")
     private Integer result;
 
-    @Schema(description = "驾驶员姓名")
+    @Schema(description = "driver name")
     private String name;
 
-    @Schema(description = "从业资格证编码")
+    @Schema(description = "Professional qualification certificate code")
     private String certificateCode;
 
-    @Schema(description = "发证机构名称")
+    @Schema(description = "Name of issuing authority")
     private String certificateIssuanceMechanismName;
 
-    @Schema(description = "证件有效期")
+    @Schema(description = "Certificate validity period")
     private String expire;
 
-    @Schema(description = "驾驶员身份证号")
+    @Schema(description = "Driver ID number")
     private String driverIdNumber;
 
     public static JTDriverInformation decode(ByteBuf buf, boolean is2019) {
@@ -53,14 +53,14 @@ public class JTDriverInformation {
         try {
             jtDriverInformation.setTime(DateUtil.jt1078Toyyyy_MM_dd_HH_mm_ss(timeStr));
         }catch (Exception e) {
-            log.error("[JT-驾驶员身份信息] 解码时无法格式化时间： {}", timeStr);
+            log.error("[JT-driver identification information] Unable to format time when decoding： {}", timeStr);
         }
 
         if (jtDriverInformation.getStatus() == 1) {
             int result = (int)buf.readUnsignedByte();
             jtDriverInformation.setResult(result);
             if (result == 0) {
-                // IC卡读卡成功
+                // ICCard reading successful
                 int nameLength = buf.readUnsignedByte();
                 jtDriverInformation.setName(buf.readCharSequence(nameLength, Charset.forName("GBK")).toString().trim());
                 jtDriverInformation.setCertificateCode(buf.readCharSequence(20, Charset.forName("GBK")).toString().trim());
@@ -73,7 +73,7 @@ public class JTDriverInformation {
                 try {
                     jtDriverInformation.setExpire(DateUtil.jt1078dateToyyyy_MM_dd(bytesForExpireStr));
                 }catch (Exception e) {
-                    log.error("[JT-驾驶员身份信息] 解码时无法格式化时间： {}", bytesForExpireStr);
+                    log.error("[JT-driver identification information] Unable to format time when decoding： {}", bytesForExpireStr);
                 }
                 if (is2019) {
                     jtDriverInformation.setDriverIdNumber(buf.readCharSequence(20, Charset.forName("GBK")).toString().trim());

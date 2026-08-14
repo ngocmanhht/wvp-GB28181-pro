@@ -2,23 +2,23 @@
   <div style="width: 100%;">
     <div style="height: calc(100vh - 260px); overflow: auto">
       <el-form ref="form" :model="form" label-width="240px" style="width: 50%; margin: 0 auto">
-        <el-form-item  label="通道1采集时间间隔(毫秒)" prop="canCollectionTimeForChannel1">
-          <el-input v-model="form.canCollectionTimeForChannel1" placeholder="通道1采集时间间隔, 单位为毫秒(ms), 0表示不采集"/>
+        <el-form-item  label="Channel 1 acquisition time interval(milliseconds)" prop="canCollectionTimeForChannel1">
+          <el-input v-model="form.canCollectionTimeForChannel1" placeholder="Channel 1 acquisition time interval, unit is milliseconds(ms), 0Indicates no collection"/>
         </el-form-item>
-        <el-form-item  label="通道1上传时间间隔(秒)" prop="canUploadIntervalForChannel1">
-          <el-input v-model="form.canUploadIntervalForChannel1" placeholder="通道1 上传时间间隔, 单位为秒(s), 0表示不上传"/>
+        <el-form-item  label="Channel 1 upload time interval(seconds)" prop="canUploadIntervalForChannel1">
+          <el-input v-model="form.canUploadIntervalForChannel1" placeholder="Channel 1 upload time interval, unit is seconds(s), 0Indicates not uploading"/>
         </el-form-item>
-        <el-form-item  label="通道2采集时间间隔(毫秒)" prop="canCollectionTimeForChannel2">
-          <el-input v-model="form.canCollectionTimeForChannel2" placeholder="通道2采集时间间隔, 单位为毫秒(ms), 0表示不采集"/>
+        <el-form-item  label="Channel 2 acquisition time interval(milliseconds)" prop="canCollectionTimeForChannel2">
+          <el-input v-model="form.canCollectionTimeForChannel2" placeholder="Channel 2 acquisition time interval, unit is milliseconds(ms), 0Indicates no collection"/>
         </el-form-item>
-        <el-form-item  label="通道2上传时间间隔(秒)" prop="canUploadIntervalForChannel2">
-          <el-input v-model="form.canUploadIntervalForChannel2" placeholder="通道2 上传时间间隔, 单位为秒(s), 0表示不上传"/>
+        <el-form-item  label="Channel 2 upload time interval(seconds)" prop="canUploadIntervalForChannel2">
+          <el-input v-model="form.canUploadIntervalForChannel2" placeholder="Channel 2 upload time interval, unit is seconds(s), 0Indicates not uploading"/>
         </el-form-item>
       </el-form>
     </div>
     <p style="text-align: right">
-      <el-button type="primary" @click="onSubmit">确认</el-button>
-      <el-button @click="showDevice">取消</el-button>
+      <el-button type="primary" @click="onSubmit">Confirm</el-button>
+      <el-button @click="showDevice">Cancel</el-button>
     </p>
 
   </div>
@@ -34,14 +34,14 @@ export default {
       switch (this.form.gnssDataUploadMethod) {
         case 1:
         case 11:
-          return '上传设置（秒）'
+          return 'Upload settings (seconds）'
         case 2:
         case 12:
-          return '上传设置（米）'
+          return 'Upload settings (m）'
         case 13:
-          return '上传设置（条）'
+          return 'Upload settings (bar）'
         default:
-          return '上传设置'
+          return 'Upload settings'
       }
     }
   },

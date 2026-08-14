@@ -1,7 +1,7 @@
 package com.genersoft.iot.vmp.media.event.hook;
 
 /**
- * hook类型
+ * hookType
  * @author lin
  */
 

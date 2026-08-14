@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 车辆控制
+ * vehicle control
  */
 @Setter
 @Getter
@@ -25,7 +25,7 @@ import java.util.Map;
 public class J8500 extends Rs {
 
     /**
-     * 控制类型
+     * Control type
      */
     private JTVehicleControl vehicleControl;
 

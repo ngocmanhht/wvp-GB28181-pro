@@ -8,12 +8,12 @@ import com.genersoft.iot.vmp.service.bean.ErrorCallback;
 import java.util.List;
 
 /**
- * 记录国标点播的状态，包括实时预览，下载，录像回放
+ * Record the status of national standard on-demand videos, including real-time preview, download, and video playback
  */
 public interface IInviteStreamService {
 
     /**
-     * 更新点播的状态信息
+     * Update on-demand status information
      */
     void updateInviteInfo(InviteInfo inviteInfo);
 
@@ -22,64 +22,64 @@ public interface IInviteStreamService {
     InviteInfo updateInviteInfoForStream(InviteInfo inviteInfo, String stream);
 
     /**
-     * 获取点播的状态信息
+     * Get on-demand status information
      */
     InviteInfo getInviteInfo(InviteSessionType type, Integer channelId, String stream);
 
     /**
-     * 移除点播的状态信息
+     * Remove on-demand status information
      */
     void removeInviteInfo(InviteSessionType type, Integer channelId, String stream);
     /**
-     * 移除点播的状态信息
+     * Remove on-demand status information
      */
     void removeInviteInfo(InviteInfo inviteInfo);
     /**
-     * 移除点播的状态信息
+     * Remove on-demand status information
      */
     void removeInviteInfoByDeviceAndChannel(InviteSessionType inviteSessionType, Integer channelId);
 
     List<InviteInfo> getAllInviteInfo();
 
     /**
-     * 获取点播的状态信息
+     * Get on-demand status information
      */
     InviteInfo getInviteInfoByDeviceAndChannel(InviteSessionType type, Integer channelId);
 
     /**
-     * 获取点播的状态信息
+     * Get on-demand status information
      */
     InviteInfo getInviteInfoByStream(InviteSessionType type, String stream);
 
 
     /**
-     * 添加一个invite回调
+     * Add an invite callback
      */
     void once(InviteSessionType type, Integer channelId, String stream,  ErrorCallback<StreamInfo> callback);
 
     /**
-     * 调用一个invite回调
+     * Call an invite callback
      */
     void call(InviteSessionType type,  Integer channelId, String stream,  int code, String msg, StreamInfo data);
 
     /**
-     * 清空一个设备的所有invite信息
+     * Clear all invite information of a device
      */
     void clearInviteInfo(String deviceId);
 
     /**
-     * 统计同一个zlm下的国标收流个数
+     * Count the number of national standard collections under the same zlm
      */
     int getStreamInfoCount(String mediaServerId);
 
 
     /**
-     * 获取MediaServer下的流信息
+     * Get stream information under MediaServer
      */
     InviteInfo getInviteInfoBySSRC(String ssrc);
 
     /**
-     * 更新ssrc
+     * updatessrc
      */
     InviteInfo updateInviteInfoForSSRC(InviteInfo inviteInfo, String ssrcInResponse);
 }

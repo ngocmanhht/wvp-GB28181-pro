@@ -37,7 +37,7 @@ public class SsrcTransactionNotFoundException extends Exception{
     @Override
     public String getMessage() {
         StringBuffer msg = new StringBuffer();
-        msg.append(String.format("缓存事务信息未找到，device：%s channel: %s ",  deviceId, channelId));
+        msg.append(String.format("Cache transaction information not found，device：%s channel: %s ",  deviceId, channelId));
         if (callId != null) {
             msg.append(",callId: " + callId);
         }

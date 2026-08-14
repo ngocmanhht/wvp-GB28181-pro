@@ -42,24 +42,24 @@ public class AssistRESTfulUtils {
                 readTimeOut = 10;
             }
             OkHttpClient.Builder httpClientBuilder = new OkHttpClient.Builder();
-            // 设置连接超时时间
+            // Set connection timeout
             httpClientBuilder.connectTimeout(8, TimeUnit.SECONDS);
-            // 设置读取超时时间
+            // Set read timeout
             httpClientBuilder.readTimeout(readTimeOut,TimeUnit.SECONDS);
-            // 设置连接池
+            // Set up connection pool
             httpClientBuilder.connectionPool(new ConnectionPool(16, 5, TimeUnit.MINUTES));
             if (log.isDebugEnabled()) {
                 HttpLoggingInterceptor logging = new HttpLoggingInterceptor(message -> {
-                    log.debug("http请求参数：" + message);
+                    log.debug("httpRequest parameters：" + message);
                 });
                 logging.setLevel(HttpLoggingInterceptor.Level.BASIC);
-                // OkHttp進行添加攔截器loggingInterceptor
+                // OkHttpAdd interceptorloggingInterceptor
                 httpClientBuilder.addInterceptor(logging);
             }
             X509TrustManager manager = SSLSocketClientUtil.getX509TrustManager();
-            // 设置ssl
+            // settingsssl
             httpClientBuilder.sslSocketFactory(SSLSocketClientUtil.getSocketFactory(manager), manager);
-            httpClientBuilder.hostnameVerifier(SSLSocketClientUtil.getHostnameVerifier());//忽略校验
+            httpClientBuilder.hostnameVerifier(SSLSocketClientUtil.getHostnameVerifier());//Ignore validation
             client = httpClientBuilder.build();
         }
         return client;
@@ -74,7 +74,7 @@ public class AssistRESTfulUtils {
             return null;
         }
         if (mediaServerItem.getRecordAssistPort() <= 0) {
-            log.warn("未启用Assist服务");
+            log.warn("Assist service is not enabled");
             return null;
         }
         StringBuilder stringBuffer = new StringBuilder();
@@ -96,7 +96,7 @@ public class AssistRESTfulUtils {
         }
 
         String url = stringBuffer.toString();
-        log.info("[访问assist]： {}", url);
+        log.info("[visitassist]： {}", url);
         Request request = new Request.Builder()
                 .get()
                 .url(url)
@@ -115,10 +115,10 @@ public class AssistRESTfulUtils {
                         Objects.requireNonNull(response.body()).close();
                     }
                 } catch (ConnectException e) {
-                    log.error(String.format("连接Assist失败: %s, %s", e.getCause().getMessage(), e.getMessage()));
-                    log.info("请检查media配置并确认Assist已启动...");
+                    log.error(String.format("Failed to connect to Assist: %s, %s", e.getCause().getMessage(), e.getMessage()));
+                    log.info("Please check the media configuration and confirm that Assist is started...");
                 }catch (IOException e) {
-                    log.error(String.format("[ %s ]请求失败: %s", url, e.getMessage()));
+                    log.error(String.format("[ %s ]Request failed: %s", url, e.getMessage()));
                 }
             }else {
                 client.newCall(request).enqueue(new Callback(){
@@ -130,7 +130,7 @@ public class AssistRESTfulUtils {
                                 String responseStr = Objects.requireNonNull(response.body()).string();
                                 callback.run(JSON.parseObject(responseStr));
                             } catch (IOException e) {
-                                log.error(String.format("[ %s ]请求失败: %s", url, e.getMessage()));
+                                log.error(String.format("[ %s ]Request failed: %s", url, e.getMessage()));
                             }
 
                         }else {
@@ -141,8 +141,8 @@ public class AssistRESTfulUtils {
 
                     @Override
                     public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                        log.error(String.format("连接Assist失败: %s, %s", e.getCause().getMessage(), e.getMessage()));
-                        log.info("请检查media配置并确认Assist已启动...");
+                        log.error(String.format("Failed to connect to Assist: %s, %s", e.getCause().getMessage(), e.getMessage()));
+                        log.info("Please check the media configuration and confirm that Assist is started...");
                     }
                 });
             }
@@ -160,11 +160,11 @@ public class AssistRESTfulUtils {
         if (mediaServerItem == null) {
             return null;
         }
-        log.info("[访问assist]： {}, 参数： {}", url, param);
+        log.info("[visitassist]： {}, parameters： {}", url, param);
         JSONObject responseJSON = new JSONObject();
-        //-2自定义流媒体 调用错误码
+        //-2Custom streaming media call error code
         responseJSON.put("code",-2);
-        responseJSON.put("msg","ASSIST调用失败");
+        responseJSON.put("msg","ASSISTcall failed");
 
         RequestBody requestBodyJson = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), param.toString());
 
@@ -187,19 +187,19 @@ public class AssistRESTfulUtils {
                     Objects.requireNonNull(response.body()).close();
                 }
             }catch (IOException e) {
-                log.error(String.format("[ %s ]ASSIST请求失败: %s", url, e.getMessage()));
+                log.error(String.format("[ %s ]ASSISTRequest failed: %s", url, e.getMessage()));
 
                 if(e instanceof SocketTimeoutException){
-                    //读取超时超时异常
-                    log.error(String.format("读取ASSIST数据失败: %s, %s", url, e.getMessage()));
+                    //Read timeout exception
+                    log.error(String.format("Failed to read ASSIST data: %s, %s", url, e.getMessage()));
                 }
                 if(e instanceof ConnectException){
-                    //判断连接异常，我这里是报Failed to connect to 10.7.5.144
-                    log.error(String.format("连接ASSIST失败: %s, %s", url, e.getMessage()));
+                    //It is determined that the connection is abnormal. Here is the report.Failed to connect to 10.7.5.144
+                    log.error(String.format("Failed to connect to ASSIST: %s, %s", url, e.getMessage()));
                 }
 
             }catch (Exception e){
-                log.error(String.format("访问ASSIST失败: %s, %s", url, e.getMessage()));
+                log.error(String.format("Access to ASSIST failed: %s, %s", url, e.getMessage()));
             }
         }else {
             client.newCall(request).enqueue(new Callback(){
@@ -211,7 +211,7 @@ public class AssistRESTfulUtils {
                             String responseStr = Objects.requireNonNull(response.body()).string();
                             callback.run(responseStr);
                         } catch (IOException e) {
-                            log.error(String.format("[ %s ]请求失败: %s", url, e.getMessage()));
+                            log.error(String.format("[ %s ]Request failed: %s", url, e.getMessage()));
                         }
 
                     }else {
@@ -222,15 +222,15 @@ public class AssistRESTfulUtils {
 
                 @Override
                 public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                    log.error(String.format("连接ZLM失败: %s, %s", call.request().toString(), e.getMessage()));
+                    log.error(String.format("Failed to connect to ZLM: %s, %s", call.request().toString(), e.getMessage()));
 
                     if(e instanceof SocketTimeoutException){
-                        //读取超时超时异常
-                        log.error(String.format("读取ZLM数据失败: %s, %s", call.request().toString(), e.getMessage()));
+                        //Read timeout exception
+                        log.error(String.format("Failed to read ZLM data: %s, %s", call.request().toString(), e.getMessage()));
                     }
                     if(e instanceof ConnectException){
-                        //判断连接异常，我这里是报Failed to connect to 10.7.5.144
-                        log.error(String.format("连接ZLM失败: %s, %s", call.request().toString(), e.getMessage()));
+                        //It is determined that the connection is abnormal. Here is the report.Failed to connect to 10.7.5.144
+                        log.error(String.format("Failed to connect to ZLM: %s, %s", call.request().toString(), e.getMessage()));
                     }
                 }
             });

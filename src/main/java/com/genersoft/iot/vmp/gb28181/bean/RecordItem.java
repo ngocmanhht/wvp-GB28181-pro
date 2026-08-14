@@ -11,43 +11,43 @@ import java.time.Instant;
 import java.time.temporal.TemporalAccessor;
 
 /**
- * @description:设备录像bean
+ * @description:Equipment videobean
  * @author: swwheihei
- * @date:   2020年5月8日 下午2:06:54
+ * @date:   2020May 8, 2018, afternoon2:06:54
  */
 @Setter
 @Getter
-@Schema(description = "设备录像详情")
+@Schema(description = "Device recording details")
 public class RecordItem  implements Comparable<RecordItem>{
 
-	@Schema(description = "设备编号")
+	@Schema(description = "Device number")
 	private String deviceId;
 
-	@Schema(description = "名称")
+	@Schema(description = "Name")
 	private String name;
 
-	@Schema(description = "文件路径名 (可选)")
+	@Schema(description = "file pathname (Optional)")
 	private String filePath;
 
-	@Schema(description = "录像文件大小,单位:Byte(可选)")
+	@Schema(description = "Video file size, unit:Byte(Optional)")
 	private String fileSize;
 
-	@Schema(description = "录像地址(可选)")
+	@Schema(description = "Video address(Optional)")
 	private String address;
 
-	@Schema(description = "录像开始时间(可选)")
+	@Schema(description = "Recording start time(Optional)")
 	private String startTime;
 
-	@Schema(description = "录像结束时间(可选)")
+	@Schema(description = "Recording end time(Optional)")
 	private String endTime;
 
-	@Schema(description = "保密属性(必选)缺省为0;0:不涉密,1:涉密")
+	@Schema(description = "Confidential attribute(Required)The default is0;0:Not confidential, 1: confidential")
 	private int secrecy;
 
-	@Schema(description = "录像产生类型(可选)time或alarm 或 manual")
+	@Schema(description = "Video generation type(Optional)timeor alarm or manual")
 	private String type;
 
-	@Schema(description = "录像触发者ID(可选)")
+	@Schema(description = "video triggerID(Optional)")
 	private String recorderId;
 
     @Override

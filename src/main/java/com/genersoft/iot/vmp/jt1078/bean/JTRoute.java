@@ -14,25 +14,25 @@ import java.util.List;
 
 @Setter
 @Getter
-@Schema(description = "路线")
+@Schema(description = "route")
 public class JTRoute implements JTAreaOrRoute{
 
-    @Schema(description = "路线 ID")
+    @Schema(description = "route ID")
     private long id;
 
-    @Schema(description = "路线属性")
+    @Schema(description = "route properties")
     private JTRouteAttribute attribute;
 
-    @Schema(description = "起始时间, yyyy-MM-dd HH:mm:ss")
+    @Schema(description = "start time, yyyy-MM-dd HH:mm:ss")
     private String startTime;
 
-    @Schema(description = "结束时间, yyyy-MM-dd HH:mm:ss")
+    @Schema(description = "end time, yyyy-MM-dd HH:mm:ss")
     private String endTime;
 
-    @Schema(description = "路线拐点")
+    @Schema(description = "Route turning point")
     private List<JTRoutePoint> routePointList;
 
-    @Schema(description = "区域的名称")
+    @Schema(description = "The name of the area")
     private String name;
 
     public ByteBuf encode(){

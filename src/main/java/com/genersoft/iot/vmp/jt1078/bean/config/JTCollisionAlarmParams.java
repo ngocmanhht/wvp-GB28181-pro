@@ -6,19 +6,19 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * 碰撞报警参数设置
+ * Collision alarm parameter settings
  */
 @Setter
 @Getter
 public class JTCollisionAlarmParams implements JTDeviceSubConfig{
 
     /**
-     * 碰撞时间 单位为毫秒(ms)
+     * Collision time in milliseconds(ms)
      */
     private int collisionAlarmTime;
 
     /**
-     * 碰撞加速度 单位为0.1g,设置范围为0~79,默认为10
+     * Collision acceleration unit is 0.1g, setting range is 0~79, default is10
      */
     private int collisionAcceleration;
 

@@ -9,7 +9,7 @@ NC='\033[0m'
 function log() {
 	message="[Polaris Log]: $1 "
 	case "$1" in
-	*"Fail"* | *"Error"* | *"请使用 root 或 sudo 权限运行此脚本"*)
+	*"Fail"* | *"Error"* | *"Please run this script with root or sudo privileges"*)
 		echo -e "${RED}${message}${NC}" 2>&1 | tee -a
 		;;
 	*"Success"*)
@@ -34,8 +34,8 @@ cat <<EOF
 
 EOF
 
-#配置jdk的路径
-export JAVA_HOME=/usr/local/java/jdk1.8.0_202   #此处为JDK路径
+#Configure the path of jdk
+export JAVA_HOME=/usr/local/java/jdk1.8.0_202   #Here is the JDK path
 export JRE_HOME=${JAVA_HOME}/jre
 export CLASSPATH=.:${JAVA_HOME}/lib:${JRE_HOME}/lib
 export PATH=${JAVA_HOME}/bin:$PATH
@@ -43,18 +43,18 @@ export PATH=${JAVA_HOME}/bin:$PATH
 # WVP-pro defines
 AppName=wvp-pro-2.7.2-05131055.jar
 AppHome="/root/polaris/wvp/"
-# JVM参数
+# JVMparameters
 JVM_OPTS="-Dname=$AppName  -Duser.timezone=Asia/Shanghai -Xms512m -Xmx2048m -XX:MetaspaceSize=128m -XX:MaxMetaspaceSize=1024m -XX:+HeapDumpOnOutOfMemoryError -XX:+PrintGCDateStamps  -XX:+PrintGCDetails -XX:NewRatio=1 -XX:SurvivorRatio=30 -XX:+UseParallelGC -XX:+UseParallelOldGC"
 
 function start() {
-	log "======================= 开启流媒体服务 ======================="
+	log "======================= Turn on streaming service ======================="
 	log "AppName: $AppName"
 	log "AppHome: $AppHome"
-	log "Success:流媒体服务开启成功"
+	log "Success:Streaming media service started successfully"
 }
 
 function stop() {
-	log "======================= 停止流媒体服务 ======================="
+	log "======================= Stop streaming service ======================="
 
 	PID=""
 	query() {
@@ -62,7 +62,7 @@ function stop() {
 	}
 	query
 	if [ x"$PID" != x"" ]; then
-		log "进程PID: $PID"
+		log "processPID: $PID"
 		kill -TERM $PID
 		log "$AppName (pid:$PID) exiting..."
 		while [ x"$PID" != x"" ]; do
@@ -71,17 +71,17 @@ function stop() {
 		done
 		log "Success:$AppName exited."
 	else
-		log "Jump:进程不存在"
+		log "Jump:Process does not exist"
 	fi
 }
 
 function status() {
-	log "======================= 运行状态 ======================="
+	log "======================= Running status ======================="
 	log ""
 
 	PID=$(ps -ef | grep java | grep $AppName | grep -v grep | wc -l)
 	if [ $PID != 0 ]; then
-		log "进程PID: $PID"
+		log "processPID: $PID"
 		log "$AppName is running..."
 	else
 		log "$AppName is not running..."

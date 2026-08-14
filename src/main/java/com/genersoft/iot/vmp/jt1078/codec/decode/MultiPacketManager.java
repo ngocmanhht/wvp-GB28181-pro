@@ -12,7 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Slf4j
 public enum MultiPacketManager {
     INSTANCE;
-    // 用与消息的缓存
+    // caching of messages
     private final Map<String, CompositeByteBuf> packetMap = new ConcurrentHashMap<>();
     private final Map<String, Long> packetTimeMap = new ConcurrentHashMap<>();
 
@@ -21,7 +21,7 @@ public enum MultiPacketManager {
     }
 
     /**
-     * 增加待合并的分包，如果分包接受完毕会返回完整的数据包
+     * Add subpackages to be merged. If the subpackages are accepted, the complete data packet will be returned.
      */
     public ByteBuf add(Header header, Integer count, ByteBuf byteBuf) {
         String key = header.getMsgId() + "/" + header.getPhoneNumber();
@@ -47,7 +47,7 @@ public enum MultiPacketManager {
                 if (!packetTimeMap.isEmpty()) {
                     for (String key : packetTimeMap.keySet()) {
                         if (packetTimeMap.get(key) < expireTime) {
-                            log.info("分包消息超时 key: {}", key);
+                            log.info("Subpackage message timeout key: {}", key);
                             packetTimeMap.remove(key);
                             packetMap.remove(key);
                         }

@@ -1,87 +1,87 @@
-<!-- 抓包 -->
+<!-- Packet capture -->
 
-# 抓包
+# Capture packets
 
-如果说对于网络编程，有什么工具是必会的，我觉得抓包肯定是其中之一了。作为GB/T
-28181调试过程中最重要的手段，我觉得如果你真对他有兴趣，或者系统遇到问题可以最快的得到解决，那么抓包你就一定要学会了。
+If there are any tools that you must know about network programming, I think packet capture must be one of them. As GB/T
+28181 The most important method in the debugging process. I think if you are really interested in it, or if the system encounters problems that can be solved as quickly as possible, then you must learn to capture packets.
 
-## 抓包工具的选择
+## Selection of packet capture tools
 
 ### 1. Wireshark
 
-在具备图形界面的系统上，比如windows，linux发行版ubuntu，opensuse等，我一般直接使用Wireshark直接进行抓包，也方便进行内容的查看。
+On systems with graphical interfaces, such as windows, Linux distributions ubuntu, opensuse, etc., I usually use Wireshark to capture packets directly, which is also convenient for viewing the content.
 
 ### 2. Tcpdump
 
-在使用命令行的系统，比如linux服务器，我一般使用Tcpdump进行抓包，无需额外安装，系统一般自带，抓包的到的文件，可以使用Wireshark打开，在图形界面下方便查看内容。
+In systems that use the command line, such as Linux servers, I usually use Tcpdump to capture packets. No additional installation is required. The system usually comes with it. The captured files can be opened with Wireshark, and the content can be easily viewed on the graphical interface.
 
-## 工具安装
+## Tool installation
 
-Wireshark的安装很简单，根据提示一步步点击就好了，在linux需要解决权限的问题，如果和我一样使用图形界面的linux发行版的话，可以参看如下步骤;
-windows的小伙伴直接略过即可
+The installation of Wireshark is very simple. Just click step by step according to the prompts. In Linux, you need to solve the permission problem. If you use a graphical interface Linux distribution like me, you can refer to the following steps;
+Windows friends can just skip it.
 
 ```shell
-# 1. 添加wireshark用户组
+# 1. Add wireshark user group
 sudo groupadd wireshark
-# 2. 将dumpcap更改为wireshark用户组
+# 2. Change dumpcap to wireshark user group
 sudo chgrp wireshark /usr/bin/dumpcap
-# 3. 让wireshark用户组有root权限使用dumpcap
+# 3. Let the wireshark user group have root permissions.dumpcap
 sudo chmod 4755 /usr/bin/dumpcap
-# 4. 将需要使用的用户名加入wireshark用户组
+# 4. Add the username you need to use to the wireshark user group
 sudo gpasswd -a $USER wireshark
 ```
 
-tcpdump一般linux都是自带，无需安装，可以这样验证;显示版本信息即是已安装
+tcpdump generally comes with Linux and does not need to be installed. You can verify it like this; if the version information is displayed, it means it has been installed.
 
 ```shell
 tcpdump --version
 ```
 
-## 开始抓包
+## Start capturing packets
 
-### 使用Wireshark
+### Using Wireshark
 
-在28181中我一般只关注sip包和rtp包，所以我一般是直接过滤sip和rtp，可以输入框输入 `sip or rtp`这样即可，如果设备来源比较多还可以加上ip和端口号的过滤
+In 28181, I usually only focus on sip packets and rtp packets, so I usually filter sip and rtp directly. You can enter `sip or rtp` in the input box. If there are many sources of equipment, you can also add ip and port number filtering.
 `(sip or rtp )and ip.addr==192.168.1.3 and udp.port==5060`
-详细的过滤规则可以自行百度，我可以提供一些常用的给大家参考
+Detailed filtering rules can be found on Baidu. I can provide some commonly used ones for your reference.
 ![img.png](_media/img.png)  
-**只过滤SIP：**
+**Filter SIP only:**
 
 ```shell
 sip
 ```
 
-**只获取rtp数据：**
+**Only get rtp data:**
 
 ```shell
 rtp
 ```
 
-**默认方式：**
+**Default mode:**
 
 ```shell
 sip or rtp
 ```
 
-**过滤IP：**
+**Filter IP:**
 
 ```shell
  sip and ip.addr==192.168.1.3
 ```
 
-**过滤端口：**
+**Filter port:**
 
 ```shell
  sip and udp.port==5060
 ```
 
-输入命令开启抓包后，此时可以进行操作，比如点播，录像回访等，操作完成回到Wireshark点击红色的停止即可，需要保存文件可以点击
-`文件->导出特定分组`导出过滤后的数据，也可以直接`文件->另存为`保存未过滤的数据。
+After entering the command to start packet capture, you can perform operations at this time, such as on-demand playback, video callback, etc. After the operation is completed, return to Wireshark and click the red stop. If you need to save the file, click
+ `File->Export specific grouping` exports filtered data, or you can directly save unfiltered data in `File->Save as` .
 
-### 使用tcpdump
+### Using tcpdump
 
-对于服务器抓包，为了得到足够完整的数据，我一般会要求直接抓取网卡数据而不过滤，如下：
-抓取网卡首先需要获取网卡名，在linux我一般使用`ip addr`获取网卡信息，如下所示：
+For server packet capture, in order to obtain sufficiently complete data, I usually require the network card data to be captured directly without filtering, as follows:
+To capture the network card, you first need to obtain the network card name. In Linux, I usually use `ip addr` to obtain the network card information, as shown below:
 ![img_1.png](_media/img_1.png)
 
 ```shell
@@ -89,6 +89,6 @@ sudo tcpdump -i wlp3s0 -w demo.pcap
 ```
 
 ![img_2.png](_media/img_2.png)  
-命令行会停留在这个位置，此时可以进行操作，比如点播，录像回放等，操作完成回到命令行使用`Ctrl+C`
-结束命令行，在当前目录下得到demo.pcap，将这个文件下载到图形界面操作系统里，即可使用Wireshark查看了
-更多的操作可以参考： [https://www.cnblogs.com/jiujuan/p/9017495.html](https://www.cnblogs.com/jiujuan/p/9017495.html)
+The command line will stay at this position, and you can perform operations at this time, such as on-demand playback, video playback, etc. After the operation is completed, return to the command line and use `Ctrl+C` 
+End the command line, get demo.pcap in the current directory, download this file to the graphical interface operating system, and then use Wireshark to view it.
+For more operations, please refer to: [https://www.cnblogs.com/jiujuan/p/9017495.html](https://www.cnblogs.com/jiujuan/p/9017495.html) 

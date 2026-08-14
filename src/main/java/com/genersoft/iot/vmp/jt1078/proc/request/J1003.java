@@ -12,7 +12,7 @@ import io.netty.buffer.ByteBuf;
 import org.springframework.context.ApplicationEvent;
 
 /**
- * 终端上传音视频属性
+ * Terminal upload audio and video attributes
  *
  */
 @MsgId(id = "1003")

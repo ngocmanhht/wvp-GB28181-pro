@@ -1,18 +1,18 @@
 package com.genersoft.iot.vmp.storager.dao.dto;
 
 /**
- * 平台发送注册/注销消息时缓存此消息
+ * Platform sends registration/Cache this message when logging out
  * @author lin
  */
 public class PlatformRegisterInfo {
 
     /**
-     * 平台Id
+     * platformId
      */
     private String platformId;
 
     /**
-     * 是否时注册，false为注销
+     * Whether to register, false to log out
      */
     private boolean register;
 

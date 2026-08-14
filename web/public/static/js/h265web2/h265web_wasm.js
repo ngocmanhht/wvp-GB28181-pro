@@ -7957,20 +7957,20 @@ var ASM_CONSTS = {
         return;
       }
       Module.gl.viewport(0, 0, canvas.width, canvas.height);
-      const vsSource = "#version 300 es\n" + "in vec4 aVertexPosition;\n" + "in vec2 aTextureCoord;\n" + "out vec2 vTextureCoord;\n" + "void main() {\n" + "    gl_Position = aVertexPosition;\n" + "    vTextureCoord = vec2(aTextureCoord.x, 1.0 - aTextureCoord.y); // 方法1 Y 坐标翻转\n" + "}";
-      const fsSource = "#version 300 es\n" + "precision mediump float;\n" + "in vec2 vTextureCoord;\n" + "out vec4 FragColor;\n" + "uniform sampler2D uSampler;\n" + "void main() {\n" + "    FragColor = texture(uSampler, vTextureCoord);\n" + "    //FragColor = texture(uSampler, vec2(vTextureCoord.x, 1.0 - vTextureCoord.y)); // 方法2 反转 Y 坐标\n" + "}";
+      const vsSource = "#version 300 es\n" + "in vec4 aVertexPosition;\n" + "in vec2 aTextureCoord;\n" + "out vec2 vTextureCoord;\n" + "void main() {\n" + "    gl_Position = aVertexPosition;\n" + "    vTextureCoord = vec2(aTextureCoord.x, 1.0 - aTextureCoord.y); // Method 1 Y coordinate flip\n" + "}";
+      const fsSource = "#version 300 es\n" + "precision mediump float;\n" + "in vec2 vTextureCoord;\n" + "out vec4 FragColor;\n" + "uniform sampler2D uSampler;\n" + "void main() {\n" + "    FragColor = texture(uSampler, vTextureCoord);\n" + "    //FragColor = texture(uSampler, vec2(vTextureCoord.x, 1.0 - vTextureCoord.y)); // Method 2 Invert Y coordinate\n" + "}";
       const vertexShader = Module.gl.createShader(Module.gl.VERTEX_SHADER);
       Module.gl.shaderSource(vertexShader, vsSource);
       Module.gl.compileShader(vertexShader);
       if (!Module.gl.getShaderParameter(vertexShader, Module.gl.COMPILE_STATUS)) {
-        console.error("顶点着色器编译错误:", Module.gl.getShaderInfoLog(vertexShader));
+        console.error("Vertex shader compilation error:", Module.gl.getShaderInfoLog(vertexShader));
         return;
       }
       const fragmentShader = Module.gl.createShader(Module.gl.FRAGMENT_SHADER);
       Module.gl.shaderSource(fragmentShader, fsSource);
       Module.gl.compileShader(fragmentShader);
       if (!Module.gl.getShaderParameter(fragmentShader, Module.gl.COMPILE_STATUS)) {
-        console.error("片段着色器编译错误:", Module.gl.getShaderInfoLog(fragmentShader));
+        console.error("Fragment shader compilation error:", Module.gl.getShaderInfoLog(fragmentShader));
         return;
       }
       Module.shaderProgram = Module.gl.createProgram();
@@ -7979,7 +7979,7 @@ var ASM_CONSTS = {
       Module.gl.linkProgram(Module.shaderProgram);
       Module.gl.useProgram(Module.shaderProgram);
       if (!Module.gl.getProgramParameter(Module.shaderProgram, Module.gl.LINK_STATUS)) {
-        console.error("着色器程序链接错误:", Module.gl.getProgramInfoLog(Module.shaderProgram));
+        console.error("Shader program link error:", Module.gl.getProgramInfoLog(Module.shaderProgram));
         return;
       }
       const vertices = new Float32Array([ -1, 1, 0, 1, -1, -1, 0, 0, 1, 1, 1, 1, 1, -1, 1, 0 ]);

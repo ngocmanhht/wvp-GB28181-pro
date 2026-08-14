@@ -4,7 +4,7 @@
     <el-dialog
       v-if="showVideoDialog"
       v-el-drag-dialog
-      title="视频播放"
+      title="video playback"
       top="10vh"
       width="65vw"
       :close-on-click-modal="false"
@@ -28,7 +28,7 @@
           />
 
           <el-tabs v-model="tabActiveName" @tab-click="tabHandleClick" class="control-tabs">
-            <el-tab-pane label="预置位" name="preset">
+            <el-tab-pane label="Preset position" name="preset">
               <ptzPreset
                 v-if="tabActiveName === 'preset'"
                 :device-id="deviceId"
@@ -36,10 +36,10 @@
                 style="margin-top: 8px;"
               />
             </el-tab-pane>
-            <el-tab-pane label="实时视频" name="media">
+            <el-tab-pane label="real time video" name="media">
               <streamMediaPanel v-if="tabActiveName === 'media'" :player-url="playerUrlInfo.playerUrl" :play-url="playerUrlInfo.playUrl" :stream-info="streamInfo" />
             </el-tab-pane>
-            <el-tab-pane label="编码信息" name="codec">
+            <el-tab-pane label="encoded information" name="codec">
               <mediaInfo v-if="tabActiveName === 'codec'" ref="mediaInfo" :app="app" :stream="streamId" :media-server-id="mediaServerId" />
             </el-tab-pane>
           </el-tabs>
@@ -135,8 +135,8 @@ export default {
         params.deviceId = this.deviceId
         params.channelId = this.channelId
         const action = this.dragZoomDirection === 'in' ? 'frontEnd/dragZoomIn' : 'frontEnd/dragZoomOut'
-        const successMsg = this.dragZoomDirection === 'in' ? '拉框放大成功' : '拉框缩小成功'
-        const failMsg = this.dragZoomDirection === 'in' ? '拉框放大失败' : '拉框缩小失败'
+        const successMsg = this.dragZoomDirection === 'in' ? 'Pull frame to enlarge successfully' : 'The frame was successfully reduced'
+        const failMsg = this.dragZoomDirection === 'in' ? 'Failed to enlarge the frame' : 'Failed to shrink the frame'
         this.$store.dispatch(action, params).then(() => {
           this.$message({ showClose: true, message: successMsg, type: 'success' })
         }).catch(() => {

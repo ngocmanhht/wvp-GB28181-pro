@@ -29,7 +29,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Tag(name  = "用户管理")
+@Tag(name  = "User management")
 @RestController
 @RequestMapping("/api/user")
 public class UserController {
@@ -48,10 +48,10 @@ public class UserController {
 
     @GetMapping("/login")
     @PostMapping("/login")
-    @Operation(summary = "登录", description = "登录成功后返回AccessToken， 可以从返回值获取到也可以从响应头中获取到，" +
-            "后续的请求需要添加请求头 'access-token'或者放在参数里")
-    @Parameter(name = "username", description = "用户名", required = true)
-    @Parameter(name = "password", description = "密码（32位md5加密）", required = true)
+    @Operation(summary = "Login", description = "AccessToken is returned after successful login, which can be obtained from the return value or from the response header.，" +
+            "Subsequent requests need to add request headers 'access-token'Or put it in the parameters")
+    @Parameter(name = "username", description = "Username", required = true)
+    @Parameter(name = "password", description = "Password (32-bit md5 encryption）", required = true)
     public LoginUser login(HttpServletRequest request, HttpServletResponse response, @RequestParam String username, @RequestParam String password){
         LoginUser user;
         try {
@@ -60,7 +60,7 @@ public class UserController {
             throw new ControllerException(ErrorCode.ERROR100.getCode(), e.getMessage());
         }
         if (user == null) {
-            throw new ControllerException(ErrorCode.ERROR100.getCode(), "用户名或密码错误");
+            throw new ControllerException(ErrorCode.ERROR100.getCode(), "Wrong username or password");
         }else {
             String jwt = JwtUtils.createToken(username);
             response.setHeader(JwtUtils.getHeader(), jwt);
@@ -72,12 +72,12 @@ public class UserController {
 
 
     @PostMapping("/changePassword")
-    @Operation(summary = "修改密码", security = @SecurityRequirement(name = JwtUtils.HEADER))
-    @Parameter(name = "username", description = "用户名", required = true)
-    @Parameter(name = "oldpassword", description = "旧密码（已md5加密的密码）", required = true)
-    @Parameter(name = "password", description = "新密码（未md5加密的密码）", required = true)
+    @Operation(summary = "Change password", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Parameter(name = "username", description = "Username", required = true)
+    @Parameter(name = "oldpassword", description = "Old password (md5 encrypted password）", required = true)
+    @Parameter(name = "password", description = "New password (unmd5 encrypted password)）", required = true)
     public void changePassword(@RequestParam String oldPassword, @RequestParam String password){
-        // 获取当前登录用户id
+        // Get the currently logged in userid
         LoginUser userInfo = SecurityUtils.getUserInfo();
         if (userInfo== null) {
             throw new ControllerException(ErrorCode.ERROR100);
@@ -101,31 +101,31 @@ public class UserController {
 
 
     @PostMapping("/add")
-    @Operation(summary = "添加用户", security = @SecurityRequirement(name = JwtUtils.HEADER))
-    @Parameter(name = "username", description = "用户名", required = true)
-    @Parameter(name = "password", description = "密码（未md5加密的密码）", required = true)
-    @Parameter(name = "roleId", description = "角色ID", required = true)
+    @Operation(summary = "Add user", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Parameter(name = "username", description = "Username", required = true)
+    @Parameter(name = "password", description = "Password (unmd5 encrypted password)）", required = true)
+    @Parameter(name = "roleId", description = "roleID", required = true)
     public void add(@RequestParam String username,
                                                  @RequestParam String password,
                                                  @RequestParam Integer roleId){
         if (ObjectUtils.isEmpty(username) || ObjectUtils.isEmpty(password) || roleId == null) {
-            throw new ControllerException(ErrorCode.ERROR400.getCode(), "参数不可为空");
+            throw new ControllerException(ErrorCode.ERROR400.getCode(), "Parameters cannot be empty");
         }
-        // 获取当前登录用户id
+        // Get the currently logged in userid
         int currenRoleId = SecurityUtils.getUserInfo().getRole().getId();
         if (currenRoleId != 1) {
-            // 只用角色id为1才可以删除和添加用户
-            throw new ControllerException(ErrorCode.ERROR400.getCode(), "用户无权限");
+            // Users can only be deleted and added with a role ID of 1
+            throw new ControllerException(ErrorCode.ERROR400.getCode(), "User has no permission");
         }
         User user = new User();
         user.setUsername(username);
         user.setPassword(DigestUtils.md5DigestAsHex(password.getBytes()));
-        //新增用户的pushKey的生成规则为md5(时间戳+用户名)
+        //The generation rules for pushKey for new users are:md5(Timestamp+Username)
         user.setPushKey(DigestUtils.md5DigestAsHex((System.currentTimeMillis()+password).getBytes()));
         Role role = roleService.getRoleById(roleId);
 
         if (role == null) {
-            throw new ControllerException(ErrorCode.ERROR400.getCode(), "角色不存在");
+            throw new ControllerException(ErrorCode.ERROR400.getCode(), "role does not exist");
         }
         user.setRole(role);
         user.setCreateTime(DateUtil.getNow());
@@ -137,14 +137,14 @@ public class UserController {
     }
 
     @DeleteMapping("/delete")
-    @Operation(summary = "删除用户", security = @SecurityRequirement(name = JwtUtils.HEADER))
-    @Parameter(name = "id", description = "用户Id", required = true)
+    @Operation(summary = "Delete user", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Parameter(name = "id", description = "UserId", required = true)
     public void delete(@RequestParam Integer id){
-        // 获取当前登录用户id
+        // Get the currently logged in userid
         int currenRoleId = SecurityUtils.getUserInfo().getRole().getId();
         if (currenRoleId != 1) {
-            // 只用角色id为0才可以删除和添加用户
-            throw new ControllerException(ErrorCode.ERROR400.getCode(), "用户无权限");
+            // Users can only be deleted and added with a role ID of 0
+            throw new ControllerException(ErrorCode.ERROR400.getCode(), "User has no permission");
         }
         int deleteResult = userService.deleteUser(id);
         if (deleteResult <= 0) {
@@ -153,37 +153,37 @@ public class UserController {
     }
 
     @GetMapping("/all")
-    @Operation(summary = "查询全部用户", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Operation(summary = "Query all users", security = @SecurityRequirement(name = JwtUtils.HEADER))
     public List<User> all(){
         return userService.getAllUsers();
     }
 
     /**
-     * 分页查询用户
+     * Query users by page
      *
-     * @param page  当前页
-     * @param count 每页查询数量
-     * @return 分页用户列表
+     * @param page  Current page
+     * @param count Number of queries per page
+     * @return Paginated user list
      */
     @GetMapping("/users")
-    @Operation(summary = "分页查询用户", security = @SecurityRequirement(name = JwtUtils.HEADER))
-    @Parameter(name = "page", description = "当前页", required = true)
-    @Parameter(name = "count", description = "每页查询数量", required = true)
+    @Operation(summary = "Query users by page", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Parameter(name = "page", description = "Current page", required = true)
+    @Parameter(name = "count", description = "Number of queries per page", required = true)
     public PageInfo<User> users(int page, int count) {
         return userService.getUsers(page, count);
     }
 
     @RequestMapping("/changePushKey")
-    @Operation(summary = "修改pushkey", security = @SecurityRequirement(name = JwtUtils.HEADER))
-    @Parameter(name = "userId", description = "用户Id", required = true)
-    @Parameter(name = "pushKey", description = "新的pushKey", required = true)
+    @Operation(summary = "Modifypushkey", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Parameter(name = "userId", description = "UserId", required = true)
+    @Parameter(name = "pushKey", description = "newpushKey", required = true)
     public void changePushKey(@RequestParam Integer userId,@RequestParam String pushKey) {
-        // 获取当前登录用户id
+        // Get the currently logged in userid
         int currenRoleId = SecurityUtils.getUserInfo().getRole().getId();
         WVPResult<String> result = new WVPResult<>();
         if (currenRoleId != 1) {
-            // 只用角色id为0才可以删除和添加用户
-            throw new ControllerException(ErrorCode.ERROR400.getCode(), "用户无权限");
+            // Users can only be deleted and added with a role ID of 0
+            throw new ControllerException(ErrorCode.ERROR400.getCode(), "User has no permission");
         }
         int resetPushKeyResult = userService.changePushKey(userId,pushKey);
         if (resetPushKeyResult <= 0) {
@@ -192,12 +192,12 @@ public class UserController {
     }
 
     @PostMapping("/changePasswordForAdmin")
-    @Operation(summary = "管理员修改普通用户密码", security = @SecurityRequirement(name = JwtUtils.HEADER))
-    @Parameter(name = "adminId", description = "管理员id", required = true)
-    @Parameter(name = "userId", description = "用户id", required = true)
-    @Parameter(name = "password", description = "新密码（未md5加密的密码）", required = true)
+    @Operation(summary = "Administrator changes ordinary user password", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Parameter(name = "adminId", description = "Administratorid", required = true)
+    @Parameter(name = "userId", description = "Userid", required = true)
+    @Parameter(name = "password", description = "New password (unmd5 encrypted password)）", required = true)
     public void changePasswordForAdmin(@RequestParam int userId, @RequestParam String password) {
-        // 获取当前登录用户id
+        // Get the currently logged in userid
         LoginUser userInfo = SecurityUtils.getUserInfo();
         if (userInfo == null) {
             throw new ControllerException(ErrorCode.ERROR100);
@@ -212,9 +212,9 @@ public class UserController {
     }
 
     @PostMapping("/userInfo")
-    @Operation(summary = "查询当前登录用户信息")
+    @Operation(summary = "Query the currently logged in user information")
     public LoginUser getUserInfo() {
-        // 获取当前登录用户id
+        // Get the currently logged in userid
         LoginUser userInfo = SecurityUtils.getUserInfo();
 
         if (userInfo == null) {

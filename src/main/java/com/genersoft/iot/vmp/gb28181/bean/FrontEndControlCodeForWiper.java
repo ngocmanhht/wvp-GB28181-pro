@@ -14,7 +14,7 @@ public class FrontEndControlCodeForWiper implements  IFrontEndControlCode {
     }
 
     /**
-     * 辅助开关控制指令： 1为开， 2为关
+     * Auxiliary switch control instructions: 1 is on, 2 is off
      */
     @Getter
     @Setter

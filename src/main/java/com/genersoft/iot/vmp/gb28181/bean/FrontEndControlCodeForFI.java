@@ -14,28 +14,28 @@ public class FrontEndControlCodeForFI implements  IFrontEndControlCode {
     }
 
     /**
-     * 光圈，0为缩小 1为放大
+     * Aperture, 0 means zoom out, 1 means zoom in
      */
     @Getter
     @Setter
     private Integer iris;
 
     /**
-     * 聚焦 0 近， 1远
+     * Focus 0 near, 1 far
      */
     @Getter
     @Setter
     private Integer focus;
 
     /**
-     * 聚焦速度
+     * focus speed
      */
     @Getter
     @Setter
     private Integer focusSpeed;
 
     /**
-     * 光圈速度
+     * aperture speed
      */
     @Getter
     @Setter

@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-// 推流列表API
+// Push listAPI
 
 export function saveToGb(data) {
   return request({

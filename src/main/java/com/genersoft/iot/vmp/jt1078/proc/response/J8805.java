@@ -9,7 +9,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * 单条存储多媒体数据检索上传命令
+ * Single stored multimedia data retrieval and upload command
  */
 @Setter
 @Getter
@@ -17,12 +17,12 @@ import lombok.Setter;
 public class J8805 extends Rs {
 
     /**
-     * 多媒体 ID
+     * multimedia ID
      */
     private Long mediaId;
 
     /**
-     * 删除标志, 0:保留；1:删除, 存储多媒体数据上传命令中使用
+     * Delete flag, 0: reserved; 1: deleted, used in storage multimedia data upload command
      */
     private Integer delete;
 

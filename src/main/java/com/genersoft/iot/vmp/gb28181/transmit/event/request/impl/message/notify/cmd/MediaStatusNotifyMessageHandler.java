@@ -32,7 +32,7 @@ import java.text.ParseException;
 import static com.genersoft.iot.vmp.gb28181.utils.XmlUtil.getText;
 
 /**
- * 媒体通知
+ * media notification
  */
 @Slf4j
 @Component
@@ -80,50 +80,50 @@ public class MediaStatusNotifyMessageHandler extends SIPRequestProcessorParent i
 
     @Override
     public void handForDevice(RequestEvent evt, Device device, Element rootElement) {
-        // 回复200 OK
+        // Reply200 OK
         try {
              responseAck((SIPRequest) evt.getRequest(), Response.OK);
         } catch (SipException | InvalidArgumentException | ParseException e) {
-            log.error("[命令发送失败] 国标级联 录像流推送完毕，回复200OK: {}", e.getMessage());
+            log.error("[Command sending failed] National standard cascade video stream push completed, reply200OK: {}", e.getMessage());
         }
         CallIdHeader callIdHeader = (CallIdHeader)evt.getRequest().getHeader(CallIdHeader.NAME);
         String NotifyType =getText(rootElement, "NotifyType");
         if ("121".equals(NotifyType)){
-            log.info("[录像流]推送完毕，收到关流通知");
+            log.info("[video streaming]After the push is completed, you will receive the notification of closing the flow.");
 
             SsrcTransaction ssrcTransaction = sessionManager.getSsrcTransactionByCallId(callIdHeader.getCallId());
             if (ssrcTransaction != null) {
-                log.info("[录像流]推送完毕，关流通知， device: {}, channelId: {}", ssrcTransaction.getDeviceId(), ssrcTransaction.getChannelId());
+                log.info("[video streaming]After the push is completed, the notification will be turned off.， device: {}, channelId: {}", ssrcTransaction.getDeviceId(), ssrcTransaction.getChannelId());
                 InviteInfo inviteInfo = inviteStreamService.getInviteInfo(InviteSessionType.DOWNLOAD, ssrcTransaction.getChannelId(), ssrcTransaction.getStream());
                 if (inviteInfo != null) {
                     playService.stop(inviteInfo);
                 }
-                // 去除监听流注销自动停止下载的监听
+                // Remove monitoring stream logout that automatically stops downloading
                 Hook hook = Hook.getInstance(HookType.on_media_arrival, MediaStreamUtil.RTP_APP, ssrcTransaction.getStream(), ssrcTransaction.getMediaServerId());
                 subscribe.removeSubscribe(hook);
                 if (ssrcTransaction.getPlatformId() != null) {
-                    // 如果级联播放，需要给上级发送此通知 TODO 多个上级同时观看一个下级 可能存在停错的问题，需要将点播CallId进行上下级绑定
+                    // If you play in cascade, you need to send this notification to the superior. TODO Multiple superiors watch a subordinate at the same time. There may be a problem of wrong stopping. The on-demand CallId needs to be bound to the superior and subordinate.
                     SendRtpInfo sendRtpInfo =  sendRtpServerService.queryByChannelId(ssrcTransaction.getChannelId(), ssrcTransaction.getPlatformId());
                     if (sendRtpInfo != null) {
                         Platform parentPlatform = platformService.queryPlatformByServerGBId(sendRtpInfo.getTargetId());
                         if (parentPlatform == null) {
-                            log.warn("[级联消息发送]：发送MediaStatus发现上级平台{}不存在", sendRtpInfo.getTargetId());
+                            log.warn("[Cascading message sending]：Send MediaStatus to discover the superior platform{}does not exist", sendRtpInfo.getTargetId());
                             return;
                         }
                         CommonGBChannel channel = platformChannelService.queryChannelByPlatformIdAndChannelId(parentPlatform.getId(), sendRtpInfo.getChannelId());
                         if (channel == null) {
-                            log.warn("[级联消息发送]：发送MediaStatus发现通道{}不存在", sendRtpInfo.getChannelId());
+                            log.warn("[Cascading message sending]：Send MediaStatus discovery channel{}does not exist", sendRtpInfo.getChannelId());
                             return;
                         }
                         try {
                             sipCommanderFroPlatform.sendMediaStatusNotify(parentPlatform, sendRtpInfo, channel);
                         } catch (SipException | InvalidArgumentException | ParseException e) {
-                            log.error("[命令发送失败] 国标级联 录像播放完毕: {}", e.getMessage());
+                            log.error("[Command sending failed] National standard cascade video playback completed: {}", e.getMessage());
                         }
                     }
                 }
             }else {
-                log.info("[录像流]推送完毕，关流通知， 但是未找到对应的下载信息");
+                log.info("[video streaming]After the push is completed, the stream notification is turned off, but the corresponding download information is not found.");
             }
         }
     }

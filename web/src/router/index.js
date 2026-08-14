@@ -49,9 +49,9 @@ export const constantRoutes = [
     redirect: '/dashboard',
     children: [{
       path: 'dashboard',
-      name: '控制台',
+      name: 'console',
       component: () => import('@/views/dashboard/index'),
-      meta: { title: '控制台', icon: 'dashboard', affix: true }
+      meta: { title: 'console', icon: 'dashboard', affix: true }
     }]
   },
 
@@ -63,7 +63,7 @@ export const constantRoutes = [
       path: '',
       name: 'Live',
       component: () => import('@/views/live/index'),
-      meta: { title: '分屏监控', icon: 'live' }
+      meta: { title: 'Split screen monitoring', icon: 'live' }
     }]
   },
   {
@@ -75,13 +75,13 @@ export const constantRoutes = [
       path: '/channel',
       name: 'Channel',
       component: () => import('@/views/channel/index'),
-      meta: { title: '通道列表', icon: 'channelManger' }
+      meta: { title: 'Channel list', icon: 'channelManger' }
     },
     {
       path: '/channel/record/:channelId',
       name: 'CommonRecord',
       component: () => import('@/views/channel/record'),
-      meta: { title: '设备录像' }
+      meta: { title: 'Equipment video' }
     }
     ]
   },
@@ -93,52 +93,52 @@ export const constantRoutes = [
       path: '',
       name: 'Map',
       component: () => import('@/views/map/index'),
-      meta: { title: '电子地图', icon: 'map' }
+      meta: { title: 'electronic map', icon: 'map' }
     }]
   },
   {
     path: '/device',
     component: Layout,
-    name: '设备接入',
-    meta: { title: '设备接入', icon: 'devices' },
+    name: 'Device access',
+    meta: { title: 'Device access', icon: 'devices' },
     children: [
       {
         path: '/device',
         name: 'Device',
         component: () => import('@/views/device/index'),
-        meta: { title: '国标设备', icon: 'device' }
+        meta: { title: 'National standard equipment', icon: 'device' }
       },
       {
         hidden: true,
         path: '/device/record/:deviceId/:channelDeviceId',
         name: 'DeviceRecord',
         component: () => import('@/views/device/channel/record'),
-        meta: { title: '国标录像' }
+        meta: { title: 'National standard video' }
       },
       {
         path: '/jtDevice',
         name: 'JTDevice',
         component: () => import('@/views/jtDevice/index'),
-        meta: { title: '部标设备', icon: 'jtDevice' }
+        meta: { title: 'Ministry standard equipment', icon: 'jtDevice' }
       },
       {
         hidden: true,
         path: '/jtDevice/record/:phoneNumber/:channelId',
         name: 'JTDeviceRecord',
         component: () => import('@/views/jtDevice/channel/record'),
-        meta: { title: '部标录像' }
+        meta: { title: 'Ministry logo video' }
       },
       {
         path: '/push',
         name: 'PushList',
         component: () => import('@/views/streamPush/index'),
-        meta: { title: '推流列表', icon: 'streamPush' }
+        meta: { title: 'Push list', icon: 'streamPush' }
       },
       {
         path: '/proxy',
         name: 'Proxy',
         component: () => import('@/views/streamProxy/index'),
-        meta: { title: '拉流代理', icon: 'streamProxy' }
+        meta: { title: 'Streaming agent', icon: 'streamProxy' }
       }
     ]
   },
@@ -146,20 +146,20 @@ export const constantRoutes = [
     path: '/commonChannel',
     component: Layout,
     redirect: '/commonChannel/region',
-    name: '组织结构',
-    meta: { title: '组织结构', icon: 'tree' },
+    name: 'organizational structure',
+    meta: { title: 'organizational structure', icon: 'tree' },
     children: [
       {
         path: 'region',
         name: 'Region',
         component: () => import('@/views/channel/region/index'),
-        meta: { title: '行政区划', icon: 'region' }
+        meta: { title: 'Administrative division', icon: 'region' }
       },
       {
         path: 'group',
         name: 'Group',
         component: () => import('@/views/channel/group/index'),
-        meta: { title: '业务分组', icon: 'tree' }
+        meta: { title: 'business grouping', icon: 'tree' }
       }
     ]
   },
@@ -172,7 +172,7 @@ export const constantRoutes = [
         path: '',
         name: 'AlarmManage',
         component: () => import('@/views/alarm/index'),
-        meta: { title: '报警管理', icon: 'el-icon-bell' }
+        meta: { title: 'Alarm management', icon: 'el-icon-bell' }
       }
     ]
   },
@@ -185,7 +185,7 @@ export const constantRoutes = [
         path: '',
         name: 'RecordPlan',
         component: () => import('@/views/recordPlan/index'),
-        meta: { title: '录制计划', icon: 'recordPlan' }
+        meta: { title: 'Recording plan', icon: 'recordPlan' }
       }
     ]
   },
@@ -199,13 +199,13 @@ export const constantRoutes = [
         path: '/cloudRecord',
         name: 'CloudRecord',
         component: () => import('@/views/cloudRecord/index'),
-        meta: { title: '云端录像', icon: 'cloudRecord' }
+        meta: { title: 'Cloud recording', icon: 'cloudRecord' }
       },
       {
         path: '/cloudRecord/detail/:app/:stream',
         name: 'CloudRecordDetail',
         component: () => import('@/views/cloudRecord/detail'),
-        meta: { title: '云端录像详情' }
+        meta: { title: 'Cloud recording details' }
       }
     ]
   },
@@ -218,7 +218,7 @@ export const constantRoutes = [
         path: '',
         name: 'MediaServer',
         component: () => import('@/views/mediaServer/index'),
-        meta: { title: '媒体节点', icon: 'mediaServerList' }
+        meta: { title: 'media node', icon: 'mediaServerList' }
       }
     ]
   },
@@ -231,7 +231,7 @@ export const constantRoutes = [
         path: '',
         name: 'Platform',
         component: () => import('@/views/platform/index'),
-        meta: { title: '国标级联', icon: 'platform' }
+        meta: { title: 'National standard cascade', icon: 'platform' }
       }
     ]
   },
@@ -244,7 +244,7 @@ export const constantRoutes = [
         path: '',
         name: 'User',
         component: () => import('@/views/user/index'),
-        meta: { title: '用户管理', icon: 'user' }
+        meta: { title: 'User management', icon: 'user' }
       }
     ]
   },
@@ -255,35 +255,35 @@ export const constantRoutes = [
   //   children: [
   //     {
   //       path: '',
-  //       name: '系统设置',
+  //       name: 'System settings',
   //       component: () => import('@/views/platform/index'),
-  //       meta: { title: '系统设置', icon: 'setting' }
+  //       meta: { title: 'System settings', icon: 'setting' }
   //     }
   //   ]
   // },
   {
     path: '/operations',
     component: Layout,
-    meta: { title: '运维中心', icon: 'operations' },
+    meta: { title: 'Operation and maintenance center', icon: 'operations' },
     redirect: '/operations/systemInfo',
     children: [
       {
         path: '/operations/systemInfo',
         name: 'OperationsSystemInfo',
         component: () => import('@/views/operations/systemInfo'),
-        meta: { title: '平台信息', icon: 'systemInfo' }
+        meta: { title: 'Platform information', icon: 'systemInfo' }
       },
       {
         path: '/operations/historyLog',
         name: 'OperationsHistoryLog',
         component: () => import('@/views/operations/historyLog'),
-        meta: { title: '历史日志', icon: 'historyLog' }
+        meta: { title: 'History log', icon: 'historyLog' }
       },
       {
         path: '/operations/realLog',
         name: 'OperationsRealLog',
         component: () => import('@/views/operations/realLog'),
-        meta: { title: '实时日志', icon: 'realLog' }
+        meta: { title: 'real time log', icon: 'realLog' }
       }
     ]
   },

@@ -20,7 +20,7 @@ import java.nio.charset.Charset;
 import java.util.UUID;
 
 /**
- * 终端注册
+ * Terminal registration
  *
  * @author QingtaiJiang
  * @date 2023/4/27 18:06
@@ -63,7 +63,7 @@ public class J0100 extends Re {
 
 
             if (buf.readableBytes() < 29) {
-                // 按照2011解析
+                // Analyzed according to 2011
                 byte[] bytes8 = new byte[8];
                 buf.readBytes(bytes8);
                 device.setModel(new String(bytes8).trim());
@@ -93,7 +93,7 @@ public class J0100 extends Re {
     protected Rs handler(Header header, Session session, Ijt1078Service service) {
         J8100 j8100 = new J8100();
         j8100.setRespNo(header.getSn());
-        // 从数据库判断这个设备是否合法
+        // Determine whether the device is legal from the database
         deviceForUpdate = service.getDevice(header.getPhoneNumber());
         if (deviceForUpdate != null) {
             j8100.setResult(J8100.SUCCESS);
@@ -116,14 +116,14 @@ public class J0100 extends Re {
             deviceForUpdate.setModel(device.getModel());
             deviceForUpdate.setMakerId(device.getMakerId());
             deviceForUpdate.setTerminalId(device.getTerminalId());
-            // TODO 支持直接展示车牌颜色的描述
+            // TODO Supports direct display of license plate color descriptions
             deviceForUpdate.setPlateColor(device.getPlateColor());
             deviceForUpdate.setPlateNo(device.getPlateNo());
-            log.info("[JT-注册成功] 设备： {}", deviceForUpdate);
+            log.info("[JT-Registration successful] Equipment： {}", deviceForUpdate);
         }else {
-            log.info("[JT-注册失败] 未授权设备： {}", header.getPhoneNumber());
+            log.info("[JT-Registration failed] Unauthorized device： {}", header.getPhoneNumber());
             j8100.setResult(J8100.FAIL);
-            // 断开连接，清理资源
+            // Disconnect and clean up resources
             if (session.isRegistered()) {
                 session.unregister();
             }

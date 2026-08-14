@@ -20,31 +20,31 @@ public class HttpUtils {
 
         try (Response response = client.newCall(request).execute()) {
             if (!response.isSuccessful()) {
-                log.error("下载失败，HTTP 状态码: {}, URL: {}", response.code(), url);
+                log.error("Download failed, HTTP status code: {}, URL: {}", response.code(), url);
                 return false;
             }
 
-            // 获取响应体的输入流
+            // Get the input stream of the response body
             InputStream inputStream = null;
             if (response.body() != null) {
                 inputStream = response.body().byteStream();
             }
             if (inputStream == null) {
-                log.error("响应体为空，无法下载文件: {}", url);
+                log.error("The response body is empty and the file cannot be downloaded.: {}", url);
                 return false;
             }
 
-            // 将输入流写入zip文件
-            byte[] buffer = new byte[8192]; // 8KB 缓冲区，提高性能
+            // Write input stream to zip file
+            byte[] buffer = new byte[8192]; // 8KB buffer to improve performance
             int bytesRead;
             while ((bytesRead = inputStream.read(buffer)) != -1) {
                 zos.write(buffer, 0, bytesRead);
             }
 
-            log.debug("成功下载文件: {}, 大小: {} bytes", url, response.body().contentLength());
+            log.debug("File downloaded successfully: {}, size: {} bytes", url, response.body().contentLength());
             return true;
         } catch (IOException e) {
-            log.error("下载过程中出错: {}, URL: {}", e.getMessage(), url);
+            log.error("Error occurred during download: {}, URL: {}", e.getMessage(), url);
             return false;
         }
     }

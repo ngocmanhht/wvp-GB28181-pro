@@ -11,47 +11,47 @@
         <button v-if="showDiagonals" class="dpad-btn diag diag-downright" @mousedown.prevent="handlePtzMove('downright')" @mouseup.prevent="handlePtzStop()"><span style="display:inline-block;transform:rotate(135deg)">▲</span></button>
         <button v-if="showDiagonals" class="dpad-btn diag diag-downleft" @mousedown.prevent="handlePtzMove('downleft')" @mouseup.prevent="handlePtzStop()"><span style="display:inline-block;transform:rotate(225deg)">▲</span></button>
         <button v-if="showDiagonals" class="dpad-btn diag diag-upleft" @mousedown.prevent="handlePtzMove('upleft')" @mouseup.prevent="handlePtzStop()"><span style="display:inline-block;transform:rotate(-45deg)">▲</span></button>
-        <button class="dpad-btn dpad-center" title="停止" @click="$emit('ptz-stop')">⏹</button>
+        <button class="dpad-btn dpad-center" title="stop" @click="$emit('ptz-stop')">⏹</button>
       </div>
       <div class="ptz-func-col">
         <div class="ptz-func-group" :class="{ row: btnLayout === 'row' }">
           <div class="ptz-func-row" v-if="homePosition && hasGuard">
             <div class="ptz-func-row">
-              <div class="ptz-func-btn" title="看守位" @click.prevent="$emit('ptz-guard')">
-                <i class="el-icon-s-home" /><span>看守位</span>
+              <div class="ptz-func-btn" title="guard position" @click.prevent="$emit('ptz-guard')">
+                <i class="el-icon-s-home" /><span>guard position</span>
               </div>
             </div>
           </div>
           <div v-if="hasPtzDirection" class="ptz-func-row">
-            <div class="ptz-func-btn" title="变倍+" @mousedown.prevent="handlePtzMove('zoomin')" @mouseup.prevent="handlePtzStop()">
-              <i class="el-icon-zoom-in" /><span>变倍+</span>
+            <div class="ptz-func-btn" title="Zoom+" @mousedown.prevent="handlePtzMove('zoomin')" @mouseup.prevent="handlePtzStop()">
+              <i class="el-icon-zoom-in" /><span>Zoom+</span>
             </div>
-            <div class="ptz-func-btn" title="变倍-" @mousedown.prevent="handlePtzMove('zoomout')" @mouseup.prevent="handlePtzStop()">
-              <i class="el-icon-zoom-out" /><span>变倍-</span>
+            <div class="ptz-func-btn" title="Zoom-" @mousedown.prevent="handlePtzMove('zoomout')" @mouseup.prevent="handlePtzStop()">
+              <i class="el-icon-zoom-out" /><span>Zoom-</span>
             </div>
           </div>
           <div v-if="hasFocus" class="ptz-func-row">
-            <div class="ptz-func-btn" title="聚焦+" @mousedown.prevent="$emit('focus-move', { command: 'near', speed: controSpeed })" @mouseup.prevent="$emit('focus-stop')">
-              <i class="iconfont icon-bianjiao-fangda" /><span>聚焦+</span>
+            <div class="ptz-func-btn" title="focus+" @mousedown.prevent="$emit('focus-move', { command: 'near', speed: controSpeed })" @mouseup.prevent="$emit('focus-stop')">
+              <i class="iconfont icon-bianjiao-fangda" /><span>focus+</span>
             </div>
-            <div class="ptz-func-btn" title="聚焦-" @mousedown.prevent="$emit('focus-move', { command: 'far', speed: controSpeed })" @mouseup.prevent="$emit('focus-stop')">
-              <i class="iconfont icon-bianjiao-suoxiao" /><span>聚焦-</span>
+            <div class="ptz-func-btn" title="focus-" @mousedown.prevent="$emit('focus-move', { command: 'far', speed: controSpeed })" @mouseup.prevent="$emit('focus-stop')">
+              <i class="iconfont icon-bianjiao-suoxiao" /><span>focus-</span>
             </div>
           </div>
           <div v-if="hasIris" class="ptz-func-row">
-            <div class="ptz-func-btn" title="光圈+" @mousedown.prevent="$emit('iris-move', { command: 'in', speed: controSpeed })" @mouseup.prevent="$emit('iris-stop')">
-              <i class="iconfont icon-guangquan" /><span>光圈+</span>
+            <div class="ptz-func-btn" title="Aperture+" @mousedown.prevent="$emit('iris-move', { command: 'in', speed: controSpeed })" @mouseup.prevent="$emit('iris-stop')">
+              <i class="iconfont icon-guangquan" /><span>Aperture+</span>
             </div>
-            <div class="ptz-func-btn" title="光圈-" @mousedown.prevent="$emit('iris-move', { command: 'out', speed: controSpeed })" @mouseup.prevent="$emit('iris-stop')">
-              <i class="iconfont icon-guangquan-" /><span>光圈-</span>
+            <div class="ptz-func-btn" title="Aperture-" @mousedown.prevent="$emit('iris-move', { command: 'out', speed: controSpeed })" @mouseup.prevent="$emit('iris-stop')">
+              <i class="iconfont icon-guangquan-" /><span>Aperture-</span>
             </div>
           </div>
           <div v-if="hasDragZoom" class="ptz-func-row">
-            <div class="ptz-func-btn" title="拉框放大" @click="$emit('toggle-drag-zoom')">
-              <i class="iconfont icon-guangquan" /><span>拉框放大</span>
+            <div class="ptz-func-btn" title="Scroll down to enlarge" @click="$emit('toggle-drag-zoom')">
+              <i class="iconfont icon-guangquan" /><span>Scroll down to enlarge</span>
             </div>
-            <div class="ptz-func-btn" title="拉框缩小" @click="$emit('toggle-drag-zoom-out')">
-              <i class="iconfont icon-guangquan-" /><span>拉框缩小</span>
+            <div class="ptz-func-btn" title="Zoom out" @click="$emit('toggle-drag-zoom-out')">
+              <i class="iconfont icon-guangquan-" /><span>Zoom out</span>
             </div>
           </div>
         </div>
@@ -59,7 +59,7 @@
     </div>
     <div v-if="hasAnyPtz" class="ptz-bottom">
       <div class="slider-with-controls">
-        <span class="slider-label">速度</span>
+        <span class="slider-label">speed</span>
         <el-button type="text" icon="el-icon-minus" class="slider-btn" @click="adjustSpeed(-1)" />
         <el-slider v-model="controSpeed" :max="100" :min="1" />
         <el-button type="text" icon="el-icon-plus" class="slider-btn" @click="adjustSpeed(1)" />

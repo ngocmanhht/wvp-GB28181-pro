@@ -4,19 +4,19 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 
 @Getter
-@Schema(description = "位置信息")
+@Schema(description = "location information")
 public class JTPositionInfo {
 
     /**
-     * 位置基本信息
+     * Basic location information
      */
-    @Schema(description = "位置基本信息")
+    @Schema(description = "Basic location information")
     private JTPositionBaseInfo base;
 
     /**
-     * 位置基本信息
+     * Basic location information
      */
-    @Schema(description = "位置附加信息")
+    @Schema(description = "Location extensions")
     private JTPositionAdditionalInfo additional;
 
     public void setBase(JTPositionBaseInfo base) {

@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * 平台注册任务可序列化的信息
+ * Platform registration task serializable information
  */
 @Slf4j
 @Data
@@ -16,7 +16,7 @@ public class PlatformRegisterTaskInfo{
     private SipTransactionInfo sipTransactionInfo;
 
     /**
-     * 过期时间，单位： 毫秒
+     * Expiration time, unit: milliseconds
      */
     private long expireTime;
 }

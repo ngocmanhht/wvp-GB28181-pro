@@ -2,7 +2,7 @@
   <div id="changepushKey" v-loading="isLoging">
     <el-dialog
       v-el-drag-dialog
-      title="修改pushKey"
+      title="ModifypushKey"
       width="42%"
       top="2rem"
       :close-on-click-modal="false"
@@ -12,13 +12,13 @@
     >
       <div id="shared" style="margin-right: 18px;">
         <el-form ref="pushKeyForm" :rules="rules" status-icon label-width="86px">
-          <el-form-item label="新pushKey" prop="newPushKey">
+          <el-form-item label="newpushKey" prop="newPushKey">
             <el-input v-model="newPushKey" autocomplete="off" />
           </el-form-item>
           <el-form-item>
             <div style="float: right;">
-              <el-button type="primary" @click="onSubmit">保存</el-button>
-              <el-button @click="close">取消</el-button>
+              <el-button type="primary" @click="onSubmit">save</el-button>
+              <el-button @click="close">Cancel</el-button>
             </div>
           </el-form-item>
         </el-form>
@@ -38,7 +38,7 @@ export default {
   data() {
     const validatePass1 = (rule, value, callback) => {
       if (value === '') {
-        callback(new Error('请输入新pushKey'))
+        callback(new Error('Please enter newpushKey'))
       } else {
         callback()
       }
@@ -75,7 +75,7 @@ export default {
         .then(data => {
           this.$message({
             showClose: true,
-            message: '修改成功',
+            message: 'Modification successful',
             type: 'success'
           })
           this.listChangeCallback()

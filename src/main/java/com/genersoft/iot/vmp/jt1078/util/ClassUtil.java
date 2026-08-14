@@ -24,7 +24,7 @@ public class ClassUtil {
             try {
                 return clazz.getDeclaredConstructor().newInstance();
             } catch (Exception ex) {
-                log.error("ClassUtil:找不到指定的类", ex);
+                log.error("ClassUtil:The specified class cannot be found", ex);
             }
         }
         return null;
@@ -36,14 +36,14 @@ public class ClassUtil {
         try {
             clazz = Class.forName(className);
         } catch (Exception ex) {
-            log.error("ClassUtil:找不到指定的类");
+            log.error("ClassUtil:The specified class cannot be found");
         }
         if (clazz != null) {
             try {
-                //获取声明的构造器--》创建实例
+                //Get the declared constructor--》Create instance
                 return clazz.getDeclaredConstructor().newInstance();
             } catch (Exception ex) {
-                log.error("ClassUtil:找不到指定的类", ex);
+                log.error("ClassUtil:The specified class cannot be found", ex);
             }
         }
         return null;
@@ -51,10 +51,10 @@ public class ClassUtil {
 
 
     /**
-     * 获取包下所有带注解的class
+     * Get all annotations under the packageclass
      *
-     * @param packageName     包名
-     * @param annotationClass 注解类型
+     * @param packageName     package name
+     * @param annotationClass Annotation type
      * @return list
      */
     public static List<Class<?>> getClassList(String packageName, Class<? extends Annotation> annotationClass) {

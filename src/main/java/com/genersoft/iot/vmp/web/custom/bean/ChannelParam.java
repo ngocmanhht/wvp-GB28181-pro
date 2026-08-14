@@ -4,12 +4,12 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 @Data
-@Schema(description = "通道信息")
+@Schema(description = "Channel information")
 public class ChannelParam {
 
-    @Schema(description = "摄像头设备国标编号, 对于非国标摄像头可以不设置此参数")
+    @Schema(description = "National standard number of camera equipment. This parameter does not need to be set for non-national standard cameras.")
     private String deviceCode;
 
-    @Schema(description = "通道编号")
+    @Schema(description = "Channel number")
     private String deviceId;
 }

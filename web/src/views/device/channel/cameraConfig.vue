@@ -1,24 +1,24 @@
 <template>
   <div id="dhCameraConfigPage">
-    <el-page-header content="相机配置" @back="$emit('close')" />
+    <el-page-header content="Camera configuration" @back="$emit('close')" />
     <div class="camera-config-body">
       <div class="config-sidebar">
         <el-menu :default-active="activeTab" @select="handleMenuSelect">
           <el-menu-item index="base">
             <i class="iconfont icon-wxbzhuye" style="margin-right: 10px" />
-            <span>基础属性</span>
+            <span>Basic attributes</span>
           </el-menu-item>
           <el-menu-item index="alarm">
             <i class="iconfont icon-baojing" style="margin-right: 10px" />
-            <span>报警配置</span>
+            <span>Alarm configuration</span>
           </el-menu-item>
           <el-menu-item index="recordControl">
             <i class="iconfont icon-record1" style="margin-right: 10px" />
-            <span>录像控制</span>
+            <span>Video control</span>
           </el-menu-item>
           <el-menu-item index="upgrade">
             <i class="iconfont icon-shangchuan" style="margin-right: 10px" />
-            <span>设备运维</span>
+            <span>Equipment operation and maintenance</span>
           </el-menu-item>
         </el-menu>
       </div>

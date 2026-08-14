@@ -8,7 +8,7 @@ import org.springframework.context.ApplicationEvent;
 import java.io.Serial;
 
 /**
- * @description: 录像查询结束时间
+ * @description: Video query end time
  * @author: pan
  * @data: 2022-02-23
  */

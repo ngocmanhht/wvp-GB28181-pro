@@ -6,24 +6,24 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@Schema(description = "位置附加信息")
+@Schema(description = "Location extensions")
 public class JTPositionAdditionalInfo {
 
-    @Schema(description = "里程, 单位为1/10km, 对应车上里程表读数")
+    @Schema(description = "Mileage, in units of1/10km, Corresponding car odometer reading")
     private int mileage;
 
-    @Schema(description = "油量, 单位为1/10L, 对应车上油量表读数")
+    @Schema(description = "Oil volume, unit is1/10L, Corresponds to the car’s fuel gauge reading")
     private int oil;
 
-    @Schema(description = "行驶记录功能获取的速度,单位为1/10km/h")
+    @Schema(description = "The speed obtained by the driving record function, in units of1/10km/h")
     private int speed;
 
-    @Schema(description = "报警事件的 ID")
+    @Schema(description = "alarm event ID")
     private int alarmId;
-    // TODO 暂不支持胎压
+    // TODO Tire pressure is not supported yet
 
-    @Schema(description = "车厢温度 ,单位为摄氏度")
+    @Schema(description = "Cabin temperature in degrees Celsius")
     private int carriageTemperature;
-    // TODO 暂不支持胎压
+    // TODO Tire pressure is not supported yet
 
 }

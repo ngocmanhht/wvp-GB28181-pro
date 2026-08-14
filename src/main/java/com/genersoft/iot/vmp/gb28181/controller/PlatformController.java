@@ -25,9 +25,9 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * 级联平台管理
+ * Cascade platform management
  */
-@Tag(name  = "级联平台管理")
+@Tag(name  = "Cascade platform management")
 @Slf4j
 @RestController
 @RequestMapping("/api/platform")
@@ -46,7 +46,7 @@ public class PlatformController {
 	private IPlatformService platformService;
 
 
-    @Operation(summary = "获取国标服务的配置", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Operation(summary = "Get the configuration of the national standard service", security = @SecurityRequirement(name = JwtUtils.HEADER))
     @GetMapping("/server_config")
     public JSONObject serverConfig() {
         JSONObject result = new JSONObject();
@@ -57,23 +57,23 @@ public class PlatformController {
         return result;
     }
 
-    @Operation(summary = "获取级联服务器信息", security = @SecurityRequirement(name = JwtUtils.HEADER))
-    @Parameter(name = "id", description = "平台国标编号", required = true)
+    @Operation(summary = "Get cascade server information", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Parameter(name = "id", description = "Platform national standard number", required = true)
     @GetMapping("/info/{id}")
     public Platform getPlatform(@PathVariable String id) {
         Platform parentPlatform = platformService.queryPlatformByServerGBId(id);
         if (parentPlatform != null) {
             return  parentPlatform;
         } else {
-            throw new ControllerException(ErrorCode.ERROR100.getCode(), "未查询到此平台");
+            throw new ControllerException(ErrorCode.ERROR100.getCode(), "This platform was not found");
         }
     }
 
     @GetMapping("/query")
-    @Operation(summary = "分页查询级联平台", security = @SecurityRequirement(name = JwtUtils.HEADER))
-    @Parameter(name = "page", description = "当前页")
-    @Parameter(name = "count", description = "每页查询数量")
-    @Parameter(name = "query", description = "查询内容")
+    @Operation(summary = "Paginated query cascade platform", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Parameter(name = "page", description = "Current page")
+    @Parameter(name = "count", description = "Number of queries per page")
+    @Parameter(name = "query", description = "Query content")
     public PageInfo<Platform> platforms(int page, int count,
                                         @RequestParam(required = false) String query) {
 
@@ -87,16 +87,16 @@ public class PlatformController {
         return parentPlatformPageInfo;
     }
 
-    @Operation(summary = "添加上级平台信息", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Operation(summary = "Add parent platform information", security = @SecurityRequirement(name = JwtUtils.HEADER))
     @PostMapping("/add")
     @ResponseBody
     public void add(@RequestBody Platform platform) {
 
-        Assert.notNull(platform.getName(), "平台名称不可为空");
-        Assert.notNull(platform.getServerGBId(), "上级平台国标编号不可为空");
-        Assert.notNull(platform.getServerIp(), "上级平台IP不可为空");
-        Assert.isTrue(platform.getServerPort() > 0 && platform.getServerPort() < 65535, "上级平台端口异常");
-        Assert.notNull(platform.getDeviceGBId(), "本平台国标编号不可为空");
+        Assert.notNull(platform.getName(), "Platform name cannot be empty");
+        Assert.notNull(platform.getServerGBId(), "The national standard number of the superior platform cannot be empty");
+        Assert.notNull(platform.getServerIp(), "The upper-level platform IP cannot be empty");
+        Assert.isTrue(platform.getServerPort() > 0 && platform.getServerPort() < 65535, "Upper-level platform port abnormality");
+        Assert.notNull(platform.getDeviceGBId(), "The national standard number of this platform cannot be empty");
 
         if (ObjectUtils.isEmpty(platform.getServerGBDomain())) {
             platform.setServerGBDomain(platform.getServerGBId().substring(0, 6));
@@ -120,7 +120,7 @@ public class PlatformController {
 
         Platform parentPlatformOld = platformService.queryPlatformByServerGBId(platform.getServerGBId());
         if (parentPlatformOld != null) {
-            throw new ControllerException(ErrorCode.ERROR100.getCode(), "平台 " + platform.getServerGBId() + " 已存在");
+            throw new ControllerException(ErrorCode.ERROR100.getCode(), "platform " + platform.getServerGBId() + " Already exists");
         }
         platform.setCreateTime(DateUtil.getNow());
         platform.setUpdateTime(DateUtil.getNow());
@@ -131,7 +131,7 @@ public class PlatformController {
         }
     }
 
-    @Operation(summary = "更新上级平台信息", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Operation(summary = "Update parent platform information", security = @SecurityRequirement(name = JwtUtils.HEADER))
     @PostMapping("/update")
     @ResponseBody
     public void updatePlatform(@RequestBody Platform parentPlatform) {
@@ -152,14 +152,14 @@ public class PlatformController {
         platformService.update(parentPlatform);
     }
 
-    @Operation(summary = "删除上级平台", security = @SecurityRequirement(name = JwtUtils.HEADER))
-    @Parameter(name = "id", description = "上级平台ID")
+    @Operation(summary = "Delete parent platform", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Parameter(name = "id", description = "Superior platformID")
     @DeleteMapping("/delete")
     @ResponseBody
     public WVPResult<?> deletePlatform(Integer id) {
 
         if (log.isDebugEnabled()) {
-            log.debug("删除上级平台API调用");
+            log.debug("Delete upper-level platform API call");
         }
         boolean result = platformService.delete(id);
         if (result) {
@@ -169,8 +169,8 @@ public class PlatformController {
         }
     }
 
-    @Operation(summary = "查询上级平台是否存在", security = @SecurityRequirement(name = JwtUtils.HEADER))
-    @Parameter(name = "serverGBId", description = "上级平台的国标编号")
+    @Operation(summary = "Check whether the upper-level platform exists", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Parameter(name = "serverGBId", description = "National standard number of the superior platform")
     @GetMapping("/exit/{serverGBId}")
     @ResponseBody
     public Boolean exitPlatform(@PathVariable String serverGBId) {
@@ -178,14 +178,14 @@ public class PlatformController {
         return platform != null;
     }
 
-    @Operation(summary = "分页查询级联平台的所有所有通道", security = @SecurityRequirement(name = JwtUtils.HEADER))
-    @Parameter(name = "page", description = "当前页", required = true)
-    @Parameter(name = "count", description = "每页条数", required = true)
-    @Parameter(name = "platformId", description = "上级平台的数据ID")
-    @Parameter(name = "channelType", description = "通道类型， 0：国标设备，1：推流设备，2：拉流代理")
-    @Parameter(name = "query", description = "查询内容")
-    @Parameter(name = "online", description = "是否在线")
-    @Parameter(name = "hasShare", description = "是否已经共享")
+    @Operation(summary = "Paging query for all channels of the cascade platform", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Parameter(name = "page", description = "Current page", required = true)
+    @Parameter(name = "count", description = "Number of items per page", required = true)
+    @Parameter(name = "platformId", description = "Data from the upper level platformID")
+    @Parameter(name = "channelType", description = "Channel type, 0: national standard equipment, 1: push device, 2: pull agent")
+    @Parameter(name = "query", description = "Query content")
+    @Parameter(name = "online", description = "Is online")
+    @Parameter(name = "hasShare", description = "Has it been shared?")
     @GetMapping("/channel/list")
     @ResponseBody
     public PageInfo<PlatformChannel> queryChannelList(int page, int count,
@@ -195,7 +195,7 @@ public class PlatformController {
                                                       @RequestParam(required = false) Boolean online,
                                                       @RequestParam(required = false) Boolean hasShare) {
 
-        Assert.notNull(platformId, "上级平台的数据ID不可为NULL");
+        Assert.notNull(platformId, "The data ID of the upper-level platform cannot beNULL");
         if (ObjectUtils.isEmpty(query)) {
             query = null;
         }
@@ -203,18 +203,18 @@ public class PlatformController {
         return platformChannelService.queryChannelList(page, count, query, channelType,  online, platformId, hasShare);
     }
 
-    @Operation(summary = "向上级平台添加国标通道", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Operation(summary = "Add national standard channels to the upper level platform", security = @SecurityRequirement(name = JwtUtils.HEADER))
     @PostMapping("/channel/add")
     @ResponseBody
     public void addChannel(@RequestBody UpdateChannelParam param) {
 
         if (log.isDebugEnabled()) {
-            log.debug("给上级平台添加国标通道API调用");
+            log.debug("Add national standard channel API calls to the upper-level platform");
         }
         int result = 0;
         if (param.getChannelIds() == null || param.getChannelIds().isEmpty()) {
             if (param.isAll()) {
-                log.info("[国标级联]添加所有通道到上级平台， {}", param.getPlatformId());
+                log.info("[National standard cascade]Add all channels to the upper level platform， {}", param.getPlatformId());
                 result = platformChannelService.addAllChannel(param.getPlatformId());
             }
         }else {
@@ -225,18 +225,18 @@ public class PlatformController {
         }
     }
 
-    @Operation(summary = "从上级平台移除国标通道", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Operation(summary = "Remove the national standard channel from the upper-level platform", security = @SecurityRequirement(name = JwtUtils.HEADER))
     @DeleteMapping("/channel/remove")
     @ResponseBody
     public void delChannelForGB(@RequestBody UpdateChannelParam param) {
 
         if (log.isDebugEnabled()) {
-            log.debug("给上级平台删除国标通道API调用");
+            log.debug("Delete the national standard channel API call to the superior platform");
         }
         int result = 0;
         if (param.getChannelIds() == null || param.getChannelIds().isEmpty()) {
             if (param.isAll()) {
-                log.info("[国标级联]移除所有通道，上级平台， {}", param.getPlatformId());
+                log.info("[National standard cascade]Remove all channels, upper level platform， {}", param.getPlatformId());
                 result = platformChannelService.removeAllChannel(param.getPlatformId());
             }
         }else {
@@ -247,40 +247,40 @@ public class PlatformController {
         }
     }
 
-    @Operation(summary = "推送通道", security = @SecurityRequirement(name = JwtUtils.HEADER))
-    @Parameter(name = "id", description = "平台ID", required = true)
+    @Operation(summary = "push channel", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Parameter(name = "id", description = "platformID", required = true)
     @GetMapping("/channel/push")
     @ResponseBody
     public void pushChannel(Integer id) {
-        Assert.notNull(id, "平台ID不可为空");
+        Assert.notNull(id, "Platform ID cannot be empty");
         platformChannelService.pushChannel(id);
     }
 
-    @Operation(summary = "添加通道-通过设备", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Operation(summary = "add channel-via device", security = @SecurityRequirement(name = JwtUtils.HEADER))
     @PostMapping("/channel/device/add")
     @ResponseBody
     public void addChannelByDevice(@RequestBody UpdateChannelParam param) {
-        Assert.notNull(param.getPlatformId(), "平台ID不可为空");
-        Assert.notNull(param.getDeviceIds(), "设备ID不可为空");
-        Assert.notEmpty(param.getDeviceIds(), "设备ID不可为空");
+        Assert.notNull(param.getPlatformId(), "Platform ID cannot be empty");
+        Assert.notNull(param.getDeviceIds(), "Device ID cannot be empty");
+        Assert.notEmpty(param.getDeviceIds(), "Device ID cannot be empty");
         platformChannelService.addChannelByDevice(param.getPlatformId(), param.getDeviceIds());
     }
 
-    @Operation(summary = "移除通道-通过设备", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Operation(summary = "Remove channel-via device", security = @SecurityRequirement(name = JwtUtils.HEADER))
     @PostMapping("/channel/device/remove")
     @ResponseBody
     public void removeChannelByDevice(@RequestBody UpdateChannelParam param) {
-        Assert.notNull(param.getPlatformId(), "平台ID不可为空");
-        Assert.notNull(param.getDeviceIds(), "设备ID不可为空");
-        Assert.notEmpty(param.getDeviceIds(), "设备ID不可为空");
+        Assert.notNull(param.getPlatformId(), "Platform ID cannot be empty");
+        Assert.notNull(param.getDeviceIds(), "Device ID cannot be empty");
+        Assert.notEmpty(param.getDeviceIds(), "Device ID cannot be empty");
         platformChannelService.removeChannelByDevice(param.getPlatformId(), param.getDeviceIds());
     }
 
-    @Operation(summary = "自定义共享通道信息", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Operation(summary = "Custom shared channel information", security = @SecurityRequirement(name = JwtUtils.HEADER))
     @PostMapping("/channel/custom/update")
     @ResponseBody
     public void updateCustomChannel(@RequestBody PlatformChannel channel) {
-        Assert.isTrue(channel.getId() > 0, "共享通道ID必须存在");
+        Assert.isTrue(channel.getId() > 0, "Shared channel ID must exist");
         platformChannelService.updateCustomChannel(channel);
     }
 }

@@ -10,100 +10,100 @@ import java.io.Serializable;
 import java.util.Objects;
 
 @Data
-@Schema(description = "流信息")
+@Schema(description = "flow information")
 public class StreamInfo implements Serializable, Cloneable{
 
-    @Schema(description = "应用名")
+    @Schema(description = "Application name")
     private String app;
-    @Schema(description = "流ID")
+    @Schema(description = "flowID")
     private String stream;
-    @Schema(description = "设备编号")
+    @Schema(description = "Device number")
     private String deviceId;
-    @Schema(description = "通道ID")
+    @Schema(description = "channelID")
     private Integer channelId;
 
     @Schema(description = "IP")
     private String ip;
 
-    @Schema(description = "HTTP-FLV流地址")
+    @Schema(description = "HTTP-FLVstream address")
     private StreamURL flv;
 
-    @Schema(description = "HTTPS-FLV流地址")
+    @Schema(description = "HTTPS-FLVstream address")
     private StreamURL https_flv;
-    @Schema(description = "Websocket-FLV流地址")
+    @Schema(description = "Websocket-FLVstream address")
     private StreamURL ws_flv;
-    @Schema(description = "Websockets-FLV流地址")
+    @Schema(description = "Websockets-FLVstream address")
     private StreamURL wss_flv;
-    @Schema(description = "HTTP-FMP4流地址")
+    @Schema(description = "HTTP-FMP4stream address")
     private StreamURL fmp4;
-    @Schema(description = "HTTPS-FMP4流地址")
+    @Schema(description = "HTTPS-FMP4stream address")
     private StreamURL https_fmp4;
-    @Schema(description = "Websocket-FMP4流地址")
+    @Schema(description = "Websocket-FMP4stream address")
     private StreamURL ws_fmp4;
-    @Schema(description = "Websockets-FMP4流地址")
+    @Schema(description = "Websockets-FMP4stream address")
     private StreamURL wss_fmp4;
-    @Schema(description = "HLS流地址")
+    @Schema(description = "HLSstream address")
     private StreamURL hls;
-    @Schema(description = "HTTPS-HLS流地址")
+    @Schema(description = "HTTPS-HLSstream address")
     private StreamURL https_hls;
-    @Schema(description = "Websocket-HLS流地址")
+    @Schema(description = "Websocket-HLSstream address")
     private StreamURL ws_hls;
-    @Schema(description = "Websockets-HLS流地址")
+    @Schema(description = "Websockets-HLSstream address")
     private StreamURL wss_hls;
-    @Schema(description = "HTTP-TS流地址")
+    @Schema(description = "HTTP-TSstream address")
     private StreamURL ts;
-    @Schema(description = "HTTPS-TS流地址")
+    @Schema(description = "HTTPS-TSstream address")
     private StreamURL https_ts;
-    @Schema(description = "Websocket-TS流地址")
+    @Schema(description = "Websocket-TSstream address")
     private StreamURL ws_ts;
-    @Schema(description = "Websockets-TS流地址")
+    @Schema(description = "Websockets-TSstream address")
     private StreamURL wss_ts;
-    @Schema(description = "RTMP流地址")
+    @Schema(description = "RTMPstream address")
     private StreamURL rtmp;
-    @Schema(description = "RTMPS流地址")
+    @Schema(description = "RTMPSstream address")
     private StreamURL rtmps;
-    @Schema(description = "RTSP流地址")
+    @Schema(description = "RTSPstream address")
     private StreamURL rtsp;
-    @Schema(description = "RTSPS流地址")
+    @Schema(description = "RTSPSstream address")
     private StreamURL rtsps;
-    @Schema(description = "RTC流地址")
+    @Schema(description = "RTCstream address")
     private StreamURL rtc;
 
-    @Schema(description = "RTCS流地址")
+    @Schema(description = "RTCSstream address")
     private StreamURL rtcs;
-    @Schema(description = "流媒体节点")
+    @Schema(description = "Streaming media node")
     private MediaServer mediaServer;
-    @Schema(description = "流编码信息")
+    @Schema(description = "Stream encoding information")
     private MediaInfo mediaInfo;
-    @Schema(description = "开始时间")
+    @Schema(description = "start time")
     private String startTime;
-    @Schema(description = "结束时间")
+    @Schema(description = "end time")
     private String endTime;
-    @Schema(description = "时长(回放时使用)")
+    @Schema(description = "duration(used during playback)")
     private Double duration;
-    @Schema(description = "进度（录像下载使用）")
+    @Schema(description = "Progress (video download and use）")
     private double progress;
-    @Schema(description = "文件下载地址（录像下载使用）")
+    @Schema(description = "File download address (use for video downloads）")
     private DownloadFileInfo downLoadFilePath;
-    @Schema(description = "点播请求的callId")
+    @Schema(description = "on demand requestcallId")
     private String callId;
 
-    @Schema(description = "是否暂停（录像回放使用）")
+    @Schema(description = "Whether to pause (video playback uses）")
     private boolean pause;
 
-    @Schema(description = "产生源类型，包括 unknown = 0,rtmp_push=1,rtsp_push=2,rtp_push=3,pull=4,ffmpeg_pull=5,mp4_vod=6,device_chn=7")
+    @Schema(description = "Generate source type, including unknown = 0,rtmp_push=1,rtsp_push=2,rtp_push=3,pull=4,ffmpeg_pull=5,mp4_vod=6,device_chn=7")
     private int originType;
 
-    @Schema(description = "originType的文本描述")
+    @Schema(description = "originTypetext description of")
     private String originTypeStr;
 
-    @Schema(description = "转码后的视频流")
+    @Schema(description = "Transcoded video stream")
     private StreamInfo transcodeStream;
 
-    @Schema(description = "使用的WVP ID")
+    @Schema(description = "usedWVP ID")
     private String serverId;
 
-    @Schema(description = "流绑定的流媒体操作key")
+    @Schema(description = "Streaming operations for stream bindingkey")
     private String key;
 
     public void setRtmp(String host, Integer port, Integer sslPort, String app, String stream, String callIdParam) {

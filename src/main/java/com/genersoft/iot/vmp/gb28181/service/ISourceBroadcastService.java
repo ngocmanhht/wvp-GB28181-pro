@@ -4,7 +4,7 @@ import com.genersoft.iot.vmp.gb28181.bean.CommonGBChannel;
 import com.genersoft.iot.vmp.vmanager.bean.AudioTalkResult;
 
 /**
- * 资源能力接入-语音对讲
+ * Resource capability access-Voice intercom
  */
 public interface ISourceBroadcastService {
 

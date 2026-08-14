@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-// 云端录像API
+// Cloud recordingAPI
 
 export function getPlayPath(id) {
   return request({

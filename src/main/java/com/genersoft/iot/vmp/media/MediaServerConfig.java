@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 /**
- * 启动是从配置文件加载节点信息，以及发送个节点状态管理去控制节点状态
+ * Startup is to load node information from the configuration file and send node status management to control the node status.
  */
 @Slf4j
 @Component
@@ -36,17 +36,17 @@ public class MediaServerConfig{
 
     @EventListener(ApplicationReadyEvent.class)
     public void onApplicationReady(){
-        // 清理所有在线节点的缓存信息
+        // Clear the cache information of all online nodes
         mediaServerService.clearMediaServerForOnline();
         MediaServer mediaSerItemInConfig = mediaConfig.buildMediaSer();
         mediaSerItemInConfig.setServerId(userSetting.getServerId());
         mediaServerService.deleteDefault();
-        // 发送媒体节点变化事件
+        // Send media node change event
         mediaServerService.syncCatchFromDatabase();
-        // 获取所有的zlm， 并开启主动连接
+        // Get all zlms and enable active connections
         List<MediaServer> all = mediaServerService.getAllFromDatabaseWithOutDefault();
         all.add(mediaSerItemInConfig);
-        log.info("[媒体节点] 加载节点列表， 共{}个节点", all.size());
+        log.info("[media node] Load node list, total{}nodes", all.size());
         MediaServerChangeEvent event = new MediaServerChangeEvent(this);
         event.setMediaServerItemList(all);
         applicationEventPublisher.publishEvent(event);

@@ -7,17 +7,17 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * 云台控制指令-焦距控制
+ * PTZ control instructions-Focus control
  *
  */
 @Setter
 @Getter
 @MsgId(id = "9302")
 public class J9302 extends Rs {
-    // 逻辑通道号
+    // Logical channel number
     private int channel;
 
-    // 方向： 0：焦距调大； 1：焦距调小
+    // Direction: 0: Increase the focal length; 1: Decrease the focal length
     private int focalDirection;
 
     @Override

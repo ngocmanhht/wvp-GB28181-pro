@@ -1,9 +1,9 @@
 package com.genersoft.iot.vmp.common;
 
 /**
- * 标识invite消息发出后的各个状态，
- * 收到ok钱停止invite发送cancel，
- * 收到200ok后发送BYE停止invite
+ * Identifies each status after the invite message is sent.，
+ * Stop sending invite after receiving ok moneycancel，
+ * Send BYE after receiving 200ok to stopinvite
  */
 public enum InviteSessionStatus {
     ready,

@@ -1,0 +1,301 @@
+
+
+
+# This configuration file is only used to display all configuration items and cannot be used directly.
+
+
+spring:
+  spring:
+    threads:
+      virtual:
+        enabled: true
+    cache:
+      type: redis
+    thymeleaf:
+      cache: false
+    # Set interface timeout
+    mvc:
+        async:
+            request-timeout: 20000
+    # [Optional]Upload file size limit
+    servlet:
+        multipart:
+            max-file-size: 10MB
+            max-request-size: 100MB
+    # REDISDatabase configuration
+    data:
+        redis:
+            # [Must be modified] RedisServer IP, REDIS is installed on this machine, use127.0.0.1
+            host: 127.0.0.1
+            # [Must be modified] port number
+            port: 6379
+            # [Optional] database DB
+            database: 6
+            # [Optional] Access password. If your redis server does not have a password set, you do not need to use a password to connect.
+            password:
+            # [Optional] timeout
+            timeout: 10000
+            # [Optional] The maximum number of jedis instances that can be allocated to a pool
+            poolMaxTotal: 1000
+            # [Optional] The maximum number of states a pool can have isidle(free)jedis instance
+            poolMaxIdle: 500
+            # [Optional] maximum waiting time(seconds)
+            poolMaxWait: 5
+    # [Required] jdbcDatabase configuration
+    datasource:
+        # kingbaseConfiguration
+        #        type: com.zaxxer.hikari.HikariDataSource
+        #        driver-class-name: com.kingbase8.Driver
+        #        url: jdbc:kingbase8://192.168.1.55:54321/wvp?useUnicode=true&characterEncoding=utf8
+        #        username: system
+        #        password: system
+        # postgresqlConfiguration
+        #    type: com.zaxxer.hikari.HikariDataSource
+        #    driver-class-name: org.postgresql.Driver
+        #    url: jdbc:postgresql://192.168.1.242:3306/242wvp
+        #    username: root
+        #    password: SYceshizu1234
+        # mysqlConfiguration
+        type: com.zaxxer.hikari.HikariDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://127.0.0.1:3306/wvp2?useUnicode=true&characterEncoding=UTF8&rewriteBatchedStatements=true&serverTimezone=PRC&useSSL=false&allowMultiQueries=true
+        username: root
+        password: root123
+        hikari:
+            connection-timeout: 20000             # Is the maximum number of milliseconds the client waits for a connection pool connection
+            initialSize: 50                       # Connection pool initialization number of connections
+            maximum-pool-size: 200                # Maximum number of connections in the connection pool
+            minimum-idle: 10                       # Minimum number of idle connections in the connection pool
+            idle-timeout: 300000                  # The maximum time in milliseconds that a connection is allowed to idle in the connection pool）
+            max-lifetime: 1200000                 # is the maximum lifetime (in milliseconds) of a connection in the pool after it has been closed)
+
+
+
+# Modify the paging plug-in to postgresql, and the database type is mysql. This is not required.
+#pagehelper:
+#    helper-dialect: postgresql
+
+# [Optional] WVPThe listening HTTP port, web pages and interface calls are all on this port
+server:
+    port: 18080
+    # [Optional] HTTPSConfiguration, not enabled by default
+    ssl:
+        # [Optional] Whether to enable HTTPS access
+        enabled: false
+        # [Optional] Certificate file path, placed inresource/Just go to the directory and change xxx to the file name.
+        key-store: classpath:xxx.jks
+        # [Optional] Certificate password
+        key-store-password: password
+        # [Optional] Certificate type, default is jks, modify according to actual situation
+        key-store-type: JKS
+        # You can use the following two items to configure the certificate. Just choose one of the two above.
+        # PEM coding certificate
+        certificate: xx.pem
+        #   private key file
+        certificate-private-key: xx.key
+        # protocols: TLSv1.2
+        # ciphers: TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+
+
+# Configuration as 28181 server
+sip:
+    # [Optional] Monitor the network card IP. The IP you monitor depends on the network card used. If you do not configure it, all the network cards of the machine will be automatically obtained. It is recommended not to configure it, and the system will automatically obtain it.
+    # If you want to monitor multiple network cards, you can use commas to separate multiple IPs, for example： 192.168.1.4,10.0.0.4
+    # If you don’t understand, just use 0.0.0.0, which is fine in most cases.
+    # Please do not use 127.0.0.1, any domain name including localhost is not allowed。
+    ip: 0.0.0.0
+    # [Optional] There is no business requirement. It is only used for front-end display.
+    # [dockerRequired under the environment] When running in a docker environment, this configuration is the external IP address of SIP, which must be configured, otherwise it cannot be used normally.
+    show-ip: 192.168.0.100
+    # [Optional] 28181The port the service listens on
+    port: 5060
+    # According to the provisions of national standard 6.1.2, domain should use the first ten digits of the unified ID code. Appendix D of the national standard defines the first 8 digits as the center code (composed of provincial, municipal, district and grassroots numbers, refer toGB/T 2260-2007）
+    # The last two digits are industry codes. For definitions, please refer to the appendix.D.3
+    # 3701020049Identification of information industry access in Lixia District, Jinan, Shandong Province
+    # [Optional]
+    domain: 4401020049
+    # [Optional]
+    id: 44010200492000000001
+    # [Optional] Public authentication password. If you remove the password, you will have to add the device in advance to pass the authentication.
+    password: admin123
+    # [Optional] If the national standard cascade registration fails, the time interval for re-initiating registration. Default 60 seconds
+    register-time-interval: 60
+    # [Optional] PTZ control speed
+    ptz-speed: 50
+    # TODO [Optional] It will automatically go online after receiving the heartbeat. After restarting the service, all devices will be set offline. The default is false and will go online after registration. Set to true to receive a heartbeat and set it to go online.。
+    # keepalliveToOnline: false
+    # Whether to store alarm information
+    alarm: false
+    # Timeout for command sending and waiting for reply, unit: milliseconds
+    timeout: 1000
+
+# As configuration of JT1078 server
+ftp:
+  #[Must be modified] Whether to enable 1078 service
+  enable: true
+  port: 2121
+  passive-ports: 10000-10500
+
+# As configuration of JT1078 server
+jt1078:
+    #[Must be modified] Whether to enable 1078 service
+    enable: true
+    #[Required modifications] 1708The port to which the device is connected
+    port: 21078
+    #[Optional] Device authentication password
+    password: admin123
+
+sy:
+  enable: false
+  # The time interval from the start to the end of PTZ control(milliseconds)
+  ptz-control-time-interval: 300
+
+#zlm Default server configuration
+media:
+    # [Must be modified] zlmThe unique ID of the server, used to distinguish which server it is when triggering the hook.,general.mediaServerId
+    id:
+    # [Must be modified] zlmServer's intranetIP
+    ip: 192.168.0.100
+    # [Optional] If there is a public IP, configure the public IP. Domain names are not available.
+    wan_ip:
+    # [Optional] IP when returning the flow address, leave it blank and use it media.ip
+    stream-ip:
+    # [Optional] wvpThe IP used in national standard signaling. This IP is the IP that the camera can access. Leave it blank. media.ip
+    sdp-ip:
+    # [Optional] zlmThe IP used by the server to access WVP. The default is 127.0.0.1. This must be configured when zlm and wvp are not deployed on the same server.
+    hook-ip: 172.19.128.50
+    # [Must be modified] zlmServer'shttp.port
+    http-port: 80
+    # [Optional] Whether to automatically configure ZLM. If you want to configure ZLM manually, you can set it to false. It is not recommended for new users to modify it.
+    auto-config: true
+    # [Optional] zlmServer'shook.admin_params=secret
+    secret: 035c73f7-bb6b-4889-a715-d9eb2d1925cc
+    # Recording path
+    record-path: ./www/record
+    # Video storage duration
+    record-day: 7
+    # Enable multi-port mode. Multi-port mode uses ports to distinguish each flow for better compatibility. Single port uses the ssrc of the flow to distinguish. For on-demand timeout, it is recommended to use multi-port testing.
+    rtp:
+        # [Optional] Whether to enable multi-port mode. When enabled, the port will be selected within the portRange range for media streaming.
+        enable: true
+        # [Optional] Select a port within this range for media streaming. This attribute must be configured on zlm in advance, otherwise the automatic configuration of this attribute may not be successful.
+        port-range: 30000,30500 # port range
+        # [Optional] National standard cascading selects ports within this range to send media streams. Please do not overlap with the range of receiving ports.
+        send-port-range: 50502,50506 # port range
+    # Video auxiliary service. Deploying this service can realize the management and download of zlm video. 0 means not to use it.
+    record-assist-port: 0
+
+
+# [Configure according to business needs]
+user-settings:
+    # Service ID, if not written, it will be000000
+    server-id:
+    # [Optional] Automatically play on demand. When using a fixed stream address for playback, if the playback is not on demand, it will automatically play on demand. Requiredrtp.enable=true
+    auto-apply-play: false
+    # [Optional] Some devices require extended SDP and this setting needs to be turned on
+    senior-sdp: false
+    # Save the historical track of mobile location: true: keep historical data, false: keep only the last location(Default)
+    save-position-history: false
+    # on demand/Video playback waiting timeout, unit: milliseconds
+    play-timeout: 18000
+    # Timeout for obtaining device recording data, unit: milliseconds
+    record-info-timeout: 10000
+    # Superior on-demand waiting timeout, unit: milliseconds
+    platform-play-timeout: 60000
+    # Whether to enable interface authentication
+    interface-authentication: true
+    # Interfaces with exceptions to interface authentication, that is, interfaces that do not perform interface authentication, should be written in as much detail as possible and should be used as little as possible./**，At least two levels of directories
+    interface-authentication-excludes:
+        - /api/v1/**
+    # Whether to record live push streaming
+    record-push-live: true
+    # Is the national standard recorded?
+    record-sip: true
+    # Use push flow status as push flow channel status
+    use-pushing-as-status: true
+    # Use the source request ip as streamIp, and enable it if and only if you only have the zlm node and it is together with wvp
+    use-source-ip-as-stream-ip: false
+    # National standard on-demand streaming on demand, true: someone is watching the stream, no one is watching it, it is released, false: it is not automatically released after it is pulled up.
+    stream-on-demand: true
+    # Push authentication, enabled by default
+    push-authority: true
+    # Whether to automatically synchronize channels when the device goes online
+    sync-channel-on-device-online: false
+    # National standard cascade voice broadcast streaming mode * UDP:udptransmission TCP-ACTIVE：tcpActive mode TCP-PASSIVE：tcppassive mode
+    broadcast-for-platform: UDP
+    # Whether to use the device source IP as the reply IP, if not set, it will be false
+    sip-use-source-ip-as-remote-address: false
+    # Whether to enable sip logs
+    sip-log: true
+    # Whether to enable sql log
+    sql-log: true
+    # Message channel function-Whether to send a message to all superiors if the national standard ID is missing
+    send-to-platforms-when-id-lost: true
+    # Keep channel status, do not accept notify channel status changes, compatible with Hikvision platform to send error messages
+    refuse-channel-status-channel-form-notify: false
+    # Set the maximum length of the notify cache queue. Data exceeding this length will return 486 BUSY_HERE and the message will be discarded. Default10000
+    max-notify-count-queue: 10000
+    # Equipment/Send messages when channel status changes
+    device-status-notify: false
+    # The upper-level platform does not use the ssrc specified by the upper-level platform when on-demand. Use the customized ssrc. Please refer to the national standard document.-On-demand external domain device media stream SSRC processing method
+    use-custom-ssrc-for-parent-invite: true
+    # How long does it take to retry registration after the GB cascade is offline?
+    register-again-after-time: 60
+    # National standard renewal method, true means renewal, each registration is in the same session, false means re-registration, each time a new session is used
+    register-keep-int-dialog: false
+    # Open the interface documentation page. It is turned on by default. It is recommended to turn it off in production environments. It can also be turned off when encountering swagger-related vulnerabilities.
+    doc-enable: true
+    # Cross-domain configuration. If this is not configured, all cross-domain requests will be allowed. After configuration, only address requests for the configured page will be allowed. Multiple configurations can be configured.
+    allowed-origins:
+        - http://localhost:8008
+        - http://192.168.1.3:8008
+    # Online strategy for national standard equipment after it goes offline，
+    # 0： The national standard is implemented. The device will not reply to the heartbeat after it is offline until the device is re-registered and online.，
+    # 1（Default): For offline devices, when a heartbeat is received, the device is set online and the registration time is updated to the time of the last heartbeat. Prevent expiration time judgment exceptions
+    gb-device-online: 0
+    # Login timeout(minutes)，
+    login-timeout: 30
+    # jwkFile path, if not specified, the file path in the resources directory will be used.jwk.json
+    jwk-file: classpath:jwk.json
+    # wvpIn cluster mode, if the registration fails with the superior wvp, another wvp will be automatically selected to continue registering with the superior.
+    auto-register-platform: true
+    # Send location on demand. By default, when sending mobile location subscription, if the location remains unchanged, it will not be sent. Set to false to continue sending at the national standard interval.
+    send-position-on-demand: true
+    # Some devices will send a large number of registrations in a short period of time, causing the protocol stack memory to overflow. Turning this on can prevent these devices from registering and avoid service crashes, but it will reduce system performance, as described below.
+    # The default value is true。
+    # Setting this to false will cause the Stack to Server Transaction Close the server socket after entering the TERMINATED state。
+    # This allows the server to prevent client-initiated TCP-based denial-of-service attacks (i.e., initiating hundreds of client transactions）。
+    # If true (the default), the stack will keep the socket open to maximize performance at the expense of thread and memory resources - Make yourself vulnerable to DOS attacks。
+    sip-cache-server-connections: true
+    # When processing alarm messages, the channel data will be cached. If it exceeds the limit, the low-heat messages will be discarded. The discarded channel will need to re-query the database next time. The default10000，
+    # It is recommended to adjust it according to the actual situation. If it is too large, it may occupy more memory. If it is too small, it may increase the pressure of database query.,
+    alarm-catch-size: 10000
+    # Whether to use the pull method to obtain snapshots. The default is false to avoid large-scale consumption of traffic. When enabled, the pull method will be used to obtain snapshots.
+    alarm-snap-by-stream: true
+    # Whether to use the pull method to obtain snapshots. The default is false to avoid large-scale consumption of traffic. When enabled, the pull method will be used to obtain snapshots.
+    allowed-alarm-type:
+      - IntrusionDetection
+    # The maximum number of entries to be retained in the device registration time list. The default is 100. If set to 0, there is no limit.
+    device-register-time-max-count: 100
+    # Device registration time list expiration time (hours), default 3, set to 0 to never expire
+    device-register-time-ttl-hours: 3
+    # The maximum number of entries in the device heartbeat time list, the default is 100, if set to 0 there is no limit
+    device-keepalive-time-max-count: 100
+    # Device heartbeat time list expiration time (hours), default 1, set to 0 to never expire
+    device-keepalive-time-ttl-hours: 1
+
+# Close the online documentation (recommended for production environments)）
+springdoc:
+    api-docs:
+        enabled: false
+    swagger-ui:
+        enabled: false
+
+logging:
+  level:
+    # Log level debug/info/warn/error
+    root: info
+  logback:
+    rollingpolicy:
+      # Maximum number of days to retain log files, default is 30 days
+      max-history: 30

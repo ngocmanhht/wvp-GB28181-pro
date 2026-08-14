@@ -3,34 +3,34 @@ package com.genersoft.iot.vmp.gb28181.bean;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 /**
- * 直播流关联国标上级平台
+ * The live stream is associated with the national standard superior platform
  * @author lin
  */
-@Schema(description = "直播流关联国标上级平台")
+@Schema(description = "The live stream is associated with the national standard superior platform")
 public class GbStream extends PlatformGbStream{
 
     @Schema(description = "ID")
     private int gbStreamId;
-    @Schema(description = "应用名")
+    @Schema(description = "Application name")
     private String app;
-    @Schema(description = "流ID")
+    @Schema(description = "flowID")
     private String stream;
-    @Schema(description = "国标ID")
+    @Schema(description = "National standardID")
     private String gbId;
-    @Schema(description = "名称")
+    @Schema(description = "Name")
     private String name;
-    @Schema(description = "流媒体ID")
+    @Schema(description = "streaming mediaID")
     private String mediaServerId;
-    @Schema(description = "经度")
+    @Schema(description = "longitude")
     private double longitude;
-    @Schema(description = "纬度")
+    @Schema(description = "Latitude")
     private double latitude;
-    @Schema(description = "流类型（拉流/推流）")
+    @Schema(description = "Stream type (pull stream/Push streaming）")
     private String streamType;
-    @Schema(description = "状态")
+    @Schema(description = "Status")
     private boolean status;
 
-    @Schema(description = "创建时间")
+    @Schema(description = "creation time")
     public String createTime;
 
     @Override

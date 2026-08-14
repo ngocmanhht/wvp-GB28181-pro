@@ -9,7 +9,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * 文件上传控制
+ * File upload control
  *
  */
 @Setter
@@ -17,10 +17,10 @@ import lombok.Setter;
 @MsgId(id = "9207")
 public class J9207 extends Rs {
 
-    // 对应平台文件上传消息的流水号
+    // Serial number corresponding to the platform file upload message
     Integer respNo;
 
-    // 控制： 0：暂停； 1：继续； 2：取消
+    // Control: 0: Pause; 1: Continue; 2: Cancel
     private int control;
 
     @Override

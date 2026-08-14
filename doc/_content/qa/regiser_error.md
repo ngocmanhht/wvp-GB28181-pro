@@ -1,10 +1,10 @@
-<!-- 设备注册不上来的解决办法 -->
+<!-- Solution to device failure to register -->
 
-# 设备注册不上来的解决办法
+# Solution to device failure to register
 
-一般的原因有两个
+There are two general reasons
 
-1. 信息填写错误，比如密码错误；
-2. 网络不通导致注册消息无法发送到WVP；
+1. Incorrect information, such as incorrect password;
+2. The network is blocked and registration messages cannot be sent to WVP;
 
-遇到问题首先仔细校验填写信息，例如海康可能需要勾选鉴权才可以输入密码。网络问题请自行测试。
+If you encounter a problem, first check the filled-in information carefully. For example, Hikvision may need to check the authentication box before entering the password. Please test it yourself if there is a network problem.

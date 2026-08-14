@@ -8,51 +8,51 @@ import lombok.Data;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * 区域
+ * area
  */
 @Data
-@Schema(description = "区域")
+@Schema(description = "area")
 public class Region implements Comparable<Region>{
     /**
-     * 数据库自增ID
+     * Database auto-incrementID
      */
-    @Schema(description = "数据库自增ID")
+    @Schema(description = "Database auto-incrementID")
     private int id;
 
     /**
-     * 区域国标编号
+     * Regional national standard number
      */
-    @Schema(description = "区域国标编号")
+    @Schema(description = "Regional national standard number")
     private String deviceId;
 
     /**
-     * 区域名称
+     * area name
      */
-    @Schema(description = "区域名称")
+    @Schema(description = "area name")
     private String name;
 
     /**
-     * 父区域国标ID
+     * Parent regional national standardID
      */
-    @Schema(description = "父区域ID")
+    @Schema(description = "parent regionID")
     private Integer parentId;
 
     /**
-     * 父区域国标ID
+     * Parent regional national standardID
      */
-    @Schema(description = "父区域国标ID")
+    @Schema(description = "Parent regional national standardID")
     private String parentDeviceId;
 
     /**
-     * 创建时间
+     * creation time
      */
-    @Schema(description = "创建时间")
+    @Schema(description = "creation time")
     private String createTime;
 
     /**
-     * 更新时间
+     * Update time
      */
-    @Schema(description = "更新时间")
+    @Schema(description = "Update time")
     private String updateTime;
 
     public static Region getInstance(String commonRegionDeviceId, String commonRegionName, String commonRegionParentId) {
@@ -104,7 +104,7 @@ public class Region implements Comparable<Region>{
         if (obj instanceof Region) {
             Region region = (Region) obj;
 
-            // 比较每个属性的值一致时才返回true
+            // Return only when the value of each attribute is consistent.true
             if (region.getId() == this.id) {
                 return true;
             }
@@ -113,7 +113,7 @@ public class Region implements Comparable<Region>{
     }
 
     /**
-     * 重写hashcode方法，返回的hashCode一样才再去比较每个属性的值
+     * Rewrite the hashcode method and compare the value of each attribute only when the returned hashCode is the same.
      */
     @Override
     public int hashCode() {

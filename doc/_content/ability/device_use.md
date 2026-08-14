@@ -1,62 +1,62 @@
-<!-- 设备使用 -->
+<!-- Equipment usage -->
 
-# 国标设备
+# National standard equipment
 
-### 更新设备通道
+### Update device channel
 
-点击列表末尾的“刷新”按钮，可以看到一个圆形进度条，等进度结束提示成功后即可更新完成，如果通道数量有变化你可以看点击左上角的![刷新](_media/img_14.png)
-即可看到通道数量的变化；如果通道数量仍未0,那么可能时对方尚未推送通道给你。
+Click the "Refresh" button at the end of the list, and you will see a circular progress bar. The update will be completed after the progress is completed and the prompt is successful. If the number of channels has changed, you can click on the upper left corner! [Refresh](_media/img_14.png) 
+You can see the change in the number of channels; if the number of channels is still not 0, it is possible that the other party has not pushed the channel to you yet.
 
-### 查看设备通道
+### View device channel
 
-点击列表末尾的“通道”按钮，
+Click the "Channel" button at the end of the list,
 
-### 编辑设备
+### Edit device
 
-点击列表末尾的“编辑”按钮，即可在打开的弹窗中对设备功能进行修改
+Click the "Edit" button at the end of the list to modify the device functions in the pop-up window that opens.
 
-- 设备名称  
-  如何未能从设备里读取到设备名称或者需要自己重命名，那么可以修改此选项。
-- 密码
-  支持为设备配置独立的密码.
-- 收流IP
-  如果你需要设备从指定的网络地址接入视频流,那么可以配置此IP,设备将会发流到这个IP,比如多网卡接入的服务器.或者存在网络映射的情况.
-- 流媒体ID
-  固定设备使用的流媒体ID,默认根据负载自动分配.
-- 字符集  
-  修改读取设备数据时使用的字符集，默认为GB2312,但是GB2312收录的汉字不全，所以有时候回遇到乱码，可以修改为UTF-8来解决。
-- 目录订阅  
-  填写订阅周期即可对设备开启目录订阅，设备如果支持目录订阅那么设备在通道信息发生变化时就会通知WVP哪些通道发生了那些变化，包括通道增加/删除/更新/上线/下线/视频丢失/故障。0为取消订阅。
-  一般NVR和平台对接可以开启此选项，直接接摄像机开启此选项意义不大。
-- 移动位置订阅  
-  对设备开启移动位置订阅，设备如果支持目录订阅那么设备位置发生变化时会通知到WVP,一般执法记录仪可以开启此选项，对固定位置的设备意义不大。
-- SSRC校验  
-  为了解决部分设备出现的串流问题，可以打开此选项。ZLM会严格按照给定的ssrc处理视频流。部分设备流信息不标准，开启可能导致无法点播。
-- 作为消息通道
-  wvp支持通过报警消息给下级WVP互相推送消息,消息内容由redis消息发送给wvp,wvp编辑成报警消息发送给下级
-- 收到ACK后发流
-  语音对讲策略: 不同的设备对于语音对讲的收流时机要求不一,勾选后会在收到设备发送的ack后再开始发流,不勾选则在回复200OK后开始发流,目前已知大华设备不勾选,海康需要勾选.
+-Device name
+If the device name cannot be read from the device or you need to rename it yourself, you can modify this option.
+- password
+Supports configuring independent passwords for devices.
+- Receive IP
+If you need the device to access the video stream from a specified network address, you can configure this IP and the device will send the stream to this IP, such as a server with multiple network cards connected. Or there is network mapping.
+- Streaming ID
+The streaming media ID used by the fixed device is automatically assigned based on the load by default.
+- character set
+Modify the character set used when reading device data. The default is GB2312. However, GB2312 does not contain complete Chinese characters, so sometimes you encounter garbled characters. You can change it to UTF-8 to solve the problem.
+- Catalog subscription
+Fill in the subscription period to enable directory subscription for the device. If the device supports directory subscription, the device will notify WVP of which channels have changed when the channel information changes, including channel addition/deletion/update/online/offline/video loss/fault. 0 means unsubscribe.
+Generally, this option can be turned on when the NVR is connected to the platform. It does not make much sense to turn on this option when directly connecting the camera.
+- Mobile location subscription
+Enable mobile location subscription for the device. If the device supports directory subscription, WVP will be notified when the device location changes. Generally, law enforcement recorders can enable this option, but it is of little significance for devices with fixed locations.
+- SSRC check
+To resolve streaming issues on some devices, this option can be turned on. ZLM will process the video stream strictly according to the given ssrc. The streaming information of some devices is not standard, and turning it on may result in the inability to play on-demand.
+- as a message channel
+wvp supports pushing messages to each other through alarm messages to subordinate WVPs. The message content is sent to wvp through redis messages, and wvp edits it into alarm messages and sends them to subordinates.
+- Send stream after receiving ACK
+Voice intercom strategy: Different devices have different requirements for the timing of voice intercom reception. If checked, the stream will start after receiving the ack sent by the device. If not checked, the stream will start after replying with 200OK. Currently, it is known that Dahua equipment does not check, and Hikvision needs to check.
 
-### 删除设备
+### Delete device
 
-可以删除WVP中的设备信息，如果设备28181配置未更改，那么设备在下一次注册后仍然会注册上来。
+The device information in WVP can be deleted. If the device 28181 configuration has not been changed, the device will still be registered after the next registration.
 
-### 点播视频
+### Video on demand
 
-进入通道列表后，点击列表末尾的“播放”按钮，稍等即可弹出播放页面
+After entering the channel list, click the "Play" button at the end of the list, and the play page will pop up after a moment.
 
-### 设备录像
+### Equipment recording
 
-进入通道列表后，点击列表末尾的“设备录像”按钮，也可以在播放页面点击录像查询进入录像查看页面，选择要查看的日期即可对录像进行播放和下载。
+After entering the channel list, click the "Device Recording" button at the end of the list. You can also click Recording Query on the playback page to enter the video viewing page. Select the date you want to view to play and download the video.
 
-### 云台控制
+### PTZ control
 
-可以对支持云台功能的设备进行上下左右的转动以及拉近拉远的操作。
+Devices that support the PTZ function can be rotated up, down, left, right, and zoomed in or out.
 
-### 获取视频的播放器地址
+### Get the player address of the video
 
-视频点播成功后在实时视频页面，点击“更多地址”可以看到所有的播放地址，地址是否可以播放与你是否完整编译启用zlm功能有关，更与网络有关。
+After the video on demand is successfully played, on the real-time video page, click "More Addresses" to see all the playback addresses. Whether the address can be played depends on whether you have fully compiled and enabled the zlm function, and it is also related to the network.
 
-### 语音对讲
+### Voice intercom
 
-[语音对讲](_content/ability/continuous_broadcast.md)
+ [Voice intercom](_content/ability/continuous_broadcast.md) 

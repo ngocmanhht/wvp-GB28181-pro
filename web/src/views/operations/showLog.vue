@@ -1,11 +1,11 @@
 <template>
   <div id="log" style="height: 100%">
     <el-form :inline="true" size="mini">
-      <el-form-item label="过滤">
-        <el-input v-model="filter" size="mini" placeholder="请输入过滤关键字" style="width: 20vw" />
+      <el-form-item label="filter">
+        <el-input v-model="filter" size="mini" placeholder="Please enter filter keywords" style="width: 20vw" />
       </el-form-item>
       <el-form-item style="float: right;">
-        <el-button size="mini" icon="el-icon-download" @click="downloadFile()">下载</el-button>
+        <el-button size="mini" icon="el-icon-download" @click="downloadFile()">Download</el-button>
       </el-form-item>
     </el-form>
     <log-viewer :log="logData" :auto-scroll="true" :height="winHeight" style="height: calc(100% - 60px);" />

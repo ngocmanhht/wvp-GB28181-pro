@@ -61,10 +61,10 @@ public class RecordInfoResponseMessageHandler extends SIPRequestProcessorParent 
     @Override
     public void handForDevice(RequestEvent evt, Device device, Element rootElement) {
         try {
-            // 回复200 OK
+            // Reply200 OK
              responseAck((SIPRequest) evt.getRequest(), Response.OK);
         }catch (SipException | InvalidArgumentException | ParseException e) {
-            log.error("[命令发送失败] 国标级联 国标录像: {}", e.getMessage());
+            log.error("[Command sending failed] National standard cascade National standard video: {}", e.getMessage());
         }
         try {
             String sn = getText(rootElement, "SN");
@@ -82,7 +82,7 @@ public class RecordInfoResponseMessageHandler extends SIPRequestProcessorParent 
             recordInfo.setSumNum(sumNum);
             Element recordListElement = rootElement.element("RecordList");
             if (recordListElement == null || sumNum == 0) {
-                log.info("无录像数据");
+                log.info("No video data");
                 recordInfo.setCount(sumNum);
                 recordInfoEventPush(recordInfo);
                 recordInfoEndEventPush(recordInfo);
@@ -90,12 +90,12 @@ public class RecordInfoResponseMessageHandler extends SIPRequestProcessorParent 
                 Iterator<Element> recordListIterator = recordListElement.elementIterator();
                 if (recordListIterator != null) {
                     List<RecordItem> recordList = new ArrayList<>();
-                    // 遍历DeviceList
+                    // TraverseDeviceList
                     while (recordListIterator.hasNext()) {
                         Element itemRecord = recordListIterator.next();
                         Element recordElement = itemRecord.element("DeviceID");
                         if (recordElement == null) {
-                            log.info("记录为空，下一个...");
+                            log.info("The record is empty, next...");
                             continue;
                         }
                         RecordItem record = new RecordItem();
@@ -120,7 +120,7 @@ public class RecordInfoResponseMessageHandler extends SIPRequestProcessorParent 
                     Map<String, String> map = recordList.stream()
                             .filter(record -> record.getDeviceId() != null)
                             .collect(Collectors.toMap(record -> record.getStartTime()+ record.getEndTime(), UJson::writeJson));
-                    // 获取任务结果数据
+                    // Get task result data
                     String resKey = VideoManagerConstants.REDIS_RECORD_INFO_RES_PRE + channelId + sn;
                     redisTemplate.opsForHash().putAll(resKey, map);
                     redisTemplate.expire(resKey, recordInfoTtl, TimeUnit.SECONDS);
@@ -136,7 +136,7 @@ public class RecordInfoResponseMessageHandler extends SIPRequestProcessorParent 
                     if (incr < sumNum) {
                         return;
                     }
-                    // 已接收完成
+                    // Received completed
                     List<RecordItem> resList = redisTemplate.opsForHash().entries(resKey).values().stream().map(e -> UJson.readJson(e.toString(), RecordItem.class)).collect(Collectors.toList());
                     if (resList.size() < sumNum) {
                         return;
@@ -146,8 +146,8 @@ public class RecordInfoResponseMessageHandler extends SIPRequestProcessorParent 
                 }
             }
         } catch (Exception e) {
-            log.error("[国标录像] 发现未处理的异常, \r\n{}", evt.getRequest());
-            log.error("[国标录像] 异常内容： ", e);
+            log.error("[National standard video] Unhandled exception found, \r\n{}", evt.getRequest());
+            log.error("[National standard video] Unusual content： ", e);
         }
     }
 

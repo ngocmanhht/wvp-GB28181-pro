@@ -54,7 +54,7 @@ public class RedisRpcPlatformController extends RpcController {
     }
 
     /**
-     * 更新
+     * update
      */
     @RedisRpcMapping("update")
     public RedisRpcResponse update(RedisRpcRequest request) {
@@ -68,7 +68,7 @@ public class RedisRpcPlatformController extends RpcController {
 
 
     /**
-     * 删除
+     * Delete
      */
     @RedisRpcMapping("delete")
     public RedisRpcResponse delete(RedisRpcRequest request) {
@@ -85,7 +85,7 @@ public class RedisRpcPlatformController extends RpcController {
         return response;
     }
     /**
-     * 主动推送通道
+     * Active push channel
      */
     @RedisRpcMapping("pushChannel")
     public RedisRpcResponse pushChannel(RedisRpcRequest request) {
@@ -103,7 +103,7 @@ public class RedisRpcPlatformController extends RpcController {
     }
 
     /**
-     * 共享通道
+     * shared channel
      */
     @RedisRpcMapping("addChannelList")
     public RedisRpcResponse addChannelList(RedisRpcRequest request) {
@@ -121,7 +121,7 @@ public class RedisRpcPlatformController extends RpcController {
     }
 
     /**
-     * 移除全部共享通道
+     * Remove all shared channels
      */
     @RedisRpcMapping("removeAllChannel")
     public RedisRpcResponse removeAllChannel(RedisRpcRequest request) {
@@ -139,7 +139,7 @@ public class RedisRpcPlatformController extends RpcController {
     }
 
     /**
-     * 取消共享通道
+     * Cancel shared channel
      */
     @RedisRpcMapping("removeChannelList")
     public RedisRpcResponse removeChannelList(RedisRpcRequest request) {
@@ -157,7 +157,7 @@ public class RedisRpcPlatformController extends RpcController {
     }
 
     /**
-     * 自定义通道
+     * Custom channel
      */
     @RedisRpcMapping("updateCustomChannel")
     public RedisRpcResponse updateCustomChannel(RedisRpcRequest request) {
@@ -175,7 +175,7 @@ public class RedisRpcPlatformController extends RpcController {
     }
 
     /**
-     * 目录更新推送
+     * Directory update push
      */
     @RedisRpcMapping("catalogEventPublish")
     public RedisRpcResponse catalogEventPublish(RedisRpcRequest request) {

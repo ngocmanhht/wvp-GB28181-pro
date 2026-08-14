@@ -4,7 +4,7 @@ import com.genersoft.iot.vmp.media.bean.MediaServer;
 import org.springframework.context.ApplicationEvent;
 
 /**
- * 流到来事件
+ * flow incoming events
  */
 public class MediaEvent extends ApplicationEvent {
 

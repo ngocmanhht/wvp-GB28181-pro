@@ -71,7 +71,7 @@ public class Jt808EncoderCmd extends MessageToByteEncoder<Cmd> {
         return byteBufList;
     }
 
-    // 分包
+    // Subcontract
     private static ByteBuf buildMsgByte(Header header, String id, Session session, Integer packageNo, ByteBuf encode, Integer packetIndex, Integer packetTotal) {
         ByteBuf byteBuf = Unpooled.buffer();
 
@@ -86,22 +86,22 @@ public class Jt808EncoderCmd extends MessageToByteEncoder<Cmd> {
             if (packetIndex > 0) {
                 msgBody = msgBody | 1 << 13;
             }
-            // 消息体属性
+            // Message body properties
             byteBuf.writeShort(msgBody);
 
-            // 版本号
+            // version number
             byteBuf.writeByte(header.getVersion());
 
-            // 终端手机号
+            // Terminal mobile phone number
             byteBuf.writeBytes(ByteBufUtil.decodeHexDump(Bin.strHexPaddingLeft(header.getPhoneNumber(), 20)));
         } else {
-            // 消息体属性
+            // Message body properties
             byteBuf.writeShort(encode.readableBytes());
 
             byteBuf.writeBytes(ByteBufUtil.decodeHexDump(Bin.strHexPaddingLeft(header.getPhoneNumber(), 12)));
         }
 
-        // 消息体流水号
+        // Message body serial number
         byteBuf.writeShort(packageNo);
 
         if (packetIndex > 0) {
@@ -109,10 +109,10 @@ public class Jt808EncoderCmd extends MessageToByteEncoder<Cmd> {
             byteBuf.writeShort(packetIndex);
         }
 
-        // 写入消息体
+        // Write message body
         byteBuf.writeBytes(encode);
 
-        // 计算校验码，并反转义
+        // Calculate the check code and escape it
         byteBuf = escapeAndCheck0(byteBuf);
         return byteBuf;
     }
@@ -120,7 +120,7 @@ public class Jt808EncoderCmd extends MessageToByteEncoder<Cmd> {
 
     private static final ByteProcessor searcher = value -> !(value == 0x7d || value == 0x7e);
 
-    //转义与校验
+    //Escape and check
     public static ByteBuf escapeAndCheck0(ByteBuf source) {
 
         sign(source);

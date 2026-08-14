@@ -17,7 +17,7 @@ public class RpcController {
     @PostConstruct
     public void init() {
         String controllerPath = this.getClass().getAnnotation(RedisRpcController.class).value();
-        // 扫描其下的方法
+        // Scan the method below
         Method[] methods = this.getClass().getDeclaredMethods();
         for (Method method : methods) {
             RedisRpcMapping annotation = method.getAnnotation(RedisRpcMapping.class);

@@ -13,40 +13,40 @@ import java.util.Date;
 
 @Setter
 @Getter
-@Schema(description = "圆形区域")
+@Schema(description = "circular area")
 public class JTCircleArea implements JTAreaOrRoute{
 
-    @Schema(description = "区域 ID")
+    @Schema(description = "area ID")
     private long id;
 
     @Schema(description = "")
     private JTAreaAttribute attribute;
 
-    @Schema(description = "中心点纬度")
+    @Schema(description = "Center point latitude")
     private Double latitude;
 
-    @Schema(description = "中心点经度")
+    @Schema(description = "Center point longitude")
     private Double longitude;
 
-    @Schema(description = "半径,单位为米(m)")
+    @Schema(description = "Radius in meters(m)")
     private long radius;
 
-    @Schema(description = "起始时间, yyyy-MM-dd HH:mm:ss")
+    @Schema(description = "start time, yyyy-MM-dd HH:mm:ss")
     private String startTime;
 
-    @Schema(description = "结束时间, yyyy-MM-dd HH:mm:ss")
+    @Schema(description = "end time, yyyy-MM-dd HH:mm:ss")
     private String endTime;
 
-    @Schema(description = "最高速度, 单位为千米每小时(km/h)")
+    @Schema(description = "Maximum speed in kilometers per hour(km/h)")
     private int maxSpeed;
 
-    @Schema(description = "超速持续时间, 单位为秒(s)")
+    @Schema(description = "Overspeed duration, in seconds(s)")
     private int overSpeedDuration;
 
-    @Schema(description = "夜间最高速度, 单位为千米每小时(km/h)")
+    @Schema(description = "Maximum speed at night in kilometers per hour(km/h)")
     private int nighttimeMaxSpeed;
 
-    @Schema(description = "区域的名称")
+    @Schema(description = "The name of the area")
     private String name;
 
     public ByteBuf encode(){

@@ -26,7 +26,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 /**
- * sign token 过滤器
+ * sign token filter
  */
 
 @Slf4j
@@ -37,9 +37,9 @@ public class SignAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest servletRequest, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
-        // 忽略登录请求的token验证
+        // Ignore token verification for login requests
         String requestURI = servletRequest.getRequestURI();
-        // 包装原始请求，缓存请求体
+        // Wrap the original request and cache the request body
         CachedBodyHttpServletRequest request = new CachedBodyHttpServletRequest(servletRequest);
         if (!requestURI.startsWith("/api/sy")) {
             chain.doFilter(request, response);
@@ -49,7 +49,7 @@ public class SignAuthenticationFilter extends OncePerRequestFilter {
 //            chain.doFilter(request, response);
 //            return;
 //        }
-        // 设置响应内容类型
+        // Set response content type
         response.setContentType("application/json;charset=UTF-8");
 
         try {
@@ -59,159 +59,159 @@ public class SignAuthenticationFilter extends OncePerRequestFilter {
             String timestampStr = request.getParameter("timestamp");
 
             if (sign == null || appKey == null || accessToken == null || timestampStr == null) {
-                log.info("[SY-接口验签] 缺少关键参数：sign/appKey/accessToken/timestamp, 请求地址: {} ", requestURI);
+                log.info("[SY-Interface signature verification] Missing key parameters：sign/appKey/accessToken/timestamp, Request address: {} ", requestURI);
                 response.setStatus(Response.OK);
                 PrintWriter out = response.getWriter();
-                out.println(getErrorResult(1, "参数非法"));
+                out.println(getErrorResult(1, "Illegal parameter"));
                 out.close();
                 return;
             }
             
-            // 添加空值检查
+            // Add null check
             if (SyTokenManager.INSTANCE.appMap == null || SyTokenManager.INSTANCE.appMap.get(appKey) == null) {
-                log.info("[SY-接口验签] appKey {} 对应的 secret 不存在, 请求地址: {} ", appKey, requestURI);
+                log.info("[SY-Interface signature verification] appKey {} The corresponding secret does not exist, request address: {} ", appKey, requestURI);
                 response.setStatus(Response.OK);
                 PrintWriter out = response.getWriter();
-                out.println(getErrorResult(1, "参数非法"));
+                out.println(getErrorResult(1, "Illegal parameter"));
                 out.close();
                 return;
             }
 
             Map<String, String[]> parameterMap = request.getParameterMap();
-            // 参数排序
+            // Parameter sorting
             Set<String> paramKeys = new TreeSet<>(parameterMap.keySet());
 
-            // 拼接签名信息
-            // 参数拼接
+            // Splicing signature information
+            // Parameter splicing
             StringBuilder beforeSign = new StringBuilder();
             for (String paramKey : paramKeys) {
                 if (paramKey.equals("sign")) {
                     continue;
                 }
-                // 添加数组长度检查
+                // Add array length check
                 String[] values = parameterMap.get(paramKey);
                 if (values != null && values.length > 0) {
                     beforeSign.append(paramKey).append(values[0]);
                 }
             }
-            // 如果是post请求的json消息，拼接body字符串
+            // If it is a json message in a post request, concatenate the body string
             if (request.getContentLength() > 0
                     && request.getMethod().equalsIgnoreCase("POST")
                     && request.getContentType() != null 
                     && request.getContentType().equalsIgnoreCase(MediaType.APPLICATION_JSON_VALUE)) {
-                // 读取body内容 - 使用自定义缓存机制
+                // Read body content - Use custom caching mechanism
                 String requestBody = request.getCachedBody();
                 if (!ObjectUtils.isEmpty(requestBody)) {
                     beforeSign.append(requestBody);
-                    log.debug("[SY-接口验签] 读取到请求体内容，长度: {}", requestBody.length());
+                    log.debug("[SY-Interface signature verification] Read the request body content, length: {}", requestBody.length());
                 } else {
-                    log.warn("[SY-接口验签] 请求体内容为空");
+                    log.warn("[SY-Interface signature verification] The request body content is empty");
                 }
             }
             
-            // 添加空值检查
+            // Add null check
             String secret = SyTokenManager.INSTANCE.appMap.get(appKey);
             if (secret == null) {
-                log.info("[SY-接口验签] 无法获取appKey {} 对应的 secret, 请求地址: {} ", appKey, requestURI);
+                log.info("[SY-Interface signature verification] Unable to obtainappKey {} Corresponding secret, request address: {} ", appKey, requestURI);
                 response.setStatus(Response.OK);
                 PrintWriter out = response.getWriter();
-                out.println(getErrorResult(1, "参数非法"));
+                out.println(getErrorResult(1, "Illegal parameter"));
                 out.close();
                 return;
             }
             
             beforeSign.append(secret);
-            // 生成签名
+            // Generate signature
             String buildSign = SmUtil.sm3(beforeSign.toString());
             if (!buildSign.equals(sign)) {
-                log.info("[SY-接口验签] 失败，加密前内容： {}, 请求地址: {} ", beforeSign, requestURI);
+                log.info("[SY-Interface signature verification] Failed, content before encryption： {}, Request address: {} ", beforeSign, requestURI);
                 response.setStatus(Response.OK);
                 PrintWriter out = response.getWriter();
-                out.println(getErrorResult(2, "签名错误"));
+                out.println(getErrorResult(2, "Signature error"));
                 out.close();
                 return;
             }
-            // 验证请求时间戳
+            // Verify request timestamp
             long timestamp = Long.parseLong(timestampStr);
             long currentTimeMillis = System.currentTimeMillis();
-            // 添加空值检查
+            // Add null check
             if (SyTokenManager.INSTANCE.expires == null) {
-                log.info("[SY-接口验签] expires配置为空, 请求地址: {} ", requestURI);
+                log.info("[SY-Interface signature verification] expiresConfiguration is empty, request address: {} ", requestURI);
                 response.setStatus(Response.OK);
                 PrintWriter out = response.getWriter();
-                out.println(getErrorResult(2, "签名错误"));
+                out.println(getErrorResult(2, "Signature error"));
                 out.close();
                 return;
             }
             if (currentTimeMillis > SyTokenManager.INSTANCE.expires * 60 * 1000 + timestamp ) {
-                log.info("[SY-接口验签] 时间戳已经过期, 请求时间戳：{}， 当前时间： {}, 过期时间： {}, 请求地址: {} ", timestamp, currentTimeMillis, timestamp + SyTokenManager.INSTANCE.expires * 60 * 1000, requestURI);
+                log.info("[SY-Interface signature verification] Timestamp has expired, request timestamp：{}， current time： {}, Expiration time： {}, Request address: {} ", timestamp, currentTimeMillis, timestamp + SyTokenManager.INSTANCE.expires * 60 * 1000, requestURI);
                 response.setStatus(Response.OK);
                 PrintWriter out = response.getWriter();
-                out.println(getErrorResult(3, "接口己过期"));
+                out.println(getErrorResult(3, "The interface has expired"));
                 out.close();
                 return;
             }
-            // accessToken校验
-            // 添加空值检查
+            // accessTokenVerification
+            // Add null check
             if (SyTokenManager.INSTANCE.adminToken == null) {
-                log.info("[SY-接口验签] adminToken配置为空, 请求地址: {} ", requestURI);
+                log.info("[SY-Interface signature verification] adminTokenConfiguration is empty, request address: {} ", requestURI);
                 response.setStatus(Response.OK);
                 PrintWriter out = response.getWriter();
-                out.println(getErrorResult(2, "签名错误"));
+                out.println(getErrorResult(2, "Signature error"));
                 out.close();
                 return;
             }
             if (accessToken.equals(SyTokenManager.INSTANCE.adminToken)) {
-                log.info("[SY-接口验签] adminToken已经默认放行, 请求地址: {} ", requestURI);
+                log.info("[SY-Interface signature verification] adminTokenAlready released by default, request address: {} ", requestURI);
                 chain.doFilter(request, response);
                 return;
             }else {
-                // 添加空值检查
+                // Add null check
                 if (SyTokenManager.INSTANCE.sm4Key == null) {
-                    log.info("[SY-接口验签] sm4Key配置为空, 请求地址: {} ", requestURI);
+                    log.info("[SY-Interface signature verification] sm4KeyConfiguration is empty, request address: {} ", requestURI);
                     response.setStatus(Response.OK);
                     PrintWriter out = response.getWriter();
-                    out.println(getErrorResult(2, "签名错误"));
+                    out.println(getErrorResult(2, "Signature error"));
                     out.close();
                     return;
                 }
-                // 对token进行解密
+                // Decrypt the token
                 SM4 sm4 = SmUtil.sm4(HexUtil.decodeHex(SyTokenManager.INSTANCE.sm4Key));
                 String decryptStr = sm4.decryptStr(accessToken, CharsetUtil.CHARSET_UTF_8);
                 if (decryptStr == null) {
-                    log.info("[SY-接口验签] accessToken解密失败, 请求地址: {} ", requestURI);
+                    log.info("[SY-Interface signature verification] accessTokenDecryption failed, request address: {} ", requestURI);
                     response.setStatus(Response.OK);
                     PrintWriter out = response.getWriter();
-                    out.println(getErrorResult(2, "签名错误"));
+                    out.println(getErrorResult(2, "Signature error"));
                     out.close();
                     return;
                 }
                 JSONObject jsonObject = JSON.parseObject(decryptStr);
                 Long expirationTime = jsonObject.getLong("expirationTime");
                 if (expirationTime == null || expirationTime < System.currentTimeMillis()) {
-                    log.info("[SY-接口验签] accessToken 已经过期, 请求地址: {} ", requestURI);
+                    log.info("[SY-Interface signature verification] accessToken Expired, request address: {} ", requestURI);
                     response.setStatus(Response.OK);
                     PrintWriter out = response.getWriter();
-                    out.println(getErrorResult(4, "token已过期或错误"));
+                    out.println(getErrorResult(4, "tokenExpired or wrong"));
                     out.close();
                     return;
                 }
             }
         }catch (NumberFormatException e) {
-            log.info("[SY-接口验签] 时间戳格式错误, 请求地址: {} ", requestURI);
+            log.info("[SY-Interface signature verification] Timestamp format error, request address: {} ", requestURI);
             response.setStatus(Response.OK);
             if (!response.isCommitted()) {
                 PrintWriter out = response.getWriter();
-                out.println(getErrorResult(2, "签名错误"));
+                out.println(getErrorResult(2, "Signature error"));
                 out.close();
             }
             return;
         }catch (Exception e) {
-            log.info("[SY-接口验签] 读取body失败, 请求地址: {} ", requestURI, e);
+            log.info("[SY-Interface signature verification] Failed to read body, request address: {} ", requestURI, e);
             response.setStatus(Response.OK);
             if (!response.isCommitted()) {
                 PrintWriter out = response.getWriter();
-                out.println(getErrorResult(2, "签名错误"));
+                out.println(getErrorResult(2, "Signature error"));
                 out.close();
             }
             return;

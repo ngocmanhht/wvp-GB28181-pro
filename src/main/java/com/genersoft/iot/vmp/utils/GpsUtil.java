@@ -21,7 +21,7 @@ public class GpsUtil {
     }
 
     /**
-     * BASE64解码
+     * BASE64Decode
      * @param str
      * @return string
      */

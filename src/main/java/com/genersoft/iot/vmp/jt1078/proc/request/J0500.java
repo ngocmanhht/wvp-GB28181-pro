@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationEvent;
 
 /**
- * 车辆控制应答
+ * vehicle control response
  *
  */
 @Slf4j
@@ -31,7 +31,7 @@ public class J0500 extends Re {
         phoneNumber = header.getPhoneNumber();
         int respNo = buf.readUnsignedShort();
         positionInfo = JTPositionBaseInfo.decode(buf);
-        log.info("[车辆控制应答] {}", header.getPhoneNumber());
+        log.info("[vehicle control response] {}", header.getPhoneNumber());
         SessionManager.INSTANCE.response(header.getPhoneNumber(), "0500", (long) respNo, positionInfo);
         return null;
     }

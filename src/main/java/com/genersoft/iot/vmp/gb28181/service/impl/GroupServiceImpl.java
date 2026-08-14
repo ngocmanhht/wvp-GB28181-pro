@@ -24,7 +24,7 @@ import org.springframework.util.ObjectUtils;
 import java.util.*;
 
 /**
- * 区域管理类
+ * Regional management
  */
 @Service
 @Slf4j
@@ -47,38 +47,38 @@ public class GroupServiceImpl implements IGroupService {
 
     @Override
     public void add(Group group) {
-        Assert.notNull(group, "参数不可为NULL");
-        Assert.notNull(group.getDeviceId(), "分组编号不可为NULL");
-        Assert.isTrue(group.getDeviceId().trim().length() == 20, "分组编号必须为20位");
-        Assert.notNull(group.getName(), "分组名称不可为NULL");
+        Assert.notNull(group, "Parameter cannot beNULL");
+        Assert.notNull(group.getDeviceId(), "The group number cannot beNULL");
+        Assert.isTrue(group.getDeviceId().trim().length() == 20, "The group number must be 20 digits");
+        Assert.notNull(group.getName(), "The group name cannot beNULL");
 
         GbCode gbCode = GbCode.decode(group.getDeviceId());
-        Assert.notNull(gbCode, "分组编号不满足国标定义");
+        Assert.notNull(gbCode, "The group number does not meet the national standard definition");
 
-        // 查询数据库中已经存在的.
+        // Query what already exists in the database.
         List<Group> groupListInDb = groupManager.queryInGroupListByDeviceId(Lists.newArrayList(group));
         if (!ObjectUtils.isEmpty(groupListInDb)){
-            throw new ControllerException(ErrorCode.ERROR100.getCode(), String.format("该节点编号 %s 已存在", group.getDeviceId()));
+            throw new ControllerException(ErrorCode.ERROR100.getCode(), String.format("The node number %s already exists", group.getDeviceId()));
         }
 
         if ("215".equals(gbCode.getTypeCode())){
-            // 添加业务分组
+            // Add business group
             addBusinessGroup(group);
         }else {
-            Assert.isTrue("216".equals(gbCode.getTypeCode()), "创建虚拟组织时设备编号11-13位应使用216");
-            // 添加虚拟组织
+            Assert.isTrue("216".equals(gbCode.getTypeCode()), "Device number when creating a virtual organization11-13bits should be used216");
+            // Add virtual organization
             addGroup(group);
         }
     }
 
     private void addGroup(Group group) {
-        // 建立虚拟组织
-        Assert.notNull(group.getBusinessGroup(), "所属的业务分组分组不存在");
+        // Create a virtual organization
+        Assert.notNull(group.getBusinessGroup(), "The business group it belongs to does not exist");
         Group businessGroup = groupManager.queryBusinessGroup(group.getBusinessGroup());
-        Assert.notNull(businessGroup, "所属的业务分组分组不存在");
+        Assert.notNull(businessGroup, "The business group it belongs to does not exist");
         if (!ObjectUtils.isEmpty(group.getParentDeviceId())) {
             Group parentGroup = groupManager.queryOneByDeviceId(group.getParentDeviceId(), group.getBusinessGroup());
-            Assert.notNull(parentGroup, "所属的上级分组分组不存在");
+            Assert.notNull(parentGroup, "The parent group it belongs to does not exist");
         }else {
             group.setParentDeviceId(null);
         }
@@ -109,22 +109,22 @@ public class GroupServiceImpl implements IGroupService {
     @Override
     @Transactional
     public void update(Group group) {
-        Assert.isTrue(group.getId()> 0, "更新必须携带分组ID");
-        Assert.notNull(group.getDeviceId(), "编号不可为NULL");
-        Assert.notNull(group.getBusinessGroup(), "业务分组不可为NULL");
+        Assert.isTrue(group.getId()> 0, "Updates must carry groupsID");
+        Assert.notNull(group.getDeviceId(), "The number cannot beNULL");
+        Assert.notNull(group.getBusinessGroup(), "Business grouping cannot beNULL");
         Group groupInDb = groupManager.queryOne(group.getId());
-        Assert.notNull(groupInDb, "分组不存在");
+        Assert.notNull(groupInDb, "Group does not exist");
 
-        // 查询数据库中已经存在的.
+        // Query what already exists in the database.
         List<Group> groupListInDb = groupManager.queryInGroupListByDeviceId(Lists.newArrayList(group));
         if (!ObjectUtils.isEmpty(groupListInDb) && groupListInDb.get(0).getId() != group.getId()){
-            throw new ControllerException(ErrorCode.ERROR100.getCode(), String.format("该该节点编号 %s 已存在", group.getDeviceId()));
+            throw new ControllerException(ErrorCode.ERROR100.getCode(), String.format("The node number %s already exists", group.getDeviceId()));
         }
 
         group.setName(group.getName());
         group.setUpdateTime(DateUtil.getNow());
         groupManager.update(group);
-        // 修改他的子节点
+        // Modify its child nodes
         if (!group.getDeviceId().equals(groupInDb.getDeviceId())
                 || !group.getBusinessGroup().equals(groupInDb.getBusinessGroup())) {
             List<Group> groupList = queryAllChildren(groupInDb.getId());
@@ -134,35 +134,35 @@ public class GroupServiceImpl implements IGroupService {
                    for (Group chjildGroup : groupList) {
                        chjildGroup.setParentDeviceId(group.getDeviceId());
                        chjildGroup.setBusinessGroup(group.getBusinessGroup());
-                       // 将变化信息发送通知
+                       // Send notification of change information
                        CommonGBChannel channel = CommonGBChannel.build(chjildGroup);
                        try {
-                           // 发送catalog
+                           // sendcatalog
                            eventPublisher.channelEventPublishForUpdate(channel, null);
                        }catch (Exception e) {
-                           log.warn("[业务分组/虚拟组织变化] 发送失败，{}", group.getDeviceId(), e);
+                           log.warn("[business grouping/virtual organization changes] Sending failed，{}", group.getDeviceId(), e);
                        }
                    }
                }
             }
         }
-        // 将变化信息发送通知
+        // Send notification of change information
         CommonGBChannel channel = CommonGBChannel.build(group);
         try {
-            // 发送catalog
+            // sendcatalog
             eventPublisher.channelEventPublishForUpdate(channel, null);
         }catch (Exception e) {
-            log.warn("[业务分组/虚拟组织变化] 发送失败，{}", group.getDeviceId(), e);
+            log.warn("[business grouping/virtual organization changes] Sending failed，{}", group.getDeviceId(), e);
         }
 
-        // 由于编号变化，会需要处理太多内容以及可能发送大量消息，所以目前更新只只支持重命名
+        // Due to the number change, too much content needs to be processed and a large number of messages may be sent, so the current update only supports renaming.
         GbCode decode = GbCode.decode(group.getDeviceId());
         if (!groupInDb.getDeviceId().equals(group.getDeviceId())) {
             if (decode.getTypeCode().equals("215")) {
-                // 业务分组变化。需要将其下的所有业务分组修改
+                // Business grouping changes. All business groups under it need to be modified
                 gbChannelService.updateBusinessGroup(groupInDb.getDeviceId(), group.getDeviceId());
             }else {
-                // 虚拟组织修改，需要把其下的子节点修改父节点ID
+                // To modify the virtual organization, you need to modify the child nodes under it to the parent node.ID
                 gbChannelService.updateParentIdGroup(groupInDb.getDeviceId(), group.getDeviceId());
             }
         }
@@ -180,7 +180,7 @@ public class GroupServiceImpl implements IGroupService {
         if (parentId == null) {
             return groupTrees;
         }
-        // 查询含有的通道
+        // Query the channels contained
         Group parentGroup = groupManager.queryOne(parentId);
         if (parentGroup != null && hasChannel != null && hasChannel) {
             List<GroupTree> groupTreesForChannel = commonGBChannelMapper.queryForGroupTreeByParentId(query, parentGroup.getDeviceId());
@@ -195,7 +195,7 @@ public class GroupServiceImpl implements IGroupService {
     @Transactional
     public boolean delete(int id) {
         Group group = groupManager.queryOne(id);
-        Assert.notNull(group, "分组不存在");
+        Assert.notNull(group, "Group does not exist");
         List<Group> groupListForDelete = new ArrayList<>();
         GbCode gbCode = GbCode.decode(group.getDeviceId());
         if (gbCode.getTypeCode().equals("215")) {
@@ -203,7 +203,7 @@ public class GroupServiceImpl implements IGroupService {
             if (!groupList.isEmpty()) {
                 groupListForDelete.addAll(groupList);
             }
-            // 业务分组
+            // business grouping
             gbChannelService.removeParentIdByBusinessGroup(group.getDeviceId());
         }else {
             List<Group> groupList = queryAllChildren(group.getId());
@@ -216,18 +216,18 @@ public class GroupServiceImpl implements IGroupService {
         groupManager.batchDelete(groupListForDelete);
 
         for (Group groupForDelete : groupListForDelete) {
-            // 删除平台关联的分组信息。同时发送通知
+            // Delete the group information associated with the platform. Send notifications simultaneously
             List<Platform> platformList = groupManager.queryForPlatformByGroupId(groupForDelete.getId());
             if ( !platformList.isEmpty()) {
                 groupManager.deletePlatformGroup(groupForDelete.getId());
-                // 将变化信息发送通知
+                // Send notification of change information
                 CommonGBChannel channel = CommonGBChannel.build(groupForDelete);
                 for (Platform platform : platformList) {
                     try {
-                        // 发送catalog
+                        // sendcatalog
                         eventPublisher.catalogEventPublish(platform, channel, CatalogEvent.DEL);
                     }catch (Exception e) {
-                        log.warn("[业务分组/虚拟组织删除] 发送失败，{}", groupForDelete.getDeviceId(), e);
+                        log.warn("[business grouping/Virtual organization deletion] Sending failed，{}", groupForDelete.getDeviceId(), e);
                     }
                 }
             }
@@ -245,7 +245,7 @@ public class GroupServiceImpl implements IGroupService {
         for (Group group : groupList) {
             groupMapForVerification.put(group.getDeviceId(), group);
         }
-        // 查询数据库中已经存在的.
+        // Query what already exists in the database.
         List<Group> groupListInDb = groupManager.queryInGroupListByDeviceId(groupList);
         if (!groupListInDb.isEmpty()) {
             for (Group group : groupListInDb) {
@@ -255,7 +255,7 @@ public class GroupServiceImpl implements IGroupService {
         if (!groupMapForVerification.isEmpty()) {
             List<Group> groupListForAdd = new ArrayList<>(groupMapForVerification.values());
             groupManager.batchAdd(groupListForAdd);
-            // 更新分组关系
+            // Update grouping relationship
             groupManager.updateParentId(groupListForAdd);
             groupManager.updateParentIdWithBusinessGroup(groupListForAdd);
         }
@@ -267,11 +267,11 @@ public class GroupServiceImpl implements IGroupService {
     public List<Group> getPath(String deviceId, String businessGroup) {
         Group businessGroupInDb = groupManager.queryBusinessGroup(businessGroup);
         if (businessGroupInDb == null) {
-            throw new ControllerException(ErrorCode.ERROR100.getCode(), "业务分组不存在");
+            throw new ControllerException(ErrorCode.ERROR100.getCode(), "Business group does not exist");
         }
         Group group = groupManager.queryOneByDeviceId(deviceId, businessGroup);
         if (group == null) {
-            throw new ControllerException(ErrorCode.ERROR100.getCode(), "虚拟组织不存在");
+            throw new ControllerException(ErrorCode.ERROR100.getCode(), "Virtual organization does not exist");
         }
         List<Group> allParent = getAllParent(group);
         List<Group> groupList = new LinkedList<>(allParent);
@@ -318,11 +318,11 @@ public class GroupServiceImpl implements IGroupService {
     @Override
     @Transactional
     public void saveByAlias(Collection<Group> groups) {
-        // 清空别名数据
+        // Clear alias data
         groupManager.deleteHasAlias();
-        // 写入新数据
+        // Write new data
         groupManager.batchAdd(new ArrayList<>(groups));
-        // 修复数据丢失的parentID
+        // Repair lost dataparentID
         groupManager.fixParentId();
     }
 }

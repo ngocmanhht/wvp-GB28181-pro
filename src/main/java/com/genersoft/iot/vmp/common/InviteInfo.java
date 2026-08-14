@@ -4,7 +4,7 @@ import com.genersoft.iot.vmp.service.bean.SSRCInfo;
 import lombok.Data;
 
 /**
- * 记录每次发送invite消息的状态
+ * Record the status of each invite message sent
  */
 @Data
 public class InviteInfo {

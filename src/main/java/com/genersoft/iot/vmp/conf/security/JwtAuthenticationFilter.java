@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 /**
- * jwt token 过滤器
+ * jwt token filter
  */
 
 @Slf4j
@@ -38,7 +38,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest servletRequest, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
         ContentCachingRequestWrapper request = new ContentCachingRequestWrapper(servletRequest);
-        // 忽略登录请求的token验证
+        // Ignore token verification for login requests
         String requestURI = request.getRequestURI();
         if ((requestURI.startsWith("/doc.html") || requestURI.startsWith("/swagger-ui")  ) && !userSetting.getDocEnable()) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
@@ -58,10 +58,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         String jwt = request.getHeader(JwtUtils.getHeader());
-        // 这里如果没有jwt，继续往后走，因为后面还有鉴权管理器等去判断是否拥有身份凭证，所以是可以放行的
-        // 没有jwt相当于匿名访问，若有一些接口是需要权限的，则不能访问这些接口
+        // If there is no jwt here, continue to go back, because there is an authentication manager and so on to determine whether you have the identity certificate, so it can be released.
+        // No jwt is equivalent to anonymous access. If there are some interfaces that require permissions, these interfaces cannot be accessed.
 
-        // websocket 鉴权信息默认存储在这里
+        // websocket Authentication information is stored here by default
         String secWebsocketProtocolHeader = request.getHeader(WSHeader);
         if (StringUtils.isBlank(jwt)) {
 
@@ -82,24 +82,24 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         JwtUser jwtUser = JwtUtils.verifyToken(jwt);
         String username = jwtUser.getUserName();
-        // TODO 处理各个状态
+        // TODO Handle various states
         switch (jwtUser.getStatus()){
             case EXPIRED:
                 response.setStatus(401);
                 chain.doFilter(request, response);
-                // 异常
+                // Abnormal
                 return;
             case EXCEPTION:
-                // 过期
+                // Expired
                 response.setStatus(400);
                 chain.doFilter(request, response);
                 return;
             case EXPIRING_SOON:
-                // 即将过期
+                // Expires soon
 //                return;
             default:
         }
-        // 构建UsernamePasswordAuthenticationToken,这里密码为null，是因为提供了正确的JWT,实现自动登录
+        // buildUsernamePasswordAuthenticationToken,The password here is null because the correct JWT is provided to achieve automatic login.
         User user = new User();
         user.setId(jwtUser.getUserId());
         user.setUsername(jwtUser.getUserName());

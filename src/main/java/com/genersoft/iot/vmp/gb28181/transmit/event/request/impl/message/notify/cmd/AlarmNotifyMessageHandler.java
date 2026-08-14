@@ -30,7 +30,7 @@ import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
- * 报警事件的处理，参考：9.4
+ * Handling of alarm events, refer to：9.4
  */
 @Slf4j
 @Component
@@ -66,14 +66,14 @@ public class AlarmNotifyMessageHandler extends SIPRequestProcessorParent impleme
     @Override
     public void handForDevice(RequestEvent evt, Device device, Element rootElement) {
         if (taskQueue.size() >= userSetting.getMaxNotifyCountQueue()) {
-            log.error("[Alarm] 待处理消息队列已满 {}，返回486 BUSY_HERE，消息不做处理", userSetting.getMaxNotifyCountQueue());
+            log.error("[Alarm] The pending message queue is full {}，Returns 486 BUSY_HERE, the message is not processed", userSetting.getMaxNotifyCountQueue());
             return;
         }
-        // 回复200 OK
+        // Reply200 OK
         try {
             responseAckAsync((SIPRequest) evt.getRequest(), Response.OK);
         } catch (SipException | InvalidArgumentException | ParseException e) {
-            log.error("[命令发送失败] 报警通知回复: {}", e.getMessage());
+            log.error("[Command sending failed] Alarm notification reply: {}", e.getMessage());
         }
         taskQueue.offer(new SipMsgInfo(evt, device, rootElement));
     }
@@ -105,14 +105,14 @@ public class AlarmNotifyMessageHandler extends SIPRequestProcessorParent impleme
                 DeviceAlarmNotify deviceAlarmNotify = DeviceAlarmNotify.fromXml(sipMsgInfo.getRootElement());
                 Device device = sipMsgInfo.getDevice();
                 if (log.isDebugEnabled()) {
-                    log.debug("[收到报警通知]设备：{}， 内容：{}", device.getDeviceId(), JSON.toJSONString(deviceAlarmNotify));
+                    log.debug("[Receive alarm notification]Equipment：{}， content：{}", device.getDeviceId(), JSON.toJSONString(deviceAlarmNotify));
                 }
                 deviceAlarmNotify.setDeviceId(device.getDeviceId());
                 deviceAlarmNotify.setDeviceName(device.getName());
                 if (deviceAlarmNotify.getAlarmMethod() != null && deviceAlarmNotify.getAlarmMethod() == DeviceAlarmMethod.GPS.getVal()) {
                     DeviceChannel deviceChannel = deviceChannelService.getOne(device.getDeviceId(), deviceAlarmNotify.getChannelId());
                     if (deviceChannel == null) {
-                        log.warn("[解析报警消息] 未找到通道：{}/{}", device.getDeviceId(), deviceAlarmNotify.getChannelId());
+                        log.warn("[Parse alarm messages] Channel not found：{}/{}", device.getDeviceId(), deviceAlarmNotify.getChannelId());
                     } else {
                         DeviceMobilePosition mobilePosition = new DeviceMobilePosition();
                         mobilePosition.setCreateTime(DateUtil.getNow());
@@ -122,16 +122,16 @@ public class AlarmNotifyMessageHandler extends SIPRequestProcessorParent impleme
                         mobilePosition.setLongitude(deviceAlarmNotify.getLongitude());
                         mobilePosition.setLatitude(deviceAlarmNotify.getLatitude());
                         mobilePosition.setDevice(device);
-                        // 发送移动位置事件，后续会保存到数据库，并且发送给上级平台
+                        // Send mobile location events, which will be saved to the database and sent to the superior platform.
                         publisher.mobilePositionsEventPublish(List.of(mobilePosition));
                     }
                 }
 
-                // 作者自用判断，其他小伙伴需要此消息可以自行修改，但是不要提在pr里
+                // The author uses his own judgment. If other friends need this information, they can modify it themselves, but do not mention it in the PR.
                 if (deviceAlarmNotify.getAlarmMethod() != null
                         && DeviceAlarmMethod.Other.getVal() == deviceAlarmNotify.getAlarmMethod()) {
-                    // 发送给平台的报警信息。 发送redis通知
-                    log.info("[发送给平台的报警信息]内容：{}", JSONObject.toJSONString(deviceAlarmNotify));
+                    // Alarm information sent to the platform. Send redis notification
+                    log.info("[Alarm information sent to the platform]content：{}", JSONObject.toJSONString(deviceAlarmNotify));
                     AlarmChannelMessage alarmChannelMessage = new AlarmChannelMessage();
                     alarmChannelMessage.setAlarmSn(deviceAlarmNotify.getAlarmMethod());
                     alarmChannelMessage.setAlarmDescription(deviceAlarmNotify.getAlarmDescription());
@@ -145,8 +145,8 @@ public class AlarmNotifyMessageHandler extends SIPRequestProcessorParent impleme
                     deviceAlarmList.add(deviceAlarmNotify);
                 }
             } catch (Exception e) {
-                log.error("未处理的异常 ", e);
-                log.warn("[收到报警通知] 发现未处理的异常, {}\r\n{}", e.getMessage(), evt.getRequest());
+                log.error("unhandled exception ", e);
+                log.warn("[Receive alarm notification] Unhandled exception found, {}\r\n{}", e.getMessage(), evt.getRequest());
             }
         }
         if (deviceAlarmList.isEmpty()) {
@@ -157,12 +157,12 @@ public class AlarmNotifyMessageHandler extends SIPRequestProcessorParent impleme
 
     @Override
     public void handForPlatform(RequestEvent evt, Platform parentPlatform, Element rootElement) {
-        log.info("收到来自平台[{}]的报警通知", parentPlatform.getServerGBId());
-        // 回复200 OK
+        log.info("received from the platform[{}]alarm notification", parentPlatform.getServerGBId());
+        // Reply200 OK
         try {
             responseAck((SIPRequest) evt.getRequest(), Response.OK);
         } catch (SipException | InvalidArgumentException | ParseException e) {
-            log.error("[命令发送失败] 国标级联 报警通知回复: {}", e.getMessage());
+            log.error("[Command sending failed] National standard cascade alarm notification reply: {}", e.getMessage());
         }
         Element deviceIdElement = rootElement.element("DeviceID");
         String channelId = deviceIdElement.getText();
@@ -172,7 +172,7 @@ public class AlarmNotifyMessageHandler extends SIPRequestProcessorParent impleme
         deviceAlarmNotify.setChannelId(channelId);
 
         if (channelId.equals(parentPlatform.getDeviceGBId())) {
-            // 发送给平台的报警信息。 发送redis通知
+            // Alarm information sent to the platform. Send redis notification
             AlarmChannelMessage alarmChannelMessage = new AlarmChannelMessage();
             alarmChannelMessage.setAlarmSn(deviceAlarmNotify.getAlarmMethod());
             alarmChannelMessage.setAlarmDescription(deviceAlarmNotify.getAlarmDescription());

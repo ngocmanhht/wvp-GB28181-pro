@@ -2,7 +2,7 @@
   <div id="configInfo">
     <el-dialog
       v-el-drag-dialog
-      title="设置电话本"
+      title="Set up phone book"
       width="=80%"
       top="2rem"
       :close-on-click-modal="false"
@@ -13,37 +13,37 @@
       <el-form :inline="true" size="mini" @submit.native.prevent>
         <el-form-item>
           <el-button-group>
-            <el-button v-if="!showUpload" icon="el-icon-upload2" size="mini" type="primary" @click="uploadData" :disabled="phoneBookList.length === 0">导入数据</el-button>
-            <el-button v-if="showUpload" icon="el-icon-close" size="mini" type="danger" @click="uploadData">结束导入</el-button>
+            <el-button v-if="!showUpload" icon="el-icon-upload2" size="mini" type="primary" @click="uploadData" :disabled="phoneBookList.length === 0">Import data</el-button>
+            <el-button v-if="showUpload" icon="el-icon-close" size="mini" type="danger" @click="uploadData">end import</el-button>
             <el-button icon="el-icon-download">
               <a style="text-align: center; text-decoration: none"
-                 href="/static/file/设置电话本模板.xlsx"
-                 download="设置电话本模板.xlsx"
-               >下载模板</a>
+                 href="/static/file/Set up phonebook template.xlsx"
+                 download="Set up phonebook template.xlsx"
+               >Download template</a>
             </el-button>
           </el-button-group>
 
         </el-form-item>
         <el-form-item style="float: right;">
           <el-button-group>
-            <el-button icon="el-icon-delete" size="mini" @click="clearPhoneBook">清空电话本</el-button>
-            <el-button icon="el-icon-refresh" size="mini" @click="uploadPhoneBook">更新电话本</el-button>
-            <el-button icon="el-icon-document-add" size="mini" @click="appendPhoneBook">追加电话本</el-button>
-            <el-button icon="el-icon-edit-outline" size="mini" @click="editPhoneBook">修改电话本</el-button>
+            <el-button icon="el-icon-delete" size="mini" @click="clearPhoneBook">Clear phone book</el-button>
+            <el-button icon="el-icon-refresh" size="mini" @click="uploadPhoneBook">Update phone book</el-button>
+            <el-button icon="el-icon-document-add" size="mini" @click="appendPhoneBook">Add phone book</el-button>
+            <el-button icon="el-icon-edit-outline" size="mini" @click="editPhoneBook">Modify phone book</el-button>
           </el-button-group>
 
         </el-form-item>
       </el-form>
 
-      <el-table :data="phoneBookList" v-if="!showUpload && phoneBookList.length > 0" :height="500" stripe style="width: 100%" empty-text="暂无数据，点击选择或者拖入文件" @click.stop="()=>{}">
-        <el-table-column label="标志">
+      <el-table :data="phoneBookList" v-if="!showUpload && phoneBookList.length > 0" :height="500" stripe style="width: 100%" empty-text="There is no data yet, click to select or drag in the file" @click.stop="()=>{}">
+        <el-table-column label="logo">
           <template v-slot:default="scope">
             <span >{{ signLabel(scope.row.sign) }}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="contactName" label="联系人" />
-        <el-table-column prop="phoneNumber" label="电话号码" />
-        <el-table-column label="操作" fixed="right">
+        <el-table-column prop="contactName" label="Contact person" />
+        <el-table-column prop="phoneNumber" label="phone number" />
+        <el-table-column label="Operation" fixed="right">
           <template v-slot:default="scope">
             <el-button
               size="medium"
@@ -53,7 +53,7 @@
               :loading="scope.row.addRegionLoading"
               @click="removeRow(scope.$index)"
             >
-              移除
+              Remove
             </el-button>
           </template>
         </el-table-column>
@@ -68,8 +68,8 @@
         :show-file-list="false"
         :on-change="loadFiled">
         <i class="el-icon-upload"></i>
-        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-        <div class="el-upload__tip" slot="tip">只能上传xls/xlsx文件</div>
+        <div class="el-upload__text">Drag files here, or<em>Click to upload</em></div>
+        <div class="el-upload__tip" slot="tip">Can only uploadxls/xlsxFile</div>
       </el-upload>
     </el-dialog>
   </div>
@@ -108,13 +108,13 @@ export default {
     signLabel: function(sign) {
       switch (sign){
         case 1:
-          return '呼入'
+          return 'Incoming call'
         case 2:
-          return '呼出'
+          return 'exhale'
         case 3:
-          return '呼入/呼出'
+          return 'Incoming call/exhale'
         default:
-          return '错误： 设置范围（1:呼入,2:呼出,3:呼入/呼出）'
+          return 'Error: Setting range (1: incoming call, 2: outgoing call, 3: incoming call/exhale）'
       }
     },
     uploadData: function() {
@@ -122,7 +122,7 @@ export default {
     },
     loadFiled: function(file) {
       if (!file.name.endsWith('.xls') && !file.name.endsWith('.xlsx')) {
-        this.$message.error('文件格式错误')
+        this.$message.error('File format error')
         return
       }
       const fileReader = new FileReader()
@@ -135,9 +135,9 @@ export default {
         for (let i = 0; i < jsonData.length; i++) {
           let item = jsonData[i]
           this.phoneBookList.push({
-            sign: item['标志'],
-            phoneNumber: item['电话号码'],
-            contactName: item['联系人']
+            sign: item['logo'],
+            phoneNumber: item['phone number'],
+            contactName: item['Contact person']
           })
         }
         this.showUpload = false
@@ -148,10 +148,10 @@ export default {
       this.phoneBookList.splice(index, 1)
     },
     clearPhoneBook: function() {
-      this.$confirm('将清空终端中已有全部联系人， 确认？', '提示', {
+      this.$confirm('All existing contacts in the terminal will be cleared, confirm？', 'Tips', {
         dangerouslyUseHTMLString: true,
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+        confirmButtonText: 'OK',
+        cancelButtonText: 'Cancel',
         type: 'warning'
       }).then(() => {
         this.submit({
@@ -162,10 +162,10 @@ export default {
 
     },
     uploadPhoneBook: function() {
-      this.$confirm('将删除终端中已有全部联系人并追加当前的联系人， 确认？', '提示', {
+      this.$confirm('All contacts in the terminal will be deleted and the current contacts will be added. Confirm？', 'Tips', {
         dangerouslyUseHTMLString: true,
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+        confirmButtonText: 'OK',
+        cancelButtonText: 'Cancel',
         type: 'warning'
       }).then(() => {
         this.submit({
@@ -177,10 +177,10 @@ export default {
 
     },
     appendPhoneBook: function() {
-      this.$confirm('将追加当前的联系人到终端中， 确认？', '提示', {
+      this.$confirm('The current contact will be appended to the terminal, confirm？', 'Tips', {
         dangerouslyUseHTMLString: true,
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+        confirmButtonText: 'OK',
+        cancelButtonText: 'Cancel',
         type: 'warning'
       }).then(() => {
         this.submit({
@@ -203,7 +203,7 @@ export default {
         .then(data => {
           this.$message.success({
             showClose: true,
-            message: '消息已下发'
+            message: 'The message has been sent'
           })
         })
     }

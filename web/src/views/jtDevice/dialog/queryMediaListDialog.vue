@@ -2,7 +2,7 @@
   <div id="configInfo">
     <el-dialog
       v-el-drag-dialog
-      title="存储多媒体数据检索"
+      title="Stored multimedia data retrieval"
       width="60%"
       top="2rem"
       :close-on-click-modal="false"

@@ -24,9 +24,9 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 /**
  * @Auther: JiangFeng
  * @Date: 2022/8/16 11:32
- * @Description: 接收redis发送的推流设备列表更新通知
- * 监听：  SUBSCRIBE VM_MSG_PUSH_STREAM_LIST_CHANGE
- * 发布 PUBLISH VM_MSG_PUSH_STREAM_LIST_CHANGE '[{"app":1000,"stream":10000000,"gbId":"12345678901234567890","name":"A6","status":false},{"app":1000,"stream":10000021,"gbId":"24212345671381000021","name":"终端9273","status":false},{"app":1000,"stream":10000022,"gbId":"24212345671381000022","name":"终端9434","status":true},{"app":1000,"stream":10000025,"gbId":"24212345671381000025","name":"华为M10","status":false},{"app":1000,"stream":10000051,"gbId":"11111111111381111122","name":"终端9720","status":false}]'
+ * @Description: Receive push device list update notifications sent by redis
+ * monitor：  SUBSCRIBE VM_MSG_PUSH_STREAM_LIST_CHANGE
+ * publish PUBLISH VM_MSG_PUSH_STREAM_LIST_CHANGE '[{"app":1000,"stream":10000000,"gbId":"12345678901234567890","name":"A6","status":false},{"app":1000,"stream":10000021,"gbId":"24212345671381000021","name":"terminal9273","status":false},{"app":1000,"stream":10000022,"gbId":"24212345671381000022","name":"terminal9434","status":true},{"app":1000,"stream":10000025,"gbId":"24212345671381000025","name":"HuaweiM10","status":false},{"app":1000,"stream":10000051,"gbId":"11111111111381111122","name":"terminal9720","status":false}]'
  */
 @Slf4j
 @Component
@@ -48,7 +48,7 @@ public class RedisPushStreamListMsgListener implements MessageListener {
 
     @Override
     public void onMessage(Message message, byte[] bytes) {
-        log.info("[REDIS: 推流设备列表更新]： {}", new String(message.getBody()));
+        log.info("[REDIS: Push device list update]： {}", new String(message.getBody()));
         taskQueue.offer(message);
     }
 
@@ -71,22 +71,22 @@ public class RedisPushStreamListMsgListener implements MessageListener {
         for (Message msg : messageDataList) {
             try {
                 List<RedisPushStreamMessage> streamPushItems = JSON.parseArray(new String(msg.getBody()), RedisPushStreamMessage.class);
-                //查询全部的app+stream 用于判断是添加还是修改
+                //Query allapp+stream Used to determine whether to add or modify
                 Map<String, StreamPush> allAppAndStream = streamPushService.getAllAppAndStreamMap();
                 Map<String, StreamPush> allGBId = streamPushService.getAllGBId();
 
-                // 用于存储更具APP+Stream过滤后的数据，可以直接存入stream_push表与gb_stream表
+                // Used to store moreAPP+StreamThe filtered data can be directly stored in the stream_push table and gb_stream table
                 List<StreamPush> streamPushItemForSave = new ArrayList<>();
                 List<StreamPush> streamPushItemForUpdate = new ArrayList<>();
                 for (RedisPushStreamMessage pushStreamMessage : streamPushItems) {
                     String app = pushStreamMessage.getApp();
                     String stream = pushStreamMessage.getStream();
                     boolean contains = allAppAndStream.containsKey(app + stream);
-                    //不存在就添加
+                    //If it does not exist, add it.
                     if (!contains) {
                         if (allGBId.containsKey(pushStreamMessage.getGbId())) {
                             StreamPush streamPushInDb = allGBId.get(pushStreamMessage.getGbId());
-                            log.warn("[REDIS消息-推流设备列表更新-INSERT] 国标编号重复: {}, 已分配给{}/{}",
+                            log.warn("[REDISnews-Push device list update-INSERT] Duplicate national standard number: {}, assigned to{}/{}",
                                     streamPushInDb.getGbDeviceId(), streamPushInDb.getApp(), streamPushInDb.getStream());
                             continue;
                         }
@@ -102,7 +102,7 @@ public class RedisPushStreamListMsgListener implements MessageListener {
                                 && (!streamPushForGbDeviceId.getApp().equals(pushStreamMessage.getApp())
                                 || !streamPushForGbDeviceId.getStream().equals(pushStreamMessage.getStream()))) {
                             StreamPush streamPushInDb = allGBId.get(pushStreamMessage.getGbId());
-                            log.warn("[REDIS消息-推流设备列表更新-UPDATE] 国标编号重复: {}, 已分配给{}/{}",
+                            log.warn("[REDISnews-Push device list update-UPDATE] Duplicate national standard number: {}, assigned to{}/{}",
                                     pushStreamMessage.getGbId(), streamPushInDb.getApp(), streamPushInDb.getStream());
                             continue;
                         }
@@ -113,24 +113,24 @@ public class RedisPushStreamListMsgListener implements MessageListener {
                         if (pushStreamMessage.getStatus() != null) {
                             streamPush.setGbStatus(pushStreamMessage.getStatus() ? "ON" : "OFF");
                         }
-                        //存在就只修改 name和gbId
+                        //If it exists, only modify the name andgbId
                         streamPushItemForUpdate.add(streamPush);
                     }
                 }
                 if (!streamPushItemForSave.isEmpty()) {
-                    log.info("添加{}条", streamPushItemForSave.size());
+                    log.info("add{}Article", streamPushItemForSave.size());
                     log.info(JSONObject.toJSONString(streamPushItemForSave));
                     streamPushService.batchAdd(streamPushItemForSave);
 
                 }
                 if (!streamPushItemForUpdate.isEmpty()) {
-                    log.info("修改{}条", streamPushItemForUpdate.size());
+                    log.info("Modify{}Article", streamPushItemForUpdate.size());
                     log.info(JSONObject.toJSONString(streamPushItemForUpdate));
                     streamPushService.batchUpdateForRedisMsg(streamPushItemForUpdate);
                 }
             } catch (Exception e) {
-                log.warn("[REDIS消息-推流设备列表更新] 发现未处理的异常, \r\n{}", new String(msg.getBody()));
-                log.error("[REDIS消息-推流设备列表更新] 异常内容： ", e);
+                log.warn("[REDISnews-Push device list update] Unhandled exception found, \r\n{}", new String(msg.getBody()));
+                log.error("[REDISnews-Push device list update] Unusual content： ", e);
             }
         }
 

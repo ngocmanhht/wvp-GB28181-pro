@@ -1,28 +1,28 @@
 <template>
   <div id="dhPtzConfigPage">
-    <el-page-header content="云台设置" @back="$emit('close')" />
+    <el-page-header content="PTZ settings" @back="$emit('close')" />
     <div class="ptz-config-body">
       <div class="config-sidebar">
         <el-menu :default-active="activeTab" @select="handleMenuSelect">
           <el-menu-item index="preset">
             <i class="iconfont icon-yuzhidian" style="margin-right: 8px" />
-            <span>预置点</span>
+            <span>preset point</span>
           </el-menu-item>
           <el-menu-item index="cruise">
             <i class="iconfont icon-xunhuan" style="margin-right: 8px" />
-            <span>巡航组</span>
+            <span>Cruise group</span>
           </el-menu-item>
           <el-menu-item index="scan">
             <i class="iconfont icon-slider-right" style="margin-right: 8px" />
-            <span>线性扫描</span>
+            <span>linear scan</span>
           </el-menu-item>
           <el-menu-item index="guard">
             <i class="iconfont icon-kanshouwei" style="margin-right: 8px" />
-            <span>看守位</span>
+            <span>guard position</span>
           </el-menu-item>
           <el-menu-item index="switch">
             <i class="iconfont icon-yushua" style="margin-right: 8px" />
-            <span>辅助开关</span>
+            <span>Auxiliary switch</span>
           </el-menu-item>
         </el-menu>
       </div>

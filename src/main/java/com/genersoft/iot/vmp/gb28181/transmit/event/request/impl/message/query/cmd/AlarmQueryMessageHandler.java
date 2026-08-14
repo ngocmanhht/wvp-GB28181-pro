@@ -37,18 +37,18 @@ public class AlarmQueryMessageHandler extends SIPRequestProcessorParent implemen
         try {
             responseAck((SIPRequest) evt.getRequest(), Response.OK);
         } catch (SipException | InvalidArgumentException | ParseException e) {
-            log.error("[命令发送失败] 回复200 OK: {}", e.getMessage());
+            log.error("[Command sending failed] Reply200 OK: {}", e.getMessage());
         }
     }
 
     @Override
     public void handForPlatform(RequestEvent evt, Platform parentPlatform, Element rootElement) {
 
-        log.info("不支持alarm查询");
+        log.info("Alarm query is not supported");
         try {
              responseAck((SIPRequest) evt.getRequest(), Response.NOT_FOUND, "not support alarm query");
         } catch (SipException | InvalidArgumentException | ParseException e) {
-            log.error("[命令发送失败] 国标级联 alarm查询回复200OK: {}", e.getMessage());
+            log.error("[Command sending failed] National standard cascade alarm query reply200OK: {}", e.getMessage());
         }
 
     }

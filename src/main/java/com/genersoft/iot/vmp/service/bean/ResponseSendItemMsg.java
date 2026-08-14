@@ -4,7 +4,7 @@ import com.genersoft.iot.vmp.gb28181.bean.SendRtpInfo;
 import com.genersoft.iot.vmp.media.bean.MediaServer;
 
 /**
- * redis消息：下级回复推送信息
+ * redisMessage: Subordinates reply to push messages
  * @author lin
  */
 public class ResponseSendItemMsg {

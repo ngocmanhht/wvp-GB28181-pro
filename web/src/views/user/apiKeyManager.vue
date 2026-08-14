@@ -1,7 +1,7 @@
 <template>
   <div id="app" style="width: 100%">
     <el-dialog
-      title="ApiKey列表"
+      title="ApiKeylist"
       width="80%"
       top="2rem"
       :close-on-click-modal="false"
@@ -12,11 +12,11 @@
       <el-form :inline="true" size="mini">
         <el-form-item>
           <el-button icon="el-icon-plus" size="mini" style="margin-right: 1rem;" type="primary" @click="addUserApiKey">
-            添加ApiKey
+            addApiKey
           </el-button>
         </el-form-item>
       </el-form>
-      <!--ApiKey列表-->
+      <!--ApiKeylist-->
       <el-table
         size="small"
         :data="userList"
@@ -24,32 +24,32 @@
         :height="winHeight"
         header-row-class-name="table-header"
       >
-        <el-table-column prop="user.username" label="用户名" min-width="120" />
-        <el-table-column prop="app" label="应用名" min-width="160" />
+        <el-table-column prop="user.username" label="Username" min-width="120" />
+        <el-table-column prop="app" label="Application name" min-width="160" />
         <el-table-column label="ApiKey" :show-overflow-tooltip="true" min-width="300">
           <template #default="scope">
-            <i v-clipboard="scope.row.apiKey" class="cpoy-btn el-icon-document-copy" title="点击拷贝" @success="$message({type:'success', message:'成功拷贝到粘贴板'})" />
+            <i v-clipboard="scope.row.apiKey" class="cpoy-btn el-icon-document-copy" title="Click to copy" @success="$message({type:'success', message:'Successfully copied to clipboard'})" />
             <span>{{ scope.row.apiKey }}</span>
 
           </template>
         </el-table-column>
-        <el-table-column prop="enable" label="启用" width="120">
+        <el-table-column prop="enable" label="enable" width="120">
           <template #default="scope">
             <el-tag v-if="scope.row.enable">
-              启用
+              enable
             </el-tag>
             <el-tag v-else type="info">
-              停用
+              deactivate
             </el-tag>
           </template>
         </el-table-column>
-        <el-table-column label="过期时间" width="160">
+        <el-table-column label="Expiration time" width="160">
           <template #default="scope">
             {{ formatTime(scope.row.expiredAt) }}
           </template>
         </el-table-column>
-        <el-table-column prop="remark" label="备注信息" min-width="160" />
-        <el-table-column label="操作" min-width="260" fixed="right">
+        <el-table-column prop="remark" label="Remarks" min-width="160" />
+        <el-table-column label="Operation" min-width="260" fixed="right">
           <template #default="scope">
             <el-button
               v-if="scope.row.enable"
@@ -58,7 +58,7 @@
               type="text"
               @click="disableUserApiKey(scope.row)"
             >
-              停用
+              deactivate
             </el-button>
             <el-button
               v-else
@@ -67,15 +67,15 @@
               type="text"
               @click="enableUserApiKey(scope.row)"
             >
-              启用
+              enable
             </el-button>
             <el-divider direction="vertical" />
             <el-button size="medium" icon="el-icon-refresh" type="text" @click="resetUserApiKey(scope.row)">
-              重置
+              reset
             </el-button>
             <el-divider direction="vertical" />
             <el-button size="medium" icon="el-icon-edit" type="text" @click="remarkUserApiKey(scope.row)">
-              备注
+              Remarks
             </el-button>
             <el-divider direction="vertical" />
             <el-button
@@ -85,7 +85,7 @@
               style="color: #f56c6c"
               @click="deleteUserApiKey(scope.row)"
             >
-              删除
+              Delete
             </el-button>
           </template>
         </el-table-column>
@@ -119,8 +119,8 @@ export default {
   },
   data() {
     return {
-      userList: [], // 设备列表
-      currentUser: {}, // 当前操作设备对象
+      userList: [], // Device list
+      currentUser: {}, // Current operating device object
       winHeight: window.innerHeight - 300,
       currentPage: 1,
       count: 15,
@@ -167,7 +167,7 @@ export default {
         this.$refs.addUserApiKey.close()
         this.$message({
           showClose: true,
-          message: 'ApiKey添加成功',
+          message: 'ApiKeyAdded successfully',
           type: 'success'
         })
         setTimeout(this.getUserApiKeyList, 200)
@@ -178,21 +178,21 @@ export default {
         this.$refs.remarkUserApiKey.close()
         this.$message({
           showClose: true,
-          message: '备注修改成功',
+          message: 'Remarks modified successfully',
           type: 'success'
         })
         setTimeout(this.getUserApiKeyList, 200)
       })
     },
     enableUserApiKey(row) {
-      let msg = '确定启用此ApiKey？'
+      let msg = 'Confirm to enable thisApiKey？'
       if (row.online !== 0) {
-        msg = '<strong>确定启用此ApiKey？</strong>'
+        msg = '<strong>Confirm to enable thisApiKey？</strong>'
       }
-      this.$confirm(msg, '提示', {
+      this.$confirm(msg, 'Tips', {
         dangerouslyUseHTMLString: true,
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+        confirmButtonText: 'OK',
+        cancelButtonText: 'Cancel',
         center: true,
         type: 'warning'
       }).then(() => {
@@ -200,7 +200,7 @@ export default {
           .then(() => {
             this.$message({
               showClose: true,
-              message: '启用成功',
+              message: 'Activated successfully',
               type: 'success'
             })
             this.getUserApiKeyList()
@@ -216,14 +216,14 @@ export default {
       })
     },
     disableUserApiKey(row) {
-      let msg = '确定停用此ApiKey？'
+      let msg = 'Confirm to disable thisApiKey？'
       if (row.online !== 0) {
-        msg = '<strong>确定停用此ApiKey？</strong>'
+        msg = '<strong>Confirm to disable thisApiKey？</strong>'
       }
-      this.$confirm(msg, '提示', {
+      this.$confirm(msg, 'Tips', {
         dangerouslyUseHTMLString: true,
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+        confirmButtonText: 'OK',
+        cancelButtonText: 'Cancel',
         center: true,
         type: 'warning'
       }).then(() => {
@@ -231,7 +231,7 @@ export default {
           .then(() => {
             this.$message({
               showClose: true,
-              message: '停用成功',
+              message: 'Deactivation successful',
               type: 'success'
             })
             this.getUserApiKeyList()
@@ -239,7 +239,7 @@ export default {
           .catch((error) => {
             this.$message({
               showClose: true,
-              message: '停用失败',
+              message: 'Deactivation failed',
               type: 'error'
             })
             console.error(error)
@@ -248,14 +248,14 @@ export default {
       })
     },
     resetUserApiKey(row) {
-      let msg = '确定重置此ApiKey？'
+      let msg = 'OK to reset thisApiKey？'
       if (row.online !== 0) {
-        msg = '<strong>确定重置此ApiKey？</strong>'
+        msg = '<strong>OK to reset thisApiKey？</strong>'
       }
-      this.$confirm(msg, '提示', {
+      this.$confirm(msg, 'Tips', {
         dangerouslyUseHTMLString: true,
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+        confirmButtonText: 'OK',
+        cancelButtonText: 'Cancel',
         center: true,
         type: 'warning'
       }).then(() => {
@@ -263,7 +263,7 @@ export default {
           .then(() => {
             this.$message({
               showClose: true,
-              message: '重置成功',
+              message: 'Reset successful',
               type: 'success'
             })
             this.getUserApiKeyList()
@@ -271,7 +271,7 @@ export default {
           .catch((error) => {
             this.$message({
               showClose: true,
-              message: '重置失败',
+              message: 'Reset failed',
               type: 'error'
             })
             console.error(error)
@@ -280,14 +280,14 @@ export default {
       })
     },
     deleteUserApiKey(row) {
-      let msg = '确定删除此ApiKey？'
+      let msg = 'Confirm to delete thisApiKey？'
       if (row.online !== 0) {
-        msg = '<strong>确定删除此ApiKey？</strong>'
+        msg = '<strong>Confirm to delete thisApiKey？</strong>'
       }
-      this.$confirm(msg, '提示', {
+      this.$confirm(msg, 'Tips', {
         dangerouslyUseHTMLString: true,
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+        confirmButtonText: 'OK',
+        cancelButtonText: 'Cancel',
         center: true,
         type: 'warning'
       }).then(() => {
@@ -295,7 +295,7 @@ export default {
           .then(() => {
             this.$message({
               showClose: true,
-              message: '删除成功',
+              message: 'Delete successfully',
               type: 'success'
             })
             this.getUserApiKeyList()
@@ -303,7 +303,7 @@ export default {
           .catch((error) => {
             this.$message({
               showClose: true,
-              message: '删除失败',
+              message: 'Delete failed',
               type: 'error'
             })
             console.error(error)

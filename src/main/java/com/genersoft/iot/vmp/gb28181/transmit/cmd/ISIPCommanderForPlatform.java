@@ -16,7 +16,7 @@ import java.util.List;
 public interface ISIPCommanderForPlatform {
 
     /**
-     * 向上级平台注册
+     * Register with the superior platform
      *
      * @param parentPlatform
      * @return
@@ -29,7 +29,7 @@ public interface ISIPCommanderForPlatform {
     void register(Platform parentPlatform, SipTransactionInfo sipTransactionInfo, WWWAuthenticateHeader www, SipSubscribe.Event errorEvent , SipSubscribe.Event okEvent, boolean isRegister) throws SipException, InvalidArgumentException, ParseException;
 
     /**
-     * 向上级平台注销
+     * Log out from the superior platform
      *
      * @param parentPlatform
      * @return
@@ -38,20 +38,20 @@ public interface ISIPCommanderForPlatform {
 
 
     /**
-     * 向上级平发送心跳信息
+     * Send heartbeat information to superior level
      *
      * @param parentPlatform
-     * @return callId(作为接受回复的判定)
+     * @return callId(As a decision to accept the reply)
      */
     String keepalive(Platform parentPlatform, SipSubscribe.Event errorEvent, SipSubscribe.Event okEvent)
             throws SipException, InvalidArgumentException, ParseException;
 
 
     /**
-     * 向上级回复通道信息
+     * Reply channel information to superior
      *
-     * @param channel        通道信息
-     * @param parentPlatform 平台信息
+     * @param channel        Channel information
+     * @param parentPlatform Platform information
      * @param sn
      * @param fromTag
      * @param size
@@ -64,19 +64,19 @@ public interface ISIPCommanderForPlatform {
             throws InvalidArgumentException, ParseException, SipException;
 
     /**
-     * 向上级回复DeviceInfo查询信息
+     * Reply to the superior for DeviceInfo query information
      *
-     * @param parentPlatform 平台信息
+     * @param parentPlatform Platform information
      * @param sn SN
-     * @param fromTag FROM头的tag信息
+     * @param fromTag FROMHeader tag information
      * @return
      */
     void deviceInfoResponse(Platform parentPlatform, Device device, String sn, String fromTag) throws SipException, InvalidArgumentException, ParseException;
 
     /**
-     * 向上级回复DeviceStatus查询信息
+     * Reply to the superior for DeviceStatus query information
      *
-     * @param parentPlatform 平台信息
+     * @param parentPlatform Platform information
      * @param sn
      * @param fromTag
      * @return
@@ -84,27 +84,27 @@ public interface ISIPCommanderForPlatform {
     void deviceStatusResponse(Platform parentPlatform, String channelId, String sn, String fromTag, Boolean status) throws SipException, InvalidArgumentException, ParseException;
 
     /**
-     * 向上级回复移动位置订阅消息
+     * Reply mobile location subscription message to superior
      *
-     * @param parentPlatform 平台信息
-     * @param gpsMsgInfo     GPS信息
-     * @param subscribeInfo  订阅相关的信息
+     * @param parentPlatform Platform information
+     * @param gpsMsgInfo     GPSinformation
+     * @param subscribeInfo  Subscribe to related information
      * @return
      */
     void sendNotifyMobilePosition(Platform parentPlatform, GPSMsgInfo gpsMsgInfo, CommonGBChannel channel, SubscribeInfo subscribeInfo)
             throws InvalidArgumentException, ParseException, NoSuchFieldException, SipException, IllegalAccessException;
 
     /**
-     * 向上级回复报警消息
+     * Reply alarm message to superior
      *
-     * @param parentPlatform 平台信息
-     * @param deviceAlarm    报警信息信息
+     * @param parentPlatform Platform information
+     * @param deviceAlarm    Alarm information
      * @return
      */
     void sendAlarmMessage(Platform parentPlatform, DeviceAlarmNotify deviceAlarm) throws SipException, InvalidArgumentException, ParseException;
 
     /**
-     * 回复catalog事件-增加/更新
+     * Reply to catalog event-increase/update
      *
      * @param parentPlatform
      * @param deviceChannels
@@ -112,7 +112,7 @@ public interface ISIPCommanderForPlatform {
     void sendNotifyForCatalogAddOrUpdate(String type, Platform parentPlatform, List<CommonGBChannel> deviceChannels, SubscribeInfo subscribeInfo, Integer index) throws InvalidArgumentException, ParseException, NoSuchFieldException, SipException, IllegalAccessException;
 
     /**
-     * 回复catalog事件-删除
+     * Reply to catalog event-Delete
      *
      * @param parentPlatform
      * @param deviceChannels
@@ -122,18 +122,18 @@ public interface ISIPCommanderForPlatform {
             ParseException, NoSuchFieldException, SipException, IllegalAccessException;
 
     /**
-     * 回复recordInfo
+     * ReplyrecordInfo
      *
-     * @param deviceChannel  通道信息
-     * @param parentPlatform 平台信息
+     * @param deviceChannel  Channel information
+     * @param parentPlatform Platform information
      * @param fromTag        fromTag
-     * @param recordInfo     录像信息
+     * @param recordInfo     Video information
      */
     void recordInfo(CommonGBChannel deviceChannel, Platform parentPlatform, String fromTag, RecordInfo recordInfo)
             throws SipException, InvalidArgumentException, ParseException;
 
     /**
-     * 录像播放推送完成时发送MediaStatus消息
+     * Send MediaStatus message when video playback and push is completed
      *
      * @param platform
      * @param sendRtpItem

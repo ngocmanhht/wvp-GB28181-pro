@@ -25,7 +25,7 @@ import java.nio.file.Files;
 import java.util.List;
 
 @SuppressWarnings("rawtypes")
-@Tag(name = "日志文件查询接口")
+@Tag(name = "Log file query interface")
 @Slf4j
 @RestController
 @RequestMapping("/api/log")
@@ -37,10 +37,10 @@ public class LogController {
 
     @ResponseBody
     @GetMapping("/list")
-    @Operation(summary = "分页查询日志文件", security = @SecurityRequirement(name = JwtUtils.HEADER))
-    @Parameter(name = "query", description = "检索内容", required = false)
-    @Parameter(name = "startTime", description = "开始时间(yyyy-MM-dd HH:mm:ss)", required = false)
-    @Parameter(name = "endTime", description = "结束时间(yyyy-MM-dd HH:mm:ss)", required = false)
+    @Operation(summary = "Query log files by page", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Parameter(name = "query", description = "Search content", required = false)
+    @Parameter(name = "startTime", description = "start time(yyyy-MM-dd HH:mm:ss)", required = false)
+    @Parameter(name = "endTime", description = "end time(yyyy-MM-dd HH:mm:ss)", required = false)
     public List<LogFileInfo> queryList(@RequestParam(required = false) String query, @RequestParam(required = false) String startTime, @RequestParam(required = false) String endTime
 
     ) {
@@ -57,7 +57,7 @@ public class LogController {
     }
 
     /**
-     * 下载指定日志文件
+     * Download the specified log file
      */
     @ResponseBody
     @GetMapping("/file/{fileName}")

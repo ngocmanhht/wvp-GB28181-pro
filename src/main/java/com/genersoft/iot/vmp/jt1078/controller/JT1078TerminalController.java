@@ -19,18 +19,18 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @ConditionalOnProperty(value = "jt1078.enable", havingValue = "true")
 @RestController
-@Tag(name  = "部标终端以及通道管理")
+@Tag(name  = "Department standard terminal and channel management")
 @RequestMapping("/api/jt1078/terminal")
 public class JT1078TerminalController {
 
     @Resource
     Ijt1078Service service;
 
-    @Operation(summary = "JT-分页查询部标设备", security = @SecurityRequirement(name = JwtUtils.HEADER))
-    @Parameter(name = "page", description = "当前页", required = true)
-    @Parameter(name = "count", description = "每页查询数量", required = true)
-    @Parameter(name = "query", description = "查询内容")
-    @Parameter(name = "online", description = "是否在线")
+    @Operation(summary = "JT-Query department standard equipment by page", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Parameter(name = "page", description = "Current page", required = true)
+    @Parameter(name = "count", description = "Number of queries per page", required = true)
+    @Parameter(name = "query", description = "Query content")
+    @Parameter(name = "online", description = "Is online")
     @GetMapping("/list")
     public PageInfo<JTDevice> getDevices(int page, int count,
                                          @RequestParam(required = false) String query,
@@ -38,8 +38,8 @@ public class JT1078TerminalController {
         return service.getDeviceList(page, count, query, online);
     }
 
-    @Operation(summary = "更新设备", security = @SecurityRequirement(name = JwtUtils.HEADER))
-    @Parameter(name = "device", description = "设备", required = true)
+    @Operation(summary = "Update device", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Parameter(name = "device", description = "Equipment", required = true)
     @PostMapping("/update")
     public void updateDevice(JTDevice device){
         assert device.getId() > 0;
@@ -47,8 +47,8 @@ public class JT1078TerminalController {
         service.updateDevice(device);
     }
 
-    @Operation(summary = "JT-新增设备", security = @SecurityRequirement(name = JwtUtils.HEADER))
-    @Parameter(name = "device", description = "设备", required = true)
+    @Operation(summary = "JT-Add new device", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Parameter(name = "device", description = "Equipment", required = true)
     @PostMapping("/add")
     public void addDevice(JTDevice device){
         assert device.getPhoneNumber() != null;
@@ -56,26 +56,26 @@ public class JT1078TerminalController {
         device.setPhoneNumber(phoneNumber);
         service.addDevice(device);
     }
-    @Operation(summary = "删除设备", security = @SecurityRequirement(name = JwtUtils.HEADER))
-    @Parameter(name = "phoneNumber", description = "设备手机号", required = true)
+    @Operation(summary = "Remove device", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Parameter(name = "phoneNumber", description = "Device mobile phone number", required = true)
     @DeleteMapping("/delete")
     public void addDevice(String phoneNumber){
         assert phoneNumber != null;
         service.deleteDeviceByPhoneNumber(phoneNumber);
     }
-    @Operation(summary = "查询设备", security = @SecurityRequirement(name = JwtUtils.HEADER))
-    @Parameter(name = "phoneNumber", description = "设备手机号", required = true)
+    @Operation(summary = "Query device", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Parameter(name = "phoneNumber", description = "Device mobile phone number", required = true)
     @GetMapping("/query")
     public JTDevice getDevice(Integer deviceId){
         return service.getDeviceById(deviceId);
     }
 
 
-    @Operation(summary = "JT-查询部标通道", security = @SecurityRequirement(name = JwtUtils.HEADER))
-    @Parameter(name = "page", description = "当前页", required = true)
-    @Parameter(name = "count", description = "每页查询数量", required = true)
-    @Parameter(name = "deviceId", description = "设备ID", required = true)
-    @Parameter(name = "query", description = "查询内容")
+    @Operation(summary = "JT-Query department label channel", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Parameter(name = "page", description = "Current page", required = true)
+    @Parameter(name = "count", description = "Number of queries per page", required = true)
+    @Parameter(name = "deviceId", description = "EquipmentID", required = true)
+    @Parameter(name = "query", description = "Query content")
     @GetMapping("/channel/list")
     public PageInfo<JTChannel> getChannels(int page, int count,
                                            @RequestParam(required = true) Integer deviceId,
@@ -84,16 +84,16 @@ public class JT1078TerminalController {
         return service.getChannelList(page, count, deviceId, query);
     }
 
-    @Operation(summary = "JT-查询单个部标通道", security = @SecurityRequirement(name = JwtUtils.HEADER))
-    @Parameter(name = "id", description = "通道数据库ID", required = true)
+    @Operation(summary = "JT-Query a single part label channel", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Parameter(name = "id", description = "channel databaseID", required = true)
     @GetMapping("/channel/one")
     public JTChannel getChannel(Integer id) {
         assert id != null;
         return service.getChannelByDbId(id);
     }
 
-    @Operation(summary = "JT-更新通道", security = @SecurityRequirement(name = JwtUtils.HEADER))
-    @Parameter(name = "channel", description = "通道", required = true)
+    @Operation(summary = "JT-update channel", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Parameter(name = "channel", description = "channel", required = true)
     @PostMapping("/channel/update")
     public void updateChannel(@RequestBody JTChannel channel){
         assert channel.getId() > 0;
@@ -101,8 +101,8 @@ public class JT1078TerminalController {
         service.updateChannel(channel);
     }
 
-    @Operation(summary = "JT-新增通道", security = @SecurityRequirement(name = JwtUtils.HEADER))
-    @Parameter(name = "channel", description = "通道", required = true)
+    @Operation(summary = "JT-Add new channel", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Parameter(name = "channel", description = "channel", required = true)
     @PostMapping("/channel/add")
     public JTChannel addChannel(@RequestBody JTChannel channel){
         assert channel.getChannelId() != null;
@@ -110,8 +110,8 @@ public class JT1078TerminalController {
         service.addChannel(channel);
         return channel;
     }
-    @Operation(summary = "JT-删除通道", security = @SecurityRequirement(name = JwtUtils.HEADER))
-    @Parameter(name = "id", description = "通道的数据库ID", required = true)
+    @Operation(summary = "JT-Delete channel", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Parameter(name = "id", description = "channel databaseID", required = true)
     @DeleteMapping("/channel/delete")
     public void deleteChannel(Integer id){
         service.deleteChannelById(id);

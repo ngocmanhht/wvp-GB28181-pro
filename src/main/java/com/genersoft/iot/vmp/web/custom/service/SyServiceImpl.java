@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 第三方平台适配
+ * Third-party platform adaptation
  */
 @Slf4j
 @Service
@@ -32,24 +32,24 @@ public class SyServiceImpl implements IMapService {
         if (configObject == null) {
             return configList;
         }
-        // 浅色地图
+        // light map
         MapConfig mapConfigForDefault = readConfig("FRAGMENTIMG_SERVER", configObject);
         if (mapConfigForDefault != null) {
-            mapConfigForDefault.setName("浅色地图");
+            mapConfigForDefault.setName("light map");
             configList.add(mapConfigForDefault);
         }
 
-        // 深色地图
+        // dark map
         MapConfig mapConfigForDark = readConfig("POLARNIGHTBLUE_FRAGMENTIMG_SERVER", configObject);
         if (mapConfigForDark != null) {
-            mapConfigForDark.setName("深色地图");
+            mapConfigForDark.setName("dark map");
             configList.add(mapConfigForDark);
         }
 
-        // 卫星地图
+        // satellite map
         MapConfig mapConfigForSatellited = readConfig("SATELLITE_FRAGMENTIMG_SERVER", configObject);
         if (mapConfigForSatellited != null) {
-            mapConfigForSatellited.setName("卫星地图");
+            mapConfigForSatellited.setName("satellite map");
             configList.add(mapConfigForSatellited);
         }
         return configList;
@@ -61,9 +61,9 @@ public class SyServiceImpl implements IMapService {
             return null;
         }
         JSONObject fragmentimgServer = fragmentimgServerArray.getJSONObject(0);
-        // 坐标系
+        // coordinate system
         String geoCoordSys = fragmentimgServer.getString("csysType").toUpperCase();
-        // 获取地址
+        // Get address
         String path = fragmentimgServer.getString("path");
         String ip = fragmentimgServer.getString("ip");
         JSONObject portJson = fragmentimgServer.getJSONObject("port");
@@ -80,7 +80,7 @@ public class SyServiceImpl implements IMapService {
 
     @Override
     public List<MapModelIcon> getModelList() {
-        // 读取redis 图标信息
+        // Read redis icon information
         /*
           {
               "brand": "WVP",
@@ -88,7 +88,7 @@ public class SyServiceImpl implements IMapService {
               "displayInSelect": true,
               "id": 12,
               "imagesPath": "images/lt132",
-              "machineName": "图传对讲单兵",
+              "machineName": "Picture transmission intercom individual soldier",
               "machineType": "LT132"
            },
          */

@@ -1,38 +1,38 @@
 package com.genersoft.iot.vmp.service.bean;
 
 /**
- * redis消息：请求下级回复推送信息
+ * redisMessage: Requesting subordinates to reply to push information
  * @author lin
  */
 public class RequestSendItemMsg {
 
     /**
-     * 下级服务ID
+     * Lower level servicesID
      */
     private String serverId;
 
     /**
-     * 下级服务ID
+     * Lower level servicesID
      */
     private String mediaServerId;
 
     /**
-     * 流ID
+     * flowID
      */
     private String app;
 
     /**
-     * 应用名
+     * Application name
      */
     private String stream;
 
     /**
-     * 目标IP
+     * targetIP
      */
     private String ip;
 
     /**
-     * 目标端口
+     * target port
      */
     private int port;
 
@@ -42,29 +42,29 @@ public class RequestSendItemMsg {
     private String ssrc;
 
     /**
-     * 平台国标编号
+     * Platform national standard number
      */
     private String platformId;
 
     /**
-     * 平台名称
+     * Platform name
      */
     private String platformName;
 
     /**
-     * 通道ID
+     * channelID
      */
     private String channelId;
 
 
     /**
-     * 是否使用TCP
+     * Whether to useTCP
      */
     private Boolean isTcp;
 
 
     /**
-     * 是否使用TCP
+     * Whether to useTCP
      */
     private Boolean rtcp;
 

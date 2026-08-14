@@ -7,7 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * 存储多媒体数据上传命令
+ * Store multimedia data upload commands
  */
 @Setter
 @Getter

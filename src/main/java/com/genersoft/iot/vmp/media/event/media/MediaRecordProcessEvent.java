@@ -8,7 +8,7 @@ import com.genersoft.iot.vmp.utils.DateUtil;
 import java.util.Date;
 
 /**
- * 录像文件进度通知事件
+ * Video file progress notification event
  */
 public class MediaRecordProcessEvent extends MediaEvent {
 

@@ -15,9 +15,9 @@ public class ServiceInfo implements ApplicationListener<WebServerInitializedEven
 
     @Override
     public void onApplicationEvent(WebServerInitializedEvent event) {
-        // 项目启动获取启动的端口号
+        // Project startup to obtain the startup port number
         ServiceInfo.serverPort = event.getWebServer().getPort();
-        log.info("项目启动获取启动的端口号:  {}", ServiceInfo.serverPort);
+        log.info("Project startup to obtain the startup port number:  {}", ServiceInfo.serverPort);
     }
 
     public void setServerPort(int serverPort) {

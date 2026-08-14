@@ -1,29 +1,29 @@
-<!-- 统一编码规则 -->
+<!-- Unified coding rules -->
 
-# 统一编码规则
+# Unified encoding rules
 
-## D.1 编码规则 A
+## D.1 Coding Rules A
 
-> &emsp;&emsp;编码规则 A 由中心编码(8位)、行业编码(2位)、类型编码(3位)和序号(7位)四个码段共20位十
-> 进制数字字符构成,即系统编码 =中心编码 + 行业编码 + 类型编码 + 序号。  
-> &emsp;&emsp;编码规则 A 的详细说明见表 D.1。其中,中心编码指用户或设备所归属的监控中心的编码,按照监控中心所在地的行政区划代码确定,
-> 当不是基层单位时空余位为0。行政区划代码采用 GB/T2260— 2007规定的行政区划代码表示。行业编码是指用户或设备所归属的行业,行业编码对照表见
+> Coding Rule A consists of four code segments: center code (8 digits), industry code (2 digits), type code (3 digits) and serial number (7 digits), a total of 20 digits.
+> It is composed of hexadecimal numeric characters, that is, system code = center code + industry code + type code + serial number.
+> The detailed description of coding rule A is shown in Table D.1. Among them, the center code refers to the code of the monitoring center to which the user or device belongs, which is determined according to the administrative division code of the location of the monitoring center.
+> When it is not an establishment, the spare bit is 0. The administrative division code is represented by the administrative division code specified in GB/T2260-2007. The industry code refers to the industry to which the user or device belongs. See the industry code comparison table.
 > D.3。
-> 类型编码指定了设备或用户的具体类型,其中的前端设备包含公安系统和非公安系统的前端设备,终端用
-> 户包含公安系统和非公安系统的终端用户。   
+> The type code specifies the specific type of device or user. The front-end equipment includes front-end equipment of public security systems and non-public security systems. Terminal users
+> Households include end users of public security systems and non-public security systems.
 ![img_7.png](_media/img_7.png)
 ![img_1.png](_media/img_1.png)
 ![img_2.png](_media/img_2.png)
 
-## D.2 编码规则 B
+## D.2 Coding Rules B
 
-> &emsp;&emsp;编码规则 B由中心编码(8位)、行业编码(2位)、序号(4位)和类型编码(2位)四个码段构成,即系
-> 统编码 =中心编码 + 行业编码 +序号+类型编码。编码规则 B的详细说明见表 D.2。
+> Coding rule B consists of four code segments: center code (8 digits), industry code (2 digits), serial number (4 digits) and type code (2 digits), that is, system code
+> Unified code = center code + industry code + serial number + type code. The detailed description of coding rule B is shown in Table D.2.
 ![img_3.png](_media/img_3.png)
 ![img_4.png](_media/img_4.png)
 
-## D.3 行业编码对照表
+## D.3 Industry coding comparison table
 
-> &emsp;&emsp;行业编码对照表见表 D.3。  
+>  The industry coding comparison table is shown in Table D.3.
 ![img_5.png](_media/img_5.png)
 ![img_6.png](_media/img_6.png)

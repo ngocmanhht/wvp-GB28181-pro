@@ -3,57 +3,57 @@ package com.genersoft.iot.vmp.vmanager.bean;
 public class OtherRtpSendInfo {
 
     /**
-     * 发流IP
+     * FlowIP
      */
     private String sendLocalIp;
 
     /**
-     * 音频发流端口
+     * Audio streaming port
      */
     private int sendLocalPortForAudio;
 
     /**
-     * 视频发流端口
+     * Video streaming port
      */
     private int sendLocalPortForVideo;
 
     /**
-     * 收流IP
+     * collect flowIP
      */
     private String receiveIp;
 
     /**
-     * 音频收流端口
+     * Audio streaming port
      */
     private int receivePortForAudio;
 
     /**
-     * 视频收流端口
+     * Video streaming port
      */
     private int receivePortForVideo;
 
     /**
-     * 会话ID
+     * sessionID
      */
     private String callId;
 
     /**
-     * 流ID
+     * flowID
      */
     private String stream;
 
     /**
-     * 推流应用名
+     * Push application name
      */
     private String pushApp;
 
     /**
-     * 推流流ID
+     * Push flowID
      */
     private String pushStream;
 
     /**
-     * 推流SSRC
+     * Push streamingSSRC
      */
     private String pushSSRC;
 

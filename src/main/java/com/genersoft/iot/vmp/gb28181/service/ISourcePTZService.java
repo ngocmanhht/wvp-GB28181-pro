@@ -6,7 +6,7 @@ import com.genersoft.iot.vmp.service.bean.ErrorCallback;
 import java.util.List;
 
 /**
- * 资源能力接入-云台控制
+ * Resource capability access-PTZ control
  */
 public interface ISourcePTZService {
 

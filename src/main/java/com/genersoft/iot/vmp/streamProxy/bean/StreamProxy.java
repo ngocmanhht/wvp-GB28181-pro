@@ -11,62 +11,62 @@ import org.springframework.util.ObjectUtils;
  * @author lin
  */
 @Data
-@Schema(description = "拉流代理的信息")
+@Schema(description = "Streaming agent information")
 @EqualsAndHashCode(callSuper = true)
 public class StreamProxy extends CommonGBChannel {
 
     /**
-     * 数据库自增ID
+     * Database auto-incrementID
      */
-    @Schema(description = "数据库自增ID")
+    @Schema(description = "Database auto-incrementID")
     private int id;
 
-    @Schema(description = "类型，取值，default： 流媒体直接拉流（默认），ffmpeg： ffmpeg实现拉流")
+    @Schema(description = "Type, value, default: Streaming media pulls streams directly (default），ffmpeg： ffmpegRealize pull flow")
     private String type;
 
-    @Schema(description = "应用名")
+    @Schema(description = "Application name")
     private String app;
 
-    @Schema(description = "流ID")
+    @Schema(description = "flowID")
     private String stream;
 
-    @Schema(description = "当前拉流使用的流媒体服务ID")
+    @Schema(description = "Streaming media service currently used for streamingID")
     private String mediaServerId;
 
-    @Schema(description = "固定选择的流媒体服务ID")
+    @Schema(description = "Fixed selection of streaming servicesID")
     private String relatesMediaServerId;
 
-    @Schema(description = "服务ID")
+    @Schema(description = "serviceID")
     private String serverId;
 
-    @Schema(description = "拉流地址")
+    @Schema(description = "Pull address")
     private String srcUrl;
 
-    @Schema(description = "超时时间:秒")
+    @Schema(description = "Timeout: seconds")
     private int timeout;
 
-    @Schema(description = "ffmpeg模板KEY")
+    @Schema(description = "ffmpegTemplateKEY")
     private String ffmpegCmdKey;
 
-    @Schema(description = "rtsp拉流时，拉流方式，0：tcp，1：udp，2：组播")
+    @Schema(description = "rtspWhen pulling streams, stream pulling method, 0: tcp, 1: udp, 2: multicast")
     private String rtspType;
 
-    @Schema(description = "是否启用")
+    @Schema(description = "Whether to enable")
     private boolean enable;
 
-    @Schema(description = "是否启用音频")
+    @Schema(description = "Whether to enable audio")
     private boolean enableAudio;
 
-    @Schema(description = "是否启用MP4")
+    @Schema(description = "Whether to enableMP4")
     private boolean enableMp4;
 
-    @Schema(description = "是否 无人观看时自动停用")
+    @Schema(description = "Whether to automatically deactivate when no one is watching")
     private boolean enableDisableNoneReader;
 
-    @Schema(description = "拉流代理时zlm返回的key，用于停止拉流代理")
+    @Schema(description = "The key returned by zlm when pulling the streaming agent, used to stop the streaming agent")
     private String streamKey;
 
-    @Schema(description = "拉流状态")
+    @Schema(description = "Pull state")
     private Boolean pulling;
 
     public CommonGBChannel buildCommonGBChannel() {

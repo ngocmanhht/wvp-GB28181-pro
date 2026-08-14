@@ -30,7 +30,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
 /**
- * 状态信息(心跳)报送
+ * status information(heartbeat)Submit
  */
 @Slf4j
 @Component
@@ -63,18 +63,18 @@ public class KeepaliveNotifyMessageHandler extends SIPRequestProcessorParent imp
 
     @Override
     public void handForDevice(RequestEvent evt, Device device, Element rootElement) {
-        // 回复200 OK
+        // Reply200 OK
         try {
             responseAckAsync((SIPRequest) evt.getRequest(), Response.OK);
         } catch (SipException | InvalidArgumentException | ParseException e) {
-            log.error("[命令发送失败] 心跳回复: {}", e.getMessage());
+            log.error("[Command sending failed] heartbeat reply: {}", e.getMessage());
         }
         taskQueue.add(device);
         SIPRequest request = (SIPRequest) evt.getRequest();
 
         RemoteAddressInfo remoteAddressInfo = SipUtils.getRemoteAddressFromRequest(request, userSetting.getSipUseSourceIpAsRemoteAddress());
         if (device.getIp() == null || !device.getIp().equalsIgnoreCase(remoteAddressInfo.getIp()) || device.getPort() != remoteAddressInfo.getPort()) {
-            log.info("[收到心跳] 地址变化, {}({}), {}:{}->{}:{}", device.getName(), device.getDeviceId(), device.getIp(), device.getPort(), remoteAddressInfo.getIp(), remoteAddressInfo.getPort());
+            log.info("[Heartbeat received] Address change, {}({}), {}:{}->{}:{}", device.getName(), device.getDeviceId(), device.getIp(), device.getPort(), remoteAddressInfo.getIp(), remoteAddressInfo.getPort());
             device.setPort(remoteAddressInfo.getPort());
             device.setHostAddress(IpPortUtil.concatenateIpAndPort(remoteAddressInfo.getIp(), String.valueOf(remoteAddressInfo.getPort())));
             device.setIp(remoteAddressInfo.getIp());
@@ -87,32 +87,32 @@ public class KeepaliveNotifyMessageHandler extends SIPRequestProcessorParent imp
             deviceStatusManager.add(device.getDeviceId(), expiresTime + System.currentTimeMillis());
         } else {
             if (userSetting.getGbDeviceOnline() == 1) {
-                // 对于已经离线的设备判断他的注册是否已经过期
+                // Determine whether the registration of an offline device has expired
                 deviceService.online(device);
             }
         }
     }
     @Scheduled(fixedDelay = 10, timeUnit = TimeUnit.SECONDS)
     public void executeUpdateDeviceList() {
-        log.debug("[定时任务] 更新心跳记录，待处理设备数量: {}", taskQueue.size());
+        log.debug("[scheduled tasks] Update heartbeat record, number of devices to be processed: {}", taskQueue.size());
         try {
             if (!taskQueue.isEmpty()) {
                 redisCatchStorage.updateDeviceKeepaliveTimeStamp(taskQueue.stream().toList());
                 taskQueue.clear();
             }
         } catch (Exception e) {
-            log.error("[定时任务] 更新心跳记录 执行异常", e);
+            log.error("[scheduled tasks] Update heartbeat record execution exception", e);
         }
     }
 
     @Override
     public void handForPlatform(RequestEvent evt, Platform parentPlatform, Element element) {
-        // 个别平台保活不回复200OK会判定离线
-        // 回复200 OK
+        // If some platforms are kept alive and do not reply with 200 OK, they will be judged as offline.
+        // Reply200 OK
         try {
             responseAckAsync((SIPRequest) evt.getRequest(), Response.OK);
         } catch (SipException | InvalidArgumentException | ParseException e) {
-            log.error("[命令发送失败] 报警通知回复: {}", e.getMessage());
+            log.error("[Command sending failed] Alarm notification reply: {}", e.getMessage());
         }
     }
 }

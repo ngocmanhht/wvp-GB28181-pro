@@ -14,21 +14,21 @@ public class FrontEndControlCodeForPreset implements  IFrontEndControlCode {
     }
 
     /**
-     * 预置位指令： 1为设置预置位， 2为调用预置位， 3为删除预置位
+     * Preset position instructions: 1 is to set the preset position, 2 is to call the preset position, 3 is to delete the preset position
      */
     @Getter
     @Setter
     private Integer code;
 
     /**
-     * 预置位编号
+     * Preset number
      */
     @Getter
     @Setter
     private Integer presetId;
 
     /**
-     * 预置位名称
+     * Preset position name
      */
     @Getter
     @Setter

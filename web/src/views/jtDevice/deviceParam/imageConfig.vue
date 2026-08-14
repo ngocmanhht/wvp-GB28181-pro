@@ -2,27 +2,27 @@
   <div style="width: 100%;">
     <div style="height: calc(100vh - 260px); overflow: auto">
       <el-form ref="form" :model="form" label-width="240px" style="width: 60%; margin: 0 auto">
-        <el-form-item label="图像/视频质量" prop="topSpeed" >
+        <el-form-item label="image/Video quality" prop="topSpeed" >
           <div style="padding: 0 14px">
             <el-slider v-model="form.qualityForVideo" show-input :height="1" :marks="qualityMarks" :min="1" :max="10" :step="1" style="width: calc(100% - 40px);"/>
           </div>
         </el-form-item>
-        <el-form-item label="亮度" prop="brightness">
+        <el-form-item label="brightness" prop="brightness">
           <div style="padding: 0 14px">
             <el-slider v-model="form.brightness" show-input :height="1" :min="0" :max="255" :step="1" style="width: calc(100% - 40px);"/>
           </div>
         </el-form-item>
-        <el-form-item label="对比度" prop="contrastRatio">
+        <el-form-item label="Contrast" prop="contrastRatio">
           <div style="padding: 0 14px">
             <el-slider v-model="form.contrastRatio" show-input :height="1" :min="0" :max="127" :step="1" style="width: calc(100% - 40px);"/>
           </div>
         </el-form-item>
-        <el-form-item label="饱和度" prop="saturation">
+        <el-form-item label="saturation" prop="saturation">
           <div style="padding: 0 14px">
             <el-slider v-model="form.saturation" show-input :height="1" :min="0" :max="127" :step="1" style="width: calc(100% - 40px);"/>
           </div>
         </el-form-item>
-        <el-form-item label="色度" prop="chroma">
+        <el-form-item label="Chroma" prop="chroma">
           <div style="padding: 0 14px">
             <el-slider v-model="form.chroma" show-input :height="1" :min="0" :max="255" :step="1" style="width: calc(100% - 40px);"/>
           </div>
@@ -30,8 +30,8 @@
       </el-form>
     </div>
     <p style="text-align: right">
-      <el-button type="primary" @click="onSubmit">确认</el-button>
-      <el-button @click="showDevice">取消</el-button>
+      <el-button type="primary" @click="onSubmit">Confirm</el-button>
+      <el-button @click="showDevice">Cancel</el-button>
     </p>
 
   </div>
@@ -53,8 +53,8 @@ export default {
     return {
       form: {},
       qualityMarks: {
-        1: '最优',
-        10: '最差'
+        1: 'optimal',
+        10: 'worst'
       },
       isLoading: false
     }

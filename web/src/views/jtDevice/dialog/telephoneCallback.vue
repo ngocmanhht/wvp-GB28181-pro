@@ -2,7 +2,7 @@
   <div id="configInfo">
     <el-dialog
       v-el-drag-dialog
-      title="电话回拨"
+      title="Call back"
       width="=80%"
       top="2rem"
       :close-on-click-modal="false"
@@ -12,18 +12,18 @@
     >
       <div>
         <el-form >
-          <el-form-item label="标志">
+          <el-form-item label="logo">
             <el-radio-group v-model="form.sign">
-              <el-radio :label="0">普通通话</el-radio>
-              <el-radio :label="1">监听</el-radio>
+              <el-radio :label="0">Ordinary call</el-radio>
+              <el-radio :label="1">monitor</el-radio>
             </el-radio-group>
           </el-form-item>
-          <el-form-item label="回拨电话号码">
+          <el-form-item label="call back phone number">
             <el-input type="input" v-model="form.destPhoneNumber" ></el-input>
           </el-form-item>
           <el-form-item style="text-align: right">
-            <el-button type="primary" @click="onSubmit">回拨</el-button>
-            <el-button @click="close" >取消</el-button>
+            <el-button type="primary" @click="onSubmit">call back</el-button>
+            <el-button @click="close" >Cancel</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -44,8 +44,8 @@ export default {
       showDialog: false,
       form: {
         phoneNumber: null,
-        sign: 0, // 标志: 0:普通通话,1:监听
-        destPhoneNumber: null // 回拨电话号码
+        sign: 0, // Flag: 0: normal call, 1: monitoring
+        destPhoneNumber: null // call back phone number
       }
     }
   },
@@ -58,14 +58,14 @@ export default {
       this.form = {
         phoneNumber: null,
           sign: {
-          type: 3, // 1紧急,2服务,3通知
-            terminalDisplay: true, // 1终端显示器显示
-            tts: true, // 从选区创建新的临时文件
-            adScreen: true, // 广告屏显示
-            source: false // false: 中心导航信息 true CAN故障码信息
+          type: 3, // 1Emergency, 2 services, 3 notifications
+            terminalDisplay: true, // 1Terminal monitor display
+            tts: true, // Create a new temporary file from the selection
+            adScreen: true, // Advertising screen display
+            source: false // false: Center navigation information true CAN fault code information
         },
-        textType: 1, // 文本类型,1 = 通知 ，2 = 服务
-          content: '' // 消息内容，最长为1024字节
+        textType: 1, // text type,1 = Notification ，2 = service
+          content: '' // Message content, up to 1024 bytes
       }
       this.form.phoneNumber = data.phoneNumber
     },
@@ -77,7 +77,7 @@ export default {
         .then(data => {
           this.$message.success({
             showClose: true,
-            message: '发送成功'
+            message: 'Sent successfully'
           })
           this.close()
         })

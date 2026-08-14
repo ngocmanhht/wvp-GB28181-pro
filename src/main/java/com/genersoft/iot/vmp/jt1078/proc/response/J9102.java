@@ -7,7 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * 音视频实时传输控制
+ * Audio and video real-time transmission control
  *
  * @author QingtaiJiang
  * @date 2023/4/27 18:49
@@ -18,33 +18,33 @@ import lombok.Setter;
 @MsgId(id = "9102")
 public class J9102 extends Rs {
 
-    // 通道号
+    // Channel number
     Integer channel;
 
-    // 控制指令
+    // control instructions
     /**
-     * 0：关闭音视频传输指令；
-     * 1：切换码流(增加暂停和继续)；
-     * 2：暂停该通道所有流的发送；
-     * 3：恢复暂停前流的发送，与暂停前的流类型一致；
-     * 4：关闭双向对讲
+     * 0：Close audio and video transmission command；
+     * 1：Switch code stream(Add pause and resume)；
+     * 2：Pause the sending of all streams on this channel；
+     * 3：Resumes the sending of the stream before the pause, which is the same as the stream type before the pause.；
+     * 4：Turn off two-way intercom
      */
     Integer command;
 
-    // 数据类型
+    // data type
     /**
-     * 0：关闭该通道有关的音视频数据；
-     * 1：只关闭该通道有关的音频，保留该通道
-     * 有关的视频；
-     * 2：只关闭该通道有关的视频，保留该通道
-     * 有关的音频
+     * 0：Close the audio and video data related to this channel；
+     * 1：Only close the audio related to the channel and keep the channel
+     * Related videos；
+     * 2：Only close the video related to the channel and keep the channel
+     * Related audio
      */
     Integer closeType;
 
-    // 数据类型
+    // data type
     /**
-     * 0：主码流；
-     * 1：子码流
+     * 0：main stream；
+     * 1：substream
      */
     Integer streamType;
 

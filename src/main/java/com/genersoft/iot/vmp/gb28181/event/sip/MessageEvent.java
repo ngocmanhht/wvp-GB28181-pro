@@ -10,7 +10,7 @@ import java.util.concurrent.TimeUnit;
 @Data
 public class MessageEvent<T> implements Delayed {
     /**
-     * 超时时间(单位： 毫秒)
+     * timeout(Unit: millisecond)
      */
     private long delay;
 

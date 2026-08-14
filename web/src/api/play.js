@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-// 实时流播放API
+// Live streamingAPI
 
 export function play(deviceId, channelId) {
   return request({

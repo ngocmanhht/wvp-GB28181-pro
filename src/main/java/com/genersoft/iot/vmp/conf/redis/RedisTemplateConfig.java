@@ -15,13 +15,13 @@ public class RedisTemplateConfig {
     @Bean
     public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
         RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
-        // 使用fastJson序列化
+        // Serialize using fastJson
         GenericFastJsonRedisSerializer fastJsonRedisSerializer = new GenericFastJsonRedisSerializer();
-        // value值的序列化采用fastJsonRedisSerializer
+        // valueValues are serialized usingfastJsonRedisSerializer
         redisTemplate.setValueSerializer(fastJsonRedisSerializer);
         redisTemplate.setHashValueSerializer(fastJsonRedisSerializer);
 
-        // key的序列化采用StringRedisSerializer
+        // keyThe serialization usesStringRedisSerializer
         redisTemplate.setKeySerializer(new StringRedisSerializer());
         redisTemplate.setHashKeySerializer(new StringRedisSerializer());
         redisTemplate.setConnectionFactory(redisConnectionFactory);
@@ -31,13 +31,13 @@ public class RedisTemplateConfig {
     @Bean
     public RedisTemplate<String, MobilePosition> getRedisTemplateForMobilePosition(RedisConnectionFactory redisConnectionFactory) {
         RedisTemplate<String, MobilePosition> redisTemplate = new RedisTemplate<>();
-        // 使用fastJson序列化
+        // Serialize using fastJson
         GenericFastJsonRedisSerializer fastJsonRedisSerializer = new GenericFastJsonRedisSerializer();
-        // value值的序列化采用fastJsonRedisSerializer
+        // valueValues are serialized usingfastJsonRedisSerializer
         redisTemplate.setValueSerializer(fastJsonRedisSerializer);
         redisTemplate.setHashValueSerializer(fastJsonRedisSerializer);
 
-        // key的序列化采用StringRedisSerializer
+        // keyThe serialization usesStringRedisSerializer
         redisTemplate.setKeySerializer(new StringRedisSerializer());
         redisTemplate.setHashKeySerializer(new StringRedisSerializer());
         redisTemplate.setConnectionFactory(redisConnectionFactory);
@@ -49,12 +49,12 @@ public class RedisTemplateConfig {
         RedisTemplate<String, Long> template = new RedisTemplate<>();
         template.setConnectionFactory(connectionFactory);
 
-        // Key 使用 String 序列化
+        // Key Serialization using String
         template.setKeySerializer(new StringRedisSerializer());
         template.setHashKeySerializer(new StringRedisSerializer());
 
-        // Value 使用 GenericToStringSerializer，它能将 Long 转换为纯文本字符串存入 Redis
-        // 这样在 Redis 命令行输入 'get key' 看到的是 "123" 而不是二进制乱码
+        // Value Use GenericToStringSerializer，It can convert a Long into a plain text string and store it in Redis
+        // Enter this on the Redis command line 'get key' What I see is "123" Instead of binary garbled code
         template.setValueSerializer(new GenericToStringSerializer<>(Long.class));
         template.setHashValueSerializer(new GenericToStringSerializer<>(Long.class));
 

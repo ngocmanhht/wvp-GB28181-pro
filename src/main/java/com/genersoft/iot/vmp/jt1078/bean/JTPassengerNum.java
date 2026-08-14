@@ -9,29 +9,29 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * 终端上传乘客流量
+ * Terminal uploads passenger traffic
  */
 @Setter
 @Getter
 public class JTPassengerNum implements JTDeviceSubConfig {
 
     /**
-     * 起始时间, YY-MM-DD-HH-MM-SS( GMT + 8 时间,本标准中之后涉及的时间均采用此时区)
+     * start time, YY-MM-DD-HH-MM-SS( GMT + 8 Time, all subsequent times in this standard are in this time zone.)
      */
     private String startTime;
 
     /**
-     * 结束时间, YY-MM-DD-HH-MM-SS( GMT + 8 时间,本标准中之后涉及的时间均采用此时区)
+     * end time, YY-MM-DD-HH-MM-SS( GMT + 8 Time, all subsequent times in this standard are in this time zone.)
      */
     private String endTime;
 
     /**
-     * 上车人数
+     * Number of people on board
      */
     private int getIn;
 
     /**
-     * 下车人数
+     * Number of people getting off the bus
      */
     private int getOut;
 
@@ -54,10 +54,10 @@ public class JTPassengerNum implements JTDeviceSubConfig {
 
     @Override
     public String toString() {
-        return "终端上传乘客流量：" +
-                " 时间： " + startTime + " 到 "  + endTime +
-                ", 上车：" + getIn +
-                ", 下车：" + getOut
+        return "Terminal uploads passenger traffic：" +
+                " time： " + startTime + " Arrive "  + endTime +
+                ", Get on the bus：" + getIn +
+                ", Get off the car：" + getOut
                 ;
     }
 }

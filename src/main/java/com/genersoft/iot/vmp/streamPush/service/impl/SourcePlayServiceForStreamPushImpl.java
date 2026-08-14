@@ -26,28 +26,28 @@ public class SourcePlayServiceForStreamPushImpl implements ISourcePlayService {
         String serverGBId = null;
         String platformName = null;
         if (platform != null) {
-            // 推流
+            // Push streaming
             serverGBId = platform.getServerGBId();
             platformName = platform.getName();
         }
-        // 推流
+        // Push streaming
         try {
             playService.start(channel.getDataDeviceId(), callback, serverGBId, platformName);
         }catch (PlayException e) {
             callback.run(e.getCode(), e.getMsg(), null);
         }catch (Exception e) {
-            log.error("[点播推流通道失败] 通道： {}({})", channel.getGbName(), channel.getGbDeviceId(), e);
+            log.error("[On-demand streaming channel failed] channel： {}({})", channel.getGbName(), channel.getGbDeviceId(), e);
             callback.run(Response.BUSY_HERE, "busy here", null);
         }
     }
 
     @Override
     public void stopPlay(CommonGBChannel channel) {
-        // 推流
+        // Push streaming
         try {
             playService.stop(channel.getDataDeviceId());
         }catch (Exception e) {
-            log.error("[停止点播失败] {}({})", channel.getGbName(), channel.getGbDeviceId(), e);
+            log.error("[Failed to stop on demand] {}({})", channel.getGbName(), channel.getGbDeviceId(), e);
         }
     }
 

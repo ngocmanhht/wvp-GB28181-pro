@@ -9,7 +9,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * 设置路线
+ * Set route
  */
 @Setter
 @Getter
@@ -17,7 +17,7 @@ import lombok.Setter;
 public class J8606 extends Rs {
 
     /**
-     * 路线
+     * route
      */
     private JTRoute route;
 

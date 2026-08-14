@@ -1,5 +1,5 @@
 spring:
-    # 上传文件大小限制
+    # Upload file size limit
     servlet:
         multipart:
             max-file-size: 10MB
@@ -7,81 +7,81 @@ spring:
     cache:
         type: redis
     data:
-        # REDIS数据库配置
+        # REDISDatabase configuration
         redis:
-            # [必须修改] Redis服务器IP, REDIS安装在本机的,使用127.0.0.1
+            # [Must be modified] RedisServer IP, REDIS is installed on this machine, use127.0.0.1
             host: ${REDIS_HOST:127.0.0.1}
-            # [必须修改] 端口号
+            # [Must be modified] port number
             port: ${REDIS_PORT:6379}
-            # [可选] 数据库 DB
+            # [Optional] database DB
             database: ${REDIS_DB:6}
-            # [可选] 访问密码,若你的redis服务器没有设置密码，就不需要用密码去连接
+            # [Optional] Access password. If your redis server does not have a password set, you do not need to use a password to connect.
             password: ${REDIS_PWD:root}
-            # [可选] 超时时间
+            # [Optional] timeout
             timeout: 10000
-    # [必选] jdbc数据库配置
+    # [Required] jdbcDatabase configuration
     datasource:
         type: com.zaxxer.hikari.HikariDataSource
         driver-class-name: com.mysql.cj.jdbc.Driver
         url: jdbc:mysql://127.0.0.1:3306/wvp2?useUnicode=true&characterEncoding=UTF8&rewriteBatchedStatements=true&serverTimezone=PRC&useSSL=false&allowMultiQueries=true
         username: root
         password: root123
-# [可选] WVP监听的HTTP端口, 网页和接口调用都是这个端口
+# [Optional] WVPThe listening HTTP port, web pages and interface calls are all on this port
 server:
     port: 18080
 
-# 作为28181服务器的配置
+# Configuration as 28181 server
 sip:
-    # [必须修改] 本机的IP，对应你的网卡，监听什么ip就是使用什么网卡，
-    # 如果要监听多张网卡，可以使用逗号分隔多个IP， 例如： 192.168.1.4,10.0.0.4
-    # 如果不明白，就使用0.0.0.0，大部分情况都是可以的
-    # 请不要使用127.0.0.1，任何包括localhost在内的域名都是不可以的。
+    # [Must be modified] The IP of this machine corresponds to your network card. The IP you monitor depends on the network card you use.，
+    # If you want to monitor multiple network cards, you can use commas to separate multiple IPs, for example： 192.168.1.4,10.0.0.4
+    # If you don’t understand, just use 0.0.0.0, which is fine in most cases.
+    # Please do not use 127.0.0.1, any domain name including localhost is not allowed。
     ip: ${WVP_HOST:127.0.0.1}
-    # [可选] 28181服务监听的端口
+    # [Optional] 28181The port the service listens on
     port: ${WVP_PORT:5060}
-    # 根据国标6.1.2中规定，domain宜采用ID统一编码的前十位编码。国标附录D中定义前8位为中心编码（由省级、市级、区级、基层编号组成，参照GB/T 2260-2007）
-    # 后两位为行业编码，定义参照附录D.3
-    # 3701020049标识山东济南历下区 信息行业接入
-    # [可选]
+    # According to the provisions of national standard 6.1.2, domain should use the first ten digits of the unified ID code. Appendix D of the national standard defines the first 8 digits as the center code (composed of provincial, municipal, district and grassroots numbers, refer toGB/T 2260-2007）
+    # The last two digits are industry codes. For definitions, please refer to the appendix.D.3
+    # 3701020049Identification of information industry access in Lixia District, Jinan, Shandong Province
+    # [Optional]
     domain: ${WVP_DOMAIN:4401020049}
-    # [可选]
+    # [Optional]
     id: ${WVP_ID:44010200492000000001}
-    # [可选] 公共认证密码 移除密码将必须提前添加设备才能通过认证
+    # [Optional] Public authentication password. If you remove the password, you will have to add the device in advance to pass the authentication.
     password: ${WVP_PWD:admin123}
 
-#zlm 默认服务器配置
+#zlm Default server configuration
 media:
-    # [必须修改] zlm服务器唯一id，用于触发hook时区别是哪台服务器,general.mediaServerId
+    # [Must be modified] zlmThe unique ID of the server, used to distinguish which server it is when triggering the hook.,general.mediaServerId
     id:
-    # [必须修改] zlm服务器的内网IP
+    # [Must be modified] zlmServer's intranetIP
     ip: ${ZLM_HOST:127.0.0.1}
-    # [必须修改] zlm服务器的http.port
+    # [Must be modified] zlmServer'shttp.port
     http-port: ${ZLM_PORT:80}
-    # [可选] zlm服务器的hook.admin_params=secret
+    # [Optional] zlmServer'shook.admin_params=secret
     secret: 035c73f7-bb6b-4889-a715-d9eb2d1925cc
-    # 启用多端口模式, 多端口模式使用端口区分每路流，兼容性更好。 单端口使用流的ssrc区分， 点播超时建议使用多端口测试
+    # Enable multi-port mode. Multi-port mode uses ports to distinguish each flow for better compatibility. Single port uses the ssrc of the flow to distinguish. For on-demand timeout, it is recommended to use multi-port testing.
     rtp:
-        # [可选] 是否启用多端口模式, 开启后会在portRange范围内选择端口用于媒体流传输
+        # [Optional] Whether to enable multi-port mode. When enabled, the port will be selected within the portRange range for media streaming.
         enable: true
-        # [可选] 在此范围内选择端口用于媒体流传输,
-        port-range: 30000,30500 # 端口范围
-        # [可选] 国标级联在此范围内选择端口发送媒体流,
-        send-port-range: 30000,30500 # 端口范围
-    # 录像辅助服务， 部署此服务可以实现zlm录像的管理与下载， 0 表示不使用
+        # [Optional] Select ports within this range for media streaming,
+        port-range: 30000,30500 # port range
+        # [Optional] National standard cascade selects ports within this range to send media streams,
+        send-port-range: 30000,30500 # port range
+    # Video auxiliary service. Deploying this service can realize the management and download of zlm video. 0 means not to use it.
     record-assist-port: 18081
     sdp-ip: ${sip.ip}
     stream-ip: ${sip.ip}
 
-# [根据业务需求配置]
+# [Configure according to business needs]
 user-settings:
-    # 推流直播是否录制
+    # Whether to record live push streaming
     record-push-live: true
     auto-apply-play: true
-    # 设备注册时间列表最大保留条数，默认100，设置为0则不限制
+    # The maximum number of entries to be retained in the device registration time list. The default is 100. If set to 0, there is no limit.
     device-register-time-max-count: 100
-    # 设备注册时间列表过期时间（小时），默认3，设置为0则永不过期
+    # Device registration time list expiration time (hours), default 3, set to 0 to never expire
     device-register-time-ttl-hours: 3
-    # 设备心跳时间列表最大保留条数，默认100，设置为0则不限制
+    # The maximum number of entries in the device heartbeat time list, the default is 100, if set to 0 there is no limit
     device-keepalive-time-max-count: 100
-    # 设备心跳时间列表过期时间（小时），默认1，设置为0则永不过期
+    # Device heartbeat time list expiration time (hours), default 1, set to 0 to never expire
     device-keepalive-time-ttl-hours: 1

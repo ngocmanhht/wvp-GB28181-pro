@@ -3,7 +3,7 @@ package com.genersoft.iot.vmp.gb28181.bean;
 import javax.sdp.SessionDescription;
 
 /**
- * 28181 的SDP解析器
+ * 28181 SDP parser
  */
 public class Gb28181Sdp  {
     private SessionDescription baseSdb;

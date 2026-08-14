@@ -5,17 +5,17 @@ import org.jetbrains.annotations.NotNull;
 public class DeviceType implements Comparable<DeviceType>{
 
     /**
-     * 编号
+     * No.
      */
     private String name;
 
     /**
-     * 名称
+     * Name
      */
     private String code;
 
     /**
-     * 归属名称
+     * attributed name
      */
     private String ownerName;
     public static DeviceType getInstance(DeviceTypeEnum typeEnum) {

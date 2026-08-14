@@ -8,19 +8,19 @@ import lombok.Setter;
 
 @Setter
 @Getter
-@Schema(description = "路段属性")
+@Schema(description = "Road segment attributes")
 public class JTRouteSectionAttribute {
 
-    @Schema(description = "行驶时间 ,false：否；true：是")
+    @Schema(description = "Driving time, false: no; true: yes")
     private boolean ruleForTimeLimit;
 
-    @Schema(description = "限速 ,false：否；true：是")
+    @Schema(description = "Speed limit, false: no; true: yes")
     private boolean ruleForSpeedLimit;
 
-    @Schema(description = "false：北纬；true：南纬")
+    @Schema(description = "false：North latitude; true: south latitude")
     private boolean southLatitude;
 
-    @Schema(description = "false：东经；true：西经")
+    @Schema(description = "false：East longitude; true: west longitude")
     private boolean westLongitude;
 
     public byte encode(){

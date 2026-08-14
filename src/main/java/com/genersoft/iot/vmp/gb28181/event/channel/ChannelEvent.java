@@ -9,7 +9,7 @@ import java.io.Serial;
 import java.util.List;
 
 /**
- * 通道事件
+ * channel events
  */
 
 @Setter

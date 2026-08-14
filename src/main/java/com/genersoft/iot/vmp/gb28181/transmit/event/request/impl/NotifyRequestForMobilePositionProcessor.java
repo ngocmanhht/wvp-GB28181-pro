@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
- * SIP命令类型： NOTIFY请求中的移动位置请求处理
+ * SIPCommand type: Mobile location request processing in NOTIFY request
  */
 @Slf4j
 @Component
@@ -39,7 +39,7 @@ public class NotifyRequestForMobilePositionProcessor extends SIPRequestProcessor
 
 	public void process(RequestEvent evt) {
 		if (taskQueue.size() >= userSetting.getMaxNotifyCountQueue()) {
-			log.error("[notify-移动位置] 待处理消息队列已满 {}，返回486 BUSY_HERE，消息不做处理", userSetting.getMaxNotifyCountQueue());
+			log.error("[notify-Move location] The pending message queue is full {}，Returns 486 BUSY_HERE, the message is not processed", userSetting.getMaxNotifyCountQueue());
 			return;
 		}
 		taskQueue.offer(new HandlerCatchData(evt, null, null));
@@ -70,30 +70,30 @@ public class NotifyRequestForMobilePositionProcessor extends SIPRequestProcessor
 				String deviceId = SipUtils.getUserIdFromFromHeader(fromHeader);
 				Device device = redisCatchStorage.getDevice(deviceId);
 				if (device == null) {
-					log.error("[notify-移动位置] 未获取到device, {}", deviceId);
+					log.error("[notify-Move location] Not obtaineddevice, {}", deviceId);
 					continue;
 				}
 				Element rootElement = getRootElement(evt, device.getCharset());
 				if (rootElement == null) {
-					log.warn("[notify-移动位置] {}处理失败，未识别到信息体", deviceId);
+					log.warn("[notify-Move location] {}Processing failed, the information body was not recognized", deviceId);
 					continue;
 				}
 				List<DeviceMobilePosition> mobilePositions = DeviceMobilePosition.decode(device, rootElement);
 				for (DeviceMobilePosition mobilePosition : mobilePositions) {
-					log.info("[收到移动位置订阅通知]：{}/{}->{}.{}, 时间： {}", device.getDeviceId(), mobilePosition.getChannelDeviceId(),
+					log.info("[Receive mobile location subscription notification]：{}/{}->{}.{}, time： {}", device.getDeviceId(), mobilePosition.getChannelDeviceId(),
 							mobilePosition.getLongitude(), mobilePosition.getLatitude(), mobilePosition.getTimestamp());
 					mobilePositionList.add(mobilePosition);
 				}
 			} catch (Exception e) {
-				log.warn("[notify-移动位置] 发现未处理的异常, \r\n{}", evt.getRequest());
-				log.error("[notify-移动位置] 异常内容： ", e);
+				log.warn("[notify-Move location] Unhandled exception found, \r\n{}", evt.getRequest());
+				log.error("[notify-Move location] Unusual content： ", e);
 			}
 		}
 		if (!mobilePositionList.isEmpty()) {
 			try {
 				eventPublisher.mobilePositionsEventPublish(mobilePositionList);
 			} catch (Exception e) {
-				log.error("[MobilePositionEvent] 发送失败：  ", e);
+				log.error("[MobilePositionEvent] Sending failed：  ", e);
 			}
 		}
 	}

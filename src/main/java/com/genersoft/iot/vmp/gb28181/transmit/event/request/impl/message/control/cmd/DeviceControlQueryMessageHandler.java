@@ -66,7 +66,7 @@ public class DeviceControlQueryMessageHandler extends SIPRequestProcessorParent 
         try {
             responseAck((SIPRequest) evt.getRequest(), Response.OK);
         } catch (SipException | InvalidArgumentException | ParseException e) {
-            log.error("[命令发送失败] 回复200 OK: {}", e.getMessage());
+            log.error("[Command sending failed] Reply200 OK: {}", e.getMessage());
         }
     }
 
@@ -75,17 +75,17 @@ public class DeviceControlQueryMessageHandler extends SIPRequestProcessorParent 
 
         SIPRequest request = (SIPRequest) evt.getRequest();
 
-        // 此处是上级发出的DeviceControl指令
+        // Here is the DeviceControl instruction issued by the superior
         String targetGBId = ((SipURI) request.getToHeader().getAddress().getURI()).getUser();
         String channelId = getText(rootElement, "DeviceID");
-        // 远程启动功能
+        // Remote start function
         if (!ObjectUtils.isEmpty(getText(rootElement, "TeleBoot"))) {
-            // 拒绝远程启动命令
-            log.warn("[deviceControl] 远程启动命令， 禁用，不允许上级平台随意重启下级平台");
+            // Reject remote boot command
+            log.warn("[deviceControl] Remote start command, disabled, does not allow the upper-level platform to restart the lower-level platform at will");
             try {
                 responseAck(request, Response.FORBIDDEN);
             } catch (SipException | InvalidArgumentException | ParseException e) {
-                log.error("[命令发送失败] 错误信息: {}", e.getMessage());
+                log.error("[Command sending failed] error message: {}", e.getMessage());
             }
             return;
         }
@@ -93,16 +93,16 @@ public class DeviceControlQueryMessageHandler extends SIPRequestProcessorParent 
 
         CommonGBChannel channel = channelService.queryOneWithPlatform(platform.getId(), channelId);
         if (channel == null) {
-            log.warn("[deviceControl] 未找到通道， 平台： {}（{}），通道编号：{}", platform.getName(),
+            log.warn("[deviceControl] Channel not found, platform： {}（{}），Channel number：{}", platform.getName(),
                     platform.getServerGBId(), channelId);
             try {
                 responseAck(request, Response.NOT_FOUND, "channel not found");
             } catch (SipException | InvalidArgumentException | ParseException e) {
-                log.error("[命令发送失败] 错误信息: {}", e.getMessage());
+                log.error("[Command sending failed] error message: {}", e.getMessage());
             }
             return;
         }
-        log.info("[deviceControl] 命令: {}, 平台： {}（{}）->{}", deviceControlType, platform.getName(),
+        log.info("[deviceControl] command: {}, platform： {}（{}）->{}", deviceControlType, platform.getName(),
                 platform.getServerGBId(), channel.getGbId());
 
         if (!ObjectUtils.isEmpty(deviceControlType)) {
@@ -141,7 +141,7 @@ public class DeviceControlQueryMessageHandler extends SIPRequestProcessorParent 
     }
 
     /**
-     * 处理云台指令
+     * Process PTZ commands
      */
     private void handlePtzCmd(CommonGBChannel channel, Element rootElement, SIPRequest request, DeviceControlType type) {
         if (channel.getDataType() == ChannelDataType.GB28181) {
@@ -150,19 +150,19 @@ public class DeviceControlQueryMessageHandler extends SIPRequestProcessorParent 
                 try {
                     responseAck(request, code, msg);
                 }  catch (InvalidArgumentException | SipException | ParseException exception) {
-                    log.error("[命令发送失败] 云台指令: {}", exception.getMessage());
+                    log.error("[Command sending failed] PTZ command: {}", exception.getMessage());
                 }
             }));
         }else {
-            // 解析云台控制参数
+            // Analyze PTZ control parameters
             String cmdString = getText(rootElement, type.getVal());
             IFrontEndControlCode frontEndControlCode = FrontEndCode.decode(cmdString);
             if (frontEndControlCode == null) {
-                log.info("[INFO 消息] 不支持的控制方式");
+                log.info("[INFO news] Unsupported control method");
                 try {
                     responseAck(request, Response.FORBIDDEN, "");
                 }  catch (InvalidArgumentException | SipException | ParseException exception) {
-                    log.error("[命令发送失败] 云台指令: {}", exception.getMessage());
+                    log.error("[Command sending failed] PTZ command: {}", exception.getMessage());
                 }
                 return;
             }
@@ -176,7 +176,7 @@ public class DeviceControlQueryMessageHandler extends SIPRequestProcessorParent 
                                 responseAck(request, Response.FORBIDDEN);
                             }
                         }  catch (InvalidArgumentException | SipException | ParseException exception) {
-                            log.error("[命令发送失败] 云台指令: {}", exception.getMessage());
+                            log.error("[Command sending failed] PTZ command: {}", exception.getMessage());
                         }
                     }));
                     break;
@@ -189,7 +189,7 @@ public class DeviceControlQueryMessageHandler extends SIPRequestProcessorParent 
                                 responseAck(request, Response.FORBIDDEN);
                             }
                         }  catch (InvalidArgumentException | SipException | ParseException exception) {
-                            log.error("[命令发送失败] FI指令: {}", exception.getMessage());
+                            log.error("[Command sending failed] FIinstructions: {}", exception.getMessage());
                         }
                     }));
                     break;
@@ -202,7 +202,7 @@ public class DeviceControlQueryMessageHandler extends SIPRequestProcessorParent 
                                 responseAck(request, Response.FORBIDDEN);
                             }
                         }  catch (InvalidArgumentException | SipException | ParseException exception) {
-                            log.error("[命令发送失败] 预置位指令: {}", exception.getMessage());
+                            log.error("[Command sending failed] Preset command: {}", exception.getMessage());
                         }
                     }));
                     break;
@@ -215,7 +215,7 @@ public class DeviceControlQueryMessageHandler extends SIPRequestProcessorParent 
                                 responseAck(request, Response.FORBIDDEN);
                             }
                         }  catch (InvalidArgumentException | SipException | ParseException exception) {
-                            log.error("[命令发送失败] 巡航指令: {}", exception.getMessage());
+                            log.error("[Command sending failed] cruise command: {}", exception.getMessage());
                         }
                     }));
                     break;
@@ -228,7 +228,7 @@ public class DeviceControlQueryMessageHandler extends SIPRequestProcessorParent 
                                 responseAck(request, Response.FORBIDDEN);
                             }
                         }  catch (InvalidArgumentException | SipException | ParseException exception) {
-                            log.error("[命令发送失败] 扫描指令: {}", exception.getMessage());
+                            log.error("[Command sending failed] scan command: {}", exception.getMessage());
                         }
                     }));
                     break;
@@ -241,7 +241,7 @@ public class DeviceControlQueryMessageHandler extends SIPRequestProcessorParent 
                                 responseAck(request, Response.FORBIDDEN);
                             }
                         }  catch (InvalidArgumentException | SipException | ParseException exception) {
-                            log.error("[命令发送失败] 辅助开关指令: {}", exception.getMessage());
+                            log.error("[Command sending failed] Auxiliary switch command: {}", exception.getMessage());
                         }
                     }));
                     break;
@@ -254,92 +254,92 @@ public class DeviceControlQueryMessageHandler extends SIPRequestProcessorParent 
                                 responseAck(request, Response.FORBIDDEN);
                             }
                         }  catch (InvalidArgumentException | SipException | ParseException exception) {
-                            log.error("[命令发送失败] 辅助开关指令: {}", exception.getMessage());
+                            log.error("[Command sending failed] Auxiliary switch command: {}", exception.getMessage());
                         }
                     }));
                     break;
                 default:
-                    log.info("[INFO 消息] 设备不支持的控制方式");
+                    log.info("[INFO news] Control method not supported by the device");
                     try {
                         responseAck(request, Response.FORBIDDEN, "");
                     }  catch (InvalidArgumentException | SipException | ParseException exception) {
-                        log.error("[命令发送失败] 云台指令: {}", exception.getMessage());
+                        log.error("[Command sending failed] PTZ command: {}", exception.getMessage());
                     }
             }
         }
     }
 
     /**
-     * 处理强制关键帧
+     * Handling forced keyframes
      */
     private void handleIFameCmd(CommonGBChannel channel, SIPRequest request) {
         if (channel.getDataType() != ChannelDataType.GB28181) {
-            // 只支持国标的云台控制
-            log.warn("[INFO 消息] 只支持国标的处理强制关键帧， 通道ID： {}", channel.getGbId());
+            // Only supports national standard PTZ control
+            log.warn("[INFO news] Only supports national standard processing of forced key frames, channelID： {}", channel.getGbId());
             try {
                 responseAck(request, Response.FORBIDDEN, "");
             } catch (SipException | InvalidArgumentException | ParseException e) {
-                log.error("[命令发送失败] 错误信息: {}", e.getMessage());
+                log.error("[Command sending failed] error message: {}", e.getMessage());
             }
             return;
         }
-        // 根据通道ID，获取所属设备
+        // Get the device according to the channel ID
         Device device = deviceService.getDevice(channel.getDataDeviceId());
         if (device == null) {
-            // 不存在则回复404
-            log.warn("[INFO 消息] 通道所属设备不存在， 通道ID： {}", channel.getGbId());
+            // Reply if it does not exist404
+            log.warn("[INFO news] The device to which the channel belongs does not exist, channelID： {}", channel.getGbId());
             try {
                 responseAck(request, Response.NOT_FOUND, "device  not found");
             } catch (SipException | InvalidArgumentException | ParseException e) {
-                log.error("[命令发送失败] 错误信息: {}", e.getMessage());
+                log.error("[Command sending failed] error message: {}", e.getMessage());
             }
             return;
         }
 
         DeviceChannel deviceChannel = deviceChannelService.getOneForSourceById(channel.getGbId());
         if (deviceChannel == null) {
-            log.warn("[deviceControl] 未找到设备原始通道， 设备： {}（{}），通道编号：{}", device.getName(),
+            log.warn("[deviceControl] Device raw channel not found, device： {}（{}），Channel number：{}", device.getName(),
                     device.getDeviceId(), channel.getGbId());
             try {
                 responseAck(request, Response.NOT_FOUND, "channel not found");
             } catch (SipException | InvalidArgumentException | ParseException e) {
-                log.error("[命令发送失败] 错误信息: {}", e.getMessage());
+                log.error("[Command sending failed] error message: {}", e.getMessage());
             }
             return;
         }
-        log.info("[deviceControl] 命令: 强制关键帧, 设备： {}（{}）， 通道{}（{}",  device.getName(), device.getDeviceId(),
+        log.info("[deviceControl] Command: force keyframe, device： {}（{}）， channel{}（{}",  device.getName(), device.getDeviceId(),
                 deviceChannel.getName(), deviceChannel.getDeviceId());
         try {
             cmder.iFrameCmd(device, deviceChannel.getDeviceId());
             responseAck(request, Response.OK);
         } catch (InvalidArgumentException | SipException | ParseException e) {
-            log.error("[命令发送失败] 强制关键帧: {}", e.getMessage());
+            log.error("[Command sending failed] Force keyframe: {}", e.getMessage());
         }
     }
 
     /**
-     * 处理重启命令
+     * Handle restart commands
      */
     private void handleTeleBootCmd(CommonGBChannel channel, SIPRequest request) {
         if (channel.getDataType() != ChannelDataType.GB28181) {
-            // 只支持国标的云台控制
-            log.warn("[INFO 消息] 只支持国标的重启命令， 通道ID： {}", channel.getGbId());
+            // Only supports national standard PTZ control
+            log.warn("[INFO news] Only supports the national standard restart command, channelID： {}", channel.getGbId());
             try {
                 responseAck(request, Response.FORBIDDEN, "");
             } catch (SipException | InvalidArgumentException | ParseException e) {
-                log.error("[命令发送失败] 错误信息: {}", e.getMessage());
+                log.error("[Command sending failed] error message: {}", e.getMessage());
             }
             return;
         }
-        // 根据通道ID，获取所属设备
+        // Get the device according to the channel ID
         Device device = deviceService.getDevice(channel.getDataDeviceId());
         if (device == null) {
-            // 不存在则回复404
-            log.warn("[INFO 消息] 通道所属设备不存在， 通道ID： {}", channel.getGbId());
+            // Reply if it does not exist404
+            log.warn("[INFO news] The device to which the channel belongs does not exist, channelID： {}", channel.getGbId());
             try {
                 responseAck(request, Response.NOT_FOUND, "device  not found");
             } catch (SipException | InvalidArgumentException | ParseException e) {
-                log.error("[命令发送失败] 错误信息: {}", e.getMessage());
+                log.error("[Command sending failed] error message: {}", e.getMessage());
             }
             return;
         }
@@ -347,50 +347,50 @@ public class DeviceControlQueryMessageHandler extends SIPRequestProcessorParent 
             cmder.teleBootCmd(device);
             responseAck(request, Response.OK);
         } catch (InvalidArgumentException | SipException | ParseException e) {
-            log.error("[命令发送失败] 重启: {}", e.getMessage());
+            log.error("[Command sending failed] Restart: {}", e.getMessage());
         }
 
     }
 
     /**
-     * 处理拉框控制
+     * Handle pull box control
      */
     private void handleDragZoom(CommonGBChannel channel, Element rootElement, SIPRequest request, DeviceControlType type) {
         if (channel.getDataType() != ChannelDataType.GB28181) {
-            // 只支持国标的云台控制
-            log.warn("[deviceControl-DragZoom] 只支持国标的拉框控制， 通道ID： {}", channel.getGbId());
+            // Only supports national standard PTZ control
+            log.warn("[deviceControl-DragZoom] Only support the national standard pull box control, channelID： {}", channel.getGbId());
             try {
                 responseAck(request, Response.FORBIDDEN, "");
             } catch (SipException | InvalidArgumentException | ParseException e) {
-                log.error("[命令发送失败] 错误信息: {}", e.getMessage());
+                log.error("[Command sending failed] error message: {}", e.getMessage());
             }
             return;
         }
-        // 根据通道ID，获取所属设备
+        // Get the device according to the channel ID
         Device device = deviceService.getDevice(channel.getDataDeviceId());
         if (device == null) {
-            // 不存在则回复404
-            log.warn("[deviceControl-DragZoom] 通道所属设备不存在， 通道ID： {}", channel.getGbId());
+            // Reply if it does not exist404
+            log.warn("[deviceControl-DragZoom] The device to which the channel belongs does not exist, channelID： {}", channel.getGbId());
             try {
                 responseAck(request, Response.NOT_FOUND, "device  not found");
             } catch (SipException | InvalidArgumentException | ParseException e) {
-                log.error("[命令发送失败] 错误信息: {}", e.getMessage());
+                log.error("[Command sending failed] error message: {}", e.getMessage());
             }
             return;
         }
 
         DeviceChannel deviceChannel = deviceChannelService.getOneForSourceById(channel.getGbId());
         if (deviceChannel == null) {
-            log.warn("[deviceControl-DragZoom] 未找到设备原始通道， 设备： {}（{}），通道编号：{}", device.getName(),
+            log.warn("[deviceControl-DragZoom] Device raw channel not found, device： {}（{}），Channel number：{}", device.getName(),
                     device.getDeviceId(), channel.getGbId());
             try {
                 responseAck(request, Response.NOT_FOUND, "channel not found");
             } catch (SipException | InvalidArgumentException | ParseException e) {
-                log.error("[命令发送失败] 错误信息: {}", e.getMessage());
+                log.error("[Command sending failed] error message: {}", e.getMessage());
             }
             return;
         }
-        log.info("[deviceControl] 命令: {}, 设备： {}（{}）， 通道{}（{}", type,  device.getName(), device.getDeviceId(),
+        log.info("[deviceControl] command: {}, Equipment： {}（{}）， channel{}（{}", type,  device.getName(), device.getDeviceId(),
                 deviceChannel.getName(), deviceChannel.getDeviceId());
         try {
             DragZoomRequest dragZoomRequest = loadElement(rootElement, DragZoomRequest.class);
@@ -410,54 +410,54 @@ public class DeviceControlQueryMessageHandler extends SIPRequestProcessorParent 
             cmder.dragZoomCmd(device, deviceChannel.getDeviceId(), cmdXml.toString());
             responseAck(request, Response.OK);
         } catch (Exception e) {
-            log.error("[命令发送失败] 拉框控制: {}", e.getMessage());
+            log.error("[Command sending failed] Frame control: {}", e.getMessage());
         }
 
     }
 
     /**
-     * 处理看守位命令
+     * Handle guard bit commands
      */
     private void handleHomePositionCmd(CommonGBChannel channel, Element rootElement, SIPRequest request, DeviceControlType type) {
         if (channel.getDataType() != ChannelDataType.GB28181) {
-            // 只支持国标的云台控制
-            log.warn("[INFO 消息] 只支持国标的看守位命令， 通道ID： {}", channel.getGbId());
+            // Only supports national standard PTZ control
+            log.warn("[INFO news] Only supports the national standard guard bit command, channelID： {}", channel.getGbId());
             try {
                 responseAck(request, Response.FORBIDDEN, "");
             } catch (SipException | InvalidArgumentException | ParseException e) {
-                log.error("[命令发送失败] 错误信息: {}", e.getMessage());
+                log.error("[Command sending failed] error message: {}", e.getMessage());
             }
             return;
         }
-        // 根据通道ID，获取所属设备
+        // Get the device according to the channel ID
         Device device = deviceService.getDevice(channel.getDataDeviceId());
         if (device == null) {
-            // 不存在则回复404
-            log.warn("[INFO 消息] 通道所属设备不存在， 通道ID： {}", channel.getGbId());
+            // Reply if it does not exist404
+            log.warn("[INFO news] The device to which the channel belongs does not exist, channelID： {}", channel.getGbId());
             try {
                 responseAck(request, Response.NOT_FOUND, "device  not found");
             } catch (SipException | InvalidArgumentException | ParseException e) {
-                log.error("[命令发送失败] 错误信息: {}", e.getMessage());
+                log.error("[Command sending failed] error message: {}", e.getMessage());
             }
             return;
         }
 
         DeviceChannel deviceChannel = deviceChannelService.getOneForSourceById(channel.getGbId());
         if (deviceChannel == null) {
-            log.warn("[deviceControl] 未找到设备原始通道， 设备： {}（{}），通道编号：{}", device.getName(),
+            log.warn("[deviceControl] Device raw channel not found, device： {}（{}），Channel number：{}", device.getName(),
                     device.getDeviceId(), channel.getGbId());
             try {
                 responseAck(request, Response.NOT_FOUND, "channel not found");
             } catch (SipException | InvalidArgumentException | ParseException e) {
-                log.error("[命令发送失败] 错误信息: {}", e.getMessage());
+                log.error("[Command sending failed] error message: {}", e.getMessage());
             }
             return;
         }
-        log.info("[deviceControl] 命令: {}, 设备： {}（{}）， 通道{}（{}", type,  device.getName(), device.getDeviceId(),
+        log.info("[deviceControl] command: {}, Equipment： {}（{}）， channel{}（{}", type,  device.getName(), device.getDeviceId(),
                 deviceChannel.getName(), deviceChannel.getDeviceId());
         try {
             HomePositionRequest homePosition = loadElement(rootElement, HomePositionRequest.class);
-            //获取整个消息主体，我们只需要修改请求头即可
+            //To get the entire message body, we only need to modify the request header.
             HomePositionRequest.HomePosition info = homePosition.getHomePosition();
             cmder.homePositionCmd(device, deviceChannel.getDeviceId(), !"0".equals(info.getEnabled()), Integer.parseInt(info.getResetTime()), Integer.parseInt(info.getPresetIndex()), (code, msg, data) -> {
                 if (code == ErrorCode.SUCCESS.getCode()) {
@@ -467,39 +467,39 @@ public class DeviceControlQueryMessageHandler extends SIPRequestProcessorParent 
                 }
             });
         } catch (Exception e) {
-            log.error("[命令发送失败] 看守位设置: {}", e.getMessage());
+            log.error("[Command sending failed] Watch bit setting: {}", e.getMessage());
         }
     }
 
     /**
-     * 处理告警消息
+     * Handle alarm messages
      */
     private void handleAlarmCmd(CommonGBChannel channel, Element rootElement, SIPRequest request) {
         if (channel.getDataType() != ChannelDataType.GB28181) {
-            // 只支持国标的云台控制
-            log.warn("[INFO 消息] 只支持国标的告警消息， 通道ID： {}", channel.getGbId());
+            // Only supports national standard PTZ control
+            log.warn("[INFO news] Only supports national standard alarm messages, channelID： {}", channel.getGbId());
             try {
                 responseAck(request, Response.FORBIDDEN, "");
             } catch (SipException | InvalidArgumentException | ParseException e) {
-                log.error("[命令发送失败] 错误信息: {}", e.getMessage());
+                log.error("[Command sending failed] error message: {}", e.getMessage());
             }
             return;
         }
-        // 根据通道ID，获取所属设备
+        // Get the device according to the channel ID
         Device device = deviceService.getDevice(channel.getDataDeviceId());
         if (device == null) {
-            // 不存在则回复404
-            log.warn("[INFO 消息] 通道所属设备不存在， 通道ID： {}", channel.getGbId());
+            // Reply if it does not exist404
+            log.warn("[INFO news] The device to which the channel belongs does not exist, channelID： {}", channel.getGbId());
             try {
                 responseAck(request, Response.NOT_FOUND, "device  not found");
             } catch (SipException | InvalidArgumentException | ParseException e) {
-                log.error("[命令发送失败] 错误信息: {}", e.getMessage());
+                log.error("[Command sending failed] error message: {}", e.getMessage());
             }
             return;
         }
-        //告警方法
+        //Alarm method
         String alarmMethod = "";
-        //告警类型
+        //Alarm type
         String alarmType = "";
         List<Element> info = rootElement.elements("Info");
         if (info != null) {
@@ -517,52 +517,52 @@ public class DeviceControlQueryMessageHandler extends SIPRequestProcessorParent 
                 }
             });
         } catch (InvalidArgumentException | SipException | ParseException e) {
-            log.error("[命令发送失败] 告警消息: {}", e.getMessage());
+            log.error("[Command sending failed] Alarm message: {}", e.getMessage());
         }
     }
 
     /**
-     * 处理录像控制
+     * Handle video control
      */
     private void handleRecordCmd(CommonGBChannel channel, Element rootElement, SIPRequest request, DeviceControlType type) {
         if (channel.getDataType() != ChannelDataType.GB28181) {
-            // 只支持国标的云台控制
-            log.warn("[INFO 消息] 只支持国标的息录像控制， 通道ID： {}", channel.getGbId());
+            // Only supports national standard PTZ control
+            log.warn("[INFO news] Only supports national standard information video control, channelID： {}", channel.getGbId());
             try {
                 responseAck(request, Response.FORBIDDEN, "");
             } catch (SipException | InvalidArgumentException | ParseException e) {
-                log.error("[命令发送失败] 错误信息: {}", e.getMessage());
+                log.error("[Command sending failed] error message: {}", e.getMessage());
             }
             return;
         }
-        // 根据通道ID，获取所属设备
+        // Get the device according to the channel ID
         Device device = deviceService.getDevice(channel.getDataDeviceId());
         if (device == null) {
-            // 不存在则回复404
-            log.warn("[INFO 消息] 通道所属设备不存在， 通道ID： {}", channel.getGbId());
+            // Reply if it does not exist404
+            log.warn("[INFO news] The device to which the channel belongs does not exist, channelID： {}", channel.getGbId());
             try {
                 responseAck(request, Response.NOT_FOUND, "device  not found");
             } catch (SipException | InvalidArgumentException | ParseException e) {
-                log.error("[命令发送失败] 错误信息: {}", e.getMessage());
+                log.error("[Command sending failed] error message: {}", e.getMessage());
             }
             return;
         }
 
         DeviceChannel deviceChannel = deviceChannelService.getOneForSourceById(channel.getGbId());
         if (deviceChannel == null) {
-            // 拒绝远程启动命令
-            log.warn("[deviceControl] 未找到设备原始通道， 设备： {}（{}），通道编号：{}", device.getName(),
+            // Reject remote boot command
+            log.warn("[deviceControl] Device raw channel not found, device： {}（{}），Channel number：{}", device.getName(),
                     device.getDeviceId(), channel.getGbId());
             try {
                 responseAck(request, Response.NOT_FOUND, "channel not found");
             } catch (SipException | InvalidArgumentException | ParseException e) {
-                log.error("[命令发送失败] 错误信息: {}", e.getMessage());
+                log.error("[Command sending failed] error message: {}", e.getMessage());
             }
             return;
         }
-        log.info("[deviceControl] 命令: {}, 设备： {}（{}）， 通道{}（{}", type,  device.getName(), device.getDeviceId(),
+        log.info("[deviceControl] command: {}, Equipment： {}（{}）， channel{}（{}", type,  device.getName(), device.getDeviceId(),
                 deviceChannel.getName(), deviceChannel.getDeviceId());
-        //获取整个消息主体，我们只需要修改请求头即可
+        //To get the entire message body, we only need to modify the request header.
         String cmdString = getText(rootElement, type.getVal());
         try {
             cmder.recordCmd(device, deviceChannel.getDeviceId(), cmdString, (code, msg, data) -> {
@@ -573,37 +573,37 @@ public class DeviceControlQueryMessageHandler extends SIPRequestProcessorParent 
                         }
                     });
         } catch (InvalidArgumentException | SipException | ParseException e) {
-            log.error("[命令发送失败] 录像控制: {}", e.getMessage());
+            log.error("[Command sending failed] Video control: {}", e.getMessage());
         }
     }
 
     /**
-     * 处理报警布防/撤防命令
+     * Handle alarm arming/disarm order
      */
     private void handleGuardCmd(CommonGBChannel channel, Element rootElement, SIPRequest request, DeviceControlType type) {
         if (channel.getDataType() != ChannelDataType.GB28181) {
-            // 只支持国标的云台控制
-            log.warn("[INFO 消息] 只支持国标的报警布防/撤防命令， 通道ID： {}", channel.getGbId());
+            // Only supports national standard PTZ control
+            log.warn("[INFO news] Only supports national standard alarm deployment/Disarm command, channelID： {}", channel.getGbId());
             try {
                 responseAck(request, Response.FORBIDDEN, "");
             } catch (SipException | InvalidArgumentException | ParseException e) {
-                log.error("[命令发送失败] 错误信息: {}", e.getMessage());
+                log.error("[Command sending failed] error message: {}", e.getMessage());
             }
             return;
         }
-        // 根据通道ID，获取所属设备
+        // Get the device according to the channel ID
         Device device = deviceService.getDevice(channel.getDataDeviceId());
         if (device == null) {
-            // 不存在则回复404
-            log.warn("[INFO 消息] 通道所属设备不存在， 通道ID： {}", channel.getGbId());
+            // Reply if it does not exist404
+            log.warn("[INFO news] The device to which the channel belongs does not exist, channelID： {}", channel.getGbId());
             try {
                 responseAck(request, Response.NOT_FOUND, "device  not found");
             } catch (SipException | InvalidArgumentException | ParseException e) {
-                log.error("[命令发送失败] 错误信息: {}", e.getMessage());
+                log.error("[Command sending failed] error message: {}", e.getMessage());
             }
             return;
         }
-        //获取整个消息主体，我们只需要修改请求头即可
+        //To get the entire message body, we only need to modify the request header.
         String cmdString = getText(rootElement, type.getVal());
         try {
             cmder.guardCmd(device, cmdString,(code, msg, data) -> {
@@ -614,7 +614,7 @@ public class DeviceControlQueryMessageHandler extends SIPRequestProcessorParent 
                 }
             });
         } catch (InvalidArgumentException | SipException | ParseException e) {
-            log.error("[命令发送失败] 布防/撤防命令: {}", e.getMessage());
+            log.error("[Command sending failed] arm/disarm order: {}", e.getMessage());
         }
     }
 
@@ -622,15 +622,15 @@ public class DeviceControlQueryMessageHandler extends SIPRequestProcessorParent 
 
 
     /**
-     * 错误响应处理
+     * Error response handling
      *
      */
     private void onError(SIPRequest request, Integer code, String msg) {
-        // 失败的回复
+        // failed reply
         try {
             responseAck(request, code, msg);
         } catch (SipException | InvalidArgumentException | ParseException e) {
-            log.error("[命令发送失败] 回复: {}", e.getMessage());
+            log.error("[Command sending failed] Reply: {}", e.getMessage());
         }
     }
 
@@ -639,16 +639,16 @@ public class DeviceControlQueryMessageHandler extends SIPRequestProcessorParent 
     }
 
     /**
-     * 成功响应处理
+     * Successful response handling
      *
-     * @param request     请求
+     * @param request     Request
      */
     private void onOk(SIPRequest request) {
-        // 成功的回复
+        // successful reply
         try {
             responseAck(request, Response.OK);
         } catch (SipException | InvalidArgumentException | ParseException e) {
-            log.error("[命令发送失败] 回复: {}", e.getMessage());
+            log.error("[Command sending failed] Reply: {}", e.getMessage());
         }
     }
 }

@@ -6,7 +6,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 /**
- * 一个优秀的颓废程序猿（CSDN）
+ * An excellent decadent programmer（CSDN）
  */
 @Getter
 @Component

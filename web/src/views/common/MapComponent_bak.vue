@@ -107,10 +107,10 @@ export default {
       }
       olMap = new Map({
         interactions: defaultInteractions().extend([this.dragInteraction]),
-        target: this.$refs.mapContainer, // 容器ID
-        layers: [tileLayer], // 默认图层
-        view: view, // 视图
-        controls: [ // 控件
+        target: this.$refs.mapContainer, // containerID
+        layers: [tileLayer], // Default layer
+        view: view, // view
+        controls: [ // control
         ]
       })
       // olMap.addControl(new ZoomSlider({
@@ -123,7 +123,7 @@ export default {
         let features = {}
         let layers = {}
         console.log(event)
-        // 单个元素事件传递
+        // Single element event delivery
         olMap.forEachFeatureAtPixel(event.pixel, (featureAtPixel, layerAtPixel) => {
           console.log(4444)
           if (layerAtPixel) {
@@ -136,7 +136,7 @@ export default {
             }
           }
         })
-        // 遍历图层，传递事件
+        // Traverse layers and pass events
         for (const key in layers) {
           if (Object.hasOwn(layers, key)) {
             var layer = layers[key]
@@ -220,7 +220,7 @@ export default {
         // }
         // style: webglStyle
         style: {
-          // 必须提供 style 配置，可以是对象或函数
+          // Style configuration must be provided, which can be an object or function
           // 'circle-radius': 4,
           // 'circle-fill-color': 'red',
           // 'circle-stroke-color': 'white',
@@ -375,7 +375,7 @@ export default {
       }
     },
     /**
-     * 添加图层， 数据坐标系由控件内完成，输入和输出永远是wgs84
+     * Add a layer, the data coordinate system is completed within the control, and the input and output are alwayswgs84
      * [
      *     {
      *
@@ -424,7 +424,7 @@ export default {
         maxZoom: maxZoom,
         minZoom: minZoom,
         style: {
-          // 必须提供 style 配置，可以是对象或函数
+          // Style configuration must be provided, which can be an object or function
           // 'circle-radius': 10,
           // 'circle-fill-color': 'red',
           // 'circle-stroke-color': 'white',
@@ -511,7 +511,7 @@ export default {
     },
     hasFeature (layer, id) {
       if (layer instanceof LayerGroup) {
-        // 目前LayerGroup的情况肯定含有这个
+        // The current situation of LayerGroup definitely contains this
         return true
       }else {
         if (layer.getSource().getFeatureById(id)) {
@@ -590,7 +590,7 @@ export default {
     setFeatureImageById(layer, featureId, image) {
       let feature = layer.getSource().getFeatureById(featureId)
       if (!feature) {
-        console.error('更改feature的图标时未找到图标')
+        console.error('No icon found when changing the feature's icon')
         return
       }
       let style = feature.getStyle()
@@ -655,9 +655,9 @@ export default {
       window.coordinateSystem = this.mapTileList[this.mapTileIndex].coordinateSystem
       tileLayer.getSource().setUrl(this.mapTileList[index].tilesUrl)
       if (mapTileConfig.coordinateSystem !== this.mapTileList[this.mapTileIndex].coordinateSystem) {
-        // 发送通知
+        // Send notification
         this.$emit('coordinateSystemChange', this.mapTileList[this.mapTileIndex].coordinateSystem)
-        // 修正地图的中心点
+        // Correct the center point of the map
         olMap.getView().setCenter(fromLonLat(center))
       }
     },
@@ -665,9 +665,9 @@ export default {
       return [olMap.getView().getMinZoom(), olMap.getView().getMaxZoom()]
     },
     /**
-     * 根据距离计算经纬度差值，方便前端抽稀计算
-     * @param distance 距离， 单位：像素值
-     * @param zoom 地图层级，默认取值当前层级
+     * Calculate the difference in longitude and latitude based on distance to facilitate front-end thinning calculations
+     * @param distance Distance, unit: pixel value
+     * @param zoom Map level, the default value is the current level
      */
     computeDiff(distance, zoom) {
       if (!distance) {
@@ -759,7 +759,7 @@ export default {
         })
       })
       olMap.addInteraction(draw)
-      // 添加事件
+      // Add event
       draw.on('drawstart', function (event) {
         source.clear()
       })

@@ -1,13 +1,13 @@
-<!-- 云端录像 -->
+<!-- Cloud recording -->
 
-# 云端录像
+#cloudrecording
 
-![云端录像](_media/img_26.png)
-云端录像是对录制在zlm服务下的录像文件的管理，录像的文件路径默认在ZLM/www/record下。
+! [Cloud recording](_media/img_26.png) 
+Cloud recording is the management of video files recorded under the zlm service. The file path of the video is by default under ZLM/www/record.
 
-- 国标设备是否录像: 可以在WVP的配置中user-settings.record-sip设置为true那么每次点播以及录像回放都会录像;
-- 推流设备是否录像: 可以在WVP的配置中user-settings.record-push-live设置为true;
-- 拉流代理是否录像: 在添加和编辑拉流代理时可以指定, 每次点播都会进行录像
-- 录像文件存储路径配置: 可以修改media.record-path来修改录像路径,但是如果有旧的录像文件,请不要迁移,因为数据库记录了每一个录像的绝对路径,一旦修改会造成找到文件,无法定时移除以及播放
-- 录像保存时间: 可以修改media.record-day来修改录像保存时间,单位是天;
+- Whether the national standard equipment records: You can set user-settings.record-sip to true in the WVP configuration, then every on-demand and video playback will be recorded;
+- Whether the push device records: You can set user-settings.record-push-live to true in the WVP configuration;
+- Whether the streaming agent records: You can specify it when adding and editing the streaming agent. Recording will be performed every time the video is requested.
+- Recording file storage path configuration: You can modify media.record-path to modify the recording path, but if there are old recording files, please do not migrate because the database records the absolute path of each recording. Once modified, the file will be found and cannot be removed and played regularly.
+- Video storage time: You can modify media.record-day to modify the video storage time, the unit is days;
 

@@ -1,11 +1,11 @@
 spring:
-  # 设置接口超时时间
+  # Set interface timeout
   mvc:
     async:
       request-timeout: 20000
   thymeleaf:
     cache: false
-  # [可选]上传文件大小限制
+  # [Optional]Upload file size limit
   servlet:
     multipart:
       max-file-size: 10MB
@@ -13,26 +13,26 @@ spring:
   cache:
     type: redis
   data:
-    # REDIS数据库配置
+    # REDISDatabase configuration
     redis:
-      # [必须修改] Redis服务器IP, REDIS安装在本机的,使用127.0.0.1
+      # [Must be modified] RedisServer IP, REDIS is installed on this machine, use127.0.0.1
       host: 127.0.0.1
-      # [必须修改] 端口号
+      # [Must be modified] port number
       port: 6379
-      # [可选] 数据库 DB
+      # [Optional] database DB
       database: 7
-      # [可选] 访问密码,若你的redis服务器没有设置密码，就不需要用密码去连接
+      # [Optional] Access password. If your redis server does not have a password set, you do not need to use a password to connect.
       password: luna
-      # [可选] 超时时间
+      # [Optional] timeout
       timeout: 10000
-  # mysql数据源
+  # mysqldata source
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/wvp273数据库统合?useUnicode=true&characterEncoding=UTF8&rewriteBatchedStatements=true&serverTimezone=PRC&useSSL=false&allowMultiQueries=true&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://127.0.0.1:3306/wvp273Database integration?useUnicode=true&characterEncoding=UTF8&rewriteBatchedStatements=true&serverTimezone=PRC&useSSL=false&allowMultiQueries=true&allowPublicKeyRetrieval=true
     username: root
     password: 12345678
-  # h2数据库
+  # H2 Database
   #  datasource:
   #    driver-class-name: org.h2.Driver
   #    url: jdbc:h2:mem:wvp
@@ -40,83 +40,83 @@ spring:
   #    password: 12345678
   #    sql:
   #      init:
-  #        # 启动时仅初始化内置的数据库，例如h2:mem
+  #        # Only initialize built-in database when starting, such as h2:mem
   #        mode: embedded
-  #        schema-locations: file:数据库/2.7.4-h2/h2-schema.sql
-  #        data-locations: file:数据库/2.7.4-h2/h2-data.sql
-  #  # h2数据库控制台，请注意仅在测试环境下使用！
+  #        schema-locations: file:database/2.7.4-h2/h2-schema.sql
+  #        data-locations: file:database/2.7.4-h2/h2-data.sql
+  #  # H2 database console, please note it should only be used in testing environments!
   #  h2:
   #    console:
   #      enabled: true
-#[可选] WVP监听的HTTP端口, 网页和接口调用都是这个端口
+#[Optional] WVPThe listening HTTP port, web pages and interface calls are all on this port
 server:
   port: 18080
-  # [可选] HTTPS配置， 默认不开启
+  # [Optional] HTTPSConfiguration, not enabled by default
   ssl:
-    # [可选] 是否开启HTTPS访问
+    # [Optional] Whether to enable HTTPS access
     enabled: false
-    # [可选] 证书文件路径，放置在resource/目录下即可，修改xxx为文件名
+    # [Optional] Certificate file path, placed inresource/Just go to the directory and change xxx to the file name.
     key-store: classpath:test.monitor.89iot.cn.jks
-    # [可选] 证书密码
+    # [Optional] Certificate password
     key-store-password: gpf64qmw
-    # [可选] 证书类型， 默认为jks，根据实际修改
+    # [Optional] Certificate type, default is jks, modify according to actual situation
     key-store-type: JKS
 
-# 作为28181服务器的配置
+# Configuration as 28181 server
 sip:
-  # [可选] 28181服务监听的端口
+  # [Optional] 28181The port the service listens on
   port: 8116
-  # 根据国标6.1.2中规定，domain宜采用ID统一编码的前十位编码。国标附录D中定义前8位为中心编码（由省级、市级、区级、基层编号组成，参照GB/T 2260-2007）
-  # 后两位为行业编码，定义参照附录D.3
-  # 3701020049标识山东济南历下区 信息行业接入
-  # [可选]
+  # According to the provisions of national standard 6.1.2, domain should use the first ten digits of the unified ID code. Appendix D of the national standard defines the first 8 digits as the center code (composed of provincial, municipal, district and grassroots numbers, refer toGB/T 2260-2007）
+  # The last two digits are industry codes. For definitions, please refer to the appendix.D.3
+  # 3701020049Identification of information industry access in Lixia District, Jinan, Shandong Province
+  # [Optional]
   domain: 4101050000
-  # [可选]
+  # [Optional]
   id: 41010500002000000001
-  # [可选] 公共认证密码 移除密码将必须提前添加设备才能通过认证
+  # [Optional] Public authentication password. If you remove the password, you will have to add the device in advance to pass the authentication.
   password: 12345678
-  # 是否存储alarm信息
+  # Whether to store alarm information
   alarm: false
 
-#zlm 默认服务器配置
+#zlm Default server configuration
 media:
   id: zlmediakit-local
-  # [必须修改] zlm服务器的内网IP
+  # [Must be modified] zlmServer's intranetIP
   ip: 192.168.1.10
-  # [必须修改] zlm服务器的http.port
+  # [Must be modified] zlmServer'shttp.port
   http-port: 9092
-  # [必选选] zlm服务器的hook.admin_params=secret
+  # [Required] zlmServer'shook.admin_params=secret
   secret: TWSYFgYJOQWB4ftgeYut8DW4wbs7pQnj
-  # 启用多端口模式, 多端口模式使用端口区分每路流，兼容性更好。 单端口使用流的ssrc区分， 点播超时建议使用多端口测试
+  # Enable multi-port mode. Multi-port mode uses ports to distinguish each flow for better compatibility. Single port uses the ssrc of the flow to distinguish. For on-demand timeout, it is recommended to use multi-port testing.
   rtp:
-    # [可选] 是否启用多端口模式, 开启后会在portRange范围内选择端口用于媒体流传输
+    # [Optional] Whether to enable multi-port mode. When enabled, the port will be selected within the portRange range for media streaming.
     enable: true
-    # [可选] 在此范围内选择端口用于媒体流传输, 必须提前在zlm上配置该属性，不然自动配置此属性可能不成功
-    port-range: 40000,45000 # 端口范围
-    # [可选] 国标级联在此范围内选择端口发送媒体流,
-    send-port-range: 50000,55000 # 端口范围
-# [根据业务需求配置]
+    # [Optional] Select a port within this range for media streaming. This attribute must be configured on zlm in advance, otherwise the automatic configuration of this attribute may not be successful.
+    port-range: 40000,45000 # port range
+    # [Optional] National standard cascade selects ports within this range to send media streams,
+    send-port-range: 50000,55000 # port range
+# [Configure according to business needs]
 user-settings:
-  # 点播/录像回放 等待超时时间,单位：毫秒
+  # on demand/Video playback waiting timeout, unit: milliseconds
   play-timeout: 180000
-  # [可选] 多端口模式使用随机SSRC，SSRC允许重复（默认false）
+  # [Optional] Multiport mode uses random SSRC, SSRC is allowed to be repeated (defaultfalse）
   ssrc-random: false
-  # [可选] 自动点播， 使用固定流地址进行播放时，如果未点播则自动进行点播, 需要rtp.enable=true
+  # [Optional] Automatically play on demand. When using a fixed stream address for playback, if the playback is not on demand, it will automatically play on demand. Requiredrtp.enable=true
   auto-apply-play: true
-  # 推流直播是否录制
+  # Whether to record live push streaming
   record-push-live: true
-  # 国标是否录制
+  # Is the national standard recorded?
   record-sip: true
-  # 国标点播 按需拉流, true：有人观看拉流，无人观看释放， false：拉起后不自动释放
+  # National standard on-demand streaming on demand, true: someone is watching the stream, no one is watching it, it is released, false: it is not automatically released after it is pulled up.
   stream-on-demand: true
-  # 是否返回Date属性，true：不返回，避免摄像头通过该参数自动校时，false：返回，摄像头可能会根据该时间校时
+  # Whether to return the Date attribute, true: not returned, to prevent the camera from automatically adjusting the time through this parameter, false: returned, the camera may adjust the time based on this time
   disable-date-header: false
-  # 设备注册时间列表最大保留条数，默认100，设置为0则不限制
+  # The maximum number of entries to be retained in the device registration time list. The default is 100. If set to 0, there is no limit.
   device-register-time-max-count: 100
-  # 设备注册时间列表过期时间（小时），默认3，设置为0则永不过期
+  # Device registration time list expiration time (hours), default 3, set to 0 to never expire
   device-register-time-ttl-hours: 3
-  # 设备心跳时间列表最大保留条数，默认100，设置为0则不限制
+  # The maximum number of entries in the device heartbeat time list, the default is 100, if set to 0 there is no limit
   device-keepalive-time-max-count: 100
-  # 设备心跳时间列表过期时间（小时），默认1，设置为0则永不过期
+  # Device heartbeat time list expiration time (hours), default 1, set to 0 to never expire
   device-keepalive-time-ttl-hours: 1
 

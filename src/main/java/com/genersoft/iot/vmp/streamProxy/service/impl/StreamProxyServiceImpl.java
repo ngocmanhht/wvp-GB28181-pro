@@ -44,7 +44,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 视频代理业务
+ * Video agency business
  */
 @Slf4j
 @Service
@@ -75,7 +75,7 @@ public class StreamProxyServiceImpl implements IStreamProxyService {
     TransactionDefinition transactionDefinition;
 
     /**
-     * 流到来的处理
+     * Processing of incoming streams
      */
     @Async
     @Transactional
@@ -87,7 +87,7 @@ public class StreamProxyServiceImpl implements IStreamProxyService {
     }
 
     /**
-     * 流离开的处理
+     * Stream departure processing
      */
     @Async
     @EventListener
@@ -99,7 +99,7 @@ public class StreamProxyServiceImpl implements IStreamProxyService {
     }
 
     /**
-     * 流未找到的处理
+     * Stream not found processing
      */
     @Async
     @EventListener
@@ -107,17 +107,17 @@ public class StreamProxyServiceImpl implements IStreamProxyService {
         if (MediaStreamUtil.isKeywords(event.getApp())) {
             return;
         }
-        // 拉流代理
+        // Streaming agent
         StreamProxy streamProxyByAppAndStream = getStreamProxyByAppAndStream(event.getApp(), event.getStream());
         if (streamProxyByAppAndStream != null && streamProxyByAppAndStream.isEnableDisableNoneReader()) {
             startByAppAndStream(event.getApp(), event.getStream(), ((code, msg, data) -> {
-                log.info("[拉流代理] 自动点播成功， app： {}， stream: {}", event.getApp(), event.getStream());
+                log.info("[Streaming agent] Automatic on-demand successful， app： {}， stream: {}", event.getApp(), event.getStream());
             }));
         }
     }
 
     /**
-     * 流媒体节点上线
+     * Streaming media node online
      */
     @Async
     @EventListener
@@ -127,7 +127,7 @@ public class StreamProxyServiceImpl implements IStreamProxyService {
     }
 
     /**
-     * 流媒体节点离线
+     * Streaming media node offline
      */
     @Async
     @EventListener
@@ -142,7 +142,7 @@ public class StreamProxyServiceImpl implements IStreamProxyService {
     public void add(StreamProxy streamProxy) {
         StreamProxy streamProxyInDb = streamProxyMapper.selectOneByAppAndStream(streamProxy.getApp(), streamProxy.getStream());
         if (streamProxyInDb != null) {
-            throw new ControllerException(ErrorCode.ERROR100.getCode(), "APP+STREAM已经存在");
+            throw new ControllerException(ErrorCode.ERROR100.getCode(), "APP+STREAMalready exists");
         }
         if (streamProxy.getGbDeviceId() != null) {
             gbChannelService.add(streamProxy.buildCommonGBChannel());
@@ -158,13 +158,13 @@ public class StreamProxyServiceImpl implements IStreamProxyService {
     public void delete(int id) {
         StreamProxy streamProxy = getStreamProxy(id);
         if (streamProxy == null) {
-            throw new ControllerException(ErrorCode.ERROR100.getCode(), "代理不存在");
+            throw new ControllerException(ErrorCode.ERROR100.getCode(), "Agent does not exist");
         }
         delete(streamProxy);
     }
 
     private void delete(StreamProxy streamProxy) {
-        Assert.notNull(streamProxy, "代理不可为NULL");
+        Assert.notNull(streamProxy, "The agent cannotNULL");
         if (streamProxy.getPulling() != null && streamProxy.getPulling()) {
             playService.stopProxy(streamProxy);
         }
@@ -179,20 +179,20 @@ public class StreamProxyServiceImpl implements IStreamProxyService {
     public void delteByAppAndStream(String app, String stream) {
         StreamProxy streamProxy = streamProxyMapper.selectOneByAppAndStream(app, stream);
         if (streamProxy == null) {
-            throw new ControllerException(ErrorCode.ERROR100.getCode(), "代理不存在");
+            throw new ControllerException(ErrorCode.ERROR100.getCode(), "Agent does not exist");
         }
         delete(streamProxy);
     }
 
     /**
-     * 更新代理流
+     * Update agent flow
      */
     @Override
     public boolean update(StreamProxy streamProxy) {
         streamProxy.setUpdateTime(DateUtil.getNow());
         StreamProxy streamProxyInDb = streamProxyMapper.select(streamProxy.getId());
         if (streamProxyInDb == null) {
-            throw new ControllerException(ErrorCode.ERROR100.getCode(), "代理不存在");
+            throw new ControllerException(ErrorCode.ERROR100.getCode(), "Agent does not exist");
         }
         int updateResult = streamProxyMapper.update(streamProxy);
         if (updateResult > 0 && !ObjectUtils.isEmpty(streamProxy.getGbDeviceId())) {
@@ -222,7 +222,7 @@ public class StreamProxyServiceImpl implements IStreamProxyService {
     public void startByAppAndStream(String app, String stream, ErrorCallback<StreamInfo> callback) {
         StreamProxy streamProxy = streamProxyMapper.selectOneByAppAndStream(app, stream);
         if (streamProxy == null) {
-            throw new ControllerException(ErrorCode.ERROR404.getCode(), "代理信息未找到");
+            throw new ControllerException(ErrorCode.ERROR404.getCode(), "Agent information not found");
         }
         playService.startProxy(streamProxy, callback);
     }
@@ -231,7 +231,7 @@ public class StreamProxyServiceImpl implements IStreamProxyService {
     public void stopByAppAndStream(String app, String stream) {
         StreamProxy streamProxy = streamProxyMapper.selectOneByAppAndStream(app, stream);
         if (streamProxy == null) {
-            throw new ControllerException(ErrorCode.ERROR404.getCode(), "代理信息未找到");
+            throw new ControllerException(ErrorCode.ERROR404.getCode(), "Agent information not found");
         }
         playService.stopProxy(streamProxy);
     }
@@ -254,7 +254,7 @@ public class StreamProxyServiceImpl implements IStreamProxyService {
         if (mediaServer == null) {
             return;
         }
-        // 这里主要是控制数据库/redis缓存/以及zlm中存在的代理流 三者状态一致。以数据库中数据为根本
+        // The main thing here is to control the database/rediscache/And the proxy flow existing in zlm has the same status. Based on the data in the database
         redisCatchStorage.removeStream(mediaServer.getId(), "PULL");
 
         List<StreamProxy> streamProxies = streamProxyMapper.selectForPushingInMediaServer(mediaServer.getId(), true);
@@ -273,7 +273,7 @@ public class StreamProxyServiceImpl implements IStreamProxyService {
             String key = streamInfo.getApp() + streamInfo.getStream();
             StreamProxy streamProxy = streamProxyMapForDb.get(key);
             if (streamProxy == null) {
-                // 流媒体存在，数据库中不存在
+                // The streaming media exists but does not exist in the database.
                 continue;
             }
             if (streamInfo.getOriginType() == OriginType.PULL.ordinal()
@@ -320,7 +320,7 @@ public class StreamProxyServiceImpl implements IStreamProxyService {
     public void zlmServerOffline(MediaServer mediaServer) {
         List<StreamProxy> streamProxies = streamProxyMapper.selectForPushingInMediaServer(mediaServer.getId(), true);
 
-        // 清理redis相关的缓存
+        // Clean redis related cache
         redisCatchStorage.removeStream(mediaServer.getId(), "PULL");
 
         if (streamProxies.isEmpty()) {
@@ -338,7 +338,7 @@ public class StreamProxyServiceImpl implements IStreamProxyService {
             }
         }
         if (!channelListForOffline.isEmpty()) {
-            // 修改国标关联的国标通道的状态
+            // Modify the status of the national standard channel associated with the national standard
             gbChannelService.offline(channelListForOffline, true);
         }
         if (!streamProxiesForSendMessage.isEmpty()) {
@@ -356,7 +356,7 @@ public class StreamProxyServiceImpl implements IStreamProxyService {
 
     @Transactional
     public void streamChangeHandler(String app, String stream, String mediaServerId, boolean status) {
-        // 状态变化时推送到国标上级
+        // When the status changes, push it to the higher level of the national standard
         StreamProxy streamProxy = streamProxyMapper.selectOneByAppAndStream(app, stream);
         if (streamProxy == null) {
             return;

@@ -6,16 +6,16 @@ import lombok.Data;
 import org.dom4j.Element;
 
 @Data
-@Schema(description = "视频参数范围")
+@Schema(description = "Video parameter range")
 public class VideoParamOpt implements DeviceConfigAware {
 
-    @Schema(description = "设备ID")
+    @Schema(description = "EquipmentID")
     private String deviceId;
 
-    @Schema(description = "下载倍速范围，各可选参数以 '/' 分隔")
+    @Schema(description = "Download speed range, each optional parameter is '/' separate")
     private String downloadSpeed;
 
-    @Schema(description = "摄像机支持的分辨率，多个分辨率值以 '/' 分隔")
+    @Schema(description = "The resolution supported by the camera, multiple resolution values start with '/' separate")
     private String resolution;
 
     @Override

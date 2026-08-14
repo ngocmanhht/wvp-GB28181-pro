@@ -3,60 +3,60 @@
     <div v-if="!editId && !ptzConfigChannelDeviceId && !cameraConfigDeviceId" style="height: 100%">
       <el-form :inline="true" size="mini">
         <el-form-item style="margin-right: 2rem">
-          <el-page-header content="通道列表" @back="showDevice" />
+          <el-page-header content="Channel list" @back="showDevice" />
         </el-form-item>
-        <el-form-item label="搜索">
+        <el-form-item label="Search">
           <el-input
             v-model="searchStr"
             style="margin-right: 1rem; width: auto;"
-            placeholder="关键字"
+            placeholder="Keywords"
             prefix-icon="el-icon-search"
             clearable
             @input="search"
           />
         </el-form-item>
-        <el-form-item label="通道类型">
+        <el-form-item label="Channel type">
           <el-select
             v-model="channelType"
             style="width: 8rem; margin-right: 1rem;"
-            placeholder="请选择"
+            placeholder="Please select"
             default-first-option
             @change="search"
           >
-            <el-option label="全部" value="" />
-            <el-option label="设备" value="false" />
-            <el-option label="子目录" value="true" />
+            <el-option label="All" value="" />
+            <el-option label="Equipment" value="false" />
+            <el-option label="subdirectory" value="true" />
           </el-select>
         </el-form-item>
-        <el-form-item label="在线状态">
+        <el-form-item label="online status">
           <el-select
             v-model="online"
             style="width: 8rem; margin-right: 1rem;"
-            placeholder="请选择"
+            placeholder="Please select"
             default-first-option
             @change="search"
           >
-            <el-option label="全部" value="" />
-            <el-option label="在线" value="true" />
-            <el-option label="离线" value="false" />
+            <el-option label="All" value="" />
+            <el-option label="online" value="true" />
+            <el-option label="Offline" value="false" />
           </el-select>
         </el-form-item>
-        <el-form-item label="码流类型重置">
+        <el-form-item label="Stream type reset">
           <el-select
             v-model="subStream"
             style="width: 16rem; margin-right: 1rem;"
-            placeholder="请选择码流类型"
+            placeholder="Please select stream type"
             default-first-option
             @change="subStreamChange"
           >
-            <el-option label="stream:0(主码流)" value="stream:0" />
-            <el-option label="stream:1(子码流)" value="stream:1" />
-            <el-option label="streamnumber:0(主码流-2022)" value="streamnumber:0" />
-            <el-option label="streamnumber:1(子码流-2022)" value="streamnumber:1" />
-            <el-option label="streamprofile:0(主码流-大华)" value="streamprofile:0" />
-            <el-option label="streamprofile:1(子码流-大华)" value="streamprofile:1" />
-            <el-option label="streamMode:MAIN(主码流-水星+TP-LINK)" value="streamMode:MAIN" />
-            <el-option label="streamMode:SUB(子码流-水星+TP-LINK)" value="streamMode:SUB" />
+            <el-option label="stream:0(main stream)" value="stream:0" />
+            <el-option label="stream:1(substream)" value="stream:1" />
+            <el-option label="streamnumber:0(main stream-2022)" value="streamnumber:0" />
+            <el-option label="streamnumber:1(substream-2022)" value="streamnumber:1" />
+            <el-option label="streamprofile:0(main stream-Dahua)" value="streamprofile:0" />
+            <el-option label="streamprofile:1(substream-Dahua)" value="streamprofile:1" />
+            <el-option label="streamMode:MAIN(main stream-Mercury+TP-LINK)" value="streamMode:MAIN" />
+            <el-option label="streamMode:SUB(substream-Mercury+TP-LINK)" value="streamMode:SUB" />
           </el-select>
         </el-form-item>
         <el-form-item style="float: right;">
@@ -71,9 +71,9 @@
         style="width: 100%; font-size: 12px;"
         header-row-class-name="table-header"
       >
-        <el-table-column prop="name" label="名称" min-width="180" />
-        <el-table-column prop="deviceId" label="编号" min-width="180" />
-        <el-table-column label="快照" min-width="100">
+        <el-table-column prop="name" label="Name" min-width="180" />
+        <el-table-column prop="deviceId" label="No." min-width="180" />
+        <el-table-column label="Snapshot" min-width="100">
           <template v-slot:default="scope">
             <el-image
               :src="getSnap(scope.row)"
@@ -88,55 +88,55 @@
             </el-image>
           </template>
         </el-table-column>
-        <!--          <el-table-column prop="subCount" label="子节点数" min-width="100">-->
+        <!--          <el-table-column prop="subCount" label="Number of child nodes" min-width="100">-->
         <!--          </el-table-column>-->
-        <el-table-column prop="manufacturer" label="厂家" min-width="100" />
-        <el-table-column label="位置信息" min-width="150">
+        <el-table-column prop="manufacturer" label="Manufacturer" min-width="100" />
+        <el-table-column label="location information" min-width="150">
           <template v-slot:default="scope">
             <span v-if="scope.row.longitude && scope.row.latitude">{{ scope.row.longitude }}<br>{{ scope.row.latitude }}</span>
-            <span v-if="!scope.row.longitude || !scope.row.latitude">无</span>
+            <span v-if="!scope.row.longitude || !scope.row.latitude">None</span>
           </template>
         </el-table-column>
-        <el-table-column prop="ptzType" label="摄像头类型" min-width="100">
+        <el-table-column prop="ptzType" label="Camera type" min-width="100">
           <template v-slot:default="scope">
             <div>{{ scope.row.ptzTypeText }}</div>
           </template>
         </el-table-column>
-        <el-table-column label="开启音频" min-width="100">
+        <el-table-column label="Turn on audio" min-width="100">
           <template v-slot:default="scope">
             <el-switch v-model="scope.row.hasAudio" active-color="#409EFF" @change="updateChannel(scope.row)" />
           </template>
         </el-table-column>
-        <el-table-column label="码流类型" min-width="180">
+        <el-table-column label="Stream type" min-width="180">
           <template v-slot:default="scope">
             <el-select
               v-model="scope.row.streamIdentification"
               size="mini"
               style="margin-right: 1rem;"
-              placeholder="请选择码流类型"
+              placeholder="Please select stream type"
               default-first-option
               @change="channelSubStreamChange(scope.row)"
             >
-              <el-option label="stream:0(主码流)" value="stream:0" />
-              <el-option label="stream:1(子码流)" value="stream:1" />
-              <el-option label="streamnumber:0(主码流-2022)" value="streamnumber:0" />
-              <el-option label="streamnumber:1(子码流-2022)" value="streamnumber:1" />
-              <el-option label="streamprofile:0(主码流-大华)" value="streamprofile:0" />
-              <el-option label="streamprofile:1(子码流-大华)" value="streamprofile:1" />
-              <el-option label="streamMode:MAIN(主码流-水星+TP-LINK)" value="streamMode:MAIN" />
-              <el-option label="streamMode:SUB(子码流-水星+TP-LINK)" value="streamMode:SUB" />
+              <el-option label="stream:0(main stream)" value="stream:0" />
+              <el-option label="stream:1(substream)" value="stream:1" />
+              <el-option label="streamnumber:0(main stream-2022)" value="streamnumber:0" />
+              <el-option label="streamnumber:1(substream-2022)" value="streamnumber:1" />
+              <el-option label="streamprofile:0(main stream-Dahua)" value="streamprofile:0" />
+              <el-option label="streamprofile:1(substream-Dahua)" value="streamprofile:1" />
+              <el-option label="streamMode:MAIN(main stream-Mercury+TP-LINK)" value="streamMode:MAIN" />
+              <el-option label="streamMode:SUB(substream-Mercury+TP-LINK)" value="streamMode:SUB" />
             </el-select>
           </template>
         </el-table-column>
-        <el-table-column label="状态" min-width="100">
+        <el-table-column label="Status" min-width="100">
           <template v-slot:default="scope">
             <div slot="reference" class="name-wrapper">
-              <el-tag v-if="scope.row.status === 'ON'" size="medium">在线</el-tag>
-              <el-tag v-if="scope.row.status !== 'ON'" size="medium" type="info">离线</el-tag>
+              <el-tag v-if="scope.row.status === 'ON'" size="medium">online</el-tag>
+              <el-tag v-if="scope.row.status !== 'ON'" size="medium" type="info">Offline</el-tag>
             </div>
           </template>
         </el-table-column>
-        <el-table-column label="操作" min-width="340" fixed="right">
+        <el-table-column label="Operation" min-width="340" fixed="right">
           <template v-slot:default="scope">
             <el-button
               size="medium"
@@ -145,7 +145,7 @@
               type="text"
               :loading="scope.row.playLoading"
               @click="sendDevicePush(scope.row)"
-            >播放
+            >play
             </el-button>
             <el-button
               v-if="!!scope.row.streamId"
@@ -155,7 +155,7 @@
               type="text"
               style="color: #f56c6c"
               @click="stopDevicePush(scope.row)"
-            >停止
+            >stop
             </el-button>
             <el-divider direction="vertical" />
             <el-button
@@ -164,7 +164,7 @@
               icon="el-icon-edit"
               @click="handleEdit(scope.row)"
             >
-              编辑
+              Edit
             </el-button>
             <el-divider direction="vertical" />
             <el-button
@@ -173,24 +173,24 @@
               icon="el-icon-s-open"
               type="text"
               @click="changeSubchannel(scope.row)"
-            >查看
+            >View
             </el-button>
             <el-divider v-if="scope.row.subCount > 0 || scope.row.parental === 1 || scope.row.deviceId.length <= 8" direction="vertical" />
             <el-dropdown @command="(command)=>{moreClick(command, scope.row)}">
               <el-button size="medium" type="text">
-                更多<i class="el-icon-arrow-down el-icon--right" />
+                More<i class="el-icon-arrow-down el-icon--right" />
               </el-button>
               <el-dropdown-menu>
                 <el-dropdown-item command="audioTalk" :disabled="device == null || device.online === 0">
-                  语音对讲</el-dropdown-item>
+                  Voice intercom</el-dropdown-item>
                 <el-dropdown-item command="records" :disabled="device == null || device.online === 0">
-                  设备录像</el-dropdown-item>
+                  Equipment video</el-dropdown-item>
                 <el-dropdown-item command="ptzConfig" :disabled="device == null || device.online === 0">
-                  云台配置</el-dropdown-item>
+                  PTZ configuration</el-dropdown-item>
                 <el-dropdown-item command="cameraConfig" :disabled="device == null || device.online === 0">
-                  相机配置</el-dropdown-item>
+                  Camera configuration</el-dropdown-item>
                 <el-dropdown-item command="cloudRecords" :disabled="device == null || device.online === 0">
-                  云端录像</el-dropdown-item>
+                  Cloud recording</el-dropdown-item>
               </el-dropdown-menu>
 
             </el-dropdown>
@@ -257,8 +257,8 @@ export default {
       device: null,
       deviceChannelList: [],
       videoComponentList: [],
-      currentPlayerInfo: {}, // 当前播放对象
-      updateLooper: 0, // 数据刷新轮训标志
+      currentPlayerInfo: {}, // Current playback object
+      updateLooper: 0, // Data refresh rotation training flag
       searchStr: '',
       channelType: '',
       online: '',
@@ -274,11 +274,11 @@ export default {
       cameraConfigDeviceId: null,
       loadSnap: {},
       ptzTypes: {
-        0: '未知',
-        1: '球机',
-        2: '半球',
-        3: '固定枪机',
-        4: '遥控枪机'
+        0: 'unknown',
+        1: 'ball machine',
+        2: 'hemisphere',
+        3: 'Fixed bolt',
+        4: 'remote control gun'
       }
     }
   },
@@ -345,19 +345,19 @@ export default {
           e.ptzType = e.ptzType + ''
           this.$set(e, 'playLoading', false)
         })
-        // 防止出现表格错位
+        // Prevent form misalignment
         this.$nextTick(() => {
           this.$refs.channelListTable.doLayout()
         })
       })
     },
 
-    // 通知设备上传媒体流
+    // Notify device to upload media stream
     sendDevicePush: function(itemData) {
       const deviceId = this.deviceId
       const channelId = itemData.deviceId
       itemData.playLoading = true
-      console.log('通知设备推流1：' + deviceId + ' : ' + channelId)
+      console.log('Notification device push1：' + deviceId + ' : ' + channelId)
       this.$store.dispatch('play/play', [deviceId, channelId])
         .then((data) => {
           setTimeout(() => {
@@ -423,7 +423,7 @@ export default {
       }).then(data => {
         this.initData()
       }).catch((error) => {
-        if (error.response.status === 402) { // 已经停止过
+        if (error.response.status === 402) { // has stopped
           this.initData()
         } else {
           console.log(error)
@@ -439,7 +439,7 @@ export default {
     },
     getSnapErrorEvent: function(deviceId, channelId) {
       if (typeof (this.loadSnap[deviceId + channelId]) !== 'undefined') {
-        console.log('下载截图' + this.loadSnap[deviceId + channelId])
+        console.log('Download screenshot' + this.loadSnap[deviceId + channelId])
         if (this.loadSnap[deviceId + channelId] > 5) {
           delete this.loadSnap[deviceId + channelId]
           return
@@ -488,7 +488,7 @@ export default {
           this.deviceChannelList.forEach(e => {
             e.ptzType = e.ptzType + ''
           })
-          // 防止出现表格错位
+          // Prevent form misalignment
           this.$nextTick(() => {
             this.$refs.channelListTable.doLayout()
           })
@@ -506,9 +506,9 @@ export default {
       })
     },
     subStreamChange: function() {
-      this.$confirm('确定重置所有通道的码流类型?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+      this.$confirm('Determine to reset the code stream type of all channels?', 'Tips', {
+        confirmButtonText: 'OK',
+        cancelButtonText: 'Cancel',
         type: 'warning'
       }).then(() => {
         this.$store.dispatch('device/updateChannelStreamIdentification', {
@@ -541,11 +541,11 @@ export default {
     refresh: function() {
       this.initData()
     },
-    // 编辑
+    // Edit
     handleEdit(row) {
       this.editId = row.id
     },
-    // 结束编辑
+    // End editing
     closeEdit: function() {
       this.editId = null
       this.getDeviceChannelList()

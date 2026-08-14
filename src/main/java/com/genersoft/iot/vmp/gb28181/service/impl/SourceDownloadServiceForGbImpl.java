@@ -25,11 +25,11 @@ public class SourceDownloadServiceForGbImpl implements ISourceDownloadService {
 
     @Override
     public void stopDownload(CommonGBChannel channel, String stream) {
-        // 国标通道
+        // National standard channel
         try {
             deviceChannelPlayService.stop(InviteSessionType.DOWNLOAD, channel, stream);
         }  catch (Exception e) {
-            log.error("[停止下载失败] {}({})", channel.getGbName(), channel.getGbDeviceId(), e);
+            log.error("[Stop download failed] {}({})", channel.getGbName(), channel.getGbDeviceId(), e);
         }
     }
 }

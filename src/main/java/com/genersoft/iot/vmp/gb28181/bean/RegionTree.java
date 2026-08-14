@@ -5,22 +5,22 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
- * 区域
+ * area
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-@Schema(description = "区域树")
+@Schema(description = "area tree")
 public class RegionTree extends Region {
 
-    @Schema(description = "树节点ID")
+    @Schema(description = "tree nodeID")
     private String treeId;
 
-    @Schema(description = "是否有子节点")
+    @Schema(description = "Whether there are child nodes")
     private boolean isLeaf;
 
-    @Schema(description = "类型, 行政区划:0 摄像头: 1")
+    @Schema(description = "Type, Administrative Division:0 Cameras: 1")
     private int type;
 
-    @Schema(description = "在线状态")
+    @Schema(description = "online status")
     private String status;
 }

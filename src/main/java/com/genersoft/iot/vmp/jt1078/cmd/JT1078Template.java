@@ -77,15 +77,15 @@ public class JT1078Template {
 
     public void checkTerminalStatus(String devId){
         if (SessionManager.INSTANCE.get(devId) == null) {
-            throw new ControllerException(ErrorCode.ERROR100.getCode(), "终端不在线");
+            throw new ControllerException(ErrorCode.ERROR100.getCode(), "The terminal is not online");
         }
     }
 
     /**
-     * 开启直播视频
+     * Start live video
      *
-     * @param devId 设备号
-     * @param j9101 开启视频参数
+     * @param devId Device number
+     * @param j9101 Enable video parameters
      */
     public Object startLive(String devId, J9101 j9101, Integer timeOut) {
         checkTerminalStatus(devId);
@@ -100,10 +100,10 @@ public class JT1078Template {
     }
 
     /**
-     * 关闭直播视频
+     * Turn off live video
      *
-     * @param devId 设备号
-     * @param j9102 关闭视频参数
+     * @param devId Device number
+     * @param j9102 Turn off video parameters
      */
     public Object stopLive(String devId, J9102 j9102, Integer timeOut) {
         checkTerminalStatus(devId);
@@ -118,10 +118,10 @@ public class JT1078Template {
     }
 
     /**
-     * 查询音视频列表
+     * Query audio and video list
      *
-     * @param devId 设备号
-     * @param j9205 查询音视频列表
+     * @param devId Device number
+     * @param j9205 Query audio and video list
      */
     public Object queryBackTime(String devId, J9205 j9205, Integer timeOut) {
         checkTerminalStatus(devId);
@@ -136,10 +136,10 @@ public class JT1078Template {
     }
 
     /**
-     * 开启视频回放
+     * Enable video playback
      *
-     * @param devId 设备号
-     * @param j9201 视频回放参数
+     * @param devId Device number
+     * @param j9201 Video playback parameters
      */
     public Object startBackLive(String devId, J9201 j9201, Integer timeOut) {
         checkTerminalStatus(devId);
@@ -154,10 +154,10 @@ public class JT1078Template {
     }
 
     /**
-     * 视频回放控制
+     * Video playback control
      *
-     * @param devId 设备号
-     * @param j9202 控制视频回放参数
+     * @param devId Device number
+     * @param j9202 Control video playback parameters
      */
     public Object controlBackLive(String devId, J9202 j9202, Integer timeOut) {
         checkTerminalStatus(devId);
@@ -172,10 +172,10 @@ public class JT1078Template {
     }
 
     /**
-     * 文件上传
+     * File upload
      *
-     * @param devId 设备号
-     * @param j9206 文件上传参数
+     * @param devId Device number
+     * @param j9206 File upload parameters
      */
     public Object fileUpload(String devId, J9206 j9206, Integer timeOut) {
         checkTerminalStatus(devId);
@@ -190,10 +190,10 @@ public class JT1078Template {
     }
 
     /**
-     * 文件上传控制
+     * File upload control
      *
-     * @param devId 设备号
-     * @param j9207 文件上传控制参数
+     * @param devId Device number
+     * @param j9207 File upload control parameters
      */
     public Object fileUploadControl(String devId, J9207 j9207, Integer timeOut) {
         checkTerminalStatus(devId);
@@ -208,10 +208,10 @@ public class JT1078Template {
     }
 
     /**
-     * 云台控制指令-云台旋转
+     * PTZ control instructions-PTZ rotation
      *
-     * @param devId 设备号
-     * @param j9301 云台旋转参数
+     * @param devId Device number
+     * @param j9301 PTZ rotation parameters
      */
     public Object ptzRotate(String devId, J9301 j9301, Integer timeOut) {
         checkTerminalStatus(devId);
@@ -226,10 +226,10 @@ public class JT1078Template {
     }
 
     /**
-     * 云台控制指令-云台调整焦距控制
+     * PTZ control instructions-PTZ adjustment focus control
      *
-     * @param devId 设备号
-     * @param j9302 云台焦距控制参数
+     * @param devId Device number
+     * @param j9302 PTZ focal length control parameters
      */
     public Object ptzFocal(String devId, J9302 j9302, Integer timeOut) {
         checkTerminalStatus(devId);
@@ -244,10 +244,10 @@ public class JT1078Template {
     }
 
     /**
-     * 云台控制指令-云台调整光圈控制
+     * PTZ control instructions-PTZ adjustment aperture control
      *
-     * @param devId 设备号
-     * @param j9303 云台光圈控制参数
+     * @param devId Device number
+     * @param j9303 PTZ aperture control parameters
      */
     public Object ptzIris(String devId, J9303 j9303, Integer timeOut) {
         checkTerminalStatus(devId);
@@ -262,10 +262,10 @@ public class JT1078Template {
     }
 
     /**
-     * 云台控制指令-云台雨刷控制
+     * PTZ control instructions-PTZ wiper control
      *
-     * @param devId 设备号
-     * @param j9304 云台雨刷控制参数
+     * @param devId Device number
+     * @param j9304 PTZ wiper control parameters
      */
     public Object ptzWiper(String devId, J9304 j9304, Integer timeOut) {
         checkTerminalStatus(devId);
@@ -280,10 +280,10 @@ public class JT1078Template {
     }
 
     /**
-     * 云台控制指令-红外补光控制
+     * PTZ control instructions-Infrared fill light control
      *
-     * @param devId 设备号
-     * @param j9305 云台红外补光控制参数
+     * @param devId Device number
+     * @param j9305 PTZ infrared fill light control parameters
      */
     public Object ptzSupplementaryLight(String devId, J9305 j9305, Integer timeOut) {
         checkTerminalStatus(devId);
@@ -298,10 +298,10 @@ public class JT1078Template {
     }
 
     /**
-     * 云台控制指令-变倍控制
+     * PTZ control instructions-Zoom control
      *
-     * @param devId 设备号
-     * @param j9306 云台变倍控制参数
+     * @param devId Device number
+     * @param j9306 PTZ zoom control parameters
      */
     public Object ptzZoom(String devId, J9306 j9306, Integer timeOut) {
         checkTerminalStatus(devId);
@@ -316,9 +316,9 @@ public class JT1078Template {
     }
 
     /**
-     * 查询终端参数
+     * Query terminal parameters
      *
-     * @param devId 设备号
+     * @param devId Device number
      */
     public Object getDeviceConfig(String devId, J8104 j8104, Integer timeOut) {
         checkTerminalStatus(devId);
@@ -333,9 +333,9 @@ public class JT1078Template {
     }
 
     /**
-     * 查询指定终端参数
+     * Query specified terminal parameters
      *
-     * @param devId 设备号
+     * @param devId Device number
      */
     public Object getDeviceSpecifyConfig(String devId, J8106 j8106, Integer timeOut) {
         checkTerminalStatus(devId);
@@ -350,9 +350,9 @@ public class JT1078Template {
     }
 
     /**
-     * 设置终端参数
+     * Set terminal parameters
      *
-     * @param devId 设备号
+     * @param devId Device number
      */
     public Object setDeviceSpecifyConfig(String devId, J8103 j8103, Integer timeOut) {
         checkTerminalStatus(devId);
@@ -371,7 +371,7 @@ public class JT1078Template {
     }
 
     /**
-     * 设备控制
+     * Device control
      */
     public Object deviceControl(String devId, J8105 j8105, int timeOut) {
         checkTerminalStatus(devId);
@@ -386,7 +386,7 @@ public class JT1078Template {
     }
 
     /**
-     * 查询终端属性
+     * Query terminal properties
      */
     public Object deviceAttribute(String devId, J8107 j8107, int timeOut) {
         checkTerminalStatus(devId);
@@ -401,7 +401,7 @@ public class JT1078Template {
     }
 
     /**
-     * 位置信息查询
+     * Location information query
      */
     public Object queryPositionInfo(String devId, J8201 j8201, int timeOut) {
         checkTerminalStatus(devId);

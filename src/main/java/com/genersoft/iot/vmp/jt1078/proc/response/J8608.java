@@ -9,7 +9,7 @@ import lombok.Setter;
 import java.util.List;
 
 /**
- * 查询区域或线路数据
+ * Query area or line data
  */
 @Setter
 @Getter
@@ -18,13 +18,13 @@ public class J8608 extends Rs {
 
 
     /**
-     * 查询类型, 1 = 查询圆形区域数据 ,2 = 查询矩形区域数据 ,3 = 查询多 边形区域数据 ,4 = 查询线路数据
+     * Query type, 1 = Query circular area data ,2 = Query rectangular area data ,3 = Query polygon area data ,4 = Query line data
      */
     private int type;
 
 
     /**
-     * 要查询的区域或线路的 ID
+     * The area or route to be queried ID
      */
     private List<Long> idList;
 

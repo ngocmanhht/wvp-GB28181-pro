@@ -130,7 +130,7 @@ public class SIPCommanderForPlatform implements ISIPCommanderForPlatform {
 
             sipSender.transmitRequest(parentPlatform.getDeviceIp(), request, (event)->{
                 if (event != null) {
-                    log.info("[国标级联]：{},  注册失败: {} ", parentPlatform.getServerGBId(), event.msg);
+                    log.info("[National standard cascade]：{},  Registration failed: {} ", parentPlatform.getServerGBId(), event.msg);
                 }
                 if (errorEvent != null ) {
                     errorEvent.response(event);
@@ -140,7 +140,7 @@ public class SIPCommanderForPlatform implements ISIPCommanderForPlatform {
 
     @Override
     public String keepalive(Platform parentPlatform, SipSubscribe.Event errorEvent , SipSubscribe.Event okEvent) throws SipException, InvalidArgumentException, ParseException {
-        log.info("[国标级联] 发送心跳， 上级平台： {}/{}", parentPlatform.getName(), parentPlatform.getServerGBId());
+        log.info("[National standard cascade] Send heartbeat to upper level platform： {}/{}", parentPlatform.getName(), parentPlatform.getServerGBId());
         String characterSet = parentPlatform.getCharacterSet();
         StringBuffer keepaliveXml = new StringBuffer(200);
         keepaliveXml.append("<?xml version=\"1.0\" encoding=\"")
@@ -166,9 +166,9 @@ public class SIPCommanderForPlatform implements ISIPCommanderForPlatform {
     }
 
     /**
-     * 向上级回复通道信息
-     * @param channel 通道信息
-     * @param parentPlatform 平台信息
+     * Reply channel information to superior
+     * @param channel Channel information
+     * @param parentPlatform Platform information
      */
     @Override
     public void catalogQuery(CommonGBChannel channel, Platform parentPlatform, String sn, String fromTag, int size) throws SipException, InvalidArgumentException, ParseException {
@@ -243,23 +243,23 @@ public class SIPCommanderForPlatform implements ISIPCommanderForPlatform {
 
         String callId = request.getCallIdHeader().getCallId();
 
-        log.info("[命令发送] 国标级联{} 目录查询回复: 共{}条，已发送{}条", parentPlatform.getServerGBId(),
+        log.info("[command sent] National standard cascade{} Catalog query replies: Total{}Article, sent{}Article", parentPlatform.getServerGBId(),
                 channels.size(), Math.min(index + parentPlatform.getCatalogGroup(), channels.size()));
         log.debug(catalogXml);
         if (sendAfterResponse) {
-            // 默认按照收到200回复后发送下一条， 如果超时收不到回复，就以30毫秒的间隔直接发送。
+            // By default, the next one will be sent after receiving 200 replies. If no reply is received after a timeout, it will be sent directly at an interval of 30 milliseconds.。
             sipSender.transmitRequest(parentPlatform.getDeviceIp(), request, eventResult -> {
                 if (eventResult.statusCode == -1024) {
-                    // 消息发送超时, 以30毫秒的间隔直接发送
+                    // Message sending timeout, sent directly at 30 millisecond intervals
                     int indexNext = index + parentPlatform.getCatalogGroup();
                     try {
                         sendCatalogResponse(channels, parentPlatform, sn, fromTag, indexNext, false);
                     } catch (SipException | InvalidArgumentException | ParseException e) {
-                        log.error("[命令发送失败] 国标级联 目录查询回复: {}", e.getMessage());
+                        log.error("[Command sending failed] National Standard Cascade Catalog Query Reply: {}", e.getMessage());
                     }
                     return;
                 }
-                log.error("[目录推送失败] 国标级联 platform : {}, code: {}, msg: {}, 停止发送", parentPlatform.getServerGBId(), eventResult.statusCode, eventResult.msg);
+                log.error("[Directory push failed] National standard cascade platform : {}, code: {}, msg: {}, Stop sending", parentPlatform.getServerGBId(), eventResult.statusCode, eventResult.msg);
                 dynamicTask.stop(timeoutTaskKey);
             }, eventResult -> {
                 dynamicTask.stop(timeoutTaskKey);
@@ -267,27 +267,27 @@ public class SIPCommanderForPlatform implements ISIPCommanderForPlatform {
                 try {
                     sendCatalogResponse(channels, parentPlatform, sn, fromTag, indexNext, true);
                 } catch (SipException | InvalidArgumentException | ParseException e) {
-                    log.error("[命令发送失败] 国标级联 目录查询回复: {}", e.getMessage());
+                    log.error("[Command sending failed] National Standard Cascade Catalog Query Reply: {}", e.getMessage());
                 }
             });
         }else {
             sipSender.transmitRequest(parentPlatform.getDeviceIp(), request, eventResult -> {
-                log.error("[目录推送失败] 国标级联 platform : {}, code: {}, msg: {}", parentPlatform.getServerGBId(), eventResult.statusCode, eventResult.msg);
+                log.error("[Directory push failed] National standard cascade platform : {}, code: {}, msg: {}", parentPlatform.getServerGBId(), eventResult.statusCode, eventResult.msg);
             }, null);
             dynamicTask.startDelay(timeoutTaskKey, ()->{
                 int indexNext = index + parentPlatform.getCatalogGroup();
                 try {
                     sendCatalogResponse(channels, parentPlatform, sn, fromTag, indexNext, false);
                 } catch (SipException | InvalidArgumentException | ParseException e) {
-                    log.error("[命令发送失败] 国标级联 目录查询回复: {}", e.getMessage());
+                    log.error("[Command sending failed] National Standard Cascade Catalog Query Reply: {}", e.getMessage());
                 }
             }, 100);
         }
     }
 
     /**
-     * 向上级回复DeviceInfo查询信息
-     * @param parentPlatform 平台信息
+     * Reply to the superior for DeviceInfo query information
+     * @param parentPlatform Platform information
      * @param sn
      * @param fromTag
      * @return
@@ -324,8 +324,8 @@ public class SIPCommanderForPlatform implements ISIPCommanderForPlatform {
 
 
     /**
-     * 向上级回复DeviceStatus查询信息
-     * @param parentPlatform 平台信息
+     * Reply to the superior for DeviceStatus query information
+     * @param parentPlatform Platform information
      * @param sn
      * @param fromTag
      * @return
@@ -366,9 +366,9 @@ public class SIPCommanderForPlatform implements ISIPCommanderForPlatform {
         if (parentPlatform == null) {
             return;
         }
-        log.info("[发送 移动位置订阅] {}/{}->{},{}", parentPlatform.getServerGBId(), gpsMsgInfo.getId(), gpsMsgInfo.getLng(), gpsMsgInfo.getLat());
+        log.info("[Send Mobile Location Subscription] {}/{}->{},{}", parentPlatform.getServerGBId(), gpsMsgInfo.getId(), gpsMsgInfo.getLng(), gpsMsgInfo.getLat());
         if (log.isDebugEnabled()) {
-            log.debug("[发送 移动位置订阅] {}/{}->{},{}", parentPlatform.getServerGBId(), gpsMsgInfo.getId(), gpsMsgInfo.getLng(), gpsMsgInfo.getLat());
+            log.debug("[Send Mobile Location Subscription] {}/{}->{},{}", parentPlatform.getServerGBId(), gpsMsgInfo.getId(), gpsMsgInfo.getLng(), gpsMsgInfo.getLat());
         }
 
         String characterSet = parentPlatform.getCharacterSet();
@@ -387,7 +387,7 @@ public class SIPCommanderForPlatform implements ISIPCommanderForPlatform {
                 .append("</Notify>\r\n");
 
        sendNotify(parentPlatform, deviceStatusXml.toString(), subscribeInfo, eventResult -> {
-            log.error("发送NOTIFY通知消息失败。错误：{} {}", eventResult.statusCode, eventResult.msg);
+            log.error("Failed to send NOTIFY notification message. Error：{} {}", eventResult.statusCode, eventResult.msg);
         }, null);
 
     }
@@ -397,7 +397,7 @@ public class SIPCommanderForPlatform implements ISIPCommanderForPlatform {
         if (parentPlatform == null) {
             return;
         }
-        log.info("[发送报警通知]平台： {}/{}->{},{}: {}", parentPlatform.getServerGBId(), deviceAlarm.getChannelId(),
+        log.info("[Send alarm notification]platform： {}/{}->{},{}: {}", parentPlatform.getServerGBId(), deviceAlarm.getChannelId(),
                 deviceAlarm.getLongitude(), deviceAlarm.getLatitude(), JSON.toJSONString(deviceAlarm));
         String characterSet = parentPlatform.getCharacterSet();
         StringBuffer deviceStatusXml = new StringBuffer(600);
@@ -445,9 +445,9 @@ public class SIPCommanderForPlatform implements ISIPCommanderForPlatform {
         String catalogXmlContent = getCatalogXmlContentForCatalogAddOrUpdate(parentPlatform, channels,
                 deviceChannels.size(), type, subscribeInfo);
         String channelDeviceIds = channels.stream().map(CommonGBChannel::getGbDeviceId).collect(Collectors.joining(","));
-        log.info("[发送NOTIFY通知]类型： {}，通道： {}", type, channelDeviceIds);
+        log.info("[Send NOTIFY notification]Type： {}，channel： {}", type, channelDeviceIds);
         sendNotify(parentPlatform, catalogXmlContent, subscribeInfo, eventResult -> {
-            log.error("发送NOTIFY通知消息失败。错误：{} {}", eventResult.statusCode, eventResult.msg);
+            log.error("Failed to send NOTIFY notification message. Error：{} {}", eventResult.statusCode, eventResult.msg);
             log.error(catalogXmlContent);
         }, (eventResult -> {
             try {
@@ -455,7 +455,7 @@ public class SIPCommanderForPlatform implements ISIPCommanderForPlatform {
                         finalIndex + parentPlatform.getCatalogGroup());
             } catch (InvalidArgumentException | ParseException | NoSuchFieldException | SipException |
                      IllegalAccessException e) {
-                log.error("[命令发送失败] 国标级联 NOTIFY通知: {}", e.getMessage());
+                log.error("[Command sending failed] National standard cascade NOTIFY notice: {}", e.getMessage());
             }
         }));
     }
@@ -465,7 +465,7 @@ public class SIPCommanderForPlatform implements ISIPCommanderForPlatform {
             throws SipException, ParseException, InvalidArgumentException {
         MessageFactoryImpl messageFactory = (MessageFactoryImpl) SipFactory.getInstance().createMessageFactory();
         String characterSet = parentPlatform.getCharacterSet();
-        // 设置编码， 防止中文乱码
+        // Set encoding to prevent Chinese garbled characters
         messageFactory.setDefaultContentEncodingCharset(characterSet);
 
         SIPRequest notifyRequest = headerProviderPlatformProvider.createNotifyRequest(parentPlatform, catalogXmlContent, subscribeInfo);
@@ -500,7 +500,7 @@ public class SIPCommanderForPlatform implements ISIPCommanderForPlatform {
                 || deviceChannels == null
                 || deviceChannels.size() == 0
                 || subscribeInfo == null) {
-            log.warn("[缺少必要参数]");
+            log.warn("[Missing required parameters]");
             return;
         }
 
@@ -516,18 +516,18 @@ public class SIPCommanderForPlatform implements ISIPCommanderForPlatform {
         }else {
             channels = deviceChannels.subList(index, deviceChannels.size());
         }
-        log.info("[发送NOTIFY通知]类型： {}，发送数量： {}", type, channels.size());
+        log.info("[Send NOTIFY notification]Type： {}，Send quantity： {}", type, channels.size());
         Integer finalIndex = index;
         String catalogXmlContent = getCatalogXmlContentForCatalogOther(parentPlatform, channels, type);
         sendNotify(parentPlatform, catalogXmlContent, subscribeInfo, eventResult -> {
-            log.error("发送NOTIFY通知消息失败。错误：{} {}", eventResult.statusCode, eventResult.msg);
+            log.error("Failed to send NOTIFY notification message. Error：{} {}", eventResult.statusCode, eventResult.msg);
         }, eventResult -> {
             try {
                 sendNotifyForCatalogOther(type, parentPlatform, deviceChannels, subscribeInfo,
                         finalIndex + parentPlatform.getCatalogGroup());
             } catch (InvalidArgumentException | ParseException | NoSuchFieldException | SipException |
                      IllegalAccessException e) {
-                log.error("[命令发送失败] 国标级联 NOTIFY通知: {}", e.getMessage());
+                log.error("[Command sending failed] National standard cascade NOTIFY notice: {}", e.getMessage());
             }
         });
     }
@@ -557,7 +557,7 @@ public class SIPCommanderForPlatform implements ISIPCommanderForPlatform {
         if ( parentPlatform ==null) {
             return ;
         }
-        log.info("[国标级联] 发送录像数据通道： {}", recordInfo.getChannelId());
+        log.info("[National standard cascade] Send video data channel： {}", recordInfo.getChannelId());
         String characterSet = parentPlatform.getCharacterSet();
         StringBuffer recordXml = new StringBuffer(600);
         recordXml.append("<?xml version=\"1.0\" encoding=\"" + characterSet + "\"?>\r\n")
@@ -594,13 +594,13 @@ public class SIPCommanderForPlatform implements ISIPCommanderForPlatform {
 
         recordXml.append("</RecordList>\r\n")
                 .append("</Response>\r\n");
-        log.debug("[国标级联] 发送录像数据通道：{}, 内容： {}", recordInfo.getChannelId(), recordXml);
+        log.debug("[National standard cascade] Send video data channel：{}, content： {}", recordInfo.getChannelId(), recordXml);
         // callid
         CallIdHeader callIdHeader = sipSender.getNewCallIdHeader(parentPlatform.getDeviceIp(),parentPlatform.getTransport());
 
         Request request = headerProviderPlatformProvider.createMessageRequest(parentPlatform, recordXml.toString(), fromTag, SipUtils.getNewViaTag(), callIdHeader);
         sipSender.transmitRequest(parentPlatform.getDeviceIp(), request, null, eventResult -> {
-            log.info("[国标级联] 发送录像数据通道：{}, 发送成功", recordInfo.getChannelId());
+            log.info("[National standard cascade] Send video data channel：{}, Sent successfully", recordInfo.getChannelId());
         });
 
     }
@@ -631,14 +631,14 @@ public class SIPCommanderForPlatform implements ISIPCommanderForPlatform {
     @Override
     public synchronized void streamByeCmd(Platform platform, SendRtpInfo sendRtpItem, CommonGBChannel channel) throws SipException, InvalidArgumentException, ParseException {
         if (sendRtpItem == null ) {
-            log.info("[向上级发送BYE]， sendRtpItem 为NULL");
+            log.info("[Send to superiorBYE]， sendRtpItem forNULL");
             return;
         }
         if (platform == null) {
-            log.info("[向上级发送BYE]， platform 为NULL");
+            log.info("[Send to superiorBYE]， platform forNULL");
             return;
         }
-        log.info("[向上级发送BYE]， {}/{}", platform.getServerGBId(), sendRtpItem.getChannelId());
+        log.info("[Send to superiorBYE]， {}/{}", platform.getServerGBId(), sendRtpItem.getChannelId());
         String mediaServerId = sendRtpItem.getMediaServerId();
         MediaServer mediaServerItem = mediaServerService.getOne(mediaServerId);
         if (mediaServerItem != null) {
@@ -646,7 +646,7 @@ public class SIPCommanderForPlatform implements ISIPCommanderForPlatform {
         }
         SIPRequest byeRequest = headerProviderPlatformProvider.createByeRequest(platform, sendRtpItem, channel);
         if (byeRequest == null) {
-            log.warn("[向上级发送bye]：无法创建 byeRequest");
+            log.warn("[Send to superiorbye]：Unable to create byeRequest");
         }
         sipSender.transmitRequest(platform.getDeviceIp(),byeRequest);
     }
@@ -703,7 +703,7 @@ public class SIPCommanderForPlatform implements ISIPCommanderForPlatform {
             return;
         }
 
-        log.info("{} 分配的ZLM为: {} [{}:{}]", stream, mediaServer.getId(), mediaServer.getIp(), ssrcInfo.getPort());
+        log.info("{} The allocated ZLM is: {} [{}:{}]", stream, mediaServer.getId(), mediaServer.getIp(), ssrcInfo.getPort());
         String sdpIp = mediaServer.getSdpIp();
 
         StringBuffer content = new StringBuffer(200);
@@ -734,7 +734,7 @@ public class SIPCommanderForPlatform implements ISIPCommanderForPlatform {
         }
 
         content.append("y=" + ssrcInfo.getSsrc() + "\r\n");//ssrc
-        // f字段:f= v/编码格式/分辨率/帧率/码率类型/码率大小a/编码格式/码率大小/采样率
+        // fField:f= v/encoding format/resolution/Frame rate/Code rate type/Code rate sizea/encoding format/Code rate size/Sampling rate
         content.append("f=v/2/5/25/1/4096a/1/8/1\r\n");
         CallIdHeader callIdHeader = sipSender.getNewCallIdHeader(sipLayer.getLocalIp(platform.getDeviceIp()), platform.getTransport());
 

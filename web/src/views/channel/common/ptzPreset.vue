@@ -38,7 +38,7 @@ export default {
         .then(() => {
           this.$message({
             showClose: true,
-            message: '调用成功',
+            message: 'Call successful',
             type: 'success'
           })
         }).catch((error) => {

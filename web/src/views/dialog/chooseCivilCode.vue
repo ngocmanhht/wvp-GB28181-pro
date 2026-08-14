@@ -2,7 +2,7 @@
   <div id="chooseCivilCode">
     <el-dialog
       v-el-drag-dialog
-      title="选择行政区划"
+      title="Select administrative division"
       width="30%"
       top="5rem"
       :close-on-click-modal="false"
@@ -22,8 +22,8 @@
       <el-form>
         <el-form-item>
           <div style="text-align: right">
-            <el-button type="primary" @click="onSubmit">保存</el-button>
-            <el-button @click="close">取消</el-button>
+            <el-button type="primary" @click="onSubmit">save</el-button>
+            <el-button @click="close">Cancel</el-button>
           </div>
         </el-form-item>
       </el-form>

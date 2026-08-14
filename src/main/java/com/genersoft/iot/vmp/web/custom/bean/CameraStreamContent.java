@@ -15,7 +15,7 @@ public class CameraStreamContent extends StreamContent {
 
     private String name;
 
-    // 0不可动，1可动
+    // 0Immovable, 1 movable
     private Integer controlType;
 
 

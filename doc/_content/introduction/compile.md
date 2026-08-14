@@ -1,86 +1,86 @@
-<!-- 编译 -->
+<!-- Compile -->
 
-# 编译
+# compile
 
-WVP-PRO不只是实现了国标28181的协议，本身也是一个完整的视频平台。所以对于新手来说，你可能需要一些耐心来完成。遇到问题不要焦躁，你可以
+WVP-PRO not only implements the national standard 28181 protocol, it is also a complete video platform itself. So for newbies, you may need some patience to complete. Don’t be anxious when you encounter problems;
 
-1. 百度
-2. 加入星球体提问；[知识星球](https://t.zsxq.com/0d8VAD3Dm)
-3. 向作者发送邮件648540858@qq.com,寻求技术支持（有偿）；
+1. Baidu
+2. Add planetary questions; [knowledge planet](https://t.zsxq.com/0d8VAD3Dm) 
+3. Send an email to the author at 648540858@qq.com for technical support (paid);
 
-WVP-PRO使用Spring boot开发，maven管理依赖。对于熟悉spring开发的朋友是很容易进行编译部署以及运行的。  
-下面将提供一种通用方法方便大家运行项目。
+WVP-PRO is developed using Spring boot, and maven manages dependencies. For friends who are familiar with spring development, it is easy to compile, deploy and run.
+The following will provide a general method to facilitate everyone to run the project.
 
-## 1 服务介绍
+## 1 Service introduction
 
-| 服务         | 作用                                       | 是否必须 |
+| Service | Function | Is it necessary |
 |------------|------------------------------------------|------|
-| WVP-PRO    | 实现国标28181的信令以及视频平台相关的功能                  | 是    |
-| ZLMediaKit | 为WVP-PRO提供国标28181的媒体部分的实现，以及各种视频流格式的分发支持 | 是    |
+| WVP-PRO | Implements GB 28181 signaling and video platform related functions | Yes |
+| ZLMediaKit | Provides WVP-PRO with the implementation of the media part of the national standard 28181, as well as distribution support for various video stream formats | Yes |
 
-## 2 安装依赖
+## 2 Install dependencies
 
-| 依赖     | 版本    | 用途          | 开发环境需要 | 生产环境需要 |
+| Dependencies | Version | Purpose | Development environment requirements | Production environment requirements |
 |--------|-------|-------------|--------|--------|
-| jdk    | >=21  | 运行与编译java代码 | 是      | 是      |  
-| maven  | >=3.3 | 管理java代码依赖  | 否      | 否      |
-| git    |       | 下载/更新/提交代码  | 否      | 否      |
-| nodejs |       | 编译于运行前端文件   | 否      | 否      |
-| npm    |       | 管理前端文件依赖    | 否      | 否      |
+| jdk | >=21 | Run and compile java code | Yes | Yes |
+| maven | >=3.3 | Manage java code dependencies | No | No |
+| git | | Download/update/commit code | No | No |
+| nodejs | | Compile before running front-end file | No | No |
+| npm | | Manage front-end file dependencies | No | No |
 
-如果你是一个新手，建议你使用linux或者macOS平台。windows不推荐。
+If you are a newbie, it is recommended that you use the linux or macOS platform. Windows is not recommended.
 
-ubuntu环境，以ubuntu 18为例：
+Ubuntu environment, taking Ubuntu 18 as an example:
 
 ``` bash
 apt-get install -y openjdk-21-jdk git maven nodejs npm
 ```
 
-window环境，以windows10为例：
+window environment, taking windows10 as an example:
 
 ```bash
-这里不细说了，百度或者谷歌一搜一大把，基本都是下一步下一步，然后配置环境变量。
+I won’t go into details here. You can search a lot on Baidu or Google. Basically, the next step is the next step, and then configure the environment variables.。
 ```
 
-## 3 安装mysql以及redis
+## 3 Install mysql and redis
 
-这里依然是参考网上教程，自行安装吧。
+Here we still refer to the online tutorial and install it by yourself.
 
-## 4 编译ZLMediaKit
+## 4 Compile ZLMediaKit
 
-> 现在zlm提供最新版本的打包直接下载了， 地址为：[各平台二进制包下载](https://github.com/ZLMediaKit/ZLMediaKit/issues/483)
+> Now zlm provides the latest version of the package for direct download, the address is: [Download binary packages for each platform](https://github.com/ZLMediaKit/ZLMediaKit/issues/483) 
 
-参考ZLMediaKit[WIKI](https://github.com/ZLMediaKit/ZLMediaKit/wiki)
-，如果需要使用语音对讲功能，请参考[zlm启用webrtc编译指南](https://github.com/ZLMediaKit/ZLMediaKit/wiki/zlm%E5%90%AF%E7%94%A8webrtc%E7%BC%96%E8%AF%91%E6%8C%87%E5%8D%97)
-，开启zlm的webrtc功能。截取一下关键步骤：
+ReferenceZLMediaKit [WIKI](https://github.com/ZLMediaKit/ZLMediaKit/wiki) 
+, if you need to use the voice intercom function, please refer to [zlm enable webrtc compilation guide](https://github.com/ZLMediaKit/ZLMediaKit/wiki/zlm%E5%90%AF%E7%94%A8webrtc%E7%BC%96%E8%AF%91%E6%8C%87%E5%8D%97) 
+, enable the webrtc function of zlm. Intercept the key steps:
 
 ```bash
-# 国内用户推荐从同步镜像网站gitee下载 
+# Domestic users recommend downloading from the synchronization mirror website gitee 
 git clone --depth 1 https://gitee.com/xia-chu/ZLMediaKit
 cd ZLMediaKit
-# 千万不要忘记执行这句命令
+# Don't forget to execute this command
 git submodule update --init
 ```
 
-## 5 编译WVP-PRO
+## 5 Compile WVP-PRO
 
-### 5.1 可以通过git克隆，也可以在项目下载点击下载
+### 5.1 You can clone through git, or click to download in the project download
 
-![点击下载](_media/img_1.png)
-![点击下载](_media/img_2.png)
-从gitee克隆
+! [Click to download](_media/img_1.png) 
+! [Click to download](_media/img_2.png) 
+Clone from gitee
 
 ```bash
 git clone https://gitee.com/pan648540858/wvp-GB28181-pro.git
 ```
 
-从github克隆
+Clone from github
 
 ```bash
 git clone https://github.com/648540858/wvp-GB28181-pro.git
 ```
 
-### 5.2 编译前端页面
+### 5.2 Compile front-end page
 
 ```shell script
 cd wvp-GB28181-pro/web/
@@ -88,28 +88,28 @@ npm --registry=https://registry.npmmirror.com install
 npm run build:prod
 ```
 
-编译如果报错, 一般都是网络问题, 导致的依赖包下载失败  
-编译完成后在src/main/resources下出现static目录
-**编译完成一般是这个样子，中间没有报红的错误信息**
-![编译成功](_media/img.png)
+If an error is reported during compilation, it is usually due to network problems, resulting in failure to download dependent packages.
+After compilation is completed, the static directory appears under src/main/resources
+**The compilation process usually looks like this, with no red error message in the middle**
+! [Compiled successfully](_media/img.png) 
 
-### 5.3 生成可执行jar
+### 5.3 Generate executable jar
 
 ```bash
 cd wvp-GB28181-pro
 mvn package
 ```
 
-### 5.4 生成war
+### 5.4 Generate war
 
 ```bash
 cd wvp-GB28181-pro
 mvn package -P war
 ```
 
-编译如果报错, 一般都是网络问题, 导致的依赖包下载失败  
-编译完成后在target目录下出现 `wvp-pro-VERSION.jar` 和 `wvp-pro-VERSION.war` 文件。  
-接下来[配置服务](./_content/introduction/config.md)
+If an error is reported during compilation, it is usually due to network problems, resulting in failure to download dependent packages.
+After compilation is completed, `wvp-pro-VERSION.jar` and `wvp-pro-VERSION.war` files will appear in the target directory.
+Next [Configuration service](./_content/introduction/config.md) 
 
   
 

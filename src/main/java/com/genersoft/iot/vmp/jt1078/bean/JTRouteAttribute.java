@@ -8,22 +8,22 @@ import lombok.Setter;
 
 @Setter
 @Getter
-@Schema(description = "路线属性")
+@Schema(description = "route properties")
 public class JTRouteAttribute {
 
-    @Schema(description = "是否启用起始时间与结束时间的判断规则 ,false：否；true：是")
+    @Schema(description = "Whether to enable the judgment rules of start time and end time, false: no; true: yes")
     private boolean ruleForTimeLimit;
 
-    @Schema(description = "进区域是否报警给驾驶员,false：否；true：是")
+    @Schema(description = "Whether to alert the driver when entering the area, false: no; true: yes")
     private boolean ruleForAlarmToDriverWhenEnter;
 
-    @Schema(description = "进区域是否报警给平台 ,false：否；true：是")
+    @Schema(description = "Whether to alert the platform when entering the area, false: no; true: yes")
     private boolean ruleForAlarmToPlatformWhenEnter;
 
-    @Schema(description = "出区域是否报警给驾驶员,false：否；true：是")
+    @Schema(description = "Whether to alert the driver when leaving the area, false: no; true: yes")
     private boolean ruleForAlarmToDriverWhenExit;
 
-    @Schema(description = "出区域是否报警给平台 ,false：否；true：是")
+    @Schema(description = "Whether to alarm the platform when leaving the area, false: no; true: yes")
     private boolean ruleForAlarmToPlatformWhenExit;
 
     public ByteBuf encode(){

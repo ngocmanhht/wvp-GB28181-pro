@@ -7,17 +7,17 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * 云台控制指令-光圈控制
+ * PTZ control instructions-Aperture control
  *
  */
 @Setter
 @Getter
 @MsgId(id = "9303")
 public class J9303 extends Rs {
-    // 逻辑通道号
+    // Logical channel number
     private int channel;
 
-    // 调整方式: 0：调大； 1：调小
+    // Adjustment method: 0: Increase; 1: Decrease
     private int iris;
 
     @Override

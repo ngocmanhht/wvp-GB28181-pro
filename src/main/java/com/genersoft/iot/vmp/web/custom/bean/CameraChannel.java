@@ -8,25 +8,25 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@Schema(description = "摄像头信息")
+@Schema(description = "Camera information")
 public class CameraChannel extends CommonGBChannel {
 
-    @Schema(description = "摄像头设备国标编号")
+    @Schema(description = "Camera equipment national standard number")
     private String deviceCode;
 
 
-    @Schema(description = "图标路径")
+    @Schema(description = "icon path")
     private String icon;
 
     /**
-     * 分组别名
+     * Group alias
      */
-    @Schema(description = "所属组织结构别名")
+    @Schema(description = "Alias of the organizational structure to which it belongs")
     private String groupAlias;
 
     /**
-     * 分组所属业务分组别名
+     * Alias of the business group to which the group belongs
      */
-    @Schema(description = "所属业务分组别名")
+    @Schema(description = "Alias of the business group to which it belongs")
     private String topGroupGAlias;
 }

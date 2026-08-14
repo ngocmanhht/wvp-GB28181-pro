@@ -73,43 +73,43 @@ public class CameraChannelService implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        // 启动时获取全局token
+        // Get global at startuptoken
         String taskKey = UUID.randomUUID().toString();
         if (!refreshToken()) {
-            log.info("[SY-读取Token]失败，30秒后重试");
+            log.info("[SY-readToken]Failed, try again in 30 seconds");
             dynamicTask.startDelay(taskKey, ()->{
                 this.run(args);
             }, 30000);
         }else {
-            log.info("[SY-读取Token] 成功");
+            log.info("[SY-readToken] success");
         }
     }
 
     private boolean refreshToken() {
         String adminToken = redisTemplateForString.opsForValue().get("SYSTEM_ACCESS_TOKEN");
         if (adminToken == null) {
-            log.warn("[SY读取TOKEN] SYSTEM_ACCESS_TOKEN 读取失败");
+            log.warn("[SYreadTOKEN] SYSTEM_ACCESS_TOKEN Read failed");
             return false;
         }
         SyTokenManager.INSTANCE.adminToken = adminToken;
 
         String sm4Key = redisTemplateForString.opsForValue().get("SYSTEM_SM4_KEY");
         if (sm4Key == null) {
-            log.warn("[SY读取TOKEN] SYSTEM_SM4_KEY 读取失败");
+            log.warn("[SYreadTOKEN] SYSTEM_SM4_KEY Read failed");
             return false;
         }
         SyTokenManager.INSTANCE.sm4Key = sm4Key;
 
         JSONObject appJson = (JSONObject)redisTemplate.opsForValue().get("SYSTEM_APPKEY");
         if (appJson == null) {
-            log.warn("[SY读取TOKEN] SYSTEM_APPKEY 读取失败");
+            log.warn("[SYreadTOKEN] SYSTEM_APPKEY Read failed");
             return false;
         }
         SyTokenManager.INSTANCE.appMap.put(appJson.getString("appKey"), appJson.getString("appSecret"));
 
         JSONObject timeJson = (JSONObject)redisTemplate.opsForValue().get("sys_INTERFACE_VALID_TIME");
         if (timeJson == null) {
-            log.warn("[SY读取TOKEN] sys_INTERFACE_VALID_TIME 读取失败");
+            log.warn("[SYreadTOKEN] sys_INTERFACE_VALID_TIME Read failed");
             return false;
         }
         SyTokenManager.INSTANCE.expires = timeJson.getLong("systemValue");
@@ -117,7 +117,7 @@ public class CameraChannelService implements CommandLineRunner {
         return true;
     }
 
-    // 监听通道变化，如果是移动设备则发送redis消息
+    // Monitor channel changes and send redis messages if it is a mobile device
     @EventListener
     public void onApplicationEvent(ChannelEvent event) {
         List<CommonGBChannel> channels = event.getChannels();
@@ -139,13 +139,13 @@ public class CameraChannelService implements CommandLineRunner {
             case UPDATE:
                 List<CommonGBChannel> oldChannelList = event.getOldChannels();
                 List<CommonGBChannel> channelList = event.getChannels();
-                // 更新操作
+                // update operation
                 if (oldChannelList == null || oldChannelList.isEmpty()) {
-                    // 无旧设备则不需要判断， 目前只有分组或行政区划转换为通道信息时没有旧的通道信息，这两个类型也是不需要发送通知的，直接忽略即可
+                    // If there is no old equipment, there is no need to judge. Currently, only when groups or administrative divisions are converted to channel information, there is no old channel information. These two types do not need to send notifications and can be ignored directly.
                     break;
                 }
-                // 需要比对旧数据，看看是否是新增的移动设备或者取消的移动设备
-                // 将 channelList 转为以 gbDeviceId 为 key 的 Map
+                // It is necessary to compare old data to see if it is a newly added mobile device or a canceled mobile device
+                // Convert channelList to gbDeviceId as key Map
                 Map<String, CommonGBChannel> oldChannelMap = new HashMap<>();
                 for (CommonGBChannel channel : oldChannelList) {
                     if (channel != null && channel.getGbDeviceId() != null) {
@@ -161,7 +161,7 @@ public class CameraChannelService implements CommandLineRunner {
                         if (oldChannel != null) {
                             if (oldChannel.getGbPtzType() != null && oldChannel.getGbPtzType() == 99) {
                                 resultListForUpdate.add(channel);
-                                // 如果状态变化发送消息
+                                // Send message if status changes
                                 if (!Objects.equals(oldChannel.getGbStatus(), channel.getGbStatus())) {
                                     SYMember member = getMember(channel.getGbDeviceId());
                                     if (member != null) {
@@ -259,7 +259,7 @@ public class CameraChannelService implements CommandLineRunner {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("type", ChannelEvent.ChannelEventMessageType.DEL);
             jsonObject.put("list", resultListForDelete);
-            log.info("[SY-redis发送通知-DEL] 发送 通道信息变化 {}: {}", REDIS_CHANNEL_MESSAGE, jsonObject.toString());
+            log.info("[SY-redisSend notification-DEL] Send channel information changes {}: {}", REDIS_CHANNEL_MESSAGE, jsonObject.toString());
             redisTemplateForString.convertAndSend(REDIS_CHANNEL_MESSAGE, jsonObject.toString());
         }
         if (!resultListForAdd.isEmpty()) {
@@ -278,7 +278,7 @@ public class CameraChannelService implements CommandLineRunner {
             sendMemberStatusMessage(memberList);
         }
         if (!delayChannelMap.isEmpty()) {
-            // 对于在线的终端进行延迟检查和发送
+            // Delay checking and sending for online terminals
             for (CommonGBChannel commonGBChannel : delayChannelMap.values()) {
                 String key = DELAY_TASK_KEY + commonGBChannel.getGbDeviceId();
                 dynamicTask.startDelay(key, () -> {
@@ -296,34 +296,34 @@ public class CameraChannelService implements CommandLineRunner {
 
 
     private void sendMemberStatusMessage(List<SYMember> memberList) {
-        // 取消延时发送
+        // Cancel delayed delivery
         for (SYMember syMember : memberList) {
             String key = DELAY_TASK_KEY + syMember.getChannelDeviceId();
             if (dynamicTask.contains(key)) {
-                log.info("[SY-redis发送通知] 取消延时新增任务: {}", key);
+                log.info("[SY-redisSend notification] Cancel delayed new tasks: {}", key);
                 dynamicTask.stop(key);
             }
         }
 
         String jsonString = JSONObject.toJSONString(memberList);
-        log.info("[SY-redis发送通知] 发送 状态变化 {}: {}", REDIS_MEMBER_STATUS_MESSAGE, jsonString);
+        log.info("[SY-redisSend notification] Send status change {}: {}", REDIS_MEMBER_STATUS_MESSAGE, jsonString);
         redisTemplateForString.convertAndSend(REDIS_MEMBER_STATUS_MESSAGE, jsonString);
     }
 
     private void sendChannelMessage(List<CommonGBChannel> channelList, ChannelEvent.ChannelEventMessageType type) {
         if (channelList.isEmpty()) {
-            log.warn("[SY-redis发送通知-{}] 发送失败，数据为空， 通道信息变化 {}", type, REDIS_CHANNEL_MESSAGE);
+            log.warn("[SY-redisSend notification-{}] Sending failed, data is empty, channel information changes {}", type, REDIS_CHANNEL_MESSAGE);
             return;
         }
         List<CameraChannel> cameraChannelList = channelMapper.queryCameraChannelByIds(channelList);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("type", type);
         jsonObject.put("list", cameraChannelList);
-        log.info("[SY-redis发送通知-{}] 发送 通道信息变化 {}: {}", type, REDIS_CHANNEL_MESSAGE, jsonObject.toString());
+        log.info("[SY-redisSend notification-{}] Send channel information changes {}: {}", type, REDIS_CHANNEL_MESSAGE, jsonObject.toString());
         redisTemplateForString.convertAndSend(REDIS_CHANNEL_MESSAGE, jsonObject.toString());
     }
 
-    // 监听GPS消息，如果是移动设备则发送redis消息
+    // Listen to GPS messages and send redis messages if it is a mobile device
     @Async
     @EventListener
     public void onApplicationEvent(MobilePositionEvent event) {
@@ -331,14 +331,14 @@ public class CameraChannelService implements CommandLineRunner {
         try (var executor = Executors.newVirtualThreadPerTaskExecutor()) {
             for (MobilePosition mobilePosition : mobilePositionList) {
                 executor.submit(() -> {
-                    // 从redis补充信息
+                    // Supplementary information from redis
                     SYMember member = getMember(mobilePosition.getChannelDeviceId());
                     if (member == null) {
-                        log.info("[SY-redis发送通知-移动设备位置信息] 缓存未获取 {}", mobilePosition.toString());
+                        log.info("[SY-redisSend notification-Mobile device location information] Cache not retrieved {}", mobilePosition.toString());
                         return;
                     }
 
-                    // 发送redis消息
+                    // Send redis message
                     JSONObject jsonObject = new JSONObject();
                     jsonObject.put("gpsDate", DateUtil.timestampMsTo_yyyy_MM_dd_HH_mm_ss(mobilePosition.getTimestamp()));
                     jsonObject.put("unicodeNo", member.getUnicodeNo());
@@ -351,7 +351,7 @@ public class CameraChannelService implements CommandLineRunner {
                     jsonObject.put("speed", mobilePosition.getSpeed());
                     jsonObject.put("blockId", member.getBlockId());
                     jsonObject.put("gbDeviceId", mobilePosition.getChannelDeviceId());
-                    log.info("[SY-redis发送通知-移动设备位置信息] 发送 {}: {}", REDIS_GPS_MESSAGE, jsonObject.toString());
+                    log.info("[SY-redisSend notification-Mobile device location information] send {}: {}", REDIS_GPS_MESSAGE, jsonObject.toString());
                     redisTemplateForString.convertAndSend(REDIS_GPS_MESSAGE, jsonObject.toString());
                 });
             }
@@ -362,7 +362,7 @@ public class CameraChannelService implements CommandLineRunner {
     }
 
     public SYMember getMember(String deviceId) {
-        // 从redis补充信息
+        // Supplementary information from redis
         String key = MOBILE_CHANNEL_PREFIX + deviceId;
         JSONObject jsonObject = (JSONObject)redisTemplate.opsForValue().get(key);
         if (jsonObject == null) {
@@ -375,16 +375,16 @@ public class CameraChannelService implements CommandLineRunner {
 
 
     public PageInfo<CameraChannel> queryList(Integer page, Integer count, String groupAlias, Boolean status, String geoCoordSys) {
-        // 构建组织结构信息
+        // Build organizational structure information
         Group group = groupMapper.queryGroupByAlias(groupAlias);
         if (group == null) {
-            log.warn("[SY-查询摄像机列表, 只查询当前虚拟组织下的] 组织结构不存在: {}", groupAlias);
+            log.warn("[SY-Query the camera list, only query the cameras under the current virtual organization] Organizational structure does not exist: {}", groupAlias);
             return new PageInfo<>(Collections.emptyList());
         }
 
         String groupDeviceId = group.getDeviceId();
 
-        // 构建分页
+        // Build pagination
         PageHelper.startPage(page, count);
 
         List<CameraChannel> all = channelMapper.queryListForSy(groupDeviceId, status);
@@ -397,19 +397,19 @@ public class CameraChannelService implements CommandLineRunner {
     public PageInfo<CameraChannel> queryListWithChild(Integer page, Integer count, String query, String sortName, Boolean order, String groupAlias, Boolean status, String geoCoordSys) {
 
         List<CameraGroup> groupList = null;
-        // 构建组织结构信息
+        // Build organizational structure information
         if (groupAlias != null) {
             CameraGroup group = groupMapper.queryGroupByAlias(groupAlias);
             if (group == null) {
-                log.warn("[SY-查询摄像机列表, 查询当前虚拟组织下以及全部子节点] 组织结构不存在: {}", groupAlias);
+                log.warn("[SY-Query the camera list, query the current virtual organization and all sub-nodes] Organizational structure does not exist: {}", groupAlias);
                 return new PageInfo<>(Collections.emptyList());
             }
-            // 获取所有子节点
+            // Get all child nodes
             groupList = queryAllGroupChildren(group.getId(), group.getBusinessGroup());
             groupList.add(group);
         }
 
-        // 构建分页
+        // Build pagination
         PageHelper.startPage(page, count);
         if (query != null) {
             query = query.replaceAll("/", "//")
@@ -426,7 +426,7 @@ public class CameraChannelService implements CommandLineRunner {
         return groupPageInfo;
     }
 
-    // 获取所有子节点
+    // Get all child nodes
     private List<CameraGroup> queryAllGroupChildren(int groupId, String businessGroup) {
         Map<Integer, CameraGroup> groupMap = groupMapper.queryByBusinessGroupForMap(businessGroup);
         for (CameraGroup cameraGroup : groupMap.values()) {
@@ -441,17 +441,17 @@ public class CameraChannelService implements CommandLineRunner {
     }
 
     public List<CameraCount> queryCountWithChild(String groupAlias) {
-        // 构建组织结构信息
+        // Build organizational structure information
         CameraGroup group = groupMapper.queryGroupByAlias(groupAlias);
         if (group == null) {
-            log.warn("[SY-按组织结构统计摄像头数量] 组织结构不存在: {}", groupAlias);
+            log.warn("[SY-Count the number of cameras by organizational structure] Organizational structure does not exist: {}", groupAlias);
             return Collections.emptyList();
         }
-        // 获取所有子节点
+        // Get all child nodes
         List<CameraGroup> groupList = queryAllGroupChildren(group.getId(), group.getBusinessGroup());
         groupList.add(group);
 
-        // TODO 此处整理可优化，尽量让sql直接返回对应的结构 无需二次整理
+        // TODO The sorting here can be optimized, try to let sql directly return the corresponding structure without the need for secondary sorting.
         List<CameraCount> cameraCounts = groupMapper.queryCountWithChild(groupList);
         if (cameraCounts.isEmpty()) {
             return Collections.emptyList();
@@ -474,10 +474,10 @@ public class CameraChannelService implements CommandLineRunner {
     }
 
     /**
-     * 为通道增加图片信息和转换坐标系
+     * Add image information and transform coordinate systems to channels
      */
     private List<CameraChannel> addIconPathAndPositionForCameraChannelList(List<CameraChannel> channels, String geoCoordSys) {
-        // 读取redis 图标信息
+        // Read redis icon information
         /*
           {
               "brand": "WVP",
@@ -485,7 +485,7 @@ public class CameraChannelService implements CommandLineRunner {
               "displayInSelect": true,
               "id": 12,
               "imagesPath": "images/lt132",
-              "machineName": "图传对讲单兵",
+              "machineName": "Picture transmission intercom individual soldier",
               "machineType": "LT132"
            },
          */
@@ -501,13 +501,13 @@ public class CameraChannelService implements CommandLineRunner {
                 }
             }
         }else {
-            log.warn("[读取通道图标信息失败]");
+            log.warn("[Failed to read channel icon information]");
         }
         for (CameraChannel channel : channels) {
             if (channel.getGbModel() != null && pathMap.get(channel.getGbModel()) != null) {
                 channel.setIcon(pathMap.get(channel.getGbModel()));
             }
-            // 坐标系转换
+            // Coordinate system conversion
             if (geoCoordSys != null && channel.getGbLongitude() != null && channel.getGbLatitude() != null
                     && channel.getGbLongitude() > 0 && channel.getGbLatitude() > 0) {
                 if (geoCoordSys.equalsIgnoreCase("GCJ02")) {
@@ -527,7 +527,7 @@ public class CameraChannelService implements CommandLineRunner {
 
     public CameraChannel queryOne(String deviceId, String deviceCode, String geoCoordSys) {
         List<CameraChannel> cameraChannels = channelMapper.queryGbChannelByChannelDeviceIdAndGbDeviceId(deviceId, deviceCode);
-        Assert.isTrue(cameraChannels.isEmpty(), "通道不存在");
+        Assert.isTrue(cameraChannels.isEmpty(), "Channel does not exist");
         List<CameraChannel> channels = addIconPathAndPositionForCameraChannelList(cameraChannels, geoCoordSys);
         CameraChannel channel = channels.get(0);
         if (deviceCode != null) {
@@ -538,14 +538,14 @@ public class CameraChannelService implements CommandLineRunner {
     }
 
     /**
-     * 播放通道
-     * @param deviceId 通道编号
-     * @param deviceCode 通道对应的国标设备的编号
-     * @param callback 点播结果的回放
+     * Playback channel
+     * @param deviceId Channel number
+     * @param deviceCode The number of the national standard equipment corresponding to the channel
+     * @param callback Replay of on-demand results
      */
     public void play(String deviceId, String deviceCode, ErrorCallback<CameraStreamInfo> callback) {
         List<CameraChannel> cameraChannels = channelMapper.queryGbChannelByChannelDeviceIdAndGbDeviceId(deviceId, deviceCode);
-        Assert.isTrue(cameraChannels.isEmpty(), "通道不存在");
+        Assert.isTrue(cameraChannels.isEmpty(), "Channel does not exist");
         CameraChannel channel = cameraChannels.get(0);
         channelPlayService.play(channel, null, userSetting.getRecordSip(), (code, msg, data) -> {
             callback.run(code, msg, new CameraStreamInfo(channel, data));
@@ -553,26 +553,26 @@ public class CameraChannelService implements CommandLineRunner {
     }
 
     /**
-     * 停止播放通道
-     * @param deviceId 通道编号
-     * @param deviceCode 通道对应的国标设备的编号
+     * Stop playing channel
+     * @param deviceId Channel number
+     * @param deviceCode The number of the national standard equipment corresponding to the channel
      */
     public void stopPlay(String deviceId, String deviceCode) {
         List<CameraChannel> cameraChannels = channelMapper.queryGbChannelByChannelDeviceIdAndGbDeviceId(deviceId, deviceCode);
-        Assert.isTrue(cameraChannels.isEmpty(), "通道不存在");
+        Assert.isTrue(cameraChannels.isEmpty(), "Channel does not exist");
         CameraChannel channel = cameraChannels.get(0);
         channelPlayService.stopPlay(channel);
     }
 
     public void ptz(String deviceId, String deviceCode, String command, Integer speed, ErrorCallback<String> callback) {
         List<CameraChannel> cameraChannels = channelMapper.queryGbChannelByChannelDeviceIdAndGbDeviceId(deviceId, deviceCode);
-        Assert.isTrue(cameraChannels.isEmpty(), "通道不存在");
+        Assert.isTrue(cameraChannels.isEmpty(), "Channel does not exist");
         CameraChannel channel = cameraChannels.get(0);
 
         if (speed == null) {
             speed = 50;
         }else if (speed < 0 || speed > 100) {
-            throw new ControllerException(ErrorCode.ERROR100.getCode(), "panSpeed 为 0-100的数字");
+            throw new ControllerException(ErrorCode.ERROR100.getCode(), "panSpeed for 0-100number");
         }
 
         FrontEndControlCodeForPTZ controlCode = new FrontEndControlCodeForPTZ();
@@ -623,7 +623,7 @@ public class CameraChannelService implements CommandLineRunner {
 
     public void updateCamera(String deviceId, String deviceCode, String name, Double longitude, Double latitude, String geoCoordSys) {
         List<CameraChannel> cameraChannels = channelMapper.queryGbChannelByChannelDeviceIdAndGbDeviceId(deviceId, deviceCode);
-        Assert.isTrue(cameraChannels.isEmpty(), "通道不存在");
+        Assert.isTrue(cameraChannels.isEmpty(), "Channel does not exist");
         CameraChannel commonGBChannel = cameraChannels.get(0);
         commonGBChannel.setGbName(name);
         if (geoCoordSys != null && longitude != null && latitude != null
@@ -660,16 +660,16 @@ public class CameraChannelService implements CommandLineRunner {
 
 
     public List<CameraChannel> queryListInBox(Double minLongitude, Double maxLongitude, Double minLatitude, Double maxLatitude, Integer level, String groupAlias, String geoCoordSys) {
-        // 构建组织结构信息
+        // Build organizational structure information
         CameraGroup group = groupMapper.queryGroupByAlias(groupAlias);
         if (group == null) {
-            log.warn("[SY-框选] 组织结构不存在: {}", groupAlias);
+            log.warn("[SY-Frame selection] Organizational structure does not exist: {}", groupAlias);
             return Collections.emptyList();
         }
-        // 获取所有子节点
+        // Get all child nodes
         List<CameraGroup> groupList = queryAllGroupChildren(group.getId(), group.getBusinessGroup());
         groupList.add(group);
-        // 参数坐标系列转换
+        // Parametric coordinate series conversion
         if (geoCoordSys != null) {
             if (geoCoordSys.equalsIgnoreCase("GCJ02")) {
                 Double[] minPosition = Coordtransform.GCJ02ToWGS84(minLongitude, minLatitude);
@@ -697,17 +697,17 @@ public class CameraChannelService implements CommandLineRunner {
     }
 
     public List<CameraChannel> queryListInCircle(Double centerLongitude, Double centerLatitude, Double radius, Integer level, String groupAlias, String geoCoordSys) {
-        // 构建组织结构信息
+        // Build organizational structure information
         CameraGroup group = groupMapper.queryGroupByAlias(groupAlias);
         if (group == null) {
-            log.warn("[SY-圈选] 组织结构不存在: {}", groupAlias);
+            log.warn("[SY-circle selection] Organizational structure does not exist: {}", groupAlias);
             return Collections.emptyList();
         }
-        // 获取所有子节点
+        // Get all child nodes
         List<CameraGroup> groupList = queryAllGroupChildren(group.getId(), group.getBusinessGroup());
         groupList.add(group);
 
-        // 参数坐标系列转换
+        // Parametric coordinate series conversion
         if (geoCoordSys != null) {
             if (geoCoordSys.equalsIgnoreCase("GCJ02")) {
                 Double[] position = Coordtransform.GCJ02ToWGS84(centerLongitude, centerLatitude);
@@ -727,17 +727,17 @@ public class CameraChannelService implements CommandLineRunner {
     }
 
     public List<CameraChannel> queryListInPolygon(List<Point> pointList, String groupAlias, Integer level, String geoCoordSys) {
-        // 构建组织结构信息
+        // Build organizational structure information
         CameraGroup group = groupMapper.queryGroupByAlias(groupAlias);
         if (group == null) {
-            log.warn("[SY-多边形] 组织结构不存在: {}", groupAlias);
+            log.warn("[SY-polygon] Organizational structure does not exist: {}", groupAlias);
             return Collections.emptyList();
         }
-        // 获取所有子节点
+        // Get all child nodes
         List<CameraGroup> groupList = queryAllGroupChildren(group.getId(), group.getBusinessGroup());
         groupList.add(group);
 
-        // 参数坐标系列转换
+        // Parametric coordinate series conversion
         if (geoCoordSys != null) {
             for (Point point : pointList) {
                 if (geoCoordSys.equalsIgnoreCase("GCJ02")) {
@@ -765,7 +765,7 @@ public class CameraChannelService implements CommandLineRunner {
         if (cameraGroup != null) {
             business = cameraGroup.getDeviceId();
         }
-        // 构建分页
+        // Build pagination
         PageHelper.startPage(page, count);
         List<CameraChannel> all = channelMapper.queryListForSyMobile(business);
 
@@ -778,9 +778,9 @@ public class CameraChannelService implements CommandLineRunner {
 
     public List<CameraChannel> queryMeetingChannelList(String topGroupAlias) {
         CameraGroup cameraGroup = groupMapper.queryGroupByAlias(topGroupAlias);
-        Assert.notNull(cameraGroup, "域不存在");
+        Assert.notNull(cameraGroup, "Domain does not exist");
         String business = cameraGroup.getDeviceId();
-        Assert.notNull(business, "域不存在");
+        Assert.notNull(business, "Domain does not exist");
 
         return channelMapper.queryMeetingChannelList(business);
     }

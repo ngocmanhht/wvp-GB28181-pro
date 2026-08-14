@@ -8,12 +8,12 @@ import lombok.Data;
 public class GPSMsgInfo {
 
     /**
-     * 通道国标ID
+     * Channel national standardID
      */
     private String id;
 
     /**
-     * 通道ID
+     * channelID
      */
     private Integer channelId;
 
@@ -23,32 +23,32 @@ public class GPSMsgInfo {
     private String app;
 
     /**
-     * 经度 (必选)
+     * longitude (Required)
      */
     private double lng;
 
     /**
-     * 纬度 (必选)
+     * Latitude (Required)
      */
     private double lat;
 
     /**
-     * 速度,单位:km/h (可选)
+     * speed, unit:km/h (Optional)
      */
     private Double speed;
 
     /**
-     * 产生通知时间, 时间格式： 2020-01-14T14:32:12
+     * Generate notification time, time format： 2020-01-14T14:32:12
      */
     private String time;
 
     /**
-     * 方向,取值为当前摄像头方向与正北方的顺时针夹角,取值范围0°~360°,单位:(°)(可选)
+     * Direction, the value is the clockwise angle between the current camera direction and true north, the value range is 0°~360°, unit:(°)(Optional)
      */
     private Double direction;
 
     /**
-     * 海拔高度,单位:m(可选)
+     * Altitude, unit:m(Optional)
      */
     private Double altitude;
 

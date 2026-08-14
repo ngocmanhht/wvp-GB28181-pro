@@ -4,27 +4,27 @@ package com.genersoft.iot.vmp.gb28181.bean;
 import lombok.Data;
 
 /**
- * 通过redis分发报警消息
+ * Distribute alarm messages through redis
  */
 @Data
 public class AlarmChannelMessage {
     /**
-     * 通道国标编号
+     * Channel national standard number
      */
     private String gbId;
 
     /**
-     * 报警编号
+     * Alarm number
      */
     private Integer alarmSn;
 
     /**
-     * 告警类型
+     * Alarm type
      */
     private Integer alarmType;
 
     /**
-     * 报警描述
+     * Alarm description
      */
     private String alarmDescription;
 }

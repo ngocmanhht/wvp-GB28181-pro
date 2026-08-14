@@ -9,34 +9,34 @@ import java.util.List;
 
 @Setter
 @Getter
-@Schema(description = "视频报警上报")
+@Schema(description = "Video alarm reporting")
 public class JTVideoAlarm {
 
-    @Schema(description = "视频信号丢失报警的通道")
+    @Schema(description = "Video signal loss alarm channel")
     private List<Integer> videoLossChannels;
 
-    @Schema(description = "视频信号遮挡报警的通道")
+    @Schema(description = "Video signal blocking alarm channel")
     private List<Integer> videoOcclusionChannels;
 
-    @Schema(description = "存储器故障报警状态，第 1-12 个主存储器，12-15 分别表示第 1-4 个灾备存储装置")
+    @Schema(description = "Memory fault alarm status, section 1-12 main memory，12-15 Respectively represent the 1-4 disaster recovery storage device")
     private List<Integer> storageFaultAlarm;
 
-    @Schema(description = "异常驾驶行为-疲劳")
+    @Schema(description = "Abnormal driving behavior-fatigue")
     private boolean drivingForFatigue;
 
-    @Schema(description = "异常驾驶行为-打电话")
+    @Schema(description = "Abnormal driving behavior-call")
     private boolean drivingForCall;
 
-    @Schema(description = "异常驾驶行为-抽烟")
+    @Schema(description = "Abnormal driving behavior-Smoking")
     private boolean drivingSmoking;
 
-    @Schema(description = "其他视频设备故障")
+    @Schema(description = "Other video equipment failure")
     private boolean otherDeviceFailure;
 
-    @Schema(description = "客车超员报警")
+    @Schema(description = "Bus overcrowding alarm")
     private boolean overcrowding;
 
-    @Schema(description = "特殊报警录像达到存储阈值报警")
+    @Schema(description = "Special alarm: The recording reaches the storage threshold alarm.")
     private boolean specialRecordFull;
 
     public JTVideoAlarm() {

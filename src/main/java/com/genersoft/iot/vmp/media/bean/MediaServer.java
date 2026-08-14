@@ -7,7 +7,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import org.springframework.util.ObjectUtils;
 
-@Schema(description = "流媒体服务信息")
+@Schema(description = "Streaming service information")
 @Data
 public class MediaServer {
 
@@ -17,102 +17,102 @@ public class MediaServer {
     @Schema(description = "IP")
     private String ip;
 
-    @Schema(description = "hook使用的IP（zlm访问WVP使用的IP）")
+    @Schema(description = "hookIP used (used by zlm to access WVPIP）")
     private String hookIp = "127.0.0.1";
 
     @Schema(description = "SDP IP")
     private String sdpIp;
 
-    @Schema(description = "流IP")
+    @Schema(description = "flowIP")
     private String streamIp;
 
-    @Schema(description = "HTTP端口")
+    @Schema(description = "HTTPport")
     private int httpPort;
 
-    @Schema(description = "HTTPS端口")
+    @Schema(description = "HTTPSport")
     private int httpSSlPort;
 
-    @Schema(description = "RTMP端口")
+    @Schema(description = "RTMPport")
     private int rtmpPort;
 
-    @Schema(description = "flv端口")
+    @Schema(description = "flvport")
     private int flvPort;
 
-    @Schema(description = "https-flv端口")
+    @Schema(description = "https-flvport")
     private int flvSSLPort;
 
-    @Schema(description = "mp4端口")
+    @Schema(description = "mp4port")
     private int mp4Port;
 
-    @Schema(description = "ws-flv端口")
+    @Schema(description = "ws-flvport")
     private int wsFlvPort;
 
-    @Schema(description = "wss-flv端口")
+    @Schema(description = "wss-flvport")
     private int wsFlvSSLPort;
 
-    @Schema(description = "RTMPS端口")
+    @Schema(description = "RTMPSport")
     private int rtmpSSlPort;
 
-    @Schema(description = "RTP收流端口（单端口模式有用）")
+    @Schema(description = "RTPTraffic collection port (useful in single port mode）")
     private int rtpProxyPort;
 
-    @Schema(description = "1078收流端口（单端口模式有用）")
+    @Schema(description = "1078Traffic collection port (useful in single port mode）")
     private int jttProxyPort;
 
-    @Schema(description = "RTSP端口")
+    @Schema(description = "RTSPport")
     private int rtspPort;
 
-    @Schema(description = "RTSPS端口")
+    @Schema(description = "RTSPSport")
     private int rtspSSLPort;
 
-    @Schema(description = "是否开启自动配置ZLM")
+    @Schema(description = "Whether to enable automatic configurationZLM")
     private boolean autoConfig;
 
-    @Schema(description = "ZLM鉴权参数")
+    @Schema(description = "ZLMAuthentication parameters")
     private String secret;
 
-    @Schema(description = "keepalive hook触发间隔,单位秒")
+    @Schema(description = "keepalive hookTrigger interval, unit seconds")
     private Float hookAliveInterval;
 
-    @Schema(description = "是否使用多端口模式")
+    @Schema(description = "Whether to use multi-port mode")
     private boolean rtpEnable;
 
-    @Schema(description = "状态")
+    @Schema(description = "Status")
     private boolean status;
 
-    @Schema(description = "多端口RTP收流端口范围")
+    @Schema(description = "Multi-port RTP traffic collection port range")
     private String rtpPortRange;
 
-    @Schema(description = "RTP发流端口范围")
+    @Schema(description = "RTPSending port range")
     private String sendRtpPortRange;
 
-    @Schema(description = "assist服务端口")
+    @Schema(description = "assistservice port")
     private int recordAssistPort;
 
-    @Schema(description = "创建时间")
+    @Schema(description = "creation time")
     private String createTime;
 
-    @Schema(description = "更新时间")
+    @Schema(description = "Update time")
     private String updateTime;
 
-    @Schema(description = "上次心跳时间")
+    @Schema(description = "last heartbeat time")
     private String lastKeepaliveTime;
 
-    @Schema(description = "是否是默认ZLM")
+    @Schema(description = "Is it the defaultZLM")
     private boolean defaultServer;
 
-    @Schema(description = "录像存储时长")
+    @Schema(description = "Video storage duration")
     private int recordDay;
 
-    @Schema(description = "录像存储路径")
+    @Schema(description = "Video storage path")
     private String recordPath;
-    @Schema(description = "类型： zlm/abl")
+    @Schema(description = "Type： zlm/abl")
     private String type;
 
-    @Schema(description = "转码的前缀")
+    @Schema(description = "Transcoding prefix")
     private String transcodeSuffix;
 
-    @Schema(description = "服务Id")
+    @Schema(description = "serviceId")
     private String serverId;
 
     public MediaServer() {
@@ -131,12 +131,12 @@ public class MediaServer {
         rtpProxyPort = zlmServerConfig.getRtpProxyPort();
         rtspPort = zlmServerConfig.getRtspPort();
         rtspSSLPort = zlmServerConfig.getRtspSSlport();
-        autoConfig = true; // 默认值true;
+        autoConfig = true; // Default valuetrue;
         secret = zlmServerConfig.getApiSecret();
         hookAliveInterval = zlmServerConfig.getHookAliveInterval();
-        rtpEnable = false; // 默认使用单端口;直到用户自己设置开启多端口
-        rtpPortRange = zlmServerConfig.getPortRange().replace("_",","); // 默认使用30000,30500作为级联时发送流的端口号
-        recordAssistPort = 0; // 默认关闭
+        rtpEnable = false; // Use single port by default;Until the user sets up multiple ports by himself
+        rtpPortRange = zlmServerConfig.getPortRange().replace("_",","); // By default, 30000 and 30500 are used as the port numbers for sending streams during cascading.
+        recordAssistPort = 0; // Off by default
         transcodeSuffix = zlmServerConfig.getTranscodeSuffix();
 
     }
@@ -154,10 +154,10 @@ public class MediaServer {
         rtmpPort = config.getRtmpPort();
         rtpProxyPort = config.getJtt1078RecvPort();
         rtspPort = config.getRtspPort();
-        autoConfig = true; // 默认值true;
+        autoConfig = true; // Default valuetrue;
         secret = config.getSecret();
-        rtpEnable = false; // 默认使用单端口;直到用户自己设置开启多端口
-        rtpPortRange = "30000,30500"; // 默认使用30000,30500作为级联时发送流的端口号
-        recordAssistPort = 0; // 默认关闭
+        rtpEnable = false; // Use single port by default;Until the user sets up multiple ports by himself
+        rtpPortRange = "30000,30500"; // By default, 30000 and 30500 are used as the port numbers for sending streams during cascading.
+        recordAssistPort = 0; // Off by default
     }
 }

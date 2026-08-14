@@ -45,7 +45,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 @SuppressWarnings("rawtypes")
-@Tag(name = "云端录像接口")
+@Tag(name = "Cloud recording interface")
 @Slf4j
 @RestController
 @RequestMapping("/api/cloud/record")
@@ -64,12 +64,12 @@ public class CloudRecordController {
 
     @ResponseBody
     @GetMapping("/date/list")
-    @Operation(summary = "查询存在云端录像的日期", security = @SecurityRequirement(name = JwtUtils.HEADER))
-    @Parameter(name = "app", description = "应用名", required = true)
-    @Parameter(name = "stream", description = "流ID", required = true)
-    @Parameter(name = "year", description = "年，置空则查询当年", required = false)
-    @Parameter(name = "month", description = "月，置空则查询当月", required = false)
-    @Parameter(name = "mediaServerId", description = "流媒体ID，置空则查询全部", required = false)
+    @Operation(summary = "Query the date on which cloud recording exists", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Parameter(name = "app", description = "Application name", required = true)
+    @Parameter(name = "stream", description = "flowID", required = true)
+    @Parameter(name = "year", description = "Year, leave it blank to query the current year", required = false)
+    @Parameter(name = "month", description = "Month, leave it blank to query the current month", required = false)
+    @Parameter(name = "mediaServerId", description = "Streaming media ID, leave it blank to query all", required = false)
     public List<String> openRtpServer(
             @RequestParam(required = true) String app,
             @RequestParam(required = true) String stream,
@@ -78,7 +78,7 @@ public class CloudRecordController {
             @RequestParam(required = false) String mediaServerId
 
     ) {
-        log.info("[云端录像] 查询存在云端录像的日期 app->{}, stream->{}, mediaServerId->{}, year->{}, month->{}", app, stream, mediaServerId, year, month);
+        log.info("[Cloud recording] Query the date on which cloud recording exists app->{}, stream->{}, mediaServerId->{}, year->{}, month->{}", app, stream, mediaServerId, year, month);
         Calendar calendar = Calendar.getInstance();
         if (ObjectUtils.isEmpty(year)) {
             year = calendar.get(Calendar.YEAR);
@@ -91,7 +91,7 @@ public class CloudRecordController {
             mediaServers = new ArrayList<>();
             MediaServer mediaServer = mediaServerService.getOne(mediaServerId);
             if (mediaServer == null) {
-                throw new ControllerException(ErrorCode.ERROR100.getCode(), "未找到流媒体: " + mediaServerId);
+                throw new ControllerException(ErrorCode.ERROR100.getCode(), "Streamer not found: " + mediaServerId);
             }
             mediaServers.add(mediaServer);
         } else {
@@ -106,17 +106,17 @@ public class CloudRecordController {
 
     @ResponseBody
     @GetMapping("/list")
-    @Operation(summary = "分页查询云端录像", security = @SecurityRequirement(name = JwtUtils.HEADER))
-    @Parameter(name = "query", description = "检索内容", required = false)
-    @Parameter(name = "app", description = "应用名", required = false)
-    @Parameter(name = "stream", description = "流ID", required = false)
-    @Parameter(name = "page", description = "当前页", required = true)
-    @Parameter(name = "count", description = "每页查询数量", required = true)
-    @Parameter(name = "startTime", description = "开始时间(yyyy-MM-dd HH:mm:ss)", required = false)
-    @Parameter(name = "endTime", description = "结束时间(yyyy-MM-dd HH:mm:ss)", required = false)
-    @Parameter(name = "mediaServerId", description = "流媒体ID，置空则查询全部流媒体", required = false)
-    @Parameter(name = "callId", description = "每次录像的唯一标识，置空则查询全部流媒体", required = false)
-    @Parameter(name = "ascOrder", description = "是否升序排序， 升序： true， 降序： false", required = false)
+    @Operation(summary = "Query cloud recordings by page", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Parameter(name = "query", description = "Search content", required = false)
+    @Parameter(name = "app", description = "Application name", required = false)
+    @Parameter(name = "stream", description = "flowID", required = false)
+    @Parameter(name = "page", description = "Current page", required = true)
+    @Parameter(name = "count", description = "Number of queries per page", required = true)
+    @Parameter(name = "startTime", description = "start time(yyyy-MM-dd HH:mm:ss)", required = false)
+    @Parameter(name = "endTime", description = "end time(yyyy-MM-dd HH:mm:ss)", required = false)
+    @Parameter(name = "mediaServerId", description = "Streaming media ID, leave it blank to query all streaming media", required = false)
+    @Parameter(name = "callId", description = "The unique identifier of each recording. If left blank, all streaming media will be queried.", required = false)
+    @Parameter(name = "ascOrder", description = "Whether to sort in ascending order, ascending order: true, descending order： false", required = false)
     public PageInfo<CloudRecordItem> openRtpServer(@RequestParam(required = false) String query,
                                                    @RequestParam(required = false) String app,
                                                    @RequestParam(required = false) String stream,
@@ -129,14 +129,14 @@ public class CloudRecordController {
                                                    @RequestParam(required = false) Boolean ascOrder
 
     ) {
-        log.info("[云端录像] 查询 app->{}, stream->{}, mediaServerId->{}, page->{}, count->{}, startTime->{}, endTime->{}, callId->{}", app, stream, mediaServerId, page, count, startTime, endTime, callId);
+        log.info("[Cloud recording] Query app->{}, stream->{}, mediaServerId->{}, page->{}, count->{}, startTime->{}, endTime->{}, callId->{}", app, stream, mediaServerId, page, count, startTime, endTime, callId);
 
         List<MediaServer> mediaServers;
         if (!ObjectUtils.isEmpty(mediaServerId)) {
             mediaServers = new ArrayList<>();
             MediaServer mediaServer = mediaServerService.getOne(mediaServerId);
             if (mediaServer == null) {
-                throw new ControllerException(ErrorCode.ERROR100.getCode(), "未找到流媒体: " + mediaServerId);
+                throw new ControllerException(ErrorCode.ERROR100.getCode(), "Streamer not found: " + mediaServerId);
             }
             mediaServers.add(mediaServer);
         } else {
@@ -165,14 +165,14 @@ public class CloudRecordController {
 
     @ResponseBody
     @GetMapping("/task/add")
-    @Operation(summary = "添加合并任务")
-    @Parameter(name = "app", description = "应用名", required = false)
-    @Parameter(name = "stream", description = "流ID", required = false)
-    @Parameter(name = "mediaServerId", description = "流媒体ID", required = false)
-    @Parameter(name = "startTime", description = "鉴权ID", required = false)
-    @Parameter(name = "endTime", description = "鉴权ID", required = false)
-    @Parameter(name = "callId", description = "鉴权ID", required = false)
-    @Parameter(name = "remoteHost", description = "返回地址时的远程地址", required = false)
+    @Operation(summary = "Add merge task")
+    @Parameter(name = "app", description = "Application name", required = false)
+    @Parameter(name = "stream", description = "flowID", required = false)
+    @Parameter(name = "mediaServerId", description = "streaming mediaID", required = false)
+    @Parameter(name = "startTime", description = "AuthenticationID", required = false)
+    @Parameter(name = "endTime", description = "AuthenticationID", required = false)
+    @Parameter(name = "callId", description = "AuthenticationID", required = false)
+    @Parameter(name = "remoteHost", description = "The remote address when returning the address", required = false)
     public String addTask(HttpServletRequest request, @RequestParam(required = false) String app, @RequestParam(required = false) String stream, @RequestParam(required = false) String mediaServerId, @RequestParam(required = false) String startTime, @RequestParam(required = false) String endTime, @RequestParam(required = false) String callId, @RequestParam(required = false) String remoteHost) {
         MediaServer mediaServer;
         if (mediaServerId == null) {
@@ -181,7 +181,7 @@ public class CloudRecordController {
             mediaServer = mediaServerService.getOne(mediaServerId);
         }
         if (mediaServer == null) {
-            throw new ControllerException(ErrorCode.ERROR100.getCode(), "未找到可用的流媒体");
+            throw new ControllerException(ErrorCode.ERROR100.getCode(), "No available stream found");
         } else {
             if (remoteHost == null) {
                 remoteHost = request.getScheme() + "://" + mediaServer.getIp() + ":" + mediaServer.getRecordAssistPort();
@@ -192,10 +192,10 @@ public class CloudRecordController {
 
     @ResponseBody
     @GetMapping("/task/list")
-    @Operation(summary = "查询合并任务")
-    @Parameter(name = "taskId", description = "任务Id", required = false)
-    @Parameter(name = "mediaServerId", description = "流媒体ID", required = false)
-    @Parameter(name = "isEnd", description = "是否结束", required = false)
+    @Operation(summary = "Query merge task")
+    @Parameter(name = "taskId", description = "TaskId", required = false)
+    @Parameter(name = "mediaServerId", description = "streaming mediaID", required = false)
+    @Parameter(name = "isEnd", description = "Is it over?", required = false)
     public JSONArray queryTaskList(HttpServletRequest request, @RequestParam(required = false) String app, @RequestParam(required = false) String stream, @RequestParam(required = false) String callId, @RequestParam(required = false) String taskId, @RequestParam(required = false) String mediaServerId, @RequestParam(required = false) Boolean isEnd) {
         if (ObjectUtils.isEmpty(mediaServerId)) {
             mediaServerId = null;
@@ -206,16 +206,16 @@ public class CloudRecordController {
 
     @ResponseBody
     @GetMapping("/collect/add")
-    @Operation(summary = "添加收藏")
-    @Parameter(name = "app", description = "应用名", required = false)
-    @Parameter(name = "stream", description = "流ID", required = false)
-    @Parameter(name = "mediaServerId", description = "流媒体ID", required = false)
-    @Parameter(name = "startTime", description = "鉴权ID", required = false)
-    @Parameter(name = "endTime", description = "鉴权ID", required = false)
-    @Parameter(name = "callId", description = "鉴权ID", required = false)
-    @Parameter(name = "recordId", description = "录像记录的ID，用于精准收藏一个视频文件", required = false)
+    @Operation(summary = "Add to favorites")
+    @Parameter(name = "app", description = "Application name", required = false)
+    @Parameter(name = "stream", description = "flowID", required = false)
+    @Parameter(name = "mediaServerId", description = "streaming mediaID", required = false)
+    @Parameter(name = "startTime", description = "AuthenticationID", required = false)
+    @Parameter(name = "endTime", description = "AuthenticationID", required = false)
+    @Parameter(name = "callId", description = "AuthenticationID", required = false)
+    @Parameter(name = "recordId", description = "The ID of the video record, used to accurately collect a video file", required = false)
     public int addCollect(@RequestParam(required = false) String app, @RequestParam(required = false) String stream, @RequestParam(required = false) String mediaServerId, @RequestParam(required = false) String startTime, @RequestParam(required = false) String endTime, @RequestParam(required = false) String callId, @RequestParam(required = false) Integer recordId) {
-        log.info("[云端录像] 添加收藏，app={}，stream={},mediaServerId={},startTime={},endTime={},callId={},recordId={}", app, stream, mediaServerId, startTime, endTime, callId, recordId);
+        log.info("[Cloud recording] Add to favorites，app={}，stream={},mediaServerId={},startTime={},endTime={},callId={},recordId={}", app, stream, mediaServerId, startTime, endTime, callId, recordId);
         if (recordId != null) {
             return cloudRecordService.changeCollectById(recordId, true);
         } else {
@@ -225,16 +225,16 @@ public class CloudRecordController {
 
     @ResponseBody
     @GetMapping("/collect/delete")
-    @Operation(summary = "移除收藏")
-    @Parameter(name = "app", description = "应用名", required = false)
-    @Parameter(name = "stream", description = "流ID", required = false)
-    @Parameter(name = "mediaServerId", description = "流媒体ID", required = false)
-    @Parameter(name = "startTime", description = "鉴权ID", required = false)
-    @Parameter(name = "endTime", description = "鉴权ID", required = false)
-    @Parameter(name = "callId", description = "鉴权ID", required = false)
-    @Parameter(name = "recordId", description = "录像记录的ID，用于精准精准移除一个视频文件的收藏", required = false)
+    @Operation(summary = "Remove favorites")
+    @Parameter(name = "app", description = "Application name", required = false)
+    @Parameter(name = "stream", description = "flowID", required = false)
+    @Parameter(name = "mediaServerId", description = "streaming mediaID", required = false)
+    @Parameter(name = "startTime", description = "AuthenticationID", required = false)
+    @Parameter(name = "endTime", description = "AuthenticationID", required = false)
+    @Parameter(name = "callId", description = "AuthenticationID", required = false)
+    @Parameter(name = "recordId", description = "The ID of the video record, used to accurately remove a video file from the collection", required = false)
     public int deleteCollect(@RequestParam(required = false) String app, @RequestParam(required = false) String stream, @RequestParam(required = false) String mediaServerId, @RequestParam(required = false) String startTime, @RequestParam(required = false) String endTime, @RequestParam(required = false) String callId, @RequestParam(required = false) Integer recordId) {
-        log.info("[云端录像] 移除收藏，app={}，stream={},mediaServerId={},startTime={},endTime={},callId={},recordId={}", app, stream, mediaServerId, startTime, endTime, callId, recordId);
+        log.info("[Cloud recording] Remove favorites，app={}，stream={},mediaServerId={},startTime={},endTime={},callId={},recordId={}", app, stream, mediaServerId, startTime, endTime, callId, recordId);
         if (recordId != null) {
             return cloudRecordService.changeCollectById(recordId, false);
         } else {
@@ -244,18 +244,18 @@ public class CloudRecordController {
 
     @ResponseBody
     @GetMapping("/play/path")
-    @Operation(summary = "获取播放地址")
-    @Parameter(name = "recordId", description = "录像记录的ID", required = true)
+    @Operation(summary = "Get playback address")
+    @Parameter(name = "recordId", description = "video recordedID", required = true)
     public DownloadFileInfo getPlayUrlPath(@RequestParam(required = true) Integer recordId) {
         return cloudRecordService.getPlayUrlPath(recordId);
     }
 
     @ResponseBody
     @GetMapping("/loadRecord")
-    @Operation(summary = "加载录像文件形成播放地址")
-    @Parameter(name = "app", description = "应用名", required = true)
-    @Parameter(name = "stream", description = "流ID", required = true)
-    @Parameter(name = "cloudRecordId", description = "云端录像ID", required = true)
+    @Operation(summary = "Load the video file to form the playback address")
+    @Parameter(name = "app", description = "Application name", required = true)
+    @Parameter(name = "stream", description = "flowID", required = true)
+    @Parameter(name = "cloudRecordId", description = "Cloud recordingID", required = true)
     public DeferredResult<WVPResult<StreamContent>> loadRecord(
             HttpServletRequest request,
             @RequestParam(required = true) String app,
@@ -265,10 +265,10 @@ public class CloudRecordController {
         DeferredResult<WVPResult<StreamContent>> result = new DeferredResult<>();
 
         result.onTimeout(()->{
-            log.info("[加载录像文件超时] app={}, stream={}, cloudRecordId={}", app, stream, cloudRecordId);
+            log.info("[Loading video file timed out] app={}, stream={}, cloudRecordId={}", app, stream, cloudRecordId);
             WVPResult<StreamContent> wvpResult = new WVPResult<>();
             wvpResult.setCode(ErrorCode.ERROR100.getCode());
-            wvpResult.setMsg("加载录像文件超时");
+            wvpResult.setMsg("Loading video file timed out");
             result.setResult(wvpResult);
         });
 
@@ -281,7 +281,7 @@ public class CloudRecordController {
 
                 if (streamInfo != null) {
                     if (userSetting.getUseSourceIpAsStreamIp()) {
-                        streamInfo=streamInfo.clone();//深拷贝
+                        streamInfo=streamInfo.clone();//deep copy
                         String host;
                         try {
                             URL url=new URL(request.getRequestURL().toString());
@@ -312,11 +312,11 @@ public class CloudRecordController {
 
     @ResponseBody
     @GetMapping("/seek")
-    @Operation(summary = "定位录像播放到制定位置")
-    @Parameter(name = "mediaServerId", description = "使用的节点Id", required = true)
-    @Parameter(name = "app", description = "应用名", required = true)
-    @Parameter(name = "stream", description = "流ID", required = true)
-    @Parameter(name = "seek", description = "要定位的时间位置，从录像开始的时间算起", required = true)
+    @Operation(summary = "Play the positioning video to the specified position")
+    @Parameter(name = "mediaServerId", description = "Node usedId", required = true)
+    @Parameter(name = "app", description = "Application name", required = true)
+    @Parameter(name = "stream", description = "flowID", required = true)
+    @Parameter(name = "seek", description = "The time position to be positioned is calculated from the time when the recording starts.", required = true)
     public void seekRecord(
             @RequestParam(required = true) String mediaServerId,
             @RequestParam(required = true) String app,
@@ -332,11 +332,11 @@ public class CloudRecordController {
 
     @ResponseBody
     @GetMapping("/speed")
-    @Operation(summary = "设置录像播放速度")
-    @Parameter(name = "mediaServerId", description = "使用的节点Id", required = true)
-    @Parameter(name = "app", description = "应用名", required = true)
-    @Parameter(name = "stream", description = "流ID", required = true)
-    @Parameter(name = "speed", description = "要设置的录像倍速", required = true)
+    @Operation(summary = "Set video playback speed")
+    @Parameter(name = "mediaServerId", description = "Node usedId", required = true)
+    @Parameter(name = "app", description = "Application name", required = true)
+    @Parameter(name = "stream", description = "flowID", required = true)
+    @Parameter(name = "speed", description = "The video speed to be set", required = true)
     public void setRecordSpeed(
             @RequestParam(required = true) String mediaServerId,
             @RequestParam(required = true) String app,
@@ -353,8 +353,8 @@ public class CloudRecordController {
 
     @ResponseBody
     @DeleteMapping("/delete")
-    @Operation(summary = "删除录像文件")
-    @Parameter(name = "ids", description = "文件ID集合", required = true)
+    @Operation(summary = "Delete video files")
+    @Parameter(name = "ids", description = "File ID collection", required = true)
     public void deleteFileByIds(@RequestBody BatchRemoveParam ids) {
         cloudRecordService.deleteFileByIds(ids.getIds());
     }
@@ -363,15 +363,15 @@ public class CloudRecordController {
     @GetMapping("/download/zip")
     public void downloadZipFileFromUrl(HttpServletResponse response, Integer[] ids) {
         String idsStr = StringUtils.arrayToCommaDelimitedString(ids);
-        log.info("[下载指定录像文件的压缩包] 查询 ids->{}", idsStr);
+        log.info("[Download the compressed package of the specified video file] Query ids->{}", idsStr);
         List<Integer> arrayList = new ArrayList<>(List.of(ids));
         List<CloudRecordUrl> cloudRecordItemList = cloudRecordService.getUrlListByIds(arrayList);
         if (ObjectUtils.isEmpty(cloudRecordItemList)) {
-            log.warn("[下载指定录像文件的压缩包] 未找到录像文件，ids->{}", idsStr);
+            log.warn("[Download the compressed package of the specified video file] Video file not found，ids->{}", idsStr);
             return;
         }
 
-        // 设置响应头
+        // Set response headers
         response.setContentType("application/zip");
         response.setCharacterEncoding("UTF-8");
         response.setHeader("Content-Disposition", "attachment; filename=record_" + System.currentTimeMillis() + ".zip");
@@ -382,13 +382,13 @@ public class CloudRecordController {
                     zos.putNextEntry(new ZipEntry(recordUrl.getFileName()));
                     boolean downloadSuccess = HttpUtils.downLoadFile(recordUrl.getDownloadUrl(), zos);
                     if (!downloadSuccess) {
-                        log.warn("[下载指定录像文件的压缩包] 下载文件失败: {}", recordUrl.getDownloadUrl());
+                        log.warn("[Download the compressed package of the specified video file] Download file failed: {}", recordUrl.getDownloadUrl());
                         zos.closeEntry();
                         continue;
                     }
 
 //                    try (FileInputStream fis = new FileInputStream(recordUrl.getFilePath())) {
-//                        byte[] buf = new byte[8192]; // 8KB 缓冲区，提高性能
+//                        byte[] buf = new byte[8192]; // 8KB buffer to improve performance
 //                        int len;
 //                        while ((len = fis.read(buf)) != -1) {
 //                            zos.write(buf, 0, len);
@@ -397,12 +397,12 @@ public class CloudRecordController {
 
                     zos.closeEntry();
                 } catch (Exception e) {
-                    log.error("[下载指定录像文件的压缩包] 处理文件失败: {}, 错误: {}", recordUrl.getFileName(), e.getMessage());
-                    // 继续处理下一个文件
+                    log.error("[Download the compressed package of the specified video file] Processing file failed: {}, Error: {}", recordUrl.getFileName(), e.getMessage());
+                    // Continue to the next file
                 }
             }
         } catch (IOException e) {
-            log.error("[下载指定录像文件的压缩包] 创建压缩包失败，查询 ids->{}", ids, e);
+            log.error("[Download the compressed package of the specified video file] Failed to create compressed package, query ids->{}", ids, e);
         }
     }
 
@@ -410,39 +410,39 @@ public class CloudRecordController {
 
 
 
-    /************************* 以下这些接口只适合wvp和zlm部署在同一台服务器的情况，且wvp只有一个zlm节点的情况 ***************************************/
+    /************************* The following interfaces are only suitable for situations where wvp and zlm are deployed on the same server, and wvp has only one zlm node. ***************************************/
 
     /**
-     * 下载指定录像文件的压缩包
-     * @param query 检索内容
-     * @param app 应用名
-     * @param stream 流ID
-     * @param startTime 开始时间(yyyy-MM-dd HH:mm:ss)
-     * @param endTime 结束时间(yyyy-MM-dd HH:mm:ss)
-     * @param mediaServerId 流媒体ID，置空则查询全部流媒体
-     * @param callId 每次录像的唯一标识，置空则查询全部流媒体
-     * @param ids 指定的Id
+     * Download the compressed package of the specified video file
+     * @param query Search content
+     * @param app Application name
+     * @param stream flowID
+     * @param startTime start time(yyyy-MM-dd HH:mm:ss)
+     * @param endTime end time(yyyy-MM-dd HH:mm:ss)
+     * @param mediaServerId Streaming media ID, leave it blank to query all streaming media
+     * @param callId The unique identifier of each recording. If left blank, all streaming media will be queried.
+     * @param ids designatedId
      */
     @ResponseBody
     @GetMapping("/zip")
     public void downloadZipFile(HttpServletResponse response, @RequestParam(required = false) String query, @RequestParam(required = false) String app, @RequestParam(required = false) String stream, @RequestParam(required = false) String startTime, @RequestParam(required = false) String endTime, @RequestParam(required = false) String mediaServerId, @RequestParam(required = false) String callId, @RequestParam(required = false) List<Integer> ids
 
     ) {
-        log.info("[下载指定录像文件的压缩包] 查询 app->{}, stream->{}, mediaServerId->{}, startTime->{}, endTime->{}, callId->{}", app, stream, mediaServerId, startTime, endTime, callId);
+        log.info("[Download the compressed package of the specified video file] Query app->{}, stream->{}, mediaServerId->{}, startTime->{}, endTime->{}, callId->{}", app, stream, mediaServerId, startTime, endTime, callId);
 
         List<MediaServer> mediaServers;
         if (!ObjectUtils.isEmpty(mediaServerId)) {
             mediaServers = new ArrayList<>();
             MediaServer mediaServer = mediaServerService.getOne(mediaServerId);
             if (mediaServer == null) {
-                throw new ControllerException(ErrorCode.ERROR100.getCode(), "未找到流媒体: " + mediaServerId);
+                throw new ControllerException(ErrorCode.ERROR100.getCode(), "Streamer not found: " + mediaServerId);
             }
             mediaServers.add(mediaServer);
         } else {
             mediaServers = mediaServerService.getAll();
         }
         if (mediaServers.isEmpty()) {
-            throw new ControllerException(ErrorCode.ERROR100.getCode(), "当前无流媒体");
+            throw new ControllerException(ErrorCode.ERROR100.getCode(), "No streaming at the moment");
         }
         if (query != null && ObjectUtils.isEmpty(query.trim())) {
             query = null;
@@ -462,7 +462,7 @@ public class CloudRecordController {
         if (callId != null && ObjectUtils.isEmpty(callId.trim())) {
             callId = null;
         }
-        // 设置响应头
+        // Set response headers
         response.setContentType("application/zip");
         response.setCharacterEncoding("UTF-8");
         if (stream != null && callId != null) {
@@ -482,64 +482,64 @@ public class CloudRecordController {
 
                     File file = new File(cloudRecordItem.getFilePath());
                     if (!file.exists() || file.isDirectory()) {
-                        log.warn("[下载指定录像文件的压缩包] 文件不存在或为目录: {}", cloudRecordItem.getFilePath());
+                        log.warn("[Download the compressed package of the specified video file] The file does not exist or is a directory: {}", cloudRecordItem.getFilePath());
                         zos.closeEntry();
                         continue;
                     }
 
                     try (FileInputStream fis = new FileInputStream(cloudRecordItem.getFilePath())) {
-                        byte[] buf = new byte[8192]; // 8KB 缓冲区，提高性能
+                        byte[] buf = new byte[8192]; // 8KB buffer to improve performance
                         int len;
                         while ((len = fis.read(buf)) != -1) {
                             zos.write(buf, 0, len);
                         }
                     }
                     zos.closeEntry();
-                    log.debug("[下载指定录像文件的压缩包] 成功添加文件: {}", fileName);
+                    log.debug("[Download the compressed package of the specified video file] File added successfully: {}", fileName);
                 } catch (Exception e) {
-                    log.error("[下载指定录像文件的压缩包] 处理文件失败: {}, 错误: {}", cloudRecordItem.getFilePath(), e.getMessage());
-                    // 继续处理下一个文件
+                    log.error("[Download the compressed package of the specified video file] Processing file failed: {}, Error: {}", cloudRecordItem.getFilePath(), e.getMessage());
+                    // Continue to the next file
                 }
             }
         } catch (IOException e) {
-            log.error("[下载指定录像文件的压缩包] 失败： 查询 app->{}, stream->{}, mediaServerId->{}, startTime->{}, endTime->{}, callId->{}", app, stream, mediaServerId, startTime, endTime, callId, e);
+            log.error("[Download the compressed package of the specified video file] Failure: Query app->{}, stream->{}, mediaServerId->{}, startTime->{}, endTime->{}, callId->{}", app, stream, mediaServerId, startTime, endTime, callId, e);
         }
     }
 
     /**
      *
-     * @param query 检索内容
-     * @param app 应用名
-     * @param stream 流ID
-     * @param startTime 开始时间(yyyy-MM-dd HH:mm:ss)
-     * @param endTime 结束时间(yyyy-MM-dd HH:mm:ss)
-     * @param mediaServerId 流媒体ID，置空则查询全部流媒体
-     * @param callId 每次录像的唯一标识，置空则查询全部流媒体
-     * @param remoteHost 拼接播放地址时使用的远程地址
+     * @param query Search content
+     * @param app Application name
+     * @param stream flowID
+     * @param startTime start time(yyyy-MM-dd HH:mm:ss)
+     * @param endTime end time(yyyy-MM-dd HH:mm:ss)
+     * @param mediaServerId Streaming media ID, leave it blank to query all streaming media
+     * @param callId The unique identifier of each recording. If left blank, all streaming media will be queried.
+     * @param remoteHost The remote address used when splicing playback addresses
      */
     @ResponseBody
     @GetMapping("/list-url")
-    @Operation(summary = "分页查询云端录像", security = @SecurityRequirement(name = JwtUtils.HEADER))
-    @Parameter(name = "query", description = "检索内容", required = false)
-    @Parameter(name = "app", description = "应用名", required = false)
-    @Parameter(name = "stream", description = "流ID", required = false)
-    @Parameter(name = "page", description = "当前页", required = true)
-    @Parameter(name = "count", description = "每页查询数量", required = true)
-    @Parameter(name = "startTime", description = "开始时间(yyyy-MM-dd HH:mm:ss)", required = false)
-    @Parameter(name = "endTime", description = "结束时间(yyyy-MM-dd HH:mm:ss)", required = false)
-    @Parameter(name = "mediaServerId", description = "流媒体ID，置空则查询全部流媒体", required = false)
-    @Parameter(name = "callId", description = "每次录像的唯一标识，置空则查询全部流媒体", required = false)
+    @Operation(summary = "Query cloud recordings by page", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Parameter(name = "query", description = "Search content", required = false)
+    @Parameter(name = "app", description = "Application name", required = false)
+    @Parameter(name = "stream", description = "flowID", required = false)
+    @Parameter(name = "page", description = "Current page", required = true)
+    @Parameter(name = "count", description = "Number of queries per page", required = true)
+    @Parameter(name = "startTime", description = "start time(yyyy-MM-dd HH:mm:ss)", required = false)
+    @Parameter(name = "endTime", description = "end time(yyyy-MM-dd HH:mm:ss)", required = false)
+    @Parameter(name = "mediaServerId", description = "Streaming media ID, leave it blank to query all streaming media", required = false)
+    @Parameter(name = "callId", description = "The unique identifier of each recording. If left blank, all streaming media will be queried.", required = false)
     public PageInfo<CloudRecordUrl> getListWithUrl(HttpServletRequest request, @RequestParam(required = false) String query, @RequestParam(required = false) String app, @RequestParam(required = false) String stream, @RequestParam int page, @RequestParam int count, @RequestParam(required = false) String startTime, @RequestParam(required = false) String endTime, @RequestParam(required = false) String mediaServerId, @RequestParam(required = false) String callId, @RequestParam(required = false) String remoteHost
 
     ) {
-        log.info("[云端录像] 查询URL app->{}, stream->{}, mediaServerId->{}, page->{}, count->{}, startTime->{}, endTime->{}, callId->{}", app, stream, mediaServerId, page, count, startTime, endTime, callId);
+        log.info("[Cloud recording] QueryURL app->{}, stream->{}, mediaServerId->{}, page->{}, count->{}, startTime->{}, endTime->{}, callId->{}", app, stream, mediaServerId, page, count, startTime, endTime, callId);
 
         List<MediaServer> mediaServers;
         if (!ObjectUtils.isEmpty(mediaServerId)) {
             mediaServers = new ArrayList<>();
             MediaServer mediaServer = mediaServerService.getOne(mediaServerId);
             if (mediaServer == null) {
-                throw new ControllerException(ErrorCode.ERROR100.getCode(), "未找到流媒体: " + mediaServerId);
+                throw new ControllerException(ErrorCode.ERROR100.getCode(), "Streamer not found: " + mediaServerId);
             }
             mediaServers.add(mediaServer);
         } else {
@@ -565,7 +565,7 @@ public class CloudRecordController {
         }
         MediaServer mediaServer = mediaServerService.getDefaultMediaServer();
         if (mediaServer == null) {
-            throw new ControllerException(ErrorCode.ERROR100.getCode(), "未找到流媒体节点");
+            throw new ControllerException(ErrorCode.ERROR100.getCode(), "Streaming media node not found");
         }
         if (remoteHost == null) {
             remoteHost = request.getScheme() + "://" + request.getLocalAddr() + ":" + (request.getScheme().equals("https") ? mediaServer.getHttpSSlPort() : mediaServer.getHttpPort());

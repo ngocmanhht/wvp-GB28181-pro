@@ -16,7 +16,7 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 /**
- * 动态定时任务
+ * Dynamic scheduled tasks
  * @author lin
  */
 @Slf4j
@@ -31,10 +31,10 @@ public class DynamicTask {
 
 
     /**
-     * 循环执行的任务
-     * @param key 任务ID
-     * @param task 任务
-     * @param cycleForCatalog 间隔 毫秒
+     * Tasks to be executed in a loop
+     * @param key TaskID
+     * @param task Task
+     * @param cycleForCatalog Interval milliseconds
      * @return
      */
     public void startCron(String key, Runnable task, int cycleForCatalog) {
@@ -44,29 +44,29 @@ public class DynamicTask {
         ScheduledFuture<?> future = futureMap.get(key);
         if (future != null) {
             if (future.isCancelled()) {
-                log.debug("任务【{}】已存在但是关闭状态！！！", key);
+                log.debug("Task【{}】Exists but closed！！！", key);
             } else {
-                log.debug("任务【{}】已存在且已启动！！！", key);
+                log.debug("Task【{}】Exists and started！！！", key);
                 return;
             }
         }
-        // scheduleWithFixedDelay 必须等待上一个任务结束才开始计时period， cycleForCatalog表示执行的间隔
+        // scheduleWithFixedDelay You must wait for the previous task to end before starting the timingperiod， cycleForCatalogIndicates the execution interval
 
         future = taskScheduler.scheduleAtFixedRate(task, new Date(System.currentTimeMillis() + cycleForCatalog), cycleForCatalog);
         if (future != null){
             futureMap.put(key, future);
             runnableMap.put(key, task);
-            log.debug("任务【{}】启动成功！！！", key);
+            log.debug("Task【{}】Started successfully！！！", key);
         }else {
-            log.debug("任务【{}】启动失败！！！", key);
+            log.debug("Task【{}】Startup failed！！！", key);
         }
     }
 
     /**
-     * 延时任务
-     * @param key 任务ID
-     * @param task 任务
-     * @param delay 延时 /毫秒
+     * Delayed tasks
+     * @param key TaskID
+     * @param task Task
+     * @param delay delay /milliseconds
      * @return
      */
     public void startDelay(String key, Runnable task, int delay) {
@@ -75,26 +75,26 @@ public class DynamicTask {
         }
         stop(key);
 
-        // 获取执行的时刻
+        // Get execution time
         Instant startInstant = Instant.now().plusMillis(TimeUnit.MILLISECONDS.toMillis(delay));
 
         ScheduledFuture future = futureMap.get(key);
         if (future != null) {
             if (future.isCancelled()) {
-                log.debug("任务【{}】已存在但是关闭状态！！！", key);
+                log.debug("Task【{}】Exists but closed！！！", key);
             } else {
-                log.debug("任务【{}】已存在且已启动！！！", key);
+                log.debug("Task【{}】Exists and started！！！", key);
                 return;
             }
         }
-        // scheduleWithFixedDelay 必须等待上一个任务结束才开始计时period， cycleForCatalog表示执行的间隔
+        // scheduleWithFixedDelay You must wait for the previous task to end before starting the timingperiod， cycleForCatalogIndicates the execution interval
         future = taskScheduler.schedule(task, startInstant);
         if (future != null){
             futureMap.put(key, future);
             runnableMap.put(key, task);
-            log.debug("任务【{}】启动成功！！！", key);
+            log.debug("Task【{}】Started successfully！！！", key);
         }else {
-            log.debug("任务【{}】启动失败！！！", key);
+            log.debug("Task【{}】Startup failed！！！", key);
         }
     }
 
@@ -130,7 +130,7 @@ public class DynamicTask {
     }
 
     /**
-     * 每五分钟检查失效的任务，并移除
+     * Check for expired tasks every five minutes and remove them
      */
     @Scheduled(cron="0 0/5 * * * ?")
     public void execute(){

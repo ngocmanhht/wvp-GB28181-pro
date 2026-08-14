@@ -10,7 +10,7 @@ import lombok.Setter;
 import java.nio.charset.Charset;
 
 /**
- * 电话回拨
+ * Call back
  */
 @Setter
 @Getter
@@ -18,12 +18,12 @@ import java.nio.charset.Charset;
 public class J8400 extends Rs {
 
     /**
-     * 标志， 0'普通通话,1'监听
+     * logo， 0'Ordinary call,1'monitor
      */
     private int sign;
 
     /**
-     * 电话号码
+     * phone number
      */
     private String phoneNumber;
 

@@ -1,22 +1,22 @@
 
 window.baseUrl = ""
 
-// map组件全局参数, 注释此内容可以关闭地图功能
+// mapComponent global parameters, commenting this content can turn off the map function
 window.mapParam = {
-  // 开启/关闭地图功能
+  // turn on/Turn off map function
   enable: true,
-  // 坐标系 GCJ02 WGS84,
+  // coordinate system GCJ02 WGS84,
   coordinateSystem: "GCJ02",
-  // 地图瓦片地址
+  // Map tile address
   tilesUrl: "http://webrd0{1-4}.is.autonavi.com/appmaptile?x={x}&y={y}&z={z}&lang=zh_cn&size=1&scale=1&style=8",
-  // 瓦片大小
+  // Tile size
   tileSize: 256,
-  // 默认层级
+  // Default level
   zoom:10,
-  // 默认地图中心点
+  // Default map center point
   center:[116.41020, 39.915119],
-  // 地图最大层级
+  // The maximum level of the map
   maxZoom:18,
-  // 地图最小层级
+  // Minimum map level
   minZoom: 3
 }

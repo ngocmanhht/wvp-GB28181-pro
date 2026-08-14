@@ -1,25 +1,25 @@
-# 通道管理
+# Channel management
 
-通道管理为了对已经分配国标编号的通道进行统一的行政区划和业务分组管理,国标中对于组织结构有两种表示方式,一种是按照行政区划,一种是业务分组+虚拟组织的方式.
-行政区划结构固定,比如: 北京/市辖区/昌平区, 通道可以挂载到任何一级行政区划下. 业务分组比较灵活, 可以按照自己的随意取名,
-但是通道只能放在业务分组下的虚拟组织里,不能放在业务分组下.
+Channel management In order to carry out unified administrative division and business group management of channels that have been assigned national standard numbers, the national standard has two ways of expressing the organizational structure, one is according to administrative divisions, and the other is the way of business grouping + virtual organization.
+The administrative division structure is fixed, such as: Beijing/Municipal District/Changping District, and the channel can be mounted to any first-level administrative division. The business grouping is relatively flexible, and you can name it as you like.
+However, channels can only be placed in virtual organizations under business groups, not under business groups.
 
-## 行政区划
+## Administrative divisions
 
-左侧树结构为行政区划结构, 通过数据鼠标右键可以操作,包括: 刷新节点,新建节点,编辑节点,删除节点,添加设备(
-可以将某个国标设备下的通道全部添加道某一个节点下),移除设备(可以将某个国标设备下的通道全部从这个节点移除)
-右侧伪通道列表, 对于非国标接入的设备只有配置了国标编号后才可以在这里进行操作。  
-选择左侧的节点后，可以点击右侧的“添加通道”， 选择需要的通道添加到改节点下，如果找不到通道， 可以选择“异常挂载通道”，点击清理后重新回来选择。
-![行政区划](_media/img_21.png)
+The tree structure on the left is an administrative division structure, which can be operated by right-clicking the data, including: refreshing nodes, creating new nodes, editing nodes, deleting nodes, and adding equipment (
+All channels under a certain national standard device can be added to a certain node), and devices can be removed (all channels under a certain national standard device can be removed from this node)
+Pseudo channel list on the right. Devices with non-national standard access can only be operated here after configuring a national standard number.
+After selecting the node on the left, you can click "Add Channel" on the right, select the required channel and add it to the new node. If the channel cannot be found, you can select "Exception Mount Channel", click Clean and come back to select again.
+! [Administrative division](_media/img_21.png) 
 
-## 业务分组
+## Business grouping
 
-左侧树结构为业务分组结构, 通过数据鼠标右键可以操作,包括: 刷新节点,新建节点,编辑节点,删除节点,添加设备(
-可以将某个国标设备下的通道全部添加道某一个节点下),移除设备(可以将某个国标设备下的通道全部从这个节点移除)
-业务分组下不能挂载设备,所以没有选择该节点的单选框.
-右侧为通道列表, 对于非国标接入的设备只有配置了国标编号后才可以在这里进行操作。  
+The tree structure on the left is the business grouping structure, which can be operated by right-clicking the data, including: refreshing nodes, creating new nodes, editing nodes, deleting nodes, and adding equipment (
+All channels under a certain national standard device can be added to a certain node), and devices can be removed (all channels under a certain national standard device can be removed from this node)
+Devices cannot be mounted under the business group, so the radio button of this node is not selected.
+The right side is the channel list. For devices with non-national standard access, operations can only be performed here after configuring the national standard number.
 
-选择左侧的节点后，可以点击右侧的“添加通道”， 选择需要的通道添加到改节点下。  
-如果找不到通道， 可以选择“异常挂载通道”，点击清理后重新回来选择。  
-注意，根资源组下的那一级为业务分组类型不可以直接挂载设备，需要继续建立节点，后续的节点的都是虚拟组织类型， 就可以挂载通道了。
-![业务分组](_media/img_22.png)
+After selecting the node on the left, you can click "Add Channel" on the right and select the desired channel to add to the node.
+If the channel cannot be found, you can select "Exception mount channel", click Clean and come back to select again.
+Note that the level under the root resource group is of the business group type and devices cannot be mounted directly. You need to continue to establish nodes. Subsequent nodes are of the virtual organization type and you can mount channels.
+! [business grouping](_media/img_22.png) 

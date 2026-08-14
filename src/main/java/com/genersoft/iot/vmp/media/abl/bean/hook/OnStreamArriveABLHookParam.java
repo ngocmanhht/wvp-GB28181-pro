@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * 流到来的事件
+ * stream of incoming events
  */
 @Getter
 @Setter
@@ -14,12 +14,12 @@ public class OnStreamArriveABLHookParam extends ABLHookParam{
 
 
     /**
-     * 推流鉴权Id
+     * Push authenticationId
      */
     private String callId;
 
     /**
-     * 状态
+     * Status
      */
     private Boolean status;
 

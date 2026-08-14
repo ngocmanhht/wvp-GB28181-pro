@@ -57,7 +57,7 @@ public class RedisRpcConfig implements MessageListener {
 //        for (Class<?> handlerClass : classList) {
 //            String controllerPath = handlerClass.getAnnotation(RedisRpcController.class).value();
 //            Object bean = ClassUtil.getBean(controllerPath, handlerClass);
-//            // 扫描其下的方法
+//            // Scan the method below
 //            Method[] methods = handlerClass.getDeclaredMethods();
 //            for (Method method : methods) {
 //                RedisRpcMapping annotation = method.getAnnotation(RedisRpcMapping.class);
@@ -75,7 +75,7 @@ public class RedisRpcConfig implements MessageListener {
 //            System.out.println(s);
 //        }
 //        if (log.isDebugEnabled()) {
-//            log.debug("消息ID缓存表 protocolHash:{}", protocolHash);
+//            log.debug("Message ID cache table protocolHash:{}", protocolHash);
 //        }
 //    }
 
@@ -94,10 +94,10 @@ public class RedisRpcConfig implements MessageListener {
                         } else if (redisRpcMessage.getResponse() != null){
                             handlerResponse(redisRpcMessage.getResponse());
                         } else {
-                            log.error("[redis-rpc]解析失败 {}", JSON.toJSONString(redisRpcMessage));
+                            log.error("[redis-rpc]Parsing failed {}", JSON.toJSONString(redisRpcMessage));
                         }
                     } catch (Exception e) {
-                        log.error("[redis-rpc]解析异常 {}",new String(msg.getBody()), e);
+                        log.error("[redis-rpc]parsing exception {}",new String(msg.getBody()), e);
                     }
                 }
             });
@@ -120,15 +120,15 @@ public class RedisRpcConfig implements MessageListener {
             log.info("[redis-rpc] << {}", request);
             RedisRpcClassHandler redisRpcClassHandler = protocolHash.get(request.getUri());
             if (redisRpcClassHandler == null) {
-                log.error("[redis-rpc] 路径: {}不存在", request.getUri());
+                log.error("[redis-rpc] path: {}does not exist", request.getUri());
                 return;
             }
             RpcController controller = redisRpcClassHandler.getController();
             Method method = redisRpcClassHandler.getMethod();
-            // 没有携带目标ID的可以理解为哪个wvp有结果就哪个回复，携带目标ID，但是如果是不存在的uri则直接回复404
+            // If the target ID is not carried, it can be understood that whichever wvp has the result will reply, and the target ID is carried, but if it is a uri that does not exist, it will reply directly.404
             if (userSetting.getServerId().equals(request.getToId())) {
                 if (method == null) {
-                    // 回复404结果
+                    // Reply 404 result
                     RedisRpcResponse response = request.getResponse();
                     response.setStatusCode(ErrorCode.ERROR404.getCode());
                     sendResponse(response);
@@ -140,7 +140,7 @@ public class RedisRpcConfig implements MessageListener {
                 }
             }else {
                 if (method == null) {
-                    // 回复404结果
+                    // Reply 404 result
                     RedisRpcResponse response = request.getResponse();
                     response.setStatusCode(ErrorCode.ERROR404.getCode());
                     sendResponse(response);
@@ -152,7 +152,7 @@ public class RedisRpcConfig implements MessageListener {
                 }
             }
         }catch (Exception e) {
-            log.error("[redis-rpc ] 处理请求失败 ", e);
+            log.error("[redis-rpc ] Processing request failed ", e);
             RedisRpcResponse response = request.getResponse();
             response.setStatusCode(ErrorCode.ERROR100.getCode());
             sendResponse(response);
@@ -233,7 +233,7 @@ public class RedisRpcConfig implements MessageListener {
     }
 
     private void setCallback(long key, CommonCallback<RedisRpcResponse> callback)  {
-        // TODO 如果多个上级点播同一个通道会有问题
+        // TODO There will be problems if multiple superiors request the same channel.
         callbacks.put(key, callback);
     }
 
@@ -249,11 +249,11 @@ public class RedisRpcConfig implements MessageListener {
 
 
 
-//    @Scheduled(fixedRate = 1000)   //每1秒执行一次
+//    @Scheduled(fixedRate = 1000)   //Executed every 1 second
 //    public void execute(){
-//        logger.info("callbacks的长度: " + callbacks.size());
-//        logger.info("队列的长度: " + topicSubscribers.size());
-//        logger.info("HOOK监听的长度: " + hookSubscribe.size());
+//        logger.info("callbackslength: " + callbacks.size());
+//        logger.info("Queue length: " + topicSubscribers.size());
+//        logger.info("HOOKlength of listening: " + hookSubscribe.size());
 //        logger.info("");
 //    }
 }

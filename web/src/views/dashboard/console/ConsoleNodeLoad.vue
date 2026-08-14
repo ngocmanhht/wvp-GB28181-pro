@@ -25,16 +25,16 @@ export default {
       },
       chartSettings: {
         labelMap: {
-          'push': '直播推流',
-          'proxy': '拉流代理',
-          'gbReceive': '国标收流',
-          'gbSend': '国标推流'
+          'push': 'Live streaming',
+          'proxy': 'Streaming agent',
+          'gbReceive': 'National standard collection',
+          'gbSend': 'National standard push'
         }
       },
       extend: {
         title: {
           show: true,
-          text: '节点负载',
+          text: 'Node load',
           left: 'center',
           top: 20
 
@@ -67,7 +67,7 @@ export default {
       this.chartData.rows = data
     },
     onClick(v) {
-      if (v.seriesName === "国标收流") {
+      if (v.seriesName === "National standard collection") {
         this.$refs.hasStreamChannel.openDialog();
       }
     }

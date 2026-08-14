@@ -3,34 +3,34 @@ package com.genersoft.iot.vmp.service.bean;
 import com.genersoft.iot.vmp.gb28181.bean.SendRtpInfo;
 
 /**
- * redis消息：请求下级推送流信息
+ * redisMessage: Requesting lower-level push flow information
  * @author lin
  */
 public class RequestPushStreamMsg {
 
 
     /**
-     * 下级服务ID
+     * Lower level servicesID
      */
     private String mediaServerId;
 
     /**
-     * 流ID
+     * flowID
      */
     private String app;
 
     /**
-     * 应用名
+     * Application name
      */
     private String stream;
 
     /**
-     * 目标IP
+     * targetIP
      */
     private String ip;
 
     /**
-     * 目标端口
+     * target port
      */
     private int port;
 
@@ -40,27 +40,27 @@ public class RequestPushStreamMsg {
     private String ssrc;
 
     /**
-     * 是否使用TCP方式
+     * Whether to use TCP mode
      */
     private boolean tcp;
 
     /**
-     * 本地使用的端口
+     * Port used locally
      */
     private int srcPort;
 
     /**
-     * 发送时，rtp的pt（uint8_t）,不传时默认为96
+     * When sending, rtp's pt (uint8_t), defaults to96
      */
     private int pt;
 
     /**
-     * 发送时，rtp的负载类型。为true时，负载为ps；为false时，为es；
+     * When sending, the payload type of rtp. When it is true, the load is ps; when it is false, it ises；
      */
     private boolean ps;
 
     /**
-     * 是否只有音频
+     * Is it audio only?
      */
     private boolean onlyAudio;
 

@@ -21,7 +21,7 @@ import jakarta.servlet.SessionTrackingMode;
 import java.util.Collections;
 
 /**
- * 启动类
+ * Startup class
  */
 @ServletComponentScan("com.genersoft.iot.vmp.conf")
 @SpringBootApplication
@@ -38,15 +38,15 @@ public class VManageBootstrap extends SpringBootServletInitializer {
 		ClassUtil.context = VManageBootstrap.context;
 		GitUtil gitUtil = SpringBeanFactory.getBean("gitUtil");
 		if (gitUtil == null) {
-			log.info("获取版本信息失败");
+			log.info("Failed to obtain version information");
 		}else {
-			log.info("构建版本： {}", gitUtil.getBuildVersion());
-			log.info("构建时间： {}", gitUtil.getBuildDate());
-			log.info("GIT信息： 分支: {}, ID: {},  时间: {}", gitUtil.getBranch(), gitUtil.getCommitIdShort(), gitUtil.getCommitTime());
+			log.info("build version： {}", gitUtil.getBuildVersion());
+			log.info("Build time： {}", gitUtil.getBuildDate());
+			log.info("GITInformation: Branch: {}, ID: {},  time: {}", gitUtil.getBranch(), gitUtil.getCommitIdShort(), gitUtil.getCommitTime());
 		}
 
 	}
-	// 项目重启
+	// Project restart
 	public static void restart() {
 		context.close();
 		VManageBootstrap.context = SpringApplication.run(VManageBootstrap.class, args);

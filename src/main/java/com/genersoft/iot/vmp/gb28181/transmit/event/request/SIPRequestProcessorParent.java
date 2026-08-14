@@ -32,9 +32,9 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * @description:处理接收IPCamera发来的SIP协议请求消息
+ * @description:Process and receive SIP protocol request messages from IPCamera
  * @author: songww
- * @date:   2020年5月3日 下午4:42:22
+ * @date:   2020May 3rd, afternoon4:42:22
  */
 @Slf4j
 public abstract class SIPRequestProcessorParent {
@@ -46,7 +46,7 @@ public abstract class SIPRequestProcessorParent {
 		try {
 			return SipFactory.getInstance().createHeaderFactory();
 		} catch (PeerUnavailableException e) {
-			log.error("未处理的异常 ", e);
+			log.error("unhandled exception ", e);
 		}
 		return null;
 	}
@@ -55,7 +55,7 @@ public abstract class SIPRequestProcessorParent {
 		try {
 			return SipFactory.getInstance().createMessageFactory();
 		} catch (PeerUnavailableException e) {
-			log.error("未处理的异常 ", e);
+			log.error("unhandled exception ", e);
 		}
 		return null;
 	}
@@ -68,7 +68,7 @@ public abstract class SIPRequestProcessorParent {
 	}
 
 	/***
-	 * 回复状态码
+	 * Reply status code
 	 * 100 trying
 	 * 200 OK
 	 * 400
@@ -89,9 +89,9 @@ public abstract class SIPRequestProcessorParent {
 
 
 	public SIPResponse responseAck(SIPRequest sipRequest, int statusCode, String msg, ResponseAckExtraParam responseAckExtraParam) throws SipException, InvalidArgumentException, ParseException {
-		// 全局防御：校验SIP状态码合法性，防止非法状态码传入JAIN-SIP导致IllegalArgumentException
+		// Global defense: Verify the legality of SIP status codes and prevent illegal status codes from being passed inJAIN-SIPcauseIllegalArgumentException
 		if (statusCode < 100 || statusCode > 699) {
-			log.error("[SIP响应] 非法状态码: {}，已替换为500 Server Internal Error。原始消息: {}", statusCode, msg);
+			log.error("[SIPresponse] Illegal status code: {}，Replaced with500 Server Internal Error。original message: {}", statusCode, msg);
 			statusCode = Response.SERVER_INTERNAL_ERROR; // 500
 		}
 
@@ -118,7 +118,7 @@ public abstract class SIPRequestProcessorParent {
 
 			if (sipRequest.getMethod().equals(Request.SUBSCRIBE)) {
 				if (responseAckExtraParam.expires == -1) {
-					log.error("[参数不全] 2xx的SUBSCRIBE回复，必须设置Expires header");
+					log.error("[Incomplete parameters] 2xxSUBSCRIBE reply, must be setExpires header");
 				}else {
 					ExpiresHeader expiresHeader = SipFactory.getInstance().createHeaderFactory().createExpiresHeader(responseAckExtraParam.expires);
 					response.addHeader(expiresHeader);
@@ -126,11 +126,11 @@ public abstract class SIPRequestProcessorParent {
 			}
 		}else {
 			if (sipRequest.getMethod().equals(Request.SUBSCRIBE)) {
-				log.error("[参数不全] 2xx的SUBSCRIBE回复，必须设置Expires header");
+				log.error("[Incomplete parameters] 2xxSUBSCRIBE reply, must be setExpires header");
 			}
 		}
 
-		// 发送response
+		// sendresponse
 		sipSender.transmitRequest(sipRequest.getLocalAddress().getHostAddress(), response);
 
 		return response;
@@ -139,13 +139,13 @@ public abstract class SIPRequestProcessorParent {
 
 
 	/**
-	 * 回复带sdp的200
+	 * Reply with sdp200
 	 */
 	public SIPResponse responseSdpAck(SIPRequest request, String sdp, Platform platform) throws SipException, InvalidArgumentException, ParseException {
 
 		ContentTypeHeader contentTypeHeader = SipFactory.getInstance().createHeaderFactory().createContentTypeHeader("APPLICATION", "SDP");
 
-		// 兼容国标中的使用编码@域名作为RequestURI的情况
+		// Compatible with the use of encoding@domain name as RequestURI in the national standard
 		SipURI sipURI = (SipURI)request.getRequestURI();
 		if (sipURI.getPort() == -1) {
 			sipURI = SipFactory.getInstance().createAddressFactory().createSipURI(platform.getServerGBId(),  IpPortUtil.concatenateIpAndPort(platform.getServerIp(), String.valueOf(platform.getServerPort())));
@@ -162,7 +162,7 @@ public abstract class SIPRequestProcessorParent {
 	}
 
 	/**
-	 * 回复带xml的200
+	 * Reply with xml200
 	 */
 	public SIPResponse responseXmlAck(SIPRequest request, String xml, Platform platform, Integer expires) throws SipException, InvalidArgumentException, ParseException {
 		ContentTypeHeader contentTypeHeader = SipFactory.getInstance().createHeaderFactory().createContentTypeHeader("Application", "MANSCDP+xml");
@@ -197,9 +197,9 @@ public abstract class SIPRequestProcessorParent {
 		}
 		SAXReader reader = new SAXReader();
 		reader.setEncoding(charset);
-		// 对海康出现的未转义字符做处理。
+		// Process unescaped characters appearing in Haikang。
 		String[] destStrArray = new String[]{"&lt;","&gt;","&amp;","&apos;","&quot;"};
-		// 或许可扩展兼容其他字符
+		// It may be extended to be compatible with other characters
 		char despChar = '&';
 		byte destBye = (byte) despChar;
 		List<Byte> result = new ArrayList<>();
@@ -225,11 +225,11 @@ public abstract class SIPRequestProcessorParent {
 		try {
 			xml = reader.read(new ByteArrayInputStream(bytesResult));
 		}catch (DocumentException e) {
-			log.warn("[xml解析异常]： 原文如下： \r\n{}", new String(bytesResult));
-			log.warn("[xml解析异常]： 原文如下： 尝试兼容性处理");
+			log.warn("[xmlparsing exception]： The original text is as follows： \r\n{}", new String(bytesResult));
+			log.warn("[xmlparsing exception]： The original text is as follows: Try compatibility processing");
 			String[] xmlLineArray = new String(bytesResult).split("\\r?\\n");
 
-			// 兼容海康的address字段带有<破换xml结构导致无法解析xml的问题
+			// The address field compatible with Hikvision has<The problem of failure to parse xml due to broken xml structure
 			StringBuilder stringBuilder = new StringBuilder();
 			for (String s : xmlLineArray) {
 				if (s.startsWith("<Address")) {

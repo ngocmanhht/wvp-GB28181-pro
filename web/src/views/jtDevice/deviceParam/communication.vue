@@ -2,32 +2,32 @@
   <div style="width: 100%;">
     <div style="height: calc(100vh - 260px); overflow: auto">
       <el-form ref="form" :model="form" label-width="240px" style="width: 50%; margin: 0 auto">
-        <el-form-item label="心跳发送间隔(秒)" prop="keepaliveInterval">
+        <el-form-item label="Heartbeat sending interval(seconds)" prop="keepaliveInterval">
           <el-input v-model="form.keepaliveInterval" clearable />
         </el-form-item>
-        <el-form-item label="TCP消息应答超时(秒)" prop="tcpResponseTimeout">
+        <el-form-item label="TCPMessage response timeout(seconds)" prop="tcpResponseTimeout">
           <el-input v-model="form.tcpResponseTimeout" clearable />
         </el-form-item>
-        <el-form-item label="TCP消息重传次数" prop="tcpRetransmissionCount">
+        <el-form-item label="TCPNumber of message retransmissions" prop="tcpRetransmissionCount">
           <el-input v-model="form.tcpRetransmissionCount" clearable />
         </el-form-item>
-        <el-form-item label="UDP消息应答超时时间(秒)" prop="udpResponseTimeout">
+        <el-form-item label="UDPMessage response timeout(seconds)" prop="udpResponseTimeout">
           <el-input v-model="form.udpResponseTimeout" clearable />
         </el-form-item>
-        <el-form-item label="UDP消息重传次数" prop="udpRetransmissionCount">
+        <el-form-item label="UDPNumber of message retransmissions" prop="udpRetransmissionCount">
           <el-input v-model="form.udpRetransmissionCount" clearable />
         </el-form-item>
-        <el-form-item label="SMS 消息应答超时时间(秒)" prop="smsResponseTimeout">
+        <el-form-item label="SMS Message response timeout(seconds)" prop="smsResponseTimeout">
           <el-input v-model="form.smsResponseTimeout" clearable />
         </el-form-item>
-        <el-form-item label="SMS 消息重传次数" prop="smsRetransmissionCount">
+        <el-form-item label="SMS Number of message retransmissions" prop="smsRetransmissionCount">
           <el-input v-model="form.smsRetransmissionCount" clearable />
         </el-form-item>
       </el-form>
     </div>
     <p style="text-align: right">
-      <el-button type="primary" @click="onSubmit">确认</el-button>
-      <el-button @click="showDevice">取消</el-button>
+      <el-button type="primary" @click="onSubmit">Confirm</el-button>
+      <el-button @click="showDevice">Cancel</el-button>
     </p>
 
   </div>

@@ -1,32 +1,32 @@
 <template>
   <div id="app" style="height: calc(100vh - 124px);">
     <el-form :inline="true" size="mini">
-      <el-form-item label="搜索">
+      <el-form-item label="Search">
         <el-input
           v-model="searchStr"
           style="margin-right: 1rem; width: auto;"
-          placeholder="关键字"
+          placeholder="Keywords"
           prefix-icon="el-icon-search"
           clearable
           @input="initData"
         />
       </el-form-item>
-      <el-form-item label="在线状态">
+      <el-form-item label="online status">
         <el-select
           v-model="online"
           style="width: 8rem; margin-right: 1rem;"
-          placeholder="请选择"
+          placeholder="Please select"
           default-first-option
           @change="initData"
         >
-          <el-option label="全部" value="" />
-          <el-option label="在线" value="true" />
-          <el-option label="离线" value="false" />
+          <el-option label="All" value="" />
+          <el-option label="online" value="true" />
+          <el-option label="Offline" value="false" />
         </el-select>
       </el-form-item>
       <el-form-item>
-        <el-button icon="el-icon-plus" style="margin-right: 1rem;" type="primary" @click="add">添加设备</el-button>
-        <el-button icon="el-icon-info" style="margin-right: 1rem;" @click="showInfo()">接入信息
+        <el-button icon="el-icon-plus" style="margin-right: 1rem;" type="primary" @click="add">Add device</el-button>
+        <el-button icon="el-icon-info" style="margin-right: 1rem;" @click="showInfo()">access information
         </el-button>
       </el-form-item>
       <el-form-item style="float: right;">
@@ -38,101 +38,101 @@
         />
       </el-form-item>
     </el-form>
-    <!--设备列表-->
+    <!--Device list-->
     <el-table
       size="small"
       :data="deviceList"
       height="calc(100% - 64px)"
       header-row-class-name="table-header"
     >
-      <el-table-column prop="name" label="名称" min-width="160" />
-      <el-table-column prop="deviceId" label="设备编号" min-width="160" />
-      <el-table-column label="地址" min-width="180">
+      <el-table-column prop="name" label="Name" min-width="160" />
+      <el-table-column prop="deviceId" label="Device number" min-width="160" />
+      <el-table-column label="address" min-width="180">
         <template v-slot:default="scope">
           <div slot="reference" class="name-wrapper">
             <el-tag v-if="scope.row.hostAddress" size="medium">{{ scope.row.transport.toLowerCase() }}://{{ scope.row.hostAddress }}</el-tag>
-            <el-tag v-if="!scope.row.hostAddress" size="medium">未知</el-tag>
+            <el-tag v-if="!scope.row.hostAddress" size="medium">unknown</el-tag>
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="manufacturer" label="厂家" min-width="100" />
-      <el-table-column label="流传输模式" min-width="160">
+      <el-table-column prop="manufacturer" label="Manufacturer" min-width="100" />
+      <el-table-column label="streaming mode" min-width="160">
         <template v-slot:default="scope">
           <el-select
             v-model="scope.row.streamMode"
             size="mini"
-            placeholder="请选择"
+            placeholder="Please select"
             style="width: 120px"
             @change="transportChange(scope.row)"
           >
             <el-option key="UDP" label="UDP" value="UDP" />
-            <el-option key="TCP-ACTIVE" label="TCP主动模式" value="TCP-ACTIVE" />
-            <el-option key="TCP-PASSIVE" label="TCP被动模式" value="TCP-PASSIVE" />
+            <el-option key="TCP-ACTIVE" label="TCPActive mode" value="TCP-ACTIVE" />
+            <el-option key="TCP-PASSIVE" label="TCPpassive mode" value="TCP-PASSIVE" />
           </el-select>
         </template>
       </el-table-column>
-      <el-table-column label="通道数" min-width="80">
+      <el-table-column label="Number of channels" min-width="80">
         <template v-slot:default="scope">
           <span style="font-size: 1rem">{{ scope.row.channelCount }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="状态" min-width="80">
+      <el-table-column label="Status" min-width="80">
         <template v-slot:default="scope">
           <div slot="reference" class="name-wrapper">
             <el-tag
               v-if="scope.row.onLine && myServerId !== scope.row.serverId"
               size="medium"
               style="border-color: #ecf1af"
-            >在线
+            >online
             </el-tag>
-            <el-tag v-if="scope.row.onLine && myServerId === scope.row.serverId" size="medium">在线
+            <el-tag v-if="scope.row.onLine && myServerId === scope.row.serverId" size="medium">online
             </el-tag>
-            <el-tag v-if="!scope.row.onLine" size="medium" type="info">离线</el-tag>
+            <el-tag v-if="!scope.row.onLine" size="medium" type="info">Offline</el-tag>
           </div>
         </template>
       </el-table-column>
-      <el-table-column label="订阅" min-width="240">
+      <el-table-column label="Subscribe" min-width="240">
         <template v-slot:default="scope">
           <el-checkbox
-            label="目录"
+            label="Directory"
             :checked="scope.row.subscribeCycleForCatalog > 0"
             @change="(e)=>subscribeForCatalog(scope.row.id, e)"
           />
           <el-checkbox
-            label="位置"
+            label="location"
             :checked="scope.row.subscribeCycleForMobilePosition > 0"
             @change="(e)=>subscribeForMobilePosition(scope.row.id, e)"
           />
           <el-checkbox
-            label="报警"
+            label="Alarm"
             :checked="scope.row.subscribeCycleForAlarm > 0"
             @change="(e)=>subscribeForAlarm(scope.row.id, e)"
           />
         </template>
       </el-table-column>
-      <el-table-column label="统计" min-width="140">
+      <el-table-column label="statistics" min-width="140">
         <template v-slot:default="scope">
           <el-button
             type="text"
             size="mini"
             :disabled="scope.row.online===0"
             icon="iconfont-14 icon-xintiao"
-            title="心跳时间统计"
+            title="Heartbeat time statistics"
             @click="getKeepaliveTimeStatistics(scope.row.deviceId)"
-          >心跳
+          >heartbeat
           </el-button>
           <el-button
             type="text"
             size="mini"
             :disabled="scope.row.online===0"
             icon="iconfont-14 icon-register"
-            title="注册时间统计"
+            title="Registration time statistics"
             @click="getRegisterTimeStatistics(scope.row.deviceId)"
-          >注册
+          >Register
           </el-button>
         </template>
       </el-table-column>
-      <el-table-column label="操作" min-width="260" fixed="right">
+      <el-table-column label="Operation" min-width="260" fixed="right">
         <template v-slot:default="scope">
           <el-button
             type="text"
@@ -141,7 +141,7 @@
             icon="el-icon-refresh"
             @click="refDevice(scope.row)"
             @mouseover="getTooltipContent(scope.row.deviceId)"
-          >刷新
+          >Refresh
           </el-button>
           <el-divider direction="vertical" />
           <el-button
@@ -149,12 +149,12 @@
             size="medium"
             icon="el-icon-video-camera"
             @click="showChannelList(scope.row)"
-          >通道
+          >channel
           </el-button>
           <el-divider direction="vertical" />
-          <el-button size="medium" icon="el-icon-edit" type="text" @click="edit(scope.row)">编辑</el-button>
+          <el-button size="medium" icon="el-icon-edit" type="text" @click="edit(scope.row)">Edit</el-button>
           <el-divider direction="vertical" />
-          <el-button size="medium" type="text" style="color: #f56c6c" @click="deleteDevice(scope.row)">删除</el-button>
+          <el-button size="medium" type="text" style="color: #f56c6c" @click="deleteDevice(scope.row)">Delete</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -192,12 +192,12 @@ export default {
   },
   data() {
     return {
-      deviceList: [], // 设备列表
-      currentDevice: {}, // 当前操作设备对象
+      deviceList: [], // Device list
+      currentDevice: {}, // Current operating device object
       searchStr: '',
       online: null,
       videoComponentList: [],
-      updateLooper: 0, // 数据刷新轮训标志
+      updateLooper: 0, // Data refresh rotation training flag
       currentDeviceChannelsLength: 0,
       currentPage: 1,
       count: 15,
@@ -256,14 +256,14 @@ export default {
       })
     },
     deleteDevice: function(row) {
-      let msg = '确定删除此设备？'
+      let msg = 'Confirm to delete this device？'
       if (row.online !== 0) {
-        msg = '在线设备删除后仍可通过注册再次上线。<br/>如需彻底删除请先将设备离线。<br/><strong>确定删除此设备？</strong>'
+        msg = 'After the online device is deleted, it can still be brought online again through registration.。<br/>If you want to delete it completely, please take the device offline first.。<br/><strong>Confirm to delete this device？</strong>'
       }
-      this.$confirm(msg, '提示', {
+      this.$confirm(msg, 'Tips', {
         dangerouslyUseHTMLString: true,
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+        confirmButtonText: 'OK',
+        cancelButtonText: 'Cancel',
         center: true,
         type: 'warning'
       }).then(() => {
@@ -288,10 +288,10 @@ export default {
       this.$router.push(`/map?deviceId=${row.deviceId}`)
     },
 
-    // gb28181平台对接
-    // 刷新设备信息
+    // gb28181Platform docking
+    // Refresh device information
     refDevice: function(itemData) {
-      console.log('刷新对应设备:' + itemData.deviceId)
+      console.log('Refresh the corresponding device:' + itemData.deviceId)
       this.$store.dispatch('device/sync', itemData.deviceId)
         .then(data => {
           if (data && data.errorMsg) {
@@ -326,14 +326,14 @@ export default {
           if (data.errorMsg !== null) {
             result = data.errorMsg
           }
-          result = `同步中...[${data.current}/${data.total}]`
+          result = `Synchronizing...[${data.current}/${data.total}]`
         }).catch(error => {
           result = error
         })
       return result
     },
     transportChange: function(row) {
-      console.log(`修改传输方式为 ${row.streamMode}：${row.deviceId} `)
+      console.log(`Modify the transmission method to ${row.streamMode}：${row.deviceId} `)
       console.log(row.streamMode)
       this.$store.dispatch('device/updateDeviceTransport', [row.deviceId, row.streamMode])
     },
@@ -342,7 +342,7 @@ export default {
         this.$refs.deviceEdit.close()
         this.$message({
           showClose: true,
-          message: '设备修改成功，通道字符集将在下次更新生效',
+          message: 'The device modification is successful and the channel character set will take effect in the next update.',
           type: 'success'
         })
         setTimeout(this.getDeviceList, 200)
@@ -353,7 +353,7 @@ export default {
         this.$refs.deviceEdit.close()
         this.$message({
           showClose: true,
-          message: '添加成功',
+          message: 'Added successfully',
           type: 'success'
         })
         setTimeout(this.getDeviceList, 200)
@@ -374,7 +374,7 @@ export default {
       }).then((data) => {
         this.$message.success({
           showClose: true,
-          message: value ? '订阅成功' : '取消订阅成功'
+          message: value ? 'Subscription successful' : 'Unsubscription successful'
         })
       }).catch((error) => {
         this.$message.error({
@@ -391,7 +391,7 @@ export default {
       }).then((data) => {
         this.$message.success({
           showClose: true,
-          message: value ? '订阅成功' : '取消订阅成功'
+          message: value ? 'Subscription successful' : 'Unsubscription successful'
         })
       }).catch((error) => {
         this.$message.error({
@@ -407,7 +407,7 @@ export default {
       }).then((data) => {
         this.$message.success({
           showClose: true,
-          message: value ? '订阅成功' : '取消订阅成功'
+          message: value ? 'Subscription successful' : 'Unsubscription successful'
         })
       }).catch((error) => {
         this.$message.error({
@@ -417,10 +417,10 @@ export default {
       })
     },
     getKeepaliveTimeStatistics: function(deviceId) {
-      this.$refs.timeStatistics.openDialog('心跳时间统计', 'device/getKeepaliveTimeStatistics', deviceId, 60)
+      this.$refs.timeStatistics.openDialog('Heartbeat time statistics', 'device/getKeepaliveTimeStatistics', deviceId, 60)
     },
     getRegisterTimeStatistics: function(deviceId) {
-      this.$refs.timeStatistics.openDialog('注册时间统计', 'device/getRegisterTimeStatistics', deviceId, 10)
+      this.$refs.timeStatistics.openDialog('Registration time statistics', 'device/getRegisterTimeStatistics', deviceId, 10)
     }
   }
 }

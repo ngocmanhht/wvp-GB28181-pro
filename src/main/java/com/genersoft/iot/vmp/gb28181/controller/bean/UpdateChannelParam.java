@@ -6,19 +6,19 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-@Schema(description = "通道关联参数")
+@Schema(description = "Channel related parameters")
 public class UpdateChannelParam {
 
-    @Schema(description = "上级平台的数据库ID")
+    @Schema(description = "Database of superior platformID")
     private Integer platformId;
 
 
-    @Schema(description = "关联所有通道")
+    @Schema(description = "Link all channels")
     private boolean all;
 
-    @Schema(description = "待关联的通道ID")
+    @Schema(description = "Channel to be associatedID")
     List<Integer> channelIds;
 
-    @Schema(description = "待关联的设备ID")
+    @Schema(description = "Device to be associatedID")
     List<Integer> deviceIds;
 }

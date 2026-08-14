@@ -2,7 +2,7 @@
   <div id="configInfo">
     <el-dialog
       v-el-drag-dialog
-      title="立即拍摄"
+      title="Shoot now"
       width="65%"
       top="2rem"
       :close-on-click-modal="false"
@@ -15,49 +15,49 @@
           <el-form inline  @submit.native.prevent>
             <el-form-item style="margin-right: 14.5rem">
               <el-radio-group v-model="commandType">
-                <el-radio :label="true" border>拍摄</el-radio>
-                <el-radio :label="false" border>录像</el-radio>
+                <el-radio :label="true" border>shooting</el-radio>
+                <el-radio :label="false" border>Video</el-radio>
               </el-radio-group>
             </el-form-item>
           </el-form>
         </el-form-item>
         <el-form-item>
           <el-form inline size="small" @submit.native.prevent>
-            <el-form-item label="录像时长" v-if="!commandType">
-              <el-input type="number" v-model="time" placeholder="一直录像" style="width: 8rem"></el-input>
+            <el-form-item label="Recording duration" v-if="!commandType">
+              <el-input type="number" v-model="time" placeholder="Keep recording" style="width: 8rem"></el-input>
             </el-form-item>
-            <el-form-item label="连拍" v-if="commandType">
-              <el-input type="number" v-model="commandNumber" placeholder="连拍张数" style="width: 4rem"></el-input>
+            <el-form-item label="Continuous shooting" v-if="commandType">
+              <el-input type="number" v-model="commandNumber" placeholder="Number of continuous shots" style="width: 4rem"></el-input>
             </el-form-item>
-            <el-form-item label="拍照间隔" v-if="commandType">
-              <el-input type="number" v-model="time" placeholder="最小间隔拍照" style="width: 8rem"></el-input>
+            <el-form-item label="Photo interval" v-if="commandType">
+              <el-input type="number" v-model="time" placeholder="Minimum interval for taking photos" style="width: 8rem"></el-input>
             </el-form-item>
-            <el-form-item label="存储方式">
+            <el-form-item label="Storage method">
               <el-select
                 v-model="save"
                 style="width: 8rem"
-                placeholder="请选择存储方式"
+                placeholder="Please select storage method"
               >
-                <el-option label="实时上传" :value="0" />
-                <el-option label="保存" :value="1" />
+                <el-option label="real time upload" :value="0" />
+                <el-option label="save" :value="1" />
               </el-select>
             </el-form-item>
-            <el-form-item label="通道">
+            <el-form-item label="channel">
               <el-select
                 v-model="chanelId"
                 style="width: 8rem"
-                placeholder="请选择通道"
+                placeholder="Please select channel"
               >
                 <el-option v-for="item in channelList" :key="item.id" :label="item.name" :value="item.channelId" />
               </el-select>
             </el-form-item>
-            <el-form-item label="分辨率">
+            <el-form-item label="resolution">
               <el-select
                 v-model="resolvingPower"
                 style="width: 8rem"
-                placeholder="请选择分辨率"
+                placeholder="Please select resolution"
               >
-                <el-option label="最低分辨率" :value="0x00" />
+                <el-option label="lowest resolution" :value="0x00" />
                 <el-option label="320×240" :value="0x01" />
                 <el-option label="640×480" :value="0x02" />
                 <el-option label="800×600" :value="0x03" />
@@ -66,40 +66,40 @@
                 <el-option label="352×288" :value="0x06" />
                 <el-option label="704×288" :value="0x07" />
                 <el-option label="704×576" :value="0x08" />
-                <el-option label="最高分辨率" :value="0xff" />
+                <el-option label="highest resolution" :value="0xff" />
               </el-select>
             </el-form-item>
             <el-form-item>
-              <el-checkbox v-model="showImageConfig">高级配置</el-checkbox>
+              <el-checkbox v-model="showImageConfig">Advanced configuration</el-checkbox>
             </el-form-item>
             <el-form-item style="margin-left: 2rem; text-align: right" >
               <el-button v-if="!commandType" type="danger" icon="el-icon-video-camera" @click="stopRecord()" >
-                停止录像
+                Stop recording
               </el-button>
               <el-button v-if="!commandType" type="primary" icon="el-icon-video-camera" @click="shooting()" >
-                开始录像
+                Start recording
               </el-button>
               <el-button v-if="commandType" type="primary" icon="el-icon-camera" @click="shooting()" >
-                拍照
+                take pictures
               </el-button>
             </el-form-item>
           </el-form>
         </el-form-item>
         <el-form-item v-if="showImageConfig">
           <el-form size="small" label-width="80px" style="display: grid; grid-template-columns: 1fr 1fr; grid-gap: 0.5rem">
-            <el-form-item label="质量" prop="topSpeed" >
+            <el-form-item label="quality" prop="topSpeed" >
               <el-slider v-model="quality" show-input :height="1" :marks="qualityMarks" :min="1" :max="10" :step="1"/>
             </el-form-item>
-            <el-form-item label="亮度" prop="brightness">
+            <el-form-item label="brightness" prop="brightness">
               <el-slider v-model="brightness" show-input :height="1" :min="0" :max="255" :step="1" />
             </el-form-item>
-            <el-form-item label="对比度" prop="contrastRatio">
+            <el-form-item label="Contrast" prop="contrastRatio">
               <el-slider v-model="contrastRatio" show-input :height="1" :min="0" :max="127" :step="1"/>
             </el-form-item>
-            <el-form-item label="饱和度" prop="saturation">
+            <el-form-item label="saturation" prop="saturation">
               <el-slider v-model="saturation" show-input :height="1" :min="0" :max="127" :step="1"/>
             </el-form-item>
-            <el-form-item label="色度" prop="chroma">
+            <el-form-item label="Chroma" prop="chroma">
               <el-slider v-model="chroma" show-input :height="1" :min="0" :max="255" :step="1"/>
             </el-form-item>
           </el-form>
@@ -134,8 +134,8 @@ export default {
       chanelId: null,
       resolvingPower: 0xff,
       qualityMarks: {
-        1: '最优',
-        10: '最差'
+        1: 'optimal',
+        10: 'worst'
       },
       quality: 1,
       brightness: 125,
@@ -189,7 +189,7 @@ export default {
         .then( data => {
           this.$message.success({
             showClose: true,
-            message: '消息已经下发'
+            message: 'The message has been sent'
           })
         })
     },
@@ -212,7 +212,7 @@ export default {
         .then( data => {
           this.$message.success({
             showClose: true,
-            message: '消息已经下发'
+            message: 'The message has been sent'
           })
         })
     }

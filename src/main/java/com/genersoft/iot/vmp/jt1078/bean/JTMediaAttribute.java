@@ -7,14 +7,14 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * 终端上传音视频属性
+ * Terminal upload audio and video attributes
  */
 @Setter
 @Getter
 public class JTMediaAttribute implements JTDeviceSubConfig {
 
     /**
-     * 输入音频编码方式:
+     * Enter audio encoding method:
      * 1 G. 721
      * 2 G. 722
      * 3 G. 723
@@ -47,12 +47,12 @@ public class JTMediaAttribute implements JTDeviceSubConfig {
     private int audioEncoder;
 
     /**
-     * 输入音频声道数
+     * Enter the number of audio channels
      */
     private int audioChannels;
 
     /**
-     * 输入音频采样率:
+     * Input audio sample rate:
      * 0:8 kHz;
      * 1:22. 05 kHz;
      * 2:44. 1 kHz;
@@ -61,26 +61,26 @@ public class JTMediaAttribute implements JTDeviceSubConfig {
     private int audioSamplingRate;
 
     /**
-     * 输入音频采样位数:
-     * 0:8 位;
-     * 1:16 位;
-     * 2:32 位
+     * Input audio sample bits:
+     * 0:8 Bit;
+     * 1:16 Bit;
+     * 2:32 Bit
      */
     private int audioSamplingBits;
 
     /**
-     * 音频帧长度: 范围 1 ~ 4 294 967 295
+     * Audio frame length: range 1 ~ 4 294 967 295
      */
     private int audioFrameLength;
 
     /**
-     * 是否支持音频输出:
-     * 0:不支持;1:支持
+     * Whether to support audio output:
+     * 0:Not supported;1:support
      */
     private int audioOutputEnable;
 
     /**
-     * 视频编码方式:
+     * Video encoding method:
      * 98 H. 264
      * 99 H. 265
      * 100 AVS
@@ -89,12 +89,12 @@ public class JTMediaAttribute implements JTDeviceSubConfig {
     private int videoEncoder;
 
     /**
-     * 终端支持的最大音频物理通道数量:
+     * The maximum number of audio physical channels supported by the terminal:
      */
     private int audioChannelMax;
 
     /**
-     * 终端支持的最大视频物理通道数量:
+     * The maximum number of video physical channels supported by the terminal:
      */
     private int videoChannelMax;
 

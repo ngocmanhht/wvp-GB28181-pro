@@ -5,7 +5,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 
 /**
- * 链路检测
+ * Link detection
  */
 @MsgId(id = "8204")
 public class J8204 extends Rs {

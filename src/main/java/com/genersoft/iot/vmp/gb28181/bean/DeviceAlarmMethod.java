@@ -1,31 +1,31 @@
 package com.genersoft.iot.vmp.gb28181.bean;
 
 /**
- * 报警方式
+ * Alarm mode
  * @author lin
- * 1为电话报警, 2为设备报警, 3为短信报警, 4为 GPS报警, 5为视频报警, 6为设备故障报警,
- * 7其他报警;可以为直接组合如12为电话报警或 设备报警-
+ * 12 is the phone alarm, 2 is the equipment alarm, 3 is the SMS alarm, 4 is the GPS alarm, 5 is the video alarm, and 6 is the equipment failure alarm.,
+ * 7Other alarms;It can be a direct combination such as 12 for telephone alarm or equipment alarm.-
  */
 public enum DeviceAlarmMethod {
-    // 1为电话报警
+    // 1Call the police
     Telephone(1),
 
-    // 2为设备报警
+    // 2Alarm the device
     Device(2),
 
-    // 3为短信报警
+    // 3Alarm for SMS
     SMS(3),
 
-    // 4为 GPS报警
+    // 4Alarm for GPS
     GPS(4),
 
-    // 5为视频报警
+    // 5Alarm for video
     Video(5),
 
-    // 6为设备故障报警
+    // 6Alarm for equipment failure
     DeviceFailure(6),
 
-    // 7其他报警
+    // 7Other alarms
     Other(7);
 
     private final int val;
@@ -39,7 +39,7 @@ public enum DeviceAlarmMethod {
     }
 
     /**
-     * 查询是否匹配类型
+     * Check if type matches
      * @param code
      * @return
      */

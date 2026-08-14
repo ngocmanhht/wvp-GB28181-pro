@@ -6,44 +6,44 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * OSD字幕叠加设置
+ * OSDSubtitle overlay settings
  */
 @Setter
 @Getter
 public class JTOSDConfig {
 
     /**
-     * 日期和时间
+     * date and time
      */
     private boolean time;
 
     /**
-     * 车牌号码
+     * license plate number
      */
     private boolean licensePlate;
 
     /**
-     * 逻辑通道号
+     * Logical channel number
      */
     private boolean channelId;
 
     /**
-     * 经纬度
+     * Latitude and longitude
      */
     private boolean position;
 
     /**
-     * 行驶记录速度
+     * Driving record speed
      */
     private boolean speed;
 
     /**
-     * 卫星定位速度
+     * Satellite positioning speed
      */
     private boolean speedForGPS;
 
     /**
-     * 连续驾驶时间
+     * continuous driving time
      */
     private boolean drivingTime;
 

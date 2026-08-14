@@ -14,35 +14,35 @@ public class FrontEndControlCodeForTour implements  IFrontEndControlCode {
     }
 
     /**
-     * 巡航指令： 1为加入巡航点， 2为删除一个巡航点， 3为设置巡航速度， 4为设置巡航停留时间， 5为开始巡航， 6为停止巡航
+     * Cruise command: 1 is to add a cruise point, 2 is to delete a cruise point, 3 is to set the cruise speed, 4 is to set the cruise stay time, 5 is to start cruising, 6 is to stop cruising.
      */
     @Getter
     @Setter
     private Integer code;
 
     /**
-     * 巡航点
+     * cruising point
      */
     @Getter
     @Setter
     private Integer tourId;
 
     /**
-     * 巡航停留时间
+     * Cruise stop time
      */
     @Getter
     @Setter
     private Integer tourTime;
 
     /**
-     * 巡航速度
+     * cruising speed
      */
     @Getter
     @Setter
     private Integer tourSpeed;
 
     /**
-     * 预置位编号
+     * Preset number
      */
     @Getter
     @Setter

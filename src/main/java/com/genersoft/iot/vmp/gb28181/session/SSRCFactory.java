@@ -89,7 +89,7 @@ public class SSRCFactory {
                 }
                 index = (index + 1) % 10000;
             } while (index != start);
-            log.warn("[SSRC] 媒体节点 {} 的SSRC已用尽", mediaServerId);
+            log.warn("[SSRC] media node {} The SSRC has been exhausted", mediaServerId);
             return null;
         }
     }
@@ -124,23 +124,23 @@ public class SSRCFactory {
                                 }
                                 usedMap.put(server.getId(), bits);
                                 if (count > 8000) {
-                                    log.info("[SSRC重建] 媒体节点 {} 的SSRC使用率已超过80%，请注意扩展服务提升性能", server.getId());
+                                    log.info("[SSRCrebuild] media node {} The SSRC usage rate has exceeded 80%. Please pay attention to expanding services to improve performance.", server.getId());
                                 }
                                 if (log.isDebugEnabled()) {
-                                    log.debug("[SSRC重建] 节点 {} 已占用 {} 个SSRC", server.getId(), count);
+                                    log.debug("[SSRCrebuild] node {} Already occupied {} aSSRC", server.getId(), count);
                                 }
                             }
                         } catch (Exception e) {
-                            log.warn("[SSRC重建] 查询媒体节点 {} 失败: {}", server.getId(), e.getMessage());
+                            log.warn("[SSRCrebuild] Query media nodes {} failed: {}", server.getId(), e.getMessage());
                         }
 
                     }
                 }catch (Exception e) {
-                    log.warn("[SSRC重建] 处理媒体节点 {} 失败: {}", server.getId(), e.getMessage());
+                    log.warn("[SSRCrebuild] Handle media nodes {} failed: {}", server.getId(), e.getMessage());
                 }
             }
         }catch (Exception e) {
-            log.error("[SSRC] 重建SSRC失败", e);
+            log.error("[SSRC] Rebuilding SSRC failed", e);
         }
     }
 }

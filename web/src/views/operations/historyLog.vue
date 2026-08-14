@@ -2,34 +2,34 @@
   <div id="app" class="app-container">
     <div style="height: calc(100vh - 124px);">
       <el-form :inline="true" size="mini">
-        <el-form-item label="搜索">
+        <el-form-item label="Search">
           <el-input
             v-model="search"
             style="margin-right: 1rem; width: auto;"
             size="mini"
-            placeholder="关键字"
+            placeholder="Keywords"
             prefix-icon="el-icon-search"
             clearable
             @input="getFileList"
           />
         </el-form-item>
-        <el-form-item label="开始时间">
+        <el-form-item label="start time">
           <el-date-picker
             v-model="startTime"
             size="mini"
             type="datetime"
             value-format="yyyy-MM-dd HH:mm:ss"
-            placeholder="选择日期时间"
+            placeholder="Select date time"
             @change="getFileList"
           />
         </el-form-item>
-        <el-form-item label="结束时间">
+        <el-form-item label="end time">
           <el-date-picker
             v-model="endTime"
             size="mini"
             type="datetime"
             value-format="yyyy-MM-dd HH:mm:ss"
-            placeholder="选择日期时间"
+            placeholder="Select date time"
             @change="getFileList"
           />
         </el-form-item>
@@ -37,36 +37,36 @@
           <el-button icon="el-icon-refresh-right" circle @click="getFileList()" />
         </el-form-item>
       </el-form>
-      <!--日志列表-->
+      <!--Log list-->
       <el-table size="medium" :data="fileList" style="width: 100%" :height="winHeight">
         <el-table-column
           type="selection"
           width="55"
         />
-        <el-table-column prop="fileName" label="文件名" />
-        <el-table-column prop="fileSize" label="文件大小">
+        <el-table-column prop="fileName" label="file name" />
+        <el-table-column prop="fileSize" label="file size">
           <template v-slot:default="scope">
             {{ formatFileSize(scope.row.fileSize) }}
           </template>
         </el-table-column>
-        <el-table-column label="开始时间">
+        <el-table-column label="start time">
           <template v-slot:default="scope">
             {{ formatTimeStamp(scope.row.startTime) }}
           </template>
         </el-table-column>
-        <el-table-column label="结束时间">
+        <el-table-column label="end time">
           <template v-slot:default="scope">
             {{ formatTimeStamp(scope.row.endTime) }}
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="200" fixed="right">
+        <el-table-column label="Operation" width="200" fixed="right">
           <template v-slot:default="scope">
-            <el-button size="medium" icon="el-icon-document" type="text" @click="showLogView(scope.row)">查看
+            <el-button size="medium" icon="el-icon-document" type="text" @click="showLogView(scope.row)">View
             </el-button>
-            <el-button size="medium" icon="el-icon-download" type="text" @click="downloadFile(scope.row)">下载
+            <el-button size="medium" icon="el-icon-download" type="text" @click="downloadFile(scope.row)">Download
             </el-button>
             <!--            <el-button size="medium" icon="el-icon-delete" type="text" style="color: #f56c6c"-->
-            <!--                       @click="deleteRecord(scope.row)">删除-->
+            <!--                       @click="deleteRecord(scope.row)">Delete-->
             <!--            </el-button>-->
           </template>
         </el-table-column>
@@ -109,13 +109,13 @@ export default {
         'width': window.innerWidth / 2 + 'px',
         'height': this.winHeight / 2 + 'px'
       },
-      mediaServerList: [], // 滅体节点列表
-      mediaServerId: '', // 媒体服务
-      mediaServerPath: null, // 媒体服务地址
-      fileList: [], // 设备列表
-      chooseRecord: null, // 媒体服务
+      mediaServerList: [], // List of dead nodes
+      mediaServerId: '', // media services
+      mediaServerPath: null, // Media service address
+      fileList: [], // Device list
+      chooseRecord: null, // media services
 
-      updateLooper: 0, // 数据刷新轮训标志
+      updateLooper: 0, // Data refresh rotation training flag
       winHeight: window.innerHeight - 180,
       loading: false
 
@@ -149,7 +149,7 @@ export default {
         })
     },
     showLogView(file) {
-      this.playerTitle = '正在加载日志...'
+      this.playerTitle = 'Loading logs...'
       this.fileUrl = `/api/log/file/${file.fileName}`
       this.showLog = true
       this.file = file
@@ -166,13 +166,13 @@ export default {
       //
       // link.click();
 
-      // 文件下载地址
+      // File download address
       const fileUrl = ((process.env.NODE_ENV === 'development') ? process.env.VUE_APP_BASE_API : window.baseUrl) + `/api/log/file/${file.fileName}`
 
-      // 设置请求头
+      // Set request header
       const headers = new Headers()
-      headers.append('access-token', getToken()) // 设置授权头，替换YourAccessToken为实际的访问令牌
-      // 发起  请求
+      headers.append('access-token', getToken()) // Set the authorization header and replace YourAccessToken with the actual access token
+      // Make a request
       fetch(fileUrl, {
         method: 'GET',
         headers: headers
@@ -180,21 +180,21 @@ export default {
         .then(response => response.blob())
         .then(blob => {
           console.log(blob)
-          // 创建一个虚拟的链接元素，模拟点击下载
+          // Create a virtual link element to simulate a click to download
           const link = document.createElement('a')
           link.target = '_blank'
           link.href = window.URL.createObjectURL(blob)
-          link.download = file.fileName // 设置下载文件名，替换filename.ext为实际的文件名和扩展名
+          link.download = file.fileName // Set the download file name and replace filename.ext with the actual file name and extension.
           document.body.appendChild(link)
 
-          // 模拟点击
+          // simulate click
           link.click()
 
-          // 移除虚拟链接元素
+          // Remove virtual link element
           document.body.removeChild(link)
-          this.$message.success('已申请截图', { closed: true })
+          this.$message.success('Screenshot requested', { closed: true })
         })
-        .catch(error => console.error('下载失败：', error))
+        .catch(error => console.error('Download failed：', error))
     },
     loadEnd() {
       this.playerTitle = this.file.fileName
@@ -226,7 +226,7 @@ export default {
       if (second < 0) {
         second = 0
       }
-      return (h > 0 ? h + `小时` : '') + (minute > 0 ? minute + '分' : '') + (second > 0 ? second + '秒' : '')
+      return (h > 0 ? h + `hours` : '') + (minute > 0 ? minute + 'points' : '') + (second > 0 ? second + 'seconds' : '')
     },
     formatTimeStamp(time) {
       return moment.unix(time / 1000).format('yyyy-MM-DD HH:mm:ss')

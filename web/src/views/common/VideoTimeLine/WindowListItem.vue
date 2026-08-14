@@ -44,9 +44,9 @@ export default {
   },
   methods: {
     /**
-     * @Author: 王林25
+     * @Author: Wang Lin25
      * @Date: 2020-04-14 09:20:22
-     * @Desc: 初始化
+     * @Desc: initialization
      */
     init() {
       const { height } = this.$refs.windowListItem.getBoundingClientRect()
@@ -57,15 +57,15 @@ export default {
     },
 
     /**
-     * @Author: 王林25
+     * @Author: Wang Lin25
      * @Date: 2020-04-14 15:42:49
-     * @Desc: 绘制时间段
+     * @Desc: Draw time period
      */
     drawTimeSegments(callback, path) {
       if (!this.data.timeSegments || this.data.timeSegments.length <= 0) {
         return
       }
-      const PX_PER_MS = this.width / this.totalMS // px/ms，每毫秒占的像素
+      const PX_PER_MS = this.width / this.totalMS // px/ms，Pixels per millisecond
       this.data.timeSegments.forEach((item) => {
         if (
           item.beginTime <= this.startTimestamp + this.totalMS &&
@@ -104,18 +104,18 @@ export default {
     },
 
     /**
-     * @Author: 王林25
+     * @Author: Wang Lin25
      * @Date: 2020-04-14 14:25:43
-     * @Desc: 清除画布
+     * @Desc: clear canvas
      */
     clearCanvas() {
       this.ctx.clearRect(0, 0, this.width, this.height)
     },
 
     /**
-     * @Author: 王林25
+     * @Author: Wang Lin25
      * @Date: 2021-01-20 19:07:31
-     * @Desc: 绘制
+     * @Desc: draw
      */
     draw() {
       this.$nextTick(() => {
@@ -125,9 +125,9 @@ export default {
     },
 
     /**
-     * @Author: 王林25
+     * @Author: Wang Lin25
      * @Date: 2021-01-20 19:26:46
-     * @Desc: 点击事件
+     * @Desc: click event
      */
     onClick(e) {
       this.$emit('click', e)
@@ -141,9 +141,9 @@ export default {
     },
 
     /**
-     * @Author: 王林25
+     * @Author: Wang Lin25
      * @Date: 2021-01-20 16:24:54
-     * @Desc: 检测当前是否点击了某个时间段
+     * @Desc: Detect whether a certain time period is currently clicked
      */
     getClickTimeSegments(x, y) {
       if (!this.data.timeSegments || this.data.timeSegments.length <= 0) {
@@ -159,9 +159,9 @@ export default {
     },
 
     /**
-     * @Author: 王林25
+     * @Author: Wang Lin25
      * @Date: 2021-01-21 11:25:26
-     * @Desc: 获取位置信息
+     * @Desc: Get location information
      */
     getRect() {
       return this.$refs.windowListItem ? this.$refs.windowListItem.getBoundingClientRect() : null

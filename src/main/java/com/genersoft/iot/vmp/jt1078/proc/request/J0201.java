@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationEvent;
 
 /**
- * 位置信息查询应答
+ * Location information query response
  *
  * @author QingtaiJiang
  * @date 2023/4/27 18:06
@@ -34,7 +34,7 @@ public class J0201 extends Re {
         phoneNumber = header.getPhoneNumber();
         int respNo = buf.readUnsignedShort();
         positionInfo = JTPositionBaseInfo.decode(buf);
-        log.info("[JT-位置信息查询应答]: {}", positionInfo);
+        log.info("[JT-Location information query response]: {}", positionInfo);
         SessionManager.INSTANCE.response(header.getPhoneNumber(), "0201", (long) respNo, positionInfo);
         return null;
     }

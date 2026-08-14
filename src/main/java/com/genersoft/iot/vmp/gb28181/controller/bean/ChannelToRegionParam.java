@@ -6,16 +6,16 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-@Schema(description="提交行政区划关联多个通道的参数")
+@Schema(description="Submit parameters for multiple channels associated with administrative divisions")
 public class ChannelToRegionParam {
 
-    @Schema(description = "行政区划编号")
+    @Schema(description = "Administrative division number")
     private String civilCode;
 
-    @Schema(description = "选择的通道， 和all参数二选一")
+    @Schema(description = "The selected channel, and the all parameter, choose one of the two")
     private List<Integer> channelIds;
 
-    @Schema(description = "所有通道， 和channelIds参数二选一")
+    @Schema(description = "All channels, choose one of the channelIds parameters")
     private Boolean all;
 
 }

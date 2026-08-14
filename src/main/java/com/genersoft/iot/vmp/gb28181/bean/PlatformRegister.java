@@ -2,7 +2,7 @@ package com.genersoft.iot.vmp.gb28181.bean;
 
 public class PlatformRegister {
 
-    // 未回复次数
+    // Number of non-replies
     private int reply;
 
     public int getReply() {

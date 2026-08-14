@@ -11,7 +11,7 @@ import java.nio.charset.Charset;
 import java.util.List;
 
 /**
- * 设置电话本
+ * Set up phone book
  */
 @Setter
 @Getter
@@ -19,16 +19,16 @@ import java.util.List;
 public class J8401 extends Rs {
 
     /**
-     * 设置类型:
-     * 0: 删除终端上所有存储的联系人,
-     * 1: 表示更新电话本$ 删除终端中已有全部联系人并追加消 息中的联系人,
-     * 2: 表示追加电话本,
-     * 3: 表示修改电话本$以联系人为索引
+     * Setting type:
+     * 0: Delete all contacts stored on the terminal,
+     * 1: Indicates updating the phone book $ Delete all contacts in the terminal and append the contacts in the message,
+     * 2: Indicates adding a phone book,
+     * 3: Indicates modifying the phone book $ with contacts as the index
      */
     private int type;
 
     /**
-     * 联系人
+     * Contact person
      */
     private List<JTPhoneBookContact> phoneBookContactList;
 

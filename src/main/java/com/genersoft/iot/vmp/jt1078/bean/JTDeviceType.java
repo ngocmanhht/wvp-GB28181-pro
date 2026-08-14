@@ -5,45 +5,45 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * JT 终端类型
+ * JT terminal type
  */
 @Setter
 @Getter
-@Schema(description = "JT终端参数设置")
+@Schema(description = "JTTerminal parameter settings")
 public class JTDeviceType {
 
     /**
-     * 适用客运车辆
+     * Applicable to passenger vehicles
      */
     private boolean passengerVehicles;
 
     /**
-     * 适用危险品车辆
+     * Suitable for dangerous goods vehicles
      */
     private boolean dangerousGoodsVehicles;
 
     /**
-     * 普通货运车辆
+     * Ordinary freight vehicles
      */
     private boolean freightVehicles;
 
     /**
-     * 出租车辆
+     * rental vehicle
      */
     private boolean rentalVehicles;
 
     /**
-     * 支持硬盘录像
+     * Support hard disk recording
      */
     private boolean hardDiskRecording;
 
     /**
-     * false：一体机 ,true：分体机
+     * false：All-in-one machine, true: split machine
      */
     private boolean splittingMachine;
 
     /**
-     * 适用挂车
+     * Suitable for trailers
      */
     private boolean trailer;
 

@@ -14,7 +14,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public enum CivilCodeUtil {
 
     INSTANCE;
-    // 用与消息的缓存
+    // caching of messages
     private final Map<String, CivilCodePo> civilCodeMap = new ConcurrentHashMap<>();
 
     CivilCodeUtil() {

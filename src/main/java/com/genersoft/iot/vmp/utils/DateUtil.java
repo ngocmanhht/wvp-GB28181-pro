@@ -15,45 +15,45 @@ import java.time.temporal.TemporalAccessor;
 import java.util.Locale;
 
 /**
- * 全局时间工具类
+ * Global time tool class
  * @author lin
  */
 public class DateUtil {
 
     /**
-     * 兼容不规范的iso8601时间格式
+     * Compatible with non-standard iso8601 time format
      */
 	private static final String ISO8601_COMPATIBLE_PATTERN = "yyyy-M-d'T'H:m:s";
 
     /**
-     * 用以输出标准的iso8601时间格式
+     * Used to output the standard iso8601 time format
      */
 	private static final String ISO8601_PATTERN = "yyyy-MM-dd'T'HH:mm:ss";
 
     /**
-     * iso8601时间格式带时区，例如：2024-02-21T11:10:36+08:00
+     * iso8601Time format with time zone, for example：2024-02-21T11:10:36+08:00
      */
     private static final String ISO8601_ZONE_PATTERN = "yyyy-MM-dd'T'HH:mm:ssXXX";
 
     /**
-     * 兼容的时间格式 iso8601时间格式带毫秒
+     * Compatible time format iso8601 time format with milliseconds
      */
     private static final String ISO8601_MILLISECOND_PATTERN = "yyyy-MM-dd'T'HH:mm:ss.SSS";
 
     /**
-     * wvp内部统一时间格式
+     * wvpInternal unified time format
      */
     public static final String PATTERN = "yyyy-MM-dd HH:mm:ss";
 
     /**
-     * wvp内部统一时间格式
+     * wvpInternal unified time format
      */
     public static final String URL_PATTERN = "yyyyMMddHHmmss";
     public static final String PATTERN1078 = "yyMMddHHmmss";
     public static final String PATTERN1078Date = "yyyyMMdd";
 
     /**
-     * 日期格式
+     * date format
      */
     public static final String date_PATTERN = "yyyy-MM-dd";
 
@@ -79,7 +79,7 @@ public class DateUtil {
     }
 
 	public static String ISO8601Toyyyy_MM_dd_HH_mm_ss(String formatTime) {
-        // 三种日期格式都尝试，为了兼容不同厂家的日期格式
+        // Tried all three date formats in order to be compatible with date formats from different manufacturers.
         if (verification(formatTime, formatterCompatibleISO8601)) {
             return formatter.format(formatterCompatibleISO8601.parse(formatTime));
         } else if (verification(formatTime, formatterZoneISO8601)) {
@@ -104,7 +104,7 @@ public class DateUtil {
     }
 
     /**
-     * yyyy_MM_dd_HH_mm_ss 转时间戳
+     * yyyy_MM_dd_HH_mm_ss transfer timestamp
      * @param formatTime
      * @return
      */
@@ -115,7 +115,7 @@ public class DateUtil {
 	}
 
     /**
-     * 时间戳 转 yyyy_MM_dd_HH_mm_ss
+     * timestamp turn yyyy_MM_dd_HH_mm_ss
      */
 	public static String timestampTo_yyyy_MM_dd_HH_mm_ss(long timestamp) {
         Instant instant = Instant.ofEpochSecond(timestamp);
@@ -123,7 +123,7 @@ public class DateUtil {
 	}
 
     /**
-     * 时间戳 转 yyyy_MM_dd_HH_mm_ss
+     * timestamp turn yyyy_MM_dd_HH_mm_ss
      */
 	public static String timestampMsToUrlToyyyy_MM_dd_HH_mm_ss(long timestamp) {
         Instant instant = Instant.ofEpochMilli(timestamp);
@@ -131,7 +131,7 @@ public class DateUtil {
 	}
 
     /**
-     * yyyy_MM_dd_HH_mm_ss 转时间戳（毫秒）
+     * yyyy_MM_dd_HH_mm_ss Turn timestamp (milliseconds)）
      *
      * @param formatTime
      * @return
@@ -143,7 +143,7 @@ public class DateUtil {
     }
 
     /**
-     * 时间戳（毫秒） 转 yyyy_MM_dd_HH_mm_ss
+     * timestamp (milliseconds) turn yyyy_MM_dd_HH_mm_ss
      */
     public static String timestampMsTo_yyyy_MM_dd_HH_mm_ss(long timestamp) {
         Instant instant = Instant.ofEpochMilli(timestamp);
@@ -151,7 +151,7 @@ public class DateUtil {
     }
 
     /**
-     * yyyy_MM_dd_HH_mm_ss 转时间戳（毫秒）
+     * yyyy_MM_dd_HH_mm_ss Turn timestamp (milliseconds)）
      *
      * @param formatTime
      * @return
@@ -163,7 +163,7 @@ public class DateUtil {
     }
 
     /**
-     * 时间戳 转 yyyy_MM_dd
+     * timestamp turn yyyy_MM_dd
      */
     public static String timestampTo_yyyy_MM_dd(long timestamp) {
         Instant instant = Instant.ofEpochMilli(timestamp);
@@ -171,7 +171,7 @@ public class DateUtil {
     }
 
     /**
-     * 获取当前时间
+     * Get current time
      * @return
      */
     public static String getNow() {
@@ -180,7 +180,7 @@ public class DateUtil {
     }
 
     /**
-     * 获取当前时间
+     * Get current time
      * @return
      */
     public static String getNowForUrl() {
@@ -190,9 +190,9 @@ public class DateUtil {
 
 
     /**
-     * 格式校验
-     * @param timeStr 时间字符串
-     * @param dateTimeFormatter 待校验的格式
+     * Format check
+     * @param timeStr time string
+     * @param dateTimeFormatter Format to be verified
      * @return
      */
     public static boolean verification(String timeStr, DateTimeFormatter dateTimeFormatter) {

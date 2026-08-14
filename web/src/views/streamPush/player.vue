@@ -3,7 +3,7 @@
     <el-dialog
       v-if="showVideoDialog"
       v-el-drag-dialog
-      title="视频播放"
+      title="video playback"
       top="5vh"
       width="70vw"
       :close-on-click-modal="false"
@@ -20,7 +20,7 @@
 
         <div class="control-side">
           <div class="info-card info-card--fill">
-            <div class="info-card__title">编码信息</div>
+            <div class="info-card__title">encoded information</div>
             <div class="info-card__body">
               <mediaInfo ref="mediaInfo" :app="app" :stream="streamId" :media-server-id="mediaServerId" />
             </div>

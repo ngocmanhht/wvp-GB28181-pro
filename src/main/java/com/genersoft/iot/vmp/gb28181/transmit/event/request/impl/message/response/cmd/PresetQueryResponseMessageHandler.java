@@ -33,7 +33,7 @@ import static com.genersoft.iot.vmp.gb28181.utils.XmlUtil.getInteger;
 import static com.genersoft.iot.vmp.gb28181.utils.XmlUtil.getText;
 
 /**
- * 设备预置位查询应答
+ * Equipment preset position query response
  */
 @Slf4j
 @Component
@@ -63,22 +63,22 @@ public class PresetQueryResponseMessageHandler extends SIPRequestProcessorParent
              Element rootElement = getRootElement(evt, device.getCharset());
 
             if (rootElement == null) {
-                log.warn("[ 设备预置位查询应答 ] content cannot be null, {}", evt.getRequest());
+                log.warn("[ Equipment preset position query response ] content cannot be null, {}", evt.getRequest());
                 try {
                     responseAck(request, Response.BAD_REQUEST);
                 } catch (InvalidArgumentException | ParseException | SipException e) {
-                    log.error("[命令发送失败] 设备预置位查询应答处理: {}", e.getMessage());
+                    log.error("[Command sending failed] Equipment preset position query response processing: {}", e.getMessage());
                 }
                 return;
             }
             Element presetListNumElement = rootElement.element("PresetList");
             Element snElement = rootElement.element("SN");
-            //该字段可能为通道或则设备的id
+            //This field may be a channel or deviceid
             if (snElement == null || presetListNumElement == null) {
                 try {
                     responseAck(request, Response.BAD_REQUEST, "xml error");
                 } catch (InvalidArgumentException | ParseException | SipException e) {
-                    log.error("[命令发送失败] 设备预置位查询应答处理: {}", e.getMessage());
+                    log.error("[Command sending failed] Equipment preset position query response processing: {}", e.getMessage());
                 }
                 return;
             }
@@ -90,7 +90,7 @@ public class PresetQueryResponseMessageHandler extends SIPRequestProcessorParent
                     Element itemListElement = presetIterator.next();
                     Preset presetQuerySipReq = new Preset();
                     for (Iterator<Element> itemListIterator = itemListElement.elementIterator(); itemListIterator.hasNext(); ) {
-                        // 遍历item
+                        // Traverseitem
                         Element itemOne = itemListIterator.next();
                         String name = itemOne.getName();
                         String textTrim = itemOne.getTextTrim();
@@ -108,10 +108,10 @@ public class PresetQueryResponseMessageHandler extends SIPRequestProcessorParent
             try {
                 responseAck(request, Response.OK);
             } catch (InvalidArgumentException | ParseException | SipException e) {
-                log.error("[命令发送失败] 设备预置位查询应答处理: {}", e.getMessage());
+                log.error("[Command sending failed] Equipment preset position query response processing: {}", e.getMessage());
             }
         } catch (DocumentException e) {
-            log.error("[解析xml]失败: ", e);
+            log.error("[parsexml]failed: ", e);
         }
     }
 
@@ -123,7 +123,7 @@ public class PresetQueryResponseMessageHandler extends SIPRequestProcessorParent
                 mesageMap.remove(key);
                 boolean remove = delayQueue.remove(messageResponseTask);
                 if (!remove) {
-                    log.info("[移除预置位查询任务] 从延时队列内移除失败： {}", key);
+                    log.info("[Remove preset position query task] Removal from delay queue failed： {}", key);
                 }
             }
         }else {
@@ -136,7 +136,7 @@ public class PresetQueryResponseMessageHandler extends SIPRequestProcessorParent
                     mesageMap.remove(key);
                     boolean remove = delayQueue.remove(messageResponseTask);
                     if (!remove) {
-                        log.info("[移除预置位查询任务] 从延时队列内移除失败： {}", key);
+                        log.info("[Remove preset position query task] Removal from delay queue failed： {}", key);
                     }
                     return;
                 }
@@ -153,7 +153,7 @@ public class PresetQueryResponseMessageHandler extends SIPRequestProcessorParent
         }
     }
 
-    // 处理过期的缓存
+    // Handle expired cache
     @Scheduled(fixedDelay = 500, timeUnit = TimeUnit.MILLISECONDS)
     public void expirationCheck(){
         while (!delayQueue.isEmpty()) {
@@ -164,10 +164,10 @@ public class PresetQueryResponseMessageHandler extends SIPRequestProcessorParent
                     responseMessageHandler.handMessageEvent(take.getElement(), take.getData());
                     mesageMap.remove(take.getKey());
                 }catch (Exception e) {
-                    log.error("[预置位查询到期] {} 到期处理时出现异常", take.getKey());
+                    log.error("[Preset position query expired] {} Exception occurred during expiry processing", take.getKey());
                 }
             } catch (InterruptedException e) {
-                log.error("[设备订阅任务] ", e);
+                log.error("[Device subscription task] ", e);
             }
         }
     }

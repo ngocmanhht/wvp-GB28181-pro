@@ -2,26 +2,26 @@
   <div id="channelEdit" style="width: 100%; height: 100%">
     <div class="page-header">
       <div class="page-title">
-        <el-page-header content="编辑推流信息" @back="close" />
+        <el-page-header content="Edit push information" @back="close" />
       </div>
     </div>
     <el-tabs tab-position="left" style="padding: 1rem; height: calc(100% - 24px)">
-      <el-tab-pane label="部标通道编辑" style="background-color: #FFFFFF;">
+      <el-tab-pane label="Department logo channel editor" style="background-color: #FFFFFF;">
         <el-form ref="form" :rules="rules" :model="jtChannel" label-width="60px" style="width: 40rem; margin: 0 auto">
-          <el-form-item label="编号" prop="channelId">
+          <el-form-item label="No." prop="channelId">
             <el-input v-model="jtChannel.channelId" clearable />
           </el-form-item>
-          <el-form-item label="名称" prop="name">
+          <el-form-item label="Name" prop="name">
             <el-input v-model="jtChannel.name" clearable />
           </el-form-item>
           <el-form-item style="text-align: right">
-            <el-button type="primary" @click="onSubmit">保存</el-button>
-            <el-button @click="close">取消</el-button>
+            <el-button type="primary" @click="onSubmit">save</el-button>
+            <el-button @click="close">Cancel</el-button>
           </el-form-item>
         </el-form>
 
       </el-tab-pane>
-      <el-tab-pane label="国标通道配置">
+      <el-tab-pane label="National standard channel configuration">
         <CommonChannelEdit :id="jtChannel.gbId" ref="commonChannelEdit" :data-form="jtChannel" @cancel="close" />
       </el-tab-pane>
     </el-tabs>
@@ -41,7 +41,7 @@ export default {
     return {
       version: 3,
       rules: {
-        deviceId: [{ required: true, message: '请输入设备编号', trigger: 'blur' }]
+        deviceId: [{ required: true, message: 'Please enter the device number', trigger: 'blur' }]
       },
       isLoading: false,
       loadSnap: {}
@@ -58,7 +58,7 @@ export default {
           .then(data => {
             this.$message({
               showClose: true,
-              message: '保存成功',
+              message: 'Saved successfully',
               type: 'success'
             })
             this.jtChannel = data
@@ -75,7 +75,7 @@ export default {
           .then(data => {
             this.$message({
               showClose: true,
-              message: '保存成功',
+              message: 'Saved successfully',
               type: 'success'
             })
             this.jtChannel = data

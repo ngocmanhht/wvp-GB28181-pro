@@ -5,12 +5,12 @@ import org.jetbrains.annotations.NotNull;
 public class NetworkIdentificationType implements Comparable<NetworkIdentificationType>{
 
     /**
-     * 接入类型码
+     * Access type code
      */
     private String name;
 
     /**
-     * 名称
+     * Name
      */
     private String code;
 

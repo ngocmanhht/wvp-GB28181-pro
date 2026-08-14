@@ -15,38 +15,38 @@ import java.util.Map;
 public class OnStreamChangedHookParam extends HookParam{
 
     /**
-     * 注册/注销
+     * Register/Log out
      */
     private boolean regist;
 
     /**
-     * 应用名
+     * Application name
      */
     private String app;
 
     /**
-     * 流id
+     * flowid
      */
     private String stream;
 
     /**
-     * 推流鉴权Id
+     * Push authenticationId
      */
     private String callId;
 
     /**
-     * 观看总人数，包括hls/rtsp/rtmp/http-flv/ws-flv
+     * Total number of viewers, includinghls/rtsp/rtmp/http-flv/ws-flv
      */
     private int totalReaderCount;
 
     /**
-     * 协议 包括hls/rtsp/rtmp/http-flv/ws-flv
+     * Agreement includeshls/rtsp/rtmp/http-flv/ws-flv
      */
     private String schema;
 
 
     /**
-     * 产生源类型，
+     * Generate source type，
      * unknown = 0,
      * rtmp_push=1,
      * rtsp_push=2,
@@ -59,69 +59,69 @@ public class OnStreamChangedHookParam extends HookParam{
     private int originType;
 
     /**
-     * 客户端和服务器网络信息，可能为null类型
+     * Client and server network information, possibly null
      */
     private OriginSock originSock;
 
     /**
-     * 产生源类型的字符串描述
+     * Produces a string description of the source type
      */
     private String originTypeStr;
 
     /**
-     * 产生源的url
+     * originatingurl
      */
     private String originUrl;
 
     /**
-     * 服务器id
+     * serverid
      */
     private String severId;
 
     /**
-     * GMT unix系统时间戳，单位秒
+     * GMT unixSystem timestamp in seconds
      */
     private Long createStamp;
 
     /**
-     * 存活时间，单位秒
+     * Survival time in seconds
      */
     private Long aliveSecond;
 
     /**
-     * 数据产生速度，单位byte/s
+     * Data generation speed, unitbyte/s
      */
     private Long bytesSpeed;
 
     /**
-     * 音视频轨道
+     * Audio and video tracks
      */
     private List<MediaTrack> tracks;
 
     /**
-     * 音视频轨道
+     * Audio and video tracks
      */
     private String vhost;
 
     /**
-     * 额外的参数字符串
+     * extra parameter string
      */
     private String params;
 
     /**
-     * 额外的参数
+     * additional parameters
      */
     private Map<String, String> paramMap;
 
     /**
-     * 是否是docker部署， docker部署不会自动更新zlm使用的端口，需要自己手动修改
+     * Whether it is docker deployment, docker deployment will not automatically update the port used by zlm, and you need to modify it manually.
      */
     private boolean docker;
 
     @Data
     public static class MediaTrack {
         /**
-         * 音频通道数
+         * Number of audio channels
          */
         private int channels;
 
@@ -131,7 +131,7 @@ public class OnStreamChangedHookParam extends HookParam{
         private int codec_id;
 
         /**
-         * 编码类型名称 CodecAAC CodecH264
+         * Encoding type name CodecAAC CodecH264
          */
         private String codec_id_name;
 
@@ -141,57 +141,57 @@ public class OnStreamChangedHookParam extends HookParam{
         private int codec_type;
 
         /**
-         * 轨道是否准备就绪
+         * Is the track ready?
          */
         private boolean ready;
 
         /**
-         * 音频采样位数
+         * audio sample bits
          */
         private int sample_bit;
 
         /**
-         * 音频采样率
+         * Audio sample rate
          */
         private int sample_rate;
 
         /**
-         * 视频fps
+         * videofps
          */
         private float fps;
 
         /**
-         * 视频高
+         * video high
          */
         private int height;
 
         /**
-         * 视频宽
+         * video width
          */
         private int width;
 
         /**
-         * 帧数
+         * Frames
          */
         private int frames;
 
         /**
-         * 关键帧数
+         * Number of key frames
          */
         private int key_frames;
 
         /**
-         * GOP大小
+         * GOPsize
          */
         private int gop_size;
 
         /**
-         * GOP间隔时长(ms)
+         * GOPInterval duration(ms)
          */
         private int gop_interval_ms;
 
         /**
-         * 丢帧率
+         * frame loss rate
          */
         private float loss;
     }

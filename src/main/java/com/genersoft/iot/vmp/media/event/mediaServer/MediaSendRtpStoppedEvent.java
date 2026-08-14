@@ -5,7 +5,7 @@ import com.genersoft.iot.vmp.media.zlm.dto.hook.OnStreamNotFoundHookParam;
 import org.springframework.context.ApplicationEvent;
 
 /**
- * 发送流停止事件
+ * Send stream stop event
  */
 public class MediaSendRtpStoppedEvent extends ApplicationEvent {
     public MediaSendRtpStoppedEvent(Object source) {

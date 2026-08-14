@@ -76,29 +76,29 @@ public class RedisCatchStorageImpl implements IRedisCatchStorage {
         String key = VideoManagerConstants.WVP_SERVER_PREFIX + userSetting.getServerId();
         Duration duration = Duration.ofSeconds(time);
         redisTemplate.opsForValue().set(key, serverInfo, duration);
-        // 设置平台的分数值
+        // Set the score value of the platform
         String setKey = VideoManagerConstants.WVP_SERVER_LIST;
-        // 首次设置就设置为0, 后续值越小说明越是最近启动的
+        // Set it to 0 for the first time. The smaller the subsequent value, the more recently started it is.
         redisTemplate.opsForZSet().add(setKey, userSetting.getServerId(), System.currentTimeMillis());
     }
 
     @Override
     public void removeOfflineWVPInfo(String serverId) {
         String setKey = VideoManagerConstants.WVP_SERVER_LIST;
-        // 首次设置就设置为0, 后续值越小说明越是最近启动的
+        // Set it to 0 for the first time. The smaller the subsequent value, the more recently started it is.
         redisTemplate.opsForZSet().remove(setKey, serverId);
     }
 
     @Override
     public void sendStreamChangeMsg(String type, JSONObject jsonObject) {
         String key = VideoManagerConstants.WVP_MSG_STREAM_CHANGE_PREFIX + type;
-        log.info("[redis 流变化事件] 发送 {}: {}", key, jsonObject.toString());
+        log.info("[redis flow change event] send {}: {}", key, jsonObject.toString());
         redisTemplate.convertAndSend(key, jsonObject);
     }
 
     @Override
     public void addStream(MediaServer mediaServerItem, String type, String app, String streamId, MediaInfo mediaInfo) {
-        // 查找是否使用了callID
+        // Find if usedcallID
         StreamAuthorityInfo streamAuthorityInfo = getStreamAuthorityInfo(app, streamId);
         String key = VideoManagerConstants.WVP_SERVER_STREAM_PREFIX  + userSetting.getServerId() + "_" + type.toUpperCase() + "_" + app + "_" + streamId + "_" + mediaServerItem.getId();
         if (streamAuthorityInfo != null) {
@@ -145,7 +145,7 @@ public class RedisCatchStorageImpl implements IRedisCatchStorage {
     public void removeDevice(String deviceId) {
         String key = VideoManagerConstants.DEVICE_PREFIX;
         redisTemplate.opsForHash().delete(key, deviceId);
-        // 同时删除注册时间和心跳时间缓存列表
+        // Delete the registration time and heartbeat time cache lists at the same time
         longRedisTemplate.delete(VideoManagerConstants.DEVICE_REGISTER_PREFIX + deviceId);
         longRedisTemplate.delete(VideoManagerConstants.DEVICE_KEEPALIVE_PREFIX + deviceId);
     }
@@ -154,7 +154,7 @@ public class RedisCatchStorageImpl implements IRedisCatchStorage {
     public void removeAllDevice() {
         String key = VideoManagerConstants.DEVICE_PREFIX;
         redisTemplate.delete(key);
-        // 同时删除所有注册时间和心跳时间缓存列表
+        // Also delete all registration time and heartbeat time cache lists
         Set<String> registerKeys = stringRedisTemplate.keys(VideoManagerConstants.DEVICE_REGISTER_PREFIX + "*");
         if (registerKeys != null && !registerKeys.isEmpty()) {
             stringRedisTemplate.delete(registerKeys);
@@ -212,7 +212,7 @@ public class RedisCatchStorageImpl implements IRedisCatchStorage {
         gpsMsgInfo.setStored(false);
         redisTemplate.opsForHash().put(key, gpsMsgInfo.getId(),gpsMsgInfo);
         redisTemplate.expire(key, duration);
-        // 默认GPS消息保存1分钟
+        // Default GPS messages are saved for 1 minute
     }
 
     @Override
@@ -303,7 +303,7 @@ public class RedisCatchStorageImpl implements IRedisCatchStorage {
         infoMap.put("time", DateUtil.getNow());
         infoMap.put("data", String.valueOf(cpuInfo));
         redisTemplate.opsForList().rightPush(key, infoMap);
-        // 每秒一个，最多只存30个
+        // One per second, only 30 can be stored at most
         Long size = redisTemplate.opsForList().size(key);
         if (size != null && size >= 30) {
             for (int i = 0; i < size - 30; i++) {
@@ -319,7 +319,7 @@ public class RedisCatchStorageImpl implements IRedisCatchStorage {
         infoMap.put("time", DateUtil.getNow());
         infoMap.put("data", String.valueOf(memInfo));
         redisTemplate.opsForList().rightPush(key, infoMap);
-        // 每秒一个，最多只存30个
+        // One per second, only 30 can be stored at most
         Long size = redisTemplate.opsForList().size(key);
         if (size != null && size >= 30) {
             for (int i = 0; i < size - 30; i++) {
@@ -337,7 +337,7 @@ public class RedisCatchStorageImpl implements IRedisCatchStorage {
             infoMap.put(netKey, networkInterfaces.get(netKey));
         }
         redisTemplate.opsForList().rightPush(key, infoMap);
-        // 每秒一个，最多只存30个
+        // One per second, only 30 can be stored at most
         Long size = redisTemplate.opsForList().size(key);
         if (size != null && size >= 30) {
             for (int i = 0; i < size - 30; i++) {
@@ -372,15 +372,15 @@ public class RedisCatchStorageImpl implements IRedisCatchStorage {
     @Override
     public void sendStreamPushRequestedMsg(MessageForPushChannel msg) {
         String key = VideoManagerConstants.VM_MSG_STREAM_PUSH_REQUESTED;
-        log.info("[redis发送通知] 发送 推流被请求 {}: {}/{}", key, msg.getApp(), msg.getStream());
+        log.info("[redisSend notification] Send push stream requested {}: {}/{}", key, msg.getApp(), msg.getStream());
         redisTemplate.convertAndSend(key, JSON.toJSON(msg));
     }
 
     @Override
     public void sendAlarmMsg(AlarmChannelMessage msg) {
-        // 此消息用于对接第三方服务下级来的消息内容
+        // This message is used to connect the message content from the third-party service.
         String key = VideoManagerConstants.VM_MSG_SUBSCRIBE_ALARM;
-        log.info("[redis发送通知] 发送 报警{}: {}", key, JSON.toJSON(msg));
+        log.info("[redisSend notification] Send alarm{}: {}", key, JSON.toJSON(msg));
         redisTemplate.convertAndSend(key, JSON.toJSON(msg));
     }
 
@@ -393,7 +393,7 @@ public class RedisCatchStorageImpl implements IRedisCatchStorage {
     @Override
     public void sendStreamPushRequestedMsgForStatus() {
         String key = VideoManagerConstants.VM_MSG_GET_ALL_ONLINE_REQUESTED;
-        log.info("[redis通知] 发送 获取所有推流设备的状态");
+        log.info("[redisNotification] Send Get the status of all streaming devices");
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(key, key);
         redisTemplate.convertAndSend(key, jsonObject);
@@ -426,8 +426,8 @@ public class RedisCatchStorageImpl implements IRedisCatchStorage {
             msg.append(":").append(channelId);
         }
         msg.append(" ").append(online? "ON":"OFF");
-        log.info("[redis通知] 推送设备/通道状态-> {} ", msg);
-        // 使用 RedisTemplate<String, Object> 发送字符串消息会导致发送的消息多带了双引号
+        log.info("[redisNotification] push device/Channel status-> {} ", msg);
+        // Use RedisTemplate<String, Object> Sending a string message will cause the sent message to have extra double quotes.
         stringRedisTemplate.convertAndSend(key, msg.toString());
     }
 
@@ -442,19 +442,19 @@ public class RedisCatchStorageImpl implements IRedisCatchStorage {
             msg.append(":").append(channelId);
         }
         msg.append(" ").append(add? "ADD":"DELETE");
-        log.info("[redis通知] 推送通道-> {}", msg);
-        // 使用 RedisTemplate<String, Object> 发送字符串消息会导致发送的消息多带了双引号
+        log.info("[redisNotification] push channel-> {}", msg);
+        // Use RedisTemplate<String, Object> Sending a string message will cause the sent message to have extra double quotes.
         stringRedisTemplate.convertAndSend(key, msg.toString());
     }
 
     @Override
     public void sendPlatformStartPlayMsg(SendRtpInfo sendRtpItem, DeviceChannel channel, Platform platform) {
         if (platform == null) {
-            log.info("[redis发送通知] 失败， 平台信息为NULL");
+            log.info("[redisSend notification] Failure, the platform information isNULL");
             return;
         }
         if (sendRtpItem.getPlayType() != InviteStreamType.PUSH) {
-            log.info("[redis发送通知] 取消， 流来源通道不是推流设备");
+            log.info("[redisSend notification] Cancel, the stream source channel is not a push device");
             return;
         }
         MessageForPushChannel messageForPushChannel = MessageForPushChannel.getInstance(0, sendRtpItem.getApp(), sendRtpItem.getStream(),
@@ -462,7 +462,7 @@ public class RedisCatchStorageImpl implements IRedisCatchStorage {
                 sendRtpItem.getMediaServerId());
         messageForPushChannel.setPlatFormIndex(platform.getId());
         String key = VideoManagerConstants.VM_MSG_STREAM_START_PLAY_NOTIFY;
-        log.info("[redis发送通知] 发送 推流被上级平台观看 {}: {}/{}->{}", key, sendRtpItem.getApp(), sendRtpItem.getStream(), platform.getServerGBId());
+        log.info("[redisSend notification] Send the push stream to be viewed by the superior platform {}: {}/{}->{}", key, sendRtpItem.getApp(), sendRtpItem.getStream(), platform.getServerGBId());
         redisTemplate.convertAndSend(key, JSON.toJSON(messageForPushChannel));
     }
 
@@ -475,7 +475,7 @@ public class RedisCatchStorageImpl implements IRedisCatchStorage {
         msg.setPlatFormIndex(platform.getId());
 
         String key = VideoManagerConstants.VM_MSG_STREAM_STOP_PLAY_NOTIFY;
-        log.info("[redis发送通知] 发送 上级平台停止观看 {}: {}/{}->{}", key, sendRtpItem.getApp(), sendRtpItem.getStream(), platform.getServerGBId());
+        log.info("[redisSend notification] Send the superior platform to stop watching {}: {}/{}->{}", key, sendRtpItem.getApp(), sendRtpItem.getStream(), platform.getServerGBId());
         redisTemplate.convertAndSend(key, JSON.toJSON(msg));
     }
 
@@ -503,7 +503,7 @@ public class RedisCatchStorageImpl implements IRedisCatchStorage {
     @Override
     public void sendPushStreamClose(MessageForPushChannel msg) {
         String key = VideoManagerConstants.VM_MSG_STREAM_PUSH_CLOSE_REQUESTED;
-        log.info("[redis发送通知] 发送 停止向上级推流 {}: {}/{}->{}", key, msg.getApp(), msg.getStream(), msg.getPlatFormId());
+        log.info("[redisSend notification] Send Stop pushing to superior {}: {}/{}->{}", key, msg.getApp(), msg.getStream(), msg.getPlatFormId());
         redisTemplate.convertAndSend(key, JSON.toJSON(msg));
     }
 
@@ -522,14 +522,14 @@ public class RedisCatchStorageImpl implements IRedisCatchStorage {
     @Override
     public void sendStartSendRtp(SendRtpInfo sendRtpItem) {
         String key = VideoManagerConstants.START_SEND_PUSH_STREAM + sendRtpItem.getApp() + "_" + sendRtpItem.getStream();
-        log.info("[redis发送通知] 通知其他WVP推流 {}: {}/{}->{}", key, sendRtpItem.getApp(), sendRtpItem.getStream(), sendRtpItem.getTargetId());
+        log.info("[redisSend notification] Notify other WVP push streams {}: {}/{}->{}", key, sendRtpItem.getApp(), sendRtpItem.getStream(), sendRtpItem.getTargetId());
         redisTemplate.convertAndSend(key, JSON.toJSON(sendRtpItem));
     }
 
     @Override
     public void sendPushStreamOnline(SendRtpInfo sendRtpItem) {
         String key = VideoManagerConstants.VM_MSG_STREAM_PUSH_CLOSE_REQUESTED;
-        log.info("[redis发送通知] 流上线 {}: {}/{}->{}", key, sendRtpItem.getApp(), sendRtpItem.getStream(), sendRtpItem.getTargetId());
+        log.info("[redisSend notification] stream online {}: {}/{}->{}", key, sendRtpItem.getApp(), sendRtpItem.getStream(), sendRtpItem.getTargetId());
         redisTemplate.convertAndSend(key, JSON.toJSON(sendRtpItem));
     }
 
@@ -545,7 +545,7 @@ public class RedisCatchStorageImpl implements IRedisCatchStorage {
         if (serverId != null) {
             redisTemplate.opsForZSet().remove(key, serverId);
         }
-        // 获取得分最高的，也是最后更新时间到redis的wvp，这样可以避免读取到离线的wvp，同时时间最新也一定程度代表最健康的
+        // Get the wvp with the highest score and the last updated time to redis. This can avoid reading offline wvp. At the same time, the latest time also represents the healthiest one to a certain extent.
         Set<Object> range = redisTemplate.opsForZSet().reverseRange(key, 0, 0);
         if (range == null || range.isEmpty()) {
             return null;
@@ -558,12 +558,12 @@ public class RedisCatchStorageImpl implements IRedisCatchStorage {
         if (deviceList == null || deviceList.isEmpty()) {
             return;
         }
-        // 使用 SessionCallback 保证批量操作在同一个连接中执行
+        // Use SessionCallback Ensure that batch operations are executed on the same connection
         SessionCallback<Boolean> sessionCallback = new SessionCallback<>() {
             @Override
-            // 注意：这里直接写死 String, String 覆盖接口的 K, V
+            // Note: write it down directly here String, String Covering the interface K, V
             public Boolean execute(@NonNull RedisOperations operations) {
-                // 1. 批量添加心跳数据到列表尾部
+                // 1. Add heartbeat data to the end of the list in batches
                 for (Device device : deviceList) {
                     Long timestamp = device.getKeepaliveTimeStamp();
                     if (timestamp == null) {
@@ -571,11 +571,11 @@ public class RedisCatchStorageImpl implements IRedisCatchStorage {
                     }
                     String key = VideoManagerConstants.DEVICE_KEEPALIVE_PREFIX + device.getDeviceId();
                     operations.opsForList().rightPush(key, timestamp);
-                    // 2. 截取列表，只保留最新 N 条
+                    // 2. Intercept the list and keep only the latest N items
                     if (userSetting.getDeviceKeepaliveTimeMaxCount() > 0) {
                         operations.opsForList().trim(key, -userSetting.getDeviceKeepaliveTimeMaxCount(), -1);
                     }
-                    // 3. 设置过期时间，ttlHours <= 0 则跳过
+                    // 3. Set expiration time，ttlHours <= 0 then skip
                     if (userSetting.getDeviceKeepaliveTimeTtlHours() > 0) {
                         operations.expire(key, Duration.ofHours(userSetting.getDeviceKeepaliveTimeTtlHours()));
                     }
@@ -605,12 +605,12 @@ public class RedisCatchStorageImpl implements IRedisCatchStorage {
         if (deviceList == null || deviceList.isEmpty()) {
             return;
         }
-        // 使用 SessionCallback 保证批量操作在同一个连接中执行
+        // Use SessionCallback Ensure that batch operations are executed on the same connection
         SessionCallback<Boolean> sessionCallback = new SessionCallback<>() {
             @Override
-            // 注意：这里直接写死 String, String 覆盖接口的 K, V
+            // Note: write it down directly here String, String Covering the interface K, V
             public Boolean execute(@NonNull RedisOperations operations) {
-                // 1. 批量添加注册数据到列表尾部
+                // 1. Add registration data to the end of the list in batches
                 for (Device device : deviceList) {
                     Long timestamp = device.getRegisterTimeStamp();
                     if (timestamp == null) {
@@ -618,11 +618,11 @@ public class RedisCatchStorageImpl implements IRedisCatchStorage {
                     }
                     String key = VideoManagerConstants.DEVICE_REGISTER_PREFIX + device.getDeviceId();
                     operations.opsForList().rightPush(key, timestamp);
-                    // 2. 截取列表，只保留最新 N 条
+                    // 2. Intercept the list and keep only the latest N items
                     if (userSetting.getDeviceRegisterTimeMaxCount() > 0) {
                         operations.opsForList().trim(key, -userSetting.getDeviceRegisterTimeMaxCount(), -1);
                     }
-                    // 3. 设置过期时间，ttlHours <= 0 则跳过
+                    // 3. Set expiration time，ttlHours <= 0 then skip
                     if (userSetting.getDeviceRegisterTimeTtlHours() > 0) {
                         operations.expire(key, Duration.ofHours(userSetting.getDeviceRegisterTimeTtlHours()));
                     }

@@ -12,67 +12,67 @@ import java.nio.ByteBuffer;
 @Setter
 @Getter
 @Slf4j
-@Schema(description = "位置基本信息")
+@Schema(description = "Basic location information")
 public class JTPositionBaseInfo {
 
     /**
-     * 报警标志
+     * Alarm sign
      */
-    @Schema(description = "报警标志")
+    @Schema(description = "Alarm sign")
     private JTAlarmSign alarmSign;
 
     /**
-     * 状态
+     * Status
      */
-    @Schema(description = "状态")
+    @Schema(description = "Status")
     private JTStatus status;
 
     /**
-     * 经度
+     * longitude
      */
-    @Schema(description = "经度")
+    @Schema(description = "longitude")
     private Double longitude;
 
     /**
-     * 纬度
+     * Latitude
      */
-    @Schema(description = "纬度")
+    @Schema(description = "Latitude")
     private Double latitude;
 
     /**
-     * 高程
+     * elevation
      */
-    @Schema(description = "高程")
+    @Schema(description = "elevation")
     private Integer altitude;
 
     /**
-     * 速度
+     * speed
      */
-    @Schema(description = "速度")
+    @Schema(description = "speed")
     private Integer speed;
 
     /**
-     * 方向
+     * direction
      */
-    @Schema(description = "方向")
+    @Schema(description = "direction")
     private Integer direction;
 
     /**
-     * 时间
+     * time
      */
-    @Schema(description = "时间")
+    @Schema(description = "time")
     private String time;
 
     /**
-     * 视频报警
+     * Video alarm
      */
-    @Schema(description = "视频报警")
+    @Schema(description = "Video alarm")
     private JTVideoAlarm videoAlarm;
 
     public static JTPositionBaseInfo decode(ByteBuf buf) {
         JTPositionBaseInfo positionInfo = new JTPositionBaseInfo();
         if (buf.readableBytes() < 17) {
-            log.error("[位置基本信息] 解码失败，长度不足: {}", buf.readableBytes());
+            log.error("[Basic location information] Decoding failed, insufficient length: {}", buf.readableBytes());
             return positionInfo;
         }
         positionInfo.setAlarmSign(new JTAlarmSign(buf.readUnsignedInt()));
@@ -92,27 +92,27 @@ public class JTPositionBaseInfo {
 
 
     public String toSimpleString() {
-        return "简略位置汇报信息： " +
-                " \n 经度：" + longitude +
-                " \n 纬度：" + latitude +
-                " \n 高程： " + altitude +
-                " \n 速度： " + speed +
-                " \n 方向： " + direction +
-                " \n 时间： " + time +
+        return "Brief location reporting information： " +
+                " \n longitude：" + longitude +
+                " \n Latitude：" + latitude +
+                " \n elevation： " + altitude +
+                " \n speed： " + speed +
+                " \n direction： " + direction +
+                " \n time： " + time +
                 " \n";
     }
 
     @Override
     public String toString() {
-        return "位置汇报信息： " +
-                " \n 报警标志：" + alarmSign.toString() +
-                " \n 状态：" + status.toString() +
-                " \n 经度：" + longitude +
-                " \n 纬度：" + latitude +
-                " \n 高程： " + altitude +
-                " \n 速度： " + speed +
-                " \n 方向： " + direction +
-                " \n 时间： " + time +
+        return "Location reporting information： " +
+                " \n Alarm sign：" + alarmSign.toString() +
+                " \n Status：" + status.toString() +
+                " \n longitude：" + longitude +
+                " \n Latitude：" + latitude +
+                " \n elevation： " + altitude +
+                " \n speed： " + speed +
+                " \n direction： " + direction +
+                " \n time： " + time +
                 " \n";
     }
 }

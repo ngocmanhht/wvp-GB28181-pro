@@ -6,18 +6,18 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * 违规行驶时段范围 ,精确到分
+ * The range of illegal driving periods, accurate to the minute
  */
 @Setter
 @Getter
 public class JTIllegalDrivingPeriods implements JTDeviceSubConfig{
     /**
-     * 违规行驶时段-开始时间 HH:mm
+     * illegal driving period-start time HH:mm
      */
     private String startTime;
 
     /**
-     * 违规行驶时段-结束时间 HH:mm
+     * illegal driving period-end time HH:mm
      */
     private String endTime;
 

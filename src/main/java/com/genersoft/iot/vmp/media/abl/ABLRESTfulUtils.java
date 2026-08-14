@@ -47,12 +47,12 @@ public class ABLRESTfulUtils {
                 readTimeOut = 10;
             }
             OkHttpClient.Builder httpClientBuilder = new OkHttpClient.Builder();
-            //todo 暂时写死超时时间 均为5s
-            // 设置连接超时时间
+            //todo The timeout time is temporarily programmed to be5s
+            // Set connection timeout
             httpClientBuilder.connectTimeout(8,TimeUnit.SECONDS);
-            // 设置读取超时时间
+            // Set read timeout
             httpClientBuilder.readTimeout(readTimeOut,TimeUnit.SECONDS);
-            // 设置连接池
+            // Set up connection pool
             httpClientBuilder.connectionPool(new ConnectionPool(16, 5, TimeUnit.MINUTES));
             client = httpClientBuilder.build();
         }
@@ -104,19 +104,19 @@ public class ABLRESTfulUtils {
                         Objects.requireNonNull(response.body()).close();
                     }
                 }catch (IOException e) {
-                    logger.error(String.format("[ %s ]请求失败: %s", url, e.getMessage()));
+                    logger.error(String.format("[ %s ]Request failed: %s", url, e.getMessage()));
 
                     if(e instanceof SocketTimeoutException){
-                        //读取超时超时异常
-                        logger.error(String.format("读取ABL数据超时失败: %s, %s", url, e.getMessage()));
+                        //Read timeout exception
+                        logger.error(String.format("Reading ABL data timed out and failed: %s, %s", url, e.getMessage()));
                     }
                     if(e instanceof ConnectException){
-                        //判断连接异常，我这里是报Failed to connect to 10.7.5.144
-                        logger.error(String.format("连接ABL连接失败: %s, %s", url, e.getMessage()));
+                        //It is determined that the connection is abnormal. Here is the report.Failed to connect to 10.7.5.144
+                        logger.error(String.format("Failed to connect ABL connection: %s, %s", url, e.getMessage()));
                     }
 
                 }catch (Exception e){
-                    logger.error(String.format("访问ABL失败: %s, %s", url, e.getMessage()));
+                    logger.error(String.format("Failed to access ABL: %s, %s", url, e.getMessage()));
                 }
             }else {
                 client.newCall(request).enqueue(new Callback(){
@@ -128,7 +128,7 @@ public class ABLRESTfulUtils {
                                 String responseStr = Objects.requireNonNull(response.body()).string();
                                 callback.run(responseStr);
                             } catch (IOException e) {
-                                logger.error(String.format("[ %s ]请求失败: %s", url, e.getMessage()));
+                                logger.error(String.format("[ %s ]Request failed: %s", url, e.getMessage()));
                             }
 
                         }else {
@@ -139,15 +139,15 @@ public class ABLRESTfulUtils {
 
                     @Override
                     public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                        logger.error(String.format("连接ABL失败: %s, %s", call.request().toString(), e.getMessage()));
+                        logger.error(String.format("Failed to connect to ABL: %s, %s", call.request().toString(), e.getMessage()));
 
                         if(e instanceof SocketTimeoutException){
-                            //读取超时超时异常
-                            logger.error(String.format("读取ABL数据失败: %s, %s", call.request().toString(), e.getMessage()));
+                            //Read timeout exception
+                            logger.error(String.format("Failed to read ABL data: %s, %s", call.request().toString(), e.getMessage()));
                         }
                         if(e instanceof ConnectException){
-                            //判断连接异常，我这里是报Failed to connect to 10.7.5.144
-                            logger.error(String.format("连接ABL失败: %s, %s", call.request().toString(), e.getMessage()));
+                            //It is determined that the connection is abnormal. Here is the report.Failed to connect to 10.7.5.144
+                            logger.error(String.format("Failed to connect to ABL: %s, %s", call.request().toString(), e.getMessage()));
                         }
                     }
                 });
@@ -178,7 +178,7 @@ public class ABLRESTfulUtils {
             }
         }
         String url = stringBuffer.toString();
-        logger.info("[访问ABL]： {}", url);
+        logger.info("[visitABL]： {}", url);
         Request request = new Request.Builder()
                 .get()
                 .url(url)
@@ -195,10 +195,10 @@ public class ABLRESTfulUtils {
                 Objects.requireNonNull(response.body()).close();
             }
         } catch (ConnectException e) {
-            logger.error(String.format("连接ABL失败: %s, %s", e.getCause().getMessage(), e.getMessage()));
-            logger.info("请检查media配置并确认ABL已启动...");
+            logger.error(String.format("Failed to connect to ABL: %s, %s", e.getCause().getMessage(), e.getMessage()));
+            logger.info("Please check media configuration and confirm ABL is started...");
         }catch (IOException e) {
-            logger.error(String.format("[ %s ]请求失败: %s", url, e.getMessage()));
+            logger.error(String.format("[ %s ]Request failed: %s", url, e.getMessage()));
         }
         return result;
     }
@@ -230,7 +230,7 @@ public class ABLRESTfulUtils {
                     File snapFolder = new File(targetPath);
                     if (!snapFolder.exists()) {
                         if (!snapFolder.mkdirs()) {
-                            logger.warn("{}路径创建失败", snapFolder.getAbsolutePath());
+                            logger.warn("{}Path creation failed", snapFolder.getAbsolutePath());
                         }
                     }
                     File snapFile = new File(targetPath + File.separator + fileName);
@@ -242,14 +242,14 @@ public class ABLRESTfulUtils {
                 }
                 return Objects.requireNonNull(response.body()).bytes();
             } else {
-                logger.error(String.format("[ %s ]请求失败: %s %s", url, response.code(), response.message()));
+                logger.error(String.format("[ %s ]Request failed: %s %s", url, response.code(), response.message()));
             }
             Objects.requireNonNull(response.body()).close();
         } catch (ConnectException e) {
-            logger.error(String.format("连接ABL失败: %s, %s", e.getCause().getMessage(), e.getMessage()));
-            logger.info("请检查media配置并确认ABL已启动...");
+            logger.error(String.format("Failed to connect to ABL: %s, %s", e.getCause().getMessage(), e.getMessage()));
+            logger.info("Please check media configuration and confirm ABL is started...");
         } catch (IOException e) {
-            logger.error(String.format("[ %s ]请求失败: %s", url, e.getMessage()));
+            logger.error(String.format("[ %s ]Request failed: %s", url, e.getMessage()));
         }
         return null;
     }
@@ -273,7 +273,7 @@ public class ABLRESTfulUtils {
                     File snapFolder = new File(targetPath);
                     if (!snapFolder.exists()) {
                         if (!snapFolder.mkdirs()) {
-                            logger.warn("{}路径创建失败", snapFolder.getAbsolutePath());
+                            logger.warn("{}Path creation failed", snapFolder.getAbsolutePath());
                         }
                     }
                     File snapFile = new File(targetPath + File.separator + fileName);
@@ -283,17 +283,17 @@ public class ABLRESTfulUtils {
                     outStream.flush();
                     outStream.close();
                 } else {
-                    logger.error(String.format("[ %s ]请求失败: %s %s", url, response.code(), response.message()));
+                    logger.error(String.format("[ %s ]Request failed: %s %s", url, response.code(), response.message()));
                 }
             } else {
-                logger.error(String.format("[ %s ]请求失败: %s %s", url, response.code(), response.message()));
+                logger.error(String.format("[ %s ]Request failed: %s %s", url, response.code(), response.message()));
             }
             Objects.requireNonNull(response.body()).close();
         } catch (ConnectException e) {
-            logger.error(String.format("连接ABL失败: %s, %s", e.getCause().getMessage(), e.getMessage()));
-            logger.info("请检查media配置并确认ABL已启动...");
+            logger.error(String.format("Failed to connect to ABL: %s, %s", e.getCause().getMessage(), e.getMessage()));
+            logger.info("Please check media configuration and confirm ABL is started...");
         } catch (IOException e) {
-            logger.error(String.format("[ %s ]请求失败: %s", url, e.getMessage()));
+            logger.error(String.format("[ %s ]Request failed: %s", url, e.getMessage()));
         }
     }
 
@@ -304,10 +304,10 @@ public class ABLRESTfulUtils {
         param.put("stream_id", stream);
         param.put("payload", payload);
         if (isJtt) {
-            // 1 PS 国标gb28181, 默认为1、
-            // 2 ES 视频支持 H246\H265，音频只支持G711A、G711U 、AAC
-            // 3 XHB (一家公司的打包格式) 只支持视频，音频不能加入打包
-            // 4 、Jt1078（2016版本）码流接入
+            // 1 PS National standard gb28181, the default is1、
+            // 2 ES Video supports H246\H265, audio only supportsG711A、G711U 、AAC
+            // 3 XHB (A company’s packaging format) Only supports video, audio cannot be added to the package
+            // 4 、Jt1078（2016version) code stream access
             param.put("RtpPayloadDataType", 4);
             param.put("jtt1078_version", "2019");
         }
@@ -432,7 +432,7 @@ public class ABLRESTfulUtils {
         try {
             url = URLEncoder.encode(url, "UTF-8");
         } catch (UnsupportedEncodingException e) {
-            throw new ControllerException(ErrorCode.ERROR100.getCode(),"url编码失败");
+            throw new ControllerException(ErrorCode.ERROR100.getCode(),"urlEncoding failed");
         }
 
         Map<String, Object> param =  new HashMap<>();
@@ -441,7 +441,7 @@ public class ABLRESTfulUtils {
         param.put("url", url);
         param.put("disableAudio", disableAudio? "1" : "0");
         param.put("enable_mp4", enableMp4 ? "1" : "0");
-        // TODO rtpType timeout 尚不支持
+        // TODO rtpType timeout Not supported yet
         String response = sendGet(mediaServer, "addStreamProxy", param);
         ABLResult ablResult = JSON.parseObject(response, ABLResult.class);
         if (ablResult == null) {
@@ -455,7 +455,7 @@ public class ABLRESTfulUtils {
         try {
             url = URLEncoder.encode(url, "UTF-8");
         } catch (UnsupportedEncodingException e) {
-            throw new ControllerException(ErrorCode.ERROR100.getCode(),"url编码失败");
+            throw new ControllerException(ErrorCode.ERROR100.getCode(),"urlEncoding failed");
         }
         Map<String, Object> param =  new HashMap<>();
         param.put("app", app);
@@ -463,7 +463,7 @@ public class ABLRESTfulUtils {
         param.put("url", url);
         param.put("disableAudio", disableAudio);
         param.put("enable_mp4", enableMp4);
-        // TODO rtpType timeout 尚不支持
+        // TODO rtpType timeout Not supported yet
         String response = sendGet(mediaServer, "addFFmpegProxy", param);
         ABLResult ablResult = JSON.parseObject(response, ABLResult.class);
         if (ablResult == null) {

@@ -19,7 +19,7 @@ import javax.sip.header.CallIdHeader;
 import java.text.ParseException;
 
 /**
- * 点播处理
+ * on demand processing
  */
 public interface IPlayService {
 

@@ -11,38 +11,38 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 /**
- * Hook返回的内容
+ * HookReturned content
  */
 @Data
 public class HookData {
     /**
-     * 应用名
+     * Application name
      */
     private String app;
     /**
-     * 流ID
+     * flowID
      */
     private String stream;
     /**
-     * 流媒体节点
+     * Streaming media node
      */
     private MediaServer mediaServer;
     /**
-     * 协议
+     * Agreement
      */
     private String schema;
 
     /**
-     * 流信息
+     * flow information
      */
     private MediaInfo mediaInfo;
 
     /**
-     * 录像信息
+     * Video information
      */
     private RecordInfo recordInfo;
 
-    @Schema(description = "推流的额外参数")
+    @Schema(description = "Additional parameters for push streaming")
     private String params;
     public static HookData getInstance(MediaEvent mediaEvent) {
         HookData hookData = new HookData();

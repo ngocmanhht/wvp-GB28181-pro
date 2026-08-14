@@ -22,7 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 设置终端参数
+ * Set terminal parameters
  */
 @Getter
 @MsgId(id = "8103")
@@ -50,7 +50,7 @@ public class J8103 extends Rs {
                     fieldConfigAttributeMap.put(field, configAttribute);
                 }
             }catch (InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
-                log.error("[设置终端参数 ] 编码失败", e );
+                log.error("[Set terminal parameters ] Encoding failed", e );
             }
 
         }
@@ -107,7 +107,7 @@ public class J8103 extends Rs {
                             continue;
                     }
                 }catch (Exception e) {
-                    log.error("[设置终端参数 ] 编码失败", e );
+                    log.error("[Set terminal parameters ] Encoding failed", e );
                 }
             }
         }

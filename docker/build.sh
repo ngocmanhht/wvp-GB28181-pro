@@ -1,79 +1,79 @@
 #!/bin/bash
 
-# 获取当前日期作为标签（格式：YYYYMMDD）
+# Get the current date as label (format：YYYYMMDD）
 date_tag=$(date +%Y%m%d)
 
-# 切换到脚本所在目录的上一级目录作为工作目录
+# Switch to the directory one level above the directory where the script is located as the working directory
 cd "$(dirname "$0")/.." || {
-    echo "错误：无法切换到上级目录"
+    echo "Error: Unable to switch to parent directory"
     exit 1
 }
-echo "已切换工作目录到：$(pwd)"
+echo "Working directory has been changed to：$(pwd)"
 
-# 检查私有仓库环境变量
+# Check private repository environment variables
 if [ -z "$DOCKER_REGISTRY" ]; then
-    echo "未设置DOCKER_REGISTRY环境变量"
-    read -p "请输入私有Docker注册库地址（如不推送请留空）: " input_registry
+    echo "DOCKER_REGISTRY environment variable not set"
+    read -p "Please enter the private Docker registration library address (please leave it blank if you do not want to push it)）: " input_registry
     docker_registry="$input_registry"
 else
     docker_registry="$DOCKER_REGISTRY"
 fi
 
-# 定义要构建的镜像和对应的Dockerfile路径（相对当前工作目录）
+# Define the image to be built and the corresponding Dockerfile path (relative to the current working directory）
 images=(
     "wvp-service:docker/wvp/Dockerfile"
     "wvp-nginx:docker/nginx/Dockerfile"
 )
 
-# 构建镜像的函数
+# Function to build the image
 build_image() {
     local image_name="$1"
     local dockerfile_path="$2"
     
-    # 检查Dockerfile是否存在
+    # Check if Dockerfile exists
     if [ ! -f "$dockerfile_path" ]; then
-        echo "错误：未找到Dockerfile - \"$dockerfile_path\"，跳过构建"
+        echo "Error: not foundDockerfile - \"$dockerfile_path\"，Skip build"
         return 1
     fi
     
-    # 构建镜像
+    # Build image
     local full_image_name="${image_name}:${date_tag}"
     echo
     echo "=============================================="
-    echo "开始构建镜像：${full_image_name}"
-    echo "Dockerfile路径：${dockerfile_path}"
+    echo "Start building the image：${full_image_name}"
+    echo "Dockerfilepath：${dockerfile_path}"
     
     docker build -t "${full_image_name}" -f "${dockerfile_path}" .
     if [ $? -ne 0 ]; then
-        echo "镜像${full_image_name}构建失败"
+        echo "mirror${full_image_name}Build failed"
         return 1
     fi
     
-    # 推送镜像（如果设置了仓库地址）
+    # Push the image (if the warehouse address is set）
     if [ -n "$docker_registry" ]; then
         local registry_image="${docker_registry}/${full_image_name}"
-        echo "给镜像打标签：${registry_image}"
+        echo "Tag the image：${registry_image}"
         docker tag "${full_image_name}" "${registry_image}"
         
-        echo "推送镜像到注册库"
+        echo "Push the image to the registry"
         docker push "${registry_image}"
         if [ $? -eq 0 ]; then
-            echo "镜像${registry_image}推送成功"
+            echo "mirror${registry_image}Push successful"
         else
-            echo "镜像${registry_image}推送失败"
+            echo "mirror${registry_image}Push failed"
         fi
     else
-        echo "未提供注册库地址，不执行推送"
+        echo "The registration library address is not provided and the push is not performed."
     fi
     echo "=============================================="
     echo
 }
 
-# 循环构建所有镜像
+# Build all images in a loop
 for item in "${images[@]}"; do
     IFS=':' read -r image_name dockerfile_path <<< "$item"
     build_image "$image_name" "$dockerfile_path"
 done
 
-echo "所有镜像处理完成"
+echo "All image processing completed"
 exit 0

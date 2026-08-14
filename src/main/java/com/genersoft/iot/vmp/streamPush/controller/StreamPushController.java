@@ -46,7 +46,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-@Tag(name  = "推流信息管理")
+@Tag(name  = "Push information management")
 @RestController
 @Slf4j
 @RequestMapping(value = "/api/push")
@@ -72,12 +72,12 @@ public class StreamPushController {
 
     @GetMapping(value = "/list")
     @ResponseBody
-    @Operation(summary = "推流列表查询", security = @SecurityRequirement(name = JwtUtils.HEADER))
-    @Parameter(name = "page", description = "当前页")
-    @Parameter(name = "count", description = "每页查询数量")
-    @Parameter(name = "query", description = "查询内容")
-    @Parameter(name = "pushing", description = "是否正在推流")
-    @Parameter(name = "mediaServerId", description = "流媒体ID")
+    @Operation(summary = "Push list query", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Parameter(name = "page", description = "Current page")
+    @Parameter(name = "count", description = "Number of queries per page")
+    @Parameter(name = "query", description = "Query content")
+    @Parameter(name = "pushing", description = "Whether streaming is being pushed")
+    @Parameter(name = "mediaServerId", description = "streaming mediaID")
     public PageInfo<StreamPush> list(@RequestParam(required = false)Integer page,
                                      @RequestParam(required = false)Integer count,
                                      @RequestParam(required = false)String query,
@@ -97,8 +97,8 @@ public class StreamPushController {
 
     @PostMapping(value = "/remove")
     @ResponseBody
-    @Operation(summary = "删除", security = @SecurityRequirement(name = JwtUtils.HEADER))
-    @Parameter(name = "id", description = "应用名", required = true)
+    @Operation(summary = "Delete", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Parameter(name = "id", description = "Application name", required = true)
     public void delete(int id){
         if (streamPushService.delete(id) <= 0){
             throw new ControllerException(ErrorCode.ERROR100);
@@ -109,70 +109,70 @@ public class StreamPushController {
     @ResponseBody
     public DeferredResult<ResponseEntity<WVPResult<Object>>> uploadChannelFile(@RequestParam(value = "file") MultipartFile file){
 
-        // 最多处理文件一个小时
+        // Process files for up to one hour
         DeferredResult<ResponseEntity<WVPResult<Object>>> result = new DeferredResult<>(60*60*1000L);
-        // 录像查询以channelId作为deviceId查询
+        // Video query uses channelId as deviceId query
         String key = DeferredResultHolder.UPLOAD_FILE_CHANNEL;
         String uuid = UUID.randomUUID().toString();
-        log.info("通道导入文件类型: {}",file.getContentType() );
+        log.info("Channel import file type: {}",file.getContentType() );
         if (file.isEmpty()) {
-            log.warn("通道导入文件为空");
+            log.warn("Channel import file is empty");
             WVPResult<Object> wvpResult = new WVPResult<>();
             wvpResult.setCode(-1);
-            wvpResult.setMsg("文件为空");
+            wvpResult.setMsg("File is empty");
             result.setResult(ResponseEntity.status(HttpStatus.BAD_REQUEST).body(wvpResult));
             return result;
         }
         if (file.getContentType() == null) {
             WVPResult<Object> wvpResult = new WVPResult<>();
             wvpResult.setCode(-1);
-            wvpResult.setMsg("无法识别文件类型");
+            wvpResult.setMsg("File type not recognized");
             result.setResult(ResponseEntity.status(HttpStatus.BAD_REQUEST).body(wvpResult));
             return result;
         }
-        // 同时只处理一个文件
+        // Only process one file at a time
         if (resultHolder.exist(key, null)) {
-            log.warn("已有导入任务正在执行");
+            log.warn("There is already an import task being executed");
             WVPResult<Object> wvpResult = new WVPResult<>();
             wvpResult.setCode(-1);
-            wvpResult.setMsg("已有导入任务正在执行");
+            wvpResult.setMsg("There is already an import task being executed");
             result.setResult(ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body(wvpResult));
             return result;
         }
 
         resultHolder.put(key, uuid, result);
         result.onTimeout(()->{
-            log.warn("通道导入超时，可能文件过大");
+            log.warn("Channel import timed out, the file may be too large");
             RequestMessage msg = new RequestMessage();
             msg.setKey(key);
             WVPResult<Object> wvpResult = new WVPResult<>();
             wvpResult.setCode(-1);
-            wvpResult.setMsg("导入超时，可能文件过大");
+            wvpResult.setMsg("Import timed out, the file may be too large");
             msg.setData(wvpResult);
             resultHolder.invokeAllResult(msg);
         });
-        //获取文件流
+        //Get file stream
         InputStream inputStream = null;
         try {
             String name = file.getName();
             inputStream = file.getInputStream();
         } catch (IOException e) {
-            log.error("未处理的异常 ", e);
+            log.error("unhandled exception ", e);
         }
         try {
-            //传入参数
+            //Pass in parameters
             ExcelReader excelReader = EasyExcel.read(inputStream, StreamPushExcelDto.class,
                     new StreamPushUploadFileHandler(streamPushService, mediaServerService.getDefaultMediaServer().getId(), (errorStreams, errorGBs)->{
-                        log.info("通道导入成功，存在重复App+Stream为{}个，存在国标ID为{}个", errorStreams.size(), errorGBs.size());
+                        log.info("Channel import successful, duplicates existApp+Streamfor{}, there is a national standard ID of{}a", errorStreams.size(), errorGBs.size());
                         RequestMessage msg = new RequestMessage();
                         msg.setKey(key);
                         WVPResult<Map<String, List<String>>> wvpResult = new WVPResult<>();
                         if (errorStreams.isEmpty() && errorGBs.isEmpty()) {
                             wvpResult.setCode(0);
-                            wvpResult.setMsg("成功");
+                            wvpResult.setMsg("success");
                         }else {
                             wvpResult.setCode(1);
-                            wvpResult.setMsg("导入成功。但是存在重复数据");
+                            wvpResult.setMsg("Import successful. But there is duplicate data");
                             Map<String, List<String>> errorData = new HashMap<>();
                             errorData.put("gbId", errorGBs);
                             errorData.put("stream", errorStreams);
@@ -185,21 +185,21 @@ public class StreamPushController {
             excelReader.read(readSheet);
             excelReader.finish();
         }catch (ExcelDataConvertException e) {
-            log.error("通道导入失败：行： {}， 列： {}, 内容： {}", e.getRowIndex(), e.getColumnIndex(), e.getCellData().getStringValue());
+            log.error("Channel import failed: line： {}， Column： {}, content： {}", e.getRowIndex(), e.getColumnIndex(), e.getCellData().getStringValue());
             RequestMessage msg = new RequestMessage();
             msg.setKey(key);
             WVPResult<Object> wvpResult = new WVPResult<>();
             wvpResult.setCode(ErrorCode.ERROR100.getCode());
-            wvpResult.setMsg("数据异常: " + e.getRowIndex() +"行" + e.getColumnIndex() + "列, 内容：" + e.getCellData().getStringValue() );
+            wvpResult.setMsg("Data anomaly: " + e.getRowIndex() +"OK" + e.getColumnIndex() + "column, content：" + e.getCellData().getStringValue() );
             msg.setData(wvpResult);
             resultHolder.invokeAllResult(msg);
         }catch (Exception e) {
-            log.warn("通道导入失败：", e);
+            log.warn("Channel import failed：", e);
             RequestMessage msg = new RequestMessage();
             msg.setKey(key);
             WVPResult<Object> wvpResult = new WVPResult<>();
             wvpResult.setCode(ErrorCode.ERROR100.getCode());
-            wvpResult.setMsg("通道导入失败: " + e.getMessage() );
+            wvpResult.setMsg("Channel import failed: " + e.getMessage() );
             msg.setData(wvpResult);
             resultHolder.invokeAllResult(msg);
         }
@@ -209,19 +209,19 @@ public class StreamPushController {
     }
 
     /**
-     * 添加推流信息
-     * @param stream 推流信息
+     * Add push information
+     * @param stream push information
      * @return
      */
     @PostMapping(value = "/add")
     @ResponseBody
-    @Operation(summary = "添加推流信息", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Operation(summary = "Add push information", security = @SecurityRequirement(name = JwtUtils.HEADER))
     public StreamPush add(@RequestBody StreamPush stream){
         if (ObjectUtils.isEmpty(stream.getGbId())) {
-            throw new ControllerException(ErrorCode.ERROR400.getCode(), "国标ID不可为空");
+            throw new ControllerException(ErrorCode.ERROR400.getCode(), "National standard ID cannot be empty");
         }
         if (ObjectUtils.isEmpty(stream.getApp()) && ObjectUtils.isEmpty(stream.getStream())) {
-            throw new ControllerException(ErrorCode.ERROR400.getCode(), "app或stream不可为空");
+            throw new ControllerException(ErrorCode.ERROR400.getCode(), "appor stream cannot be empty");
         }
         stream.setGbStatus("OFF");
         stream.setPushing(false);
@@ -235,10 +235,10 @@ public class StreamPushController {
 
     @PostMapping(value = "/update")
     @ResponseBody
-    @Operation(summary = "更新推流信息", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Operation(summary = "Update push information", security = @SecurityRequirement(name = JwtUtils.HEADER))
     public void update(@RequestBody StreamPush stream){
         if (ObjectUtils.isEmpty(stream.getId())) {
-            throw new ControllerException(ErrorCode.ERROR400.getCode(), "ID不可为空");
+            throw new ControllerException(ErrorCode.ERROR400.getCode(), "IDCannot be empty");
         }
         if (!streamPushService.update(stream)) {
             throw new ControllerException(ErrorCode.ERROR100);
@@ -247,7 +247,7 @@ public class StreamPushController {
 
     @DeleteMapping(value = "/batchRemove")
     @ResponseBody
-    @Operation(summary = "删除多个推流", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Operation(summary = "Delete multiple streams", security = @SecurityRequirement(name = JwtUtils.HEADER))
     public void batchStop(@RequestBody BatchRemoveParam ids){
         if(ids.getIds().isEmpty()) {
             return;
@@ -257,18 +257,18 @@ public class StreamPushController {
 
     @GetMapping(value = "/start")
     @ResponseBody
-    @Operation(summary = "开始播放", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Operation(summary = "Start playing", security = @SecurityRequirement(name = JwtUtils.HEADER))
     public DeferredResult<WVPResult<StreamContent>> start(HttpServletRequest request, Integer id){
-        Assert.notNull(id, "推流ID不可为NULL");
+        Assert.notNull(id, "The push ID cannot beNULL");
         DeferredResult<WVPResult<StreamContent>> result = new DeferredResult<>(userSetting.getPlayTimeout().longValue());
         result.onTimeout(()->{
-            WVPResult<StreamContent> fail = WVPResult.fail(ErrorCode.ERROR100.getCode(), "等待推流超时");
+            WVPResult<StreamContent> fail = WVPResult.fail(ErrorCode.ERROR100.getCode(), "Timeout waiting for push stream");
             result.setResult(fail);
         });
         streamPushPlayService.start(id, (code, msg, streamInfo) -> {
             if (code == 0 && streamInfo != null) {
                 if (userSetting.getUseSourceIpAsStreamIp()) {
-                    streamInfo=streamInfo.clone();//深拷贝
+                    streamInfo=streamInfo.clone();//deep copy
                     String host;
                     try {
                         URL url=new URL(request.getRequestURL().toString());
@@ -287,7 +287,7 @@ public class StreamPushController {
 
     @GetMapping(value = "/forceClose")
     @ResponseBody
-    @Operation(summary = "强制停止推流", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Operation(summary = "Forcibly stop streaming", security = @SecurityRequirement(name = JwtUtils.HEADER))
     public void stop(String app, String stream){
 
         streamPushPlayService.stop(app, stream);

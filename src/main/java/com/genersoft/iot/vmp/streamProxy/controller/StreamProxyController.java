@@ -34,9 +34,9 @@ import java.util.Map;
 
 @SuppressWarnings("rawtypes")
 /**
- * 拉流代理接口
+ * Pull proxy interface
  */
-@Tag(name = "拉流代理", description = "")
+@Tag(name = "Streaming agent", description = "")
 @RestController
 @Slf4j
 @RequestMapping(value = "/api/proxy")
@@ -55,12 +55,12 @@ public class StreamProxyController {
     private UserSetting userSetting;
 
 
-    @Operation(summary = "分页查询流代理", security = @SecurityRequirement(name = JwtUtils.HEADER))
-    @Parameter(name = "page", description = "当前页")
-    @Parameter(name = "count", description = "每页查询数量")
-    @Parameter(name = "query", description = "查询内容")
-    @Parameter(name = "pulling", description = "是否正在拉流")
-    @Parameter(name = "mediaServerId", description = "流媒体ID")
+    @Operation(summary = "Paginated query flow proxy", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Parameter(name = "page", description = "Current page")
+    @Parameter(name = "count", description = "Number of queries per page")
+    @Parameter(name = "query", description = "Query content")
+    @Parameter(name = "pulling", description = "Is streaming")
+    @Parameter(name = "mediaServerId", description = "streaming mediaID")
     @GetMapping(value = "/list")
     @ResponseBody
     public PageInfo<StreamProxy> list(@RequestParam(required = false)Integer page,
@@ -78,9 +78,9 @@ public class StreamProxyController {
         return streamProxyService.getAll(page, count, query, pulling, mediaServerId);
     }
 
-    @Operation(summary = "查询流代理", security = @SecurityRequirement(name = JwtUtils.HEADER))
-    @Parameter(name = "app", description = "应用名")
-    @Parameter(name = "stream", description = "流Id")
+    @Operation(summary = "Query Streaming Agent", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Parameter(name = "app", description = "Application name")
+    @Parameter(name = "stream", description = "flowId")
     @GetMapping(value = "/one")
     @ResponseBody
     public StreamProxy one(String app, String stream){
@@ -88,13 +88,13 @@ public class StreamProxyController {
         return streamProxyService.getStreamProxyByAppAndStream(app, stream);
     }
 
-    @Operation(summary = "新增代理", security = @SecurityRequirement(name = JwtUtils.HEADER), parameters = {
-            @Parameter(name = "param", description = "代理参数", required = true),
+    @Operation(summary = "Add new agent", security = @SecurityRequirement(name = JwtUtils.HEADER), parameters = {
+            @Parameter(name = "param", description = "proxy parameters", required = true),
     })
     @PostMapping(value = "/add")
     @ResponseBody
     public StreamProxy add(@RequestBody StreamProxy param){
-        log.info("添加代理： " + JSONObject.toJSONString(param));
+        log.info("Add proxy： " + JSONObject.toJSONString(param));
         if (ObjectUtils.isEmpty(param.getRelatesMediaServerId())) {
             param.setRelatesMediaServerId(null);
         }
@@ -109,15 +109,15 @@ public class StreamProxyController {
         return param;
     }
 
-    @Operation(summary = "更新代理", security = @SecurityRequirement(name = JwtUtils.HEADER), parameters = {
-            @Parameter(name = "param", description = "代理参数", required = true),
+    @Operation(summary = "update agent", security = @SecurityRequirement(name = JwtUtils.HEADER), parameters = {
+            @Parameter(name = "param", description = "proxy parameters", required = true),
     })
     @PostMapping(value = "/update")
     @ResponseBody
     public StreamProxy update(@RequestBody StreamProxy param){
-        log.info("更新代理： " + JSONObject.toJSONString(param));
+        log.info("update agent： " + JSONObject.toJSONString(param));
         if (param.getId() == 0) {
-            throw new ControllerException(ErrorCode.ERROR400.getCode(), "缺少代理信息的ID");
+            throw new ControllerException(ErrorCode.ERROR400.getCode(), "Missing agent informationID");
         }
         if (ObjectUtils.isEmpty(param.getRelatesMediaServerId())) {
             param.setRelatesMediaServerId(null);
@@ -131,27 +131,27 @@ public class StreamProxyController {
 
     @GetMapping(value = "/ffmpeg_cmd/list")
     @ResponseBody
-    @Operation(summary = "获取ffmpeg.cmd模板", security = @SecurityRequirement(name = JwtUtils.HEADER))
-    @Parameter(name = "mediaServerId", description = "流媒体ID", required = true)
+    @Operation(summary = "Get ffmpeg.cmd template", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Parameter(name = "mediaServerId", description = "streaming mediaID", required = true)
     public Map<String, String> getFFmpegCMDs(@RequestParam String mediaServerId){
-        log.debug("获取节点[ {} ]ffmpeg.cmd模板", mediaServerId );
+        log.debug("Get node[ {} ]ffmpeg.cmdTemplate", mediaServerId );
 
         MediaServer mediaServerItem = mediaServerService.getOne(mediaServerId);
         if (mediaServerItem == null) {
-            throw new ControllerException(ErrorCode.ERROR100.getCode(), "流媒体： " + mediaServerId + "未找到");
+            throw new ControllerException(ErrorCode.ERROR100.getCode(), "streaming media： " + mediaServerId + "not found");
         }
         return streamProxyService.getFFmpegCMDs(mediaServerItem);
     }
 
     @DeleteMapping(value = "/del")
     @ResponseBody
-    @Operation(summary = "移除代理", security = @SecurityRequirement(name = JwtUtils.HEADER))
-    @Parameter(name = "app", description = "应用名", required = true)
-    @Parameter(name = "stream", description = "流id", required = true)
+    @Operation(summary = "Remove proxy", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Parameter(name = "app", description = "Application name", required = true)
+    @Parameter(name = "stream", description = "flowid", required = true)
     public void del(@RequestParam String app, @RequestParam String stream){
-        log.info("移除代理： " + app + "/" + stream);
+        log.info("Remove proxy： " + app + "/" + stream);
         if (app == null || stream == null) {
-            throw new ControllerException(ErrorCode.ERROR400.getCode(), app == null ?"app不能为null":"stream不能为null");
+            throw new ControllerException(ErrorCode.ERROR400.getCode(), app == null ?"appcannot benull":"streamcannot benull");
         }else {
             streamProxyService.delteByAppAndStream(app, stream);
         }
@@ -159,21 +159,21 @@ public class StreamProxyController {
 
     @DeleteMapping(value = "/delete")
     @ResponseBody
-    @Operation(summary = "移除代理", security = @SecurityRequirement(name = JwtUtils.HEADER))
-    @Parameter(name = "id", description = "代理ID", required = true)
+    @Operation(summary = "Remove proxy", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Parameter(name = "id", description = "agentID", required = true)
     public void delte(int id){
-        log.info("移除代理： {}", id);
+        log.info("Remove proxy： {}", id);
         streamProxyService.delete(id);
     }
 
     @GetMapping(value = "/start")
     @ResponseBody
-    @Operation(summary = "播放代理", security = @SecurityRequirement(name = JwtUtils.HEADER))
-    @Parameter(name = "id", description = "代理Id", required = true)
+    @Operation(summary = "play agent", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Parameter(name = "id", description = "agentId", required = true)
     public DeferredResult<WVPResult<StreamContent>> start(HttpServletRequest request, int id){
-        log.info("播放代理： {}", id);
+        log.info("play agent： {}", id);
         StreamProxy streamProxy = streamProxyService.getStreamProxy(id);
-        Assert.notNull(streamProxy, "代理信息不存在");
+        Assert.notNull(streamProxy, "Agent information does not exist");
 
         DeferredResult<WVPResult<StreamContent>> result = new DeferredResult<>(userSetting.getPlayTimeout().longValue());
 
@@ -182,7 +182,7 @@ public class StreamProxyController {
                 WVPResult<StreamContent> wvpResult = WVPResult.success();
                 if (streamInfo != null) {
                     if (userSetting.getUseSourceIpAsStreamIp()) {
-                        streamInfo=streamInfo.clone();//深拷贝
+                        streamInfo=streamInfo.clone();//deep copy
                         String host;
                         try {
                             URL url=new URL(request.getRequestURL().toString());
@@ -214,10 +214,10 @@ public class StreamProxyController {
 
     @GetMapping(value = "/stop")
     @ResponseBody
-    @Operation(summary = "停止播放", security = @SecurityRequirement(name = JwtUtils.HEADER))
-    @Parameter(name = "id", description = "代理Id", required = true)
+    @Operation(summary = "Stop playing", security = @SecurityRequirement(name = JwtUtils.HEADER))
+    @Parameter(name = "id", description = "agentId", required = true)
     public void stop(int id){
-        log.info("停止播放： {}", id);
+        log.info("Stop playing： {}", id);
         streamProxyPlayService.stop(id);
     }
 }

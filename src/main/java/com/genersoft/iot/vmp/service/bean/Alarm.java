@@ -11,40 +11,40 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-@Schema(description = "报警信息")
+@Schema(description = "Alarm information")
 public class Alarm {
 
-    @Schema(description = "数据库id")
+    @Schema(description = "databaseid")
     private Long id;
 
-    @Schema(description = "关联通道的数据库id")
+    @Schema(description = "Database of associated channelsid")
     private int channelId;
 
-    @Schema(description = "关联通道国标编号")
+    @Schema(description = "Associated channel national standard number")
     private String channelDeviceId;
 
-    @Schema(description = "关联通道国标名称")
+    @Schema(description = "National standard name of associated channel")
     private String channelName;
 
-    @Schema(description = "报警描述")
+    @Schema(description = "Alarm description")
     private String description;
 
-    @Schema(description = "报警快照路径")
+    @Schema(description = "Alarm snapshot path")
     private String snapPath;
 
-    @Schema(description = "报警录像路径")
+    @Schema(description = "Alarm recording path")
     private String recordPath;
 
-    @Schema(description = "报警附带的经度")
+    @Schema(description = "The longitude attached to the alarm")
     private Double longitude;
 
-    @Schema(description = "报警附带的纬度")
+    @Schema(description = "Latitude attached to alarm")
     private Double latitude;
 
-    @Schema(description = "报警类别")
+    @Schema(description = "Alarm category")
     private AlarmType alarmType;
 
-    @Schema(description = "报警时间")
+    @Schema(description = "Alarm time")
     private Long alarmTime;
 
     public static Alarm buildFromDeviceAlarmNotify(DeviceAlarmNotify notify) {

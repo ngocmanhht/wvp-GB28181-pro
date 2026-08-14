@@ -26,7 +26,7 @@ import javax.sip.message.Response;
 import java.text.ParseException;
 
 /**
- * INFO 一般用于国标级联时的回放控制
+ * INFO Generally used for playback control during national standard cascading
  */
 @Slf4j
 @Component
@@ -69,7 +69,7 @@ public class InfoRequestProcessor extends SIPRequestProcessorParent implements I
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        // 添加消息处理的订阅
+        // Add message processing subscription
         sipProcessorObserver.addRequestProcessor(method, this);
     }
 
@@ -77,78 +77,78 @@ public class InfoRequestProcessor extends SIPRequestProcessorParent implements I
     public void process(RequestEvent evt) {
         SIPRequest request = (SIPRequest) evt.getRequest();
         CallIdHeader callIdHeader = request.getCallIdHeader();
-        // 先从会话内查找
+        // Search within the session first
         try {
             SendRtpInfo sendRtpInfo = sendRtpServerService.queryByCallId(callIdHeader.getCallId());
             if (sendRtpInfo == null || !sendRtpInfo.isSendToPlatform()) {
-                // 不存在则回复404
-                log.warn("[INFO 消息] 事务未找到， callID： {}", callIdHeader.getCallId());
+                // Reply if it does not exist404
+                log.warn("[INFO news] Transaction not found， callID： {}", callIdHeader.getCallId());
                 responseAck(request, Response.NOT_FOUND, "transaction not found");
                 return;
             }
-            // 查询上级平台是否存在
+            // Check whether the upper-level platform exists
             Platform platform = platformService.queryPlatformByServerGBId(sendRtpInfo.getTargetId());
             if (platform == null || !platform.isStatus()) {
-                // 不存在则回复404
-                log.warn("[INFO 消息] 平台未找到或者已离线： 平台： {}", sendRtpInfo.getTargetId());
+                // Reply if it does not exist404
+                log.warn("[INFO news] Platform not found or offline: Platform： {}", sendRtpInfo.getTargetId());
                 responseAck(request, Response.NOT_FOUND, "platform "+ sendRtpInfo.getTargetId() +" not found or offline");
                 return;
             }
             CommonGBChannel channel = channelService.getOne(sendRtpInfo.getChannelId());
             if (channel == null) {
-                // 不存在则回复404
-                log.warn("[INFO 消息] 通道不存在： 通道ID： {}", sendRtpInfo.getChannelId());
+                // Reply if it does not exist404
+                log.warn("[INFO news] Channel does not exist: channelID： {}", sendRtpInfo.getChannelId());
                 responseAck(request, Response.NOT_FOUND, "channel not found or offline");
                 return;
             }
-            // 判断通道类型
+            // Determine channel type
             if (channel.getDataType() != ChannelDataType.GB28181) {
-                // 非国标通道不支持录像回放控制
-                log.warn("[INFO 消息] 非国标通道不支持录像回放控制： 通道ID： {}", sendRtpInfo.getChannelId());
+                // Non-national standard channels do not support video playback control
+                log.warn("[INFO news] Non-national standard channels do not support video playback control: ChannelID： {}", sendRtpInfo.getChannelId());
                 responseAck(request, Response.FORBIDDEN, "");
                 return;
             }
 
-            // 根据通道ID，获取所属设备
+            // Get the device according to the channel ID
             Device device = deviceService.getDevice(channel.getDataDeviceId());
             if (device == null) {
-                // 不存在则回复404
-                log.warn("[INFO 消息] 通道所属设备不存在， 通道ID： {}", sendRtpInfo.getChannelId());
+                // Reply if it does not exist404
+                log.warn("[INFO news] The device to which the channel belongs does not exist, channelID： {}", sendRtpInfo.getChannelId());
                 responseAck(request, Response.NOT_FOUND, "platform "+ sendRtpInfo.getChannelId() +" not found or offline");
                 return;
             }
-            // 获取通道的原始信息
+            // Get the original information of the channel
             DeviceChannel deviceChannel = deviceChannelService.getOneForSourceById(sendRtpInfo.getChannelId());
-            // 向原始通道转发控制消息
+            // Forward control messages to the original channel
             ContentTypeHeader header = (ContentTypeHeader)evt.getRequest().getHeader(ContentTypeHeader.NAME);
             String contentType = header.getContentType();
             String contentSubType = header.getContentSubType();
             if ("Application".equalsIgnoreCase(contentType) && "MANSRTSP".equalsIgnoreCase(contentSubType)) {
-                log.info("[INFO 消息] 平台： {}->{}({})/{}", platform.getServerGBId(), device.getName(),
+                log.info("[INFO news] platform： {}->{}({})/{}", platform.getServerGBId(), device.getName(),
                         device.getDeviceId(), deviceChannel.getId());
-                // 不解析协议， 直接转发给对应的设备
+                // The protocol is not parsed and forwarded directly to the corresponding device.
                 cmder.playbackControlCmd(device, deviceChannel, sendRtpInfo.getStream(), new String(evt.getRequest().getRawContent()), eventResult -> {
-                    // 失败的回复
+                    // failed reply
                     try {
                         responseAck(request, eventResult.statusCode, eventResult.msg);
                     } catch (SipException | InvalidArgumentException | ParseException e) {
-                        log.error("[命令发送失败] 国标级联 录像控制: {}", e.getMessage());
+                        log.error("[Command sending failed] National standard cascade video control: {}", e.getMessage());
                     }
                 }, eventResult -> {
-                    // 成功的回复
+                    // successful reply
                     try {
                         responseAck(request, eventResult.statusCode);
                     } catch (SipException | InvalidArgumentException | ParseException e) {
-                        log.error("[命令发送失败] 国标级联 录像控制: {}", e.getMessage());
+                        log.error("[Command sending failed] National standard cascade video control: {}", e.getMessage());
                     }
                 });
             }
         } catch (SipException e) {
-            log.warn("SIP 回复错误", e);
+            log.warn("SIP Reply to error", e);
         } catch (InvalidArgumentException e) {
-            log.warn("参数无效", e);
+            log.warn("Invalid parameter", e);
         } catch (ParseException e) {
-            log.warn("SIP回复时解析异常", e);
+            log.warn("SIPParse exception when replying", e);
         }
     }
 }

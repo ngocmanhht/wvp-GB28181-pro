@@ -9,9 +9,9 @@
 //import java.util.concurrent.TimeUnit;
 //
 ///**
-// * Redis工具类
+// * RedisTools
 // * @author swwheihei
-// * @date 2020年5月6日 下午8:27:29
+// * @date 2020May 6, 2018, afternoon8:27:29
 // */
 //@SuppressWarnings(value = {"rawtypes", "unchecked"})
 //public class RedisUtil2 {
@@ -23,9 +23,9 @@
 //    }
 //
 //	/**
-//     * 指定缓存失效时间
-//     * @param key 键
-//     * @param time 时间（秒）
+//     * Specify cache expiration time
+//     * @param key key
+//     * @param time time (seconds）
 //     * @return true / false
 //     */
 //    public static boolean expire(String key, long time) {
@@ -44,8 +44,8 @@
 //    }
 //
 //    /**
-//     * 根据 key 获取过期时间
-//     * @param key 键
+//     * Get expiration time based on key
+//     * @param key key
 //     */
 //    public static long getExpire(String key) {
 //        if (redisTemplate == null) {
@@ -55,8 +55,8 @@
 //    }
 //
 //    /**
-//     * 判断 key 是否存在
-//     * @param key 键
+//     * Determine whether key exists
+//     * @param key key
 //     * @return true / false
 //     */
 //    public static boolean hasKey(String key) {
@@ -72,9 +72,9 @@
 //    }
 //
 //    /**
-//     * 删除缓存
-//     * @SuppressWarnings("unchecked") 忽略类型转换警告
-//     * @param key 键（一个或者多个）
+//     * Delete cache
+//     * @SuppressWarnings("unchecked") Ignore type conversion warnings
+//     * @param key key (one or more）
 //     */
 //    public static boolean del(String... key) {
 //        if (redisTemplate == null) {
@@ -85,7 +85,7 @@
 //                if (key.length == 1) {
 //                    redisTemplate.delete(key[0]);
 //                } else {
-////                    传入一个 Collection<String> 集合
+////                    Pass in a Collection<String> collection
 //                    redisTemplate.delete(CollectionUtils.arrayToList(key));
 //                }
 //            }
@@ -99,9 +99,9 @@
 ////    ============================== String ==============================
 //
 //    /**
-//     * 普通缓存获取
-//     * @param key 键
-//     * @return 值
+//     * Ordinary cache acquisition
+//     * @param key key
+//     * @return value
 //     */
 //    public static Object get(String key) {
 //        if (redisTemplate == null) {
@@ -111,9 +111,9 @@
 //    }
 //
 //    /**
-//     * 普通缓存放入
-//     * @param key 键
-//     * @param value 值
+//     * Ordinary cache put
+//     * @param key key
+//     * @param value value
 //     * @return true / false
 //     */
 //    public static boolean set(String key, Object value) {
@@ -130,10 +130,10 @@
 //    }
 //
 //    /**
-//     * 普通缓存放入并设置时间
-//     * @param key 键
-//     * @param value 值
-//     * @param time 时间（秒），如果 time < 0 则设置无限时间
+//     * Normal cache put and set time
+//     * @param key key
+//     * @param value value
+//     * @param time time (seconds) if time < 0 then set unlimited time
 //     * @return true / false
 //     */
 //    public static boolean set(String key, Object value, long time) {
@@ -154,9 +154,9 @@
 //    }
 //
 //    /**
-//     * 递增
-//     * @param key 键
-//     * @param delta 递增大小
+//     * Increment
+//     * @param key key
+//     * @param delta incremental size
 //     * @return
 //     */
 //    public static long incr(String key, long delta) {
@@ -164,15 +164,15 @@
 //            redisTemplate = SpringBeanFactory.getBean("redisTemplate");
 //        }
 //        if (delta < 0) {
-//            throw new RuntimeException("递增因子必须大于 0");
+//            throw new RuntimeException("The increment factor must be greater than 0");
 //        }
 //        return redisTemplate.opsForValue().increment(key, delta);
 //    }
 //
 //    /**
-//     * 递减
-//     * @param key 键
-//     * @param delta 递减大小
+//     * Decreasing
+//     * @param key key
+//     * @param delta Decrement size
 //     * @return
 //     */
 //    public static long decr(String key, long delta) {
@@ -180,7 +180,7 @@
 //            redisTemplate = SpringBeanFactory.getBean("redisTemplate");
 //        }
 //        if (delta < 0) {
-//            throw new RuntimeException("递减因子必须大于 0");
+//            throw new RuntimeException("The decreasing factor must be greater than 0");
 //        }
 //        return redisTemplate.opsForValue().increment(key, delta);
 //    }
@@ -189,9 +189,9 @@
 //
 //    /**
 //     * HashGet
-//     * @param key 键（no null）
-//     * @param item 项（no null）
-//     * @return 值
+//     * @param key key（no null）
+//     * @param item item（no null）
+//     * @return value
 //     */
 //    public static Object hget(String key, String item) {
 //        if (redisTemplate == null) {
@@ -201,9 +201,9 @@
 //    }
 //
 //    /**
-//     * 获取 key 对应的 map
-//     * @param key 键（no null）
-//     * @return 对应的多个键值
+//     * Get the corresponding key map
+//     * @param key key（no null）
+//     * @return Corresponding multiple key values
 //     */
 //    public static Map<Object, Object> hmget(String key) {
 //        if (redisTemplate == null) {
@@ -214,8 +214,8 @@
 //
 //    /**
 //     * HashSet
-//     * @param key 键
-//     * @param map 值
+//     * @param key key
+//     * @param map value
 //     * @return true / false
 //     */
 //    public static boolean hmset(String key, Map<Object, Object> map) {
@@ -232,10 +232,10 @@
 //    }
 //
 //    /**
-//     * HashSet 并设置时间
-//     * @param key 键
-//     * @param map 值
-//     * @param time 时间
+//     * HashSet and set the time
+//     * @param key key
+//     * @param map value
+//     * @param time time
 //     * @return true / false
 //     */
 //    public static boolean hmset(String key, Map<?, ?> map, long time) {
@@ -255,10 +255,10 @@
 //    }
 //
 //    /**
-//     * 向一张 Hash表 中放入数据，如不存在则创建
-//     * @param key 键
-//     * @param item 项
-//     * @param value 值
+//     * Put data into a Hash table, create it if it does not exist
+//     * @param key key
+//     * @param item item
+//     * @param value value
 //     * @return true / false
 //     */
 //    public static boolean hset(String key, String item, Object value) {
@@ -275,11 +275,11 @@
 //    }
 //
 //    /**
-//     * 向一张 Hash表 中放入数据，并设置时间，如不存在则创建
-//     * @param key 键
-//     * @param item 项
-//     * @param value 值
-//     * @param time 时间（如果原来的 Hash表 设置了时间，这里会覆盖）
+//     * Put data into a Hash table and set the time. If it does not exist, create it.
+//     * @param key key
+//     * @param item item
+//     * @param value value
+//     * @param time Time (if the original Hash table sets the time, it will be overwritten here）
 //     * @return true / false
 //     */
 //    public static boolean hset(String key, String item, Object value, long time) {
@@ -299,9 +299,9 @@
 //    }
 //
 //    /**
-//     * 删除 Hash表 中的值
-//     * @param key 键
-//     * @param item 项（可以多个，no null）
+//     * Delete values in Hash table
+//     * @param key key
+//     * @param item Items (can be multiple，no null）
 //     */
 //    public static void hdel(String key, Object... item) {
 //        if (redisTemplate == null) {
@@ -311,9 +311,9 @@
 //    }
 //
 //    /**
-//     * 判断 Hash表 中是否有该键的值
-//     * @param key 键（no null）
-//     * @param item 值（no null）
+//     * Determine whether there is a value for the key in the Hash table
+//     * @param key key（no null）
+//     * @param item value（no null）
 //     * @return true / false
 //     */
 //    public static boolean hHasKey(String key, String item) {
@@ -324,10 +324,10 @@
 //    }
 //
 //    /**
-//     * Hash递增，如果不存在则创建一个，并把新增的值返回
-//     * @param key 键
-//     * @param item 项
-//     * @param by 递增大小 > 0
+//     * HashIncrement, if it does not exist, create one and return the new value
+//     * @param key key
+//     * @param item item
+//     * @param by incremental size > 0
 //     * @return
 //     */
 //    public static Double hincr(String key, String item, Double by) {
@@ -338,10 +338,10 @@
 //    }
 //
 //    /**
-//     * Hash递减
-//     * @param key 键
-//     * @param item 项
-//     * @param by 递减大小
+//     * HashDecreasing
+//     * @param key key
+//     * @param item item
+//     * @param by Decrement size
 //     * @return
 //     */
 //    public static Double hdecr(String key, String item, Double by) {
@@ -354,9 +354,9 @@
 ////    ============================== Set ==============================
 //
 //    /**
-//     * 根据 key 获取 set 中的所有值
-//     * @param key 键
-//     * @return 值
+//     * Get all values in set based on key
+//     * @param key key
+//     * @return value
 //     */
 //    public static Set<Object> sGet(String key) {
 //        if (redisTemplate == null) {
@@ -371,9 +371,9 @@
 //    }
 //
 //    /**
-//     * 从键为 key 的 set 中，根据 value 查询是否存在
-//     * @param key 键
-//     * @param value 值
+//     * From the set whose key is key, query whether it exists based on value
+//     * @param key key
+//     * @param value value
 //     * @return true / false
 //     */
 //    public static boolean sHasKey(String key, Object value) {
@@ -389,10 +389,10 @@
 //    }
 //
 //    /**
-//     * 将数据放入 set缓存
-//     * @param key 键值
-//     * @param values 值（可以多个）
-//     * @return 成功个数
+//     * Put data into set cache
+//     * @param key key value
+//     * @param values value (can be multiple）
+//     * @return Number of successes
 //     */
 //    public static long sSet(String key, Object... values) {
 //        if (redisTemplate == null) {
@@ -407,11 +407,11 @@
 //    }
 //
 //    /**
-//     * 将数据放入 set缓存，并设置时间
-//     * @param key 键
-//     * @param time 时间
-//     * @param values 值（可以多个）
-//     * @return 成功放入个数
+//     * Put the data into the set cache and set the time
+//     * @param key key
+//     * @param time time
+//     * @param values value (can be multiple）
+//     * @return Number of successfully placed
 //     */
 //    public static long sSet(String key, long time, Object... values) {
 //        if (redisTemplate == null) {
@@ -430,9 +430,9 @@
 //    }
 //
 //    /**
-//     * 获取 set缓存的长度
-//     * @param key 键
-//     * @return 长度
+//     * Get the length of the set cache
+//     * @param key key
+//     * @return length
 //     */
 //    public static long sGetSetSize(String key) {
 //        if (redisTemplate == null) {
@@ -447,10 +447,10 @@
 //    }
 //
 //    /**
-//     * 移除 set缓存中，值为 value 的
-//     * @param key 键
-//     * @param values 值
-//     * @return 成功移除个数
+//     * Remove the set cache with value value
+//     * @param key key
+//     * @param values value
+//     * @return Number of successful removals
 //     */
 //    public static long setRemove(String key, Object... values) {
 //        if (redisTemplate == null) {
@@ -466,7 +466,7 @@
 ////    ============================== ZSet ==============================
 //
 //    /**
-//     * 添加一个元素, zset与set最大的区别就是每个元素都有一个score，因此有个排序的辅助功能;  zadd
+//     * Add an element. The biggest difference between zset and set is that each element has a score, so there is an auxiliary function for sorting.;  zadd
 //     *
 //     * @param key
 //     * @param value
@@ -480,7 +480,7 @@
 //    }
 //
 //    /**
-//     * 删除元素 zrem
+//     * Delete element zrem
 //     *
 //     * @param key
 //     * @param value
@@ -493,11 +493,11 @@
 //    }
 //
 //    /**
-//     * score的增加or减少 zincrby
+//     * scoreincrease or decrease zincrby
 //     *
 //     * @param key
 //     * @param value
-//     * @param delta -1 表示减 1 表示加1
+//     * @param delta -1 means subtracting 1 means adding1
 //     */
 //    public static Double zIncrScore(Object key, Object value, double delta) {
 //        if (redisTemplate == null) {
@@ -507,7 +507,7 @@
 //    }
 //
 //    /**
-//     * 查询value对应的score   zscore
+//     * Query the corresponding valuescore   zscore
 //     *
 //     * @param key
 //     * @param value
@@ -521,7 +521,7 @@
 //    }
 //
 //    /**
-//     * 判断value在zset中的排名  zrank
+//     * Determine the ranking of value in zset  zrank
 //     *
 //     * @param key
 //     * @param value
@@ -535,7 +535,7 @@
 //    }
 //
 //    /**
-//     * 返回集合的长度
+//     * Returns the length of the collection
 //     *
 //     * @param key
 //     * @return
@@ -548,9 +548,9 @@
 //    }
 //
 //    /**
-//     * 查询集合中指定顺序的值， 0 -1 表示获取全部的集合内容  zrange
+//     * Query the values in a specified sequence in a collection， 0 -1 Indicates getting all collection contents  zrange
 //     *
-//     * 返回有序的集合，score小的在前面
+//     * Returns an ordered set, with the smaller score at the front
 //     *
 //     * @param key
 //     * @param start
@@ -564,7 +564,7 @@
 //        return redisTemplate.opsForZSet().range(key, start, end);
 //    }
 //    /**
-//     * 查询集合中指定顺序的值和score，0, -1 表示获取全部的集合内容
+//     * Query the sum of values in a specified order in a collectionscore，0, -1 Indicates getting all collection contents
 //     *
 //     * @param key
 //     * @param start
@@ -578,9 +578,9 @@
 //        return redisTemplate.opsForZSet().rangeWithScores(key, start, end);
 //    }
 //    /**
-//     * 查询集合中指定顺序的值  zrevrange
+//     * Query the values in a specified sequence in a collection  zrevrange
 //     *
-//     * 返回有序的集合中，score大的在前面
+//     * Returns an ordered set, with the one with the largest score at the front.
 //     *
 //     * @param key
 //     * @param start
@@ -594,7 +594,7 @@
 //        return redisTemplate.opsForZSet().reverseRange(key, start, end);
 //    }
 //    /**
-//     * 根据score的值，来获取满足条件的集合  zrangebyscore
+//     * According to the value of score, get the set that meets the conditions  zrangebyscore
 //     *
 //     * @param key
 //     * @param min
@@ -612,10 +612,10 @@
 ////    ============================== List ==============================
 //
 //    /**
-//     * 获取 list缓存的内容
-//     * @param key 键
-//     * @param start 开始
-//     * @param end 结束（0 到 -1 代表所有值）
+//     * Get the contents of the list cache
+//     * @param key key
+//     * @param start start
+//     * @param end end (0 to -1 represents all values）
 //     * @return
 //     */
 //    public static List<Object> lGet(String key, long start, long end) {
@@ -631,9 +631,9 @@
 //    }
 //
 //    /**
-//     * 获取 list缓存的长度
-//     * @param key 键
-//     * @return 长度
+//     * Get the length of the list cache
+//     * @param key key
+//     * @return length
 //     */
 //    public static long lGetListSize(String key) {
 //        if (redisTemplate == null) {
@@ -648,12 +648,12 @@
 //    }
 //
 //    /**
-//     * 根据索引 index 获取键为 key 的 list 中的元素
-//     * @param key 键
-//     * @param index 索引
-//     *              当 index >= 0 时 {0:表头, 1:第二个元素}
-//     *              当 index < 0 时 {-1:表尾, -2:倒数第二个元素}
-//     * @return 值
+//     * Get the element in the list with key key according to index index
+//     * @param key key
+//     * @param index Index
+//     *              When index >= 0 time {0:Header, 1: second element}
+//     *              When index < 0 time {-1:end of table, -2:penultimate element}
+//     * @return value
 //     */
 //    public static Object lGetIndex(String key, long index) {
 //        if (redisTemplate == null) {
@@ -668,9 +668,9 @@
 //    }
 //
 //    /**
-//     * 将值 value 插入键为 key 的 list 中，如果 list 不存在则创建空 list
-//     * @param key 键
-//     * @param value 值
+//     * Insert the value value into the list with key key, or create an empty list if it does not exist list
+//     * @param key key
+//     * @param value value
 //     * @return true / false
 //     */
 //    public static boolean lSet(String key, Object value) {
@@ -687,10 +687,10 @@
 //    }
 //
 //    /**
-//     * 将值 value 插入键为 key 的 list 中，并设置时间
-//     * @param key 键
-//     * @param value 值
-//     * @param time 时间
+//     * Insert value value into list with key key and set time
+//     * @param key key
+//     * @param value value
+//     * @param time time
 //     * @return true / false
 //     */
 //    public static boolean lSet(String key, Object value, long time) {
@@ -710,9 +710,9 @@
 //    }
 //
 //    /**
-//     * 将 values 插入键为 key 的 list 中
-//     * @param key 键
-//     * @param values 值
+//     * Insert values into list with key key
+//     * @param key key
+//     * @param values value
 //     * @return true / false
 //     */
 //    public static boolean lSetList(String key, List<Object> values) {
@@ -729,10 +729,10 @@
 //    }
 //
 //    /**
-//     * 将 values 插入键为 key 的 list 中，并设置时间
-//     * @param key 键
-//     * @param values 值
-//     * @param time 时间
+//     * Insert values into list with key key and set time
+//     * @param key key
+//     * @param values value
+//     * @param time time
 //     * @return true / false
 //     */
 //    public static boolean lSetList(String key, List<Object> values, long time) {
@@ -752,10 +752,10 @@
 //    }
 //
 //    /**
-//     * 根据索引 index 修改键为 key 的值
-//     * @param key 键
-//     * @param index 索引
-//     * @param value 值
+//     * Modify the value of key according to index index
+//     * @param key key
+//     * @param index Index
+//     * @param value value
 //     * @return true / false
 //     */
 //    public static boolean lUpdateIndex(String key, long index, Object value) {
@@ -772,11 +772,11 @@
 //    }
 //
 //    /**
-//     * 在键为 key 的 list 中删除值为 value 的元素
-//     * @param key 键
-//     * @param count 如果 count == 0 则删除 list 中所有值为 value 的元素
-//     *              如果 count > 0 则删除 list 中最左边那个值为 value 的元素
-//     *              如果 count < 0 则删除 list 中最右边那个值为 value 的元素
+//     * Remove the element whose value is value from the list with key key
+//     * @param key key
+//     * @param count if count == 0 Then delete all elements in list whose value is value
+//     *              if count > 0 Then delete the leftmost element in the list whose value is value
+//     *              if count < 0 Then delete the rightmost element in the list whose value is value
 //     * @param value
 //     * @return
 //     */
@@ -793,8 +793,8 @@
 //    }
 //
 //    /**
-//     * 在键为 key 的 list中移除第一个元素
-//     * @param key 键
+//     * Remove the first element from the list with key key
+//     * @param key key
 //     * @return
 //     */
 //    public static Object lLeftPop(String key) {
@@ -805,8 +805,8 @@
 //    }
 //
 //    /**
-//     * 在键为 key 的 list中移除、最后一个元素
-//     * @param key 键
+//     * Remove the last element from the list with key key
+//     * @param key key
 //     * @return
 //     */
 //    public static Object lrightPop(String key) {
@@ -817,8 +817,8 @@
 //    }
 //
 //    /**
-//     * 模糊查询
-//     * @param key 键
+//     * fuzzy query
+//     * @param key key
 //     * @return true / false
 //     */
 //    public static List<Object> keys(String key) {
@@ -836,8 +836,8 @@
 //
 //
 //    /**
-//     * 模糊查询
-//     * @param query 查询参数
+//     * fuzzy query
+//     * @param query query parameters
 //     * @return
 //     */
 ////    public static List<Object> scan(String query) {
@@ -851,7 +851,7 @@
 ////                Object key = entry.getKey();
 ////                Object valueSet = entry.getValue();
 ////            }
-////            //关闭cursor
+////            //Closecursor
 ////            cursor.close();
 ////        } catch (Exception e) {
 ////            e.printStackTrace();
@@ -860,8 +860,8 @@
 ////    }
 //
 //    /**
-//     * 模糊查询
-//     * @param query 查询参数
+//     * fuzzy query
+//     * @param query query parameters
 //     * @return
 //     */
 //    public static List<Object> scan(String query) {
@@ -888,7 +888,7 @@
 //        Set<String> keys = redisTemplate.keys(query);
 //        return new ArrayList<>(keys);
 //    }
-//    //    ============================== 消息发送与订阅 ==============================
+//    //    ============================== Message sending and subscription ==============================
 //    public static void convertAndSend(String channel, JSONObject msg) {
 //        if (redisTemplate == null) {
 //            redisTemplate = SpringBeanFactory.getBean("redisTemplate");

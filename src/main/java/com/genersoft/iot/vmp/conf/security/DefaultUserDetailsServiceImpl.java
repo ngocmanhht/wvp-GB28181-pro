@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDateTime;
 
 /**
- * 用户登录认证逻辑
+ * User login authentication logic
  */
 @Slf4j
 @Component
@@ -26,15 +26,15 @@ public class DefaultUserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         if (StringUtils.isBlank(username)) {
-            log.info("登录用户：{} 不存在", username);
-            throw new UsernameNotFoundException("登录用户：" + username + " 不存在");
+            log.info("Login user：{} does not exist", username);
+            throw new UsernameNotFoundException("Login user：" + username + " does not exist");
         }
 
-        // 查出密码
+        // find out password
         User user = userService.getUserByUsername(username);
         if (user == null) {
-            log.info("登录用户：{} 不存在", username);
-            throw new UsernameNotFoundException("登录用户：" + username + " 不存在");
+            log.info("Login user：{} does not exist", username);
+            throw new UsernameNotFoundException("Login user：" + username + " does not exist");
         }
         String password = SecurityUtils.encryptPassword(user.getPassword());
         user.setPassword(password);

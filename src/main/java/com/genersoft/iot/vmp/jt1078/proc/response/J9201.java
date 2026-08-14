@@ -11,7 +11,7 @@ import lombok.Setter;
 import java.nio.charset.Charset;
 
 /**
- * 回放请求
+ * Replay request
  *
  * @author QingtaiJiang
  * @date 2023/4/28 10:37
@@ -21,37 +21,37 @@ import java.nio.charset.Charset;
 @Getter
 @MsgId(id = "9201")
 public class J9201 extends Rs {
-    // 服务器IP地址
+    // Server IP address
     private String ip;
 
-    // 实时视频服务器TCP端口号
+    // Real-time video server TCP port number
     private int tcpPort;
 
-    // 实时视频服务器UDP端口号
+    // Real-time video server UDP port number
     private int udpPort;
 
-    // 逻辑通道号
+    // Logical channel number
     private int channel;
 
-    // 音视频资源类型：0.音视频 1.音频 2.视频 3.视频或音视频
+    // Audio and video resource types: 0. Audio and video 1. Audio 2. Video 3. Video or audio and video
     private int type;
 
-    // 码流类型：0.所有码流 1.主码流 2.子码流(如果此通道只传输音频,此字段置0)
+    // Stream type: 0. All streams 1. Main stream 2. Sub-stream(If this channel only transmits audio, this field is set to0)
     private int rate;
 
-    // 存储器类型：0.所有存储器 1.主存储器 2.灾备存储器"
+    // Storage type: 0. All storage 1. Main storage 2. Disaster recovery storage"
     private int storageType;
 
-    // 回放方式：0.正常回放 1.快进回放 2.关键帧快退回放 3.关键帧播放 4.单帧上传
+    // Playback mode: 0. Normal playback 1. Fast forward playback 2. Key frame fast rewind playback 3. Key frame playback 4. Single frame upload
     private int playbackType;
 
-    // 快进或快退倍数：0.无效 1.1倍 2.2倍 3.4倍 4.8倍 5.16倍 (回放控制为1和2时,此字段内容有效,否则置0)
+    // Fast forward or rewind multiple: 0. Invalid 1.1 times 2.2 times 3.4 times 4.8 times 5.16 times (When the playback control is 1 and 2, the content of this field is valid, otherwise it is set0)
     private int playbackSpeed;
 
-    // 开始时间YYMMDDHHMMSS,回放方式为4时,该字段表示单帧上传时间
+    // Start time YYMMDDHHMMSS, when the playback mode is 4, this field indicates the single frame upload time
     private String startTime;
 
-    // 结束时间YYMMDDHHMMSS,回放方式为4时,该字段无效,为0表示一直回放
+    // End time YYMMDDHHMMSS. When the playback mode is 4, this field is invalid. If it is 0, it means always playing back.
     private String endTime;
 
     @Override

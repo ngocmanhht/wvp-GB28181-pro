@@ -1,22 +1,22 @@
 <template>
   <div id="live" class="live-container">
-    <div v-loading="loading" class="live-content" :class="{ 'sidebar-collapsed': !sidebarVisible }" element-loading-text="拼命加载中">
+    <div v-loading="loading" class="live-content" :class="{ 'sidebar-collapsed': !sidebarVisible }" element-loading-text="Loading desperately">
       <div class="device-tree-container-box" :class="{ 'device-tree-hidden': !sidebarVisible }">
         <DeviceTree @clickEvent="clickEvent" :context-menu-event="contextMenuEvent" />
       </div>
       <div class="video-container">
         <div class="control-bar">
           <div class="split-controls">
-            <i :class="['btn', 'sidebar-toggle', sidebarVisible ? 'el-icon-s-fold' : 'el-icon-s-unfold']" title="切换侧边栏" @click="toggleSidebar" />
+            <i :class="['btn', 'sidebar-toggle', sidebarVisible ? 'el-icon-s-fold' : 'el-icon-s-unfold']" title="Toggle sidebar" @click="toggleSidebar" />
             <span class="divider" />
-            分屏:
+            split screen:
             <i class="iconfont icon-a-mti-1fenpingshi btn" :class="{active:spiltIndex === 0}" @click="spiltIndex=0" />
             <i class="iconfont icon-a-mti-4fenpingshi btn" :class="{active: spiltIndex === 1}" @click="spiltIndex=1" />
             <i class="iconfont icon-a-mti-6fenpingshi btn" :class="{active: spiltIndex === 2}" @click="spiltIndex=2" />
             <i class="iconfont icon-a-mti-9fenpingshi btn" :class="{active: spiltIndex === 3}" @click="spiltIndex=3" />
           </div>
           <div class="global-player-control">
-            播放器:
+            player:
             <el-select v-model="globalPlayer" size="mini" style="width: 120px">
               <el-option label="Jessibuca" value="jessibuca" />
               <el-option label="WebRTC" value="webRTC" />
@@ -25,7 +25,7 @@
           </div>
           <div class="fullscreen-control">
             <i class="el-icon-full-screen btn" @click="fullScreen()" />
-            <i class="iconfont icon-PTZ btn" title="云台控制" @click="togglePtzPanel" />
+            <i class="iconfont icon-PTZ btn" title="PTZ control" @click="togglePtzPanel" />
           </div>
         </div>
         <div class="player-container">
@@ -41,7 +41,7 @@
               :class="getPlayerClass(spiltIndex, i)"
               @click="playerIdx = (i-1)"
             >
-              <div v-if="!streamInfo[i-1]" class="no-signal">{{ videoTip[i-1]?videoTip[i-1]:"无信号" }}</div>
+              <div v-if="!streamInfo[i-1]" class="no-signal">{{ videoTip[i-1]?videoTip[i-1]:"No signal" }}</div>
               <PlayerTabs
                 v-else
                 :ref="'playerTabs' + i"
@@ -54,21 +54,21 @@
       </div>
       <div class="ptz-panel" v-show="ptzVisible">
         <div class="ptz-panel-header">
-          <span>云台控制</span>
+          <span>PTZ control</span>
           <i class="el-icon-close" @click="ptzVisible = false" />
         </div>
         <div class="ptz-panel-body">
           <template v-if="currentChannelId">
             <div class="ptz-preset-section">
-              <div class="section-title">预置位</div>
+              <div class="section-title">Preset position</div>
               <LivePtzPreset :channel-id="currentChannelId" />
             </div>
             <div class="ptz-control-section">
-              <div class="section-title">方向控制</div>
+              <div class="section-title">Directional control</div>
               <channelPtzPanel :channel-id="currentChannelId" @drag-zoom-start="handleDragZoom" />
             </div>
           </template>
-          <div v-else class="ptz-empty-tip">请先在左侧选择通道</div>
+          <div v-else class="ptz-empty-tip">Please select the channel on the left first</div>
         </div>
       </div>
     </div>
@@ -93,13 +93,13 @@ export default {
       streamInfo: [null],
       videoTip: [''],
       globalPlayer: 'jessibuca',
-      sidebarVisible: true, // 侧边栏
-      ptzVisible: false, // 云台面板
-      currentChannelId: null, // 当前选中通道
-      spiltIndex: 2, // 分屏
-      playerIdx: 0, // 激活播放器
+      sidebarVisible: true, // sidebar
+      ptzVisible: false, // PTZ panel
+      currentChannelId: null, // Currently selected channel
+      spiltIndex: 2, // split screen
+      playerIdx: 0, // Activate player
 
-      updateLooper: 0, // 数据刷新轮训标志
+      updateLooper: 0, // Data refresh rotation training flag
       count: 15,
       total: 0,
 
@@ -156,7 +156,7 @@ export default {
   },
   watch: {
     spiltIndex(newValue) {
-      console.log('切换画幅;' + newValue)
+      console.log('Switch frame;' + newValue)
       const that = this
       for (let i = 1; i <= this.layout[newValue].spilt; i++) {
         if (!that.$refs['playerTabs' + i]) {
@@ -216,8 +216,8 @@ export default {
         params.channelId = this.currentChannelId
         console.log('[live] dragZoom after channelId:', JSON.stringify(params))
         const action = direction === 'in' ? 'commonChanel/dragZoomIn' : 'commonChanel/dragZoomOut'
-        const successMsg = direction === 'in' ? '拉框放大成功' : '拉框缩小成功'
-        const failMsg = direction === 'in' ? '拉框放大失败' : '拉框缩小失败'
+        const successMsg = direction === 'in' ? 'Pull frame to enlarge successfully' : 'The frame was successfully reduced'
+        const failMsg = direction === 'in' ? 'Failed to enlarge the frame' : 'Failed to shrink the frame'
         this.$store.dispatch(action, params).then(() => {
           this.$message({ showClose: true, message: successMsg, type: 'success' })
         }).catch(() => {
@@ -258,18 +258,18 @@ export default {
     contextMenuEvent: function(device, event, data, isCatalog) {
 
     },
-    // 通知设备上传媒体流
+    // Notify device to upload media stream
     sendDevicePush: function(channelId) {
       this.save(channelId)
       const idxTmp = this.playerIdx
       this.$set(this.streamInfo, idxTmp, null)
-      this.$set(this.videoTip, idxTmp, '正在拉流...')
+      this.$set(this.videoTip, idxTmp, 'Streaming...')
       this.$store.dispatch('commonChanel/playChannel', channelId)
         .then(data => {
           this.setPlayStream(data.transcodeStream || data, idxTmp)
         })
         .catch(err => {
-          this.$set(this.videoTip, idxTmp, '播放失败: ' + err)
+          this.$set(this.videoTip, idxTmp, 'Play failed: ' + err)
         })
         .finally(() => {
           this.loading = false

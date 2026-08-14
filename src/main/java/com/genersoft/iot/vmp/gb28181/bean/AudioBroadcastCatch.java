@@ -7,7 +7,7 @@ import gov.nist.javax.sip.message.SIPResponse;
 import lombok.Data;
 
 /**
- * 缓存语音广播的状态
+ * Caching the status of voice broadcasts
  * @author lin
  */
 @Data
@@ -38,47 +38,47 @@ public class AudioBroadcastCatch {
     }
 
     /**
-     * 设备编号
+     * Device number
      */
     private String deviceId;
 
     /**
-     * 通道编号
+     * Channel number
      */
     private Integer channelId;
 
     /**
-     * 流媒体信息
+     * Streaming media information
      */
     private MediaServer mediaServerItem;
 
     /**
-     * 关联的流APP
+     * associated streamsAPP
      */
     private String app;
 
     /**
-     * 关联的流STREAM
+     * associated streamsSTREAM
      */
     private String stream;
 
     /**
-     *  是否是级联语音喊话
+     *  Whether it is a cascade voice call
      */
     private boolean isFromPlatform;
 
     /**
-     * 语音广播状态
+     * Voice broadcast status
      */
     private AudioBroadcastCatchStatus status;
 
     /**
-     * 请求信息
+     * request information
      */
     private SipTransactionInfo sipTransactionInfo;
 
     /**
-     * 请求结果回调
+     * Request result callback
      */
     private AudioBroadcastEvent event;
 

@@ -14,181 +14,181 @@ import java.lang.reflect.InvocationTargetException;
 
 @Data
 @Slf4j
-@Schema(description = "通道信息")
+@Schema(description = "Channel information")
 @EqualsAndHashCode(callSuper = true)
 public class DeviceChannel extends CommonGBChannel {
 
-	@Schema(description = "数据库自增ID")
+	@Schema(description = "Database auto-incrementID")
 	private int id;
 
-	@Schema(description = "父设备编码")
+	@Schema(description = "Parent device encoding")
 	private String parentDeviceId;
 
-	@Schema(description = "父设备名称")
+	@Schema(description = "Parent device name")
 	private String parentName;
 
 	@MessageElementForCatalog("DeviceID")
-	@Schema(description = "编码")
+	@Schema(description = "encoding")
 	private String deviceId;
 
 	@MessageElementForCatalog("Name")
-	@Schema(description = "名称")
+	@Schema(description = "Name")
 	private String name;
 
 	@MessageElementForCatalog("Manufacturer")
-	@Schema(description = "设备厂商")
+	@Schema(description = "Equipment manufacturer")
 	private String manufacturer;
 
 	@MessageElementForCatalog("Model")
-	@Schema(description = "设备型号")
+	@Schema(description = "Device model")
 	private String model;
 
 	// 2016
 	@MessageElementForCatalog("Owner")
-	@Schema(description = "设备归属")
+	@Schema(description = "Equipment ownership")
 	private String owner;
 
 	@MessageElementForCatalog("CivilCode")
-	@Schema(description = "行政区域")
+	@Schema(description = "Administrative region")
 	private String civilCode;
 
 	@MessageElementForCatalog("Block")
-	@Schema(description = "警区")
+	@Schema(description = "police district")
 	private String block;
 
 	@MessageElementForCatalog("Address")
-	@Schema(description = "安装地址")
+	@Schema(description = "Installation address")
 	private String address;
 
 	@MessageElementForCatalog("Parental")
-	@Schema(description = "是否有子设备(必选)1有,0没有")
+	@Schema(description = "Is there a sub-device?(Required)1Yes, 0 No")
 	private Integer parental;
 
 
 	@MessageElementForCatalog("ParentID")
-	@Schema(description = "父节点ID")
+	@Schema(description = "parent nodeID")
 	private String parentId;
 
 	// 2016
 	@MessageElementForCatalog("SafetyWay")
-	@Schema(description = "信令安全模式")
+	@Schema(description = "Signaling security mode")
 	private Integer safetyWay;
 
 	@MessageElementForCatalog("RegisterWay")
-	@Schema(description = "注册方式")
+	@Schema(description = "Registration method")
 	private Integer registerWay;
 
 	// 2016
 	@MessageElementForCatalog("CertNum")
-	@Schema(description = "证书序列号")
+	@Schema(description = "Certificate serial number")
 	private String certNum;
 
 	// 2016
 	@MessageElementForCatalog("Certifiable")
-	@Schema(description = "证书有效标识, 缺省为0;证书有效标识:0:无效 1:有效")
+	@Schema(description = "Certificate valid ID, default is0;Certificate valid identification: 0: invalid 1: valid")
 	private Integer certifiable;
 
 	// 2016
 	@MessageElementForCatalog("ErrCode")
-	@Schema(description = "无效原因码(有证书且证书无效的设备必选)")
+	@Schema(description = "Invalid reason code(Required for devices with certificates and invalid certificates)")
 	private Integer errCode;
 
 	// 2016
 	@MessageElementForCatalog("EndTime")
-	@Schema(description = "证书终止有效期(有证书且证书无效的设备必选)")
+	@Schema(description = "Certificate expiry date(Required for devices with certificates and invalid certificates)")
 	private String endTime;
 
 	@MessageElementForCatalog("Secrecy")
-	@Schema(description = "保密属性(必选)缺省为0;0-不涉密,1-涉密")
+	@Schema(description = "Confidential attribute(Required)The default is0;0-Not confidential,1-Confidential")
 	private Integer secrecy;
 
 	@MessageElementForCatalog("IPAddress")
-	@Schema(description = "设备/系统IPv4/IPv6地址")
+	@Schema(description = "Equipment/systemIPv4/IPv6address")
 	private String ipAddress;
 
 	@MessageElementForCatalog("Port")
-	@Schema(description = "设备/系统端口")
+	@Schema(description = "Equipment/system port")
 	private Integer port;
 
 	@MessageElementForCatalog("Password")
-	@Schema(description = "设备口令")
+	@Schema(description = "Device password")
 	private String password;
 
 	@MessageElementForCatalog("Status")
-	@Schema(description = "设备状态")
+	@Schema(description = "Device status")
 	private String status;
 
 	@MessageElementForCatalog("Longitude")
-	@Schema(description = "经度 WGS-84坐标系")
+	@Schema(description = "longitude WGS-84coordinate system")
 	private Double longitude;
 
 	@MessageElementForCatalog("Latitude")
-	@Schema(description = ",纬度 WGS-84坐标系")
+	@Schema(description = ",Latitude WGS-84coordinate system")
 	private Double latitude;
 
 	@MessageElementForCatalog("Info.PTZType")
-	@Schema(description = "摄像机结构类型,标识摄像机类型: 1-球机; 2-半球; 3-固定枪机; 4-遥控枪机;5-遥控半球;6-多目设备的全景/拼接通道;7-多目设备的分割通道")
+	@Schema(description = "Camera structure type, identifying camera type: 1-ball machine; 2-hemisphere; 3-Fixed bolt; 4-remote control gun;5-remote controlled hemisphere;6-Panoramic view of multi-view equipment/Splicing channel;7-Split channels for multi-channel equipment")
 	private Integer ptzType;
 
 	@MessageElementForCatalog("Info.PositionType")
-	@Schema(description = "摄像机位置类型扩展。1-省际检查站、2-党政机关、3-车站码头、4-中心广场、5-体育场馆、" +
-			"6-商业中心、7-宗教场所、8-校园周边、9-治安复杂区域、10-交通干线")
+	@Schema(description = "Camera position type extension。1-interprovincial checkpoint、2-Party and government organs、3-Station Pier、4-central square、5-sports venues、" +
+			"6-business center、7-religious place、8-Around campus、9-Complex security area、10-traffic arteries")
 	private Integer positionType;
 
 	@MessageElementForCatalog("Info.RoomType")
-	@Schema(description = "摄像机安装位置室外、室内属性。1-室外、2-室内。")
+	@Schema(description = "Camera installation location outdoor and indoor attributes。1-outdoor、2-indoor。")
 	private Integer roomType;
 
 	@MessageElementForCatalog("Info.UseType")
-	@Schema(description = "用途属性， 1-治安、2-交通、3-重点。")
+	@Schema(description = "Usage attribute， 1-law and order、2-transportation、3-focus。")
 	private Integer useType;
 
 	@MessageElementForCatalog("Info.SupplyLightType")
-	@Schema(description = "摄像机补光属性。1-无补光;2-红外补光;3-白光补光;4-激光补光;9-其他")
+	@Schema(description = "Camera fill light properties。1-No fill light;2-Infrared fill light;3-white light fill light;4-Laser fill light;9-Others")
 	private Integer supplyLightType;
 
 	@MessageElementForCatalog("Info.DirectionType")
-	@Schema(description = "摄像机监视方位(光轴方向)属性。1-东(西向东)、2-西(东向西)、3-南(北向南)、4-北(南向北)、" +
-			"5-东南(西北到东南)、6-东北(西南到东北)、7-西南(东北到西南)、8-西北(东南到西北)")
+	@Schema(description = "Camera surveillance location(Optical axis direction)Properties。1-East(west to east)、2-west(east to west)、3-South(north to south)、4-north(south to north)、" +
+			"5-Southeast(northwest to southeast)、6-Northeast(Southwest to Northeast)、7-Southwest(Northeast to Southwest)、8-Northwest(southeast to northwest)")
 	private Integer directionType;
 
 	@MessageElementForCatalog("Info.Resolution")
-	@Schema(description = "摄像机支持的分辨率,可多值")
+	@Schema(description = "The resolution supported by the camera, which can be multi-value")
 	private String resolution;
 
 	@MessageElementForCatalog({"BusinessGroupID","Info.BusinessGroupID"})
-	@Schema(description = "虚拟组织所属的业务分组ID")
+	@Schema(description = "The business group to which the virtual organization belongsID")
 	private String businessGroupId;
 
 	@MessageElementForCatalog("Info.DownloadSpeed")
-	@Schema(description = "下载倍速(可选),可多值")
+	@Schema(description = "Download twice as fast(Optional),Can be multi-valued")
 	private String downloadSpeed;
 
 	@MessageElementForCatalog("Info.SVCSpaceSupportMode")
-	@Schema(description = "空域编码能力,取值0-不支持;1-1级增强(1个增强层);2-2级增强(2个增强层);3-3级增强(3个增强层)")
+	@Schema(description = "Airspace coding capability, value0-Not supported;1-1level enhancement(1enhancement layer);2-2level enhancement(2enhancement layer);3-3level enhancement(3enhancement layer)")
 	private Integer svcSpaceSupportMod;
 
 	@MessageElementForCatalog("Info.SVCTimeSupportMode")
-	@Schema(description = "时域编码能力,取值0-不支持;1-1级增强;2-2级增强;3-3级增强(可选)")
+	@Schema(description = "Time domain coding capability, value0-Not supported;1-1level enhancement;2-2level enhancement;3-3level enhancement(Optional)")
 	private Integer svcTimeSupportMode;
 
-	@Schema(description = "云台类型描述字符串")
+	@Schema(description = "PTZ type description string")
 	private String ptzTypeText;
 
-	@Schema(description = "子设备数")
+	@Schema(description = "Number of sub-devices")
 	private int subCount;
 
-	@Schema(description = "是否含有音频")
+	@Schema(description = "Does it contain audio")
 	private boolean hasAudio;
 
-	@Schema(description = "GPS的更新时间")
+	@Schema(description = "GPSupdate time")
 	private String gpsTime;
 
-	@Schema(description = "码流标识，优先级高于设备中码流标识，" +
-			"用于选择码流时组成码流标识。默认为null，不设置。可选值: stream/streamnumber/streamprofile/streamMode")
+	@Schema(description = "The code stream identifier has a higher priority than the code stream identifier in the device.，" +
+			"Used to form a code stream identifier when selecting a code stream. Defaults to null, not set. Optional value: stream/streamnumber/streamprofile/streamMode")
 	private String streamIdentification;
 
-	@Schema(description = "通道类型， 默认0, 0： 普通通道，1 行政区划 2 业务分组/虚拟组织")
+	@Schema(description = "Channel type, default 0, 0: ordinary channel, 1 administrative division 2 business grouping/virtual organization")
 	private int channelType;
 
 	private String dbKey;
@@ -199,28 +199,28 @@ public class DeviceChannel extends CommonGBChannel {
 		this.ptzType = ptzType;
 		switch (ptzType) {
 			case 0:
-				this.ptzTypeText = "未知";
+				this.ptzTypeText = "unknown";
 				break;
 			case 1:
-				this.ptzTypeText = "球机";
+				this.ptzTypeText = "ball machine";
 				break;
 			case 2:
-				this.ptzTypeText = "半球";
+				this.ptzTypeText = "hemisphere";
 				break;
 			case 3:
-				this.ptzTypeText = "固定枪机";
+				this.ptzTypeText = "Fixed bolt";
 				break;
 			case 4:
-				this.ptzTypeText = "遥控枪机";
+				this.ptzTypeText = "remote control gun";
 				break;
 			case 5:
-				this.ptzTypeText = "遥控半球";
+				this.ptzTypeText = "remote controlled hemisphere";
 				break;
 			case 6:
-				this.ptzTypeText = "多目设备的全景/拼接通道";
+				this.ptzTypeText = "Panoramic view of multi-view equipment/Splicing channel";
 				break;
 			case 7:
-				this.ptzTypeText = "多目设备的分割通道";
+				this.ptzTypeText = "Split channels for multi-channel equipment";
 				break;
 		}
 	}
@@ -232,7 +232,7 @@ public class DeviceChannel extends CommonGBChannel {
 					|| deviceChannel.getCivilCode().length() > 8 ){
 				deviceChannel.setCivilCode(null);
 			}
-			// 此处对于不在wvp缓存中的行政区划,默认直接存储.保证即使出现wvp的行政区划缓存过老,也可以通过用户自主创建的方式正常使用系统
+			// Here, administrative divisions that are not in the wvp cache are stored directly by default. This ensures that even if the administrative division cache of wvp is too old, the system can still be used normally through user-created methods.
 		}
 		GbCode gbCode = GbCode.decode(deviceChannel.getDeviceId());
 		if (gbCode != null && "138".equals(gbCode.getTypeCode())) {

@@ -1,3 +1,3 @@
-<!-- 自动点播 -->
+<!-- Automatic on-demand play -->
 
-# 自动点播
+#Automatically play on demand

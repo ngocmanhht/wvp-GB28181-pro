@@ -6,69 +6,69 @@ import lombok.Data;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * 业务分组
+ * business grouping
  */
 @Data
-@Schema(description = "业务分组")
+@Schema(description = "business grouping")
 public class Group implements Comparable<Group>{
     /**
-     * 数据库自增ID
+     * Database auto-incrementID
      */
-    @Schema(description = "数据库自增ID")
+    @Schema(description = "Database auto-incrementID")
     private int id;
 
     /**
-     * 区域国标编号
+     * Regional national standard number
      */
-    @Schema(description = "区域国标编号")
+    @Schema(description = "Regional national standard number")
     private String deviceId;
 
     /**
-     * 区域名称
+     * area name
      */
-    @Schema(description = "区域名称")
+    @Schema(description = "area name")
     private String name;
 
     /**
-     * 父分组ID
+     * parent groupID
      */
-    @Schema(description = "父分组ID")
+    @Schema(description = "parent groupID")
     private Integer parentId;
 
     /**
-     * 父区域国标ID
+     * Parent regional national standardID
      */
-    @Schema(description = "父区域国标ID")
+    @Schema(description = "Parent regional national standardID")
     private String parentDeviceId;
 
     /**
-     * 所属的业务分组国标编号
+     * The national standard number of the business group to which it belongs
      */
-    @Schema(description = "所属的业务分组国标编号")
+    @Schema(description = "The national standard number of the business group to which it belongs")
     private String businessGroup;
 
     /**
-     * 创建时间
+     * creation time
      */
-    @Schema(description = "创建时间")
+    @Schema(description = "creation time")
     private String createTime;
 
     /**
-     * 更新时间
+     * Update time
      */
-    @Schema(description = "更新时间")
+    @Schema(description = "Update time")
     private String updateTime;
 
     /**
-     * 行政区划
+     * Administrative division
      */
-    @Schema(description = "行政区划")
+    @Schema(description = "Administrative division")
     private String civilCode;
 
     /**
-     * 别名
+     * Alias
      */
-    @Schema(description = "别名， 此别名为唯一值，可以对接第三方是存储对方的ID")
+    @Schema(description = "Alias. This alias is a unique value and can be used to connect to a third party and store the other party'sID")
     private String alias;
 
     public static Group getInstance(DeviceChannel channel) {

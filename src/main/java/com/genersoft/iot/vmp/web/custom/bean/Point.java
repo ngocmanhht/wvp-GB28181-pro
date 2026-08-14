@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 @Data
-@Schema(description = "坐标")
+@Schema(description = "coordinates")
 public class Point {
 
     private double lng;

@@ -14,12 +14,12 @@ public interface IRegionService {
     boolean deleteByDeviceId(Integer regionDeviceId);
 
     /**
-     * 查询区划列表
+     * Query the list of divisions
      */
     PageInfo<Region> query(String query, int page, int count);
 
     /**
-     * 更新区域
+     * update area
      */
     void update(Region region);
 

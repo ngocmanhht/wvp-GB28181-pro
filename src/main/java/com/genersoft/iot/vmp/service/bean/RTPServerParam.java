@@ -12,17 +12,17 @@ import lombok.Setter;
 public class RTPServerParam {
 
     /**
-     * 使用的流媒体
+     * Streaming media used
      */
     private MediaServer mediaServer;
     private String app;
     private String streamId;
     /**
-     * 是否将ssrc传递给zlm做校验
+     * Whether to pass ssrc to zlm for verification
      */
     private boolean ssrcCheck;
     /**
-     * 开启rtpServer时使用的ssrc
+     * Used when starting rtpServerssrc
      */
     private Long ssrc;
     private Integer port;
@@ -31,7 +31,7 @@ public class RTPServerParam {
     private boolean reUsePort;
 
     /**
-     * tcp模式，0时为不启用tcp监听，1时为启用tcp监听，2时为tcp主动连接模式
+     * tcpMode, when 0 is to disable tcp monitoring, when 1 is to enable tcp monitoring, and when 2 is tcp active connection mode
      */
     private Integer tcpMode;
 

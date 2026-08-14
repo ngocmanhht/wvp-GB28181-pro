@@ -48,19 +48,19 @@ public class ZLMRESTfulUtils {
                 readTimeOut = 10;
             }
             OkHttpClient.Builder httpClientBuilder = new OkHttpClient.Builder();
-            //todo 暂时写死超时时间 均为5s
-            // 设置连接超时时间
+            //todo The timeout time is temporarily programmed to be5s
+            // Set connection timeout
             httpClientBuilder.connectTimeout(8,TimeUnit.SECONDS);
-            // 设置读取超时时间
+            // Set read timeout
             httpClientBuilder.readTimeout(readTimeOut,TimeUnit.SECONDS);
-            // 设置连接池
+            // Set up connection pool
             httpClientBuilder.connectionPool(new ConnectionPool(16, 5, TimeUnit.MINUTES));
             if (log.isDebugEnabled()) {
                 HttpLoggingInterceptor logging = new HttpLoggingInterceptor(message -> {
-                    log.debug("http请求参数：" + message);
+                    log.debug("httpRequest parameters：" + message);
                 });
                 logging.setLevel(HttpLoggingInterceptor.Level.BASIC);
-                // OkHttp進行添加攔截器loggingInterceptor
+                // OkHttpAdd interceptorloggingInterceptor
                 httpClientBuilder.addInterceptor(logging);
             }
             client = httpClientBuilder.build();
@@ -111,19 +111,19 @@ public class ZLMRESTfulUtils {
                         Objects.requireNonNull(response.body()).close();
                     }
                 }catch (IOException e) {
-                    log.error(String.format("[ %s ]请求失败: %s", url, e.getMessage()));
+                    log.error(String.format("[ %s ]Request failed: %s", url, e.getMessage()));
 
                     if(e instanceof SocketTimeoutException){
-                        //读取超时超时异常
-                        log.error(String.format("读取ZLM数据超时失败: %s, %s", url, e.getMessage()));
+                        //Read timeout exception
+                        log.error(String.format("Reading ZLM data timed out and failed: %s, %s", url, e.getMessage()));
                     }
                     if(e instanceof ConnectException){
-                        //判断连接异常，我这里是报Failed to connect to 10.7.5.144
-                        log.error(String.format("连接ZLM连接失败: %s, %s", url, e.getMessage()));
+                        //It is determined that the connection is abnormal. Here is the report.Failed to connect to 10.7.5.144
+                        log.error(String.format("Failed to connect to ZLM: %s, %s", url, e.getMessage()));
                     }
 
                 }catch (Exception e){
-                    log.error(String.format("访问ZLM失败: %s, %s", url, e.getMessage()));
+                    log.error(String.format("Failed to access ZLM: %s, %s", url, e.getMessage()));
                 }
             }else {
                 client.newCall(request).enqueue(new Callback(){
@@ -135,7 +135,7 @@ public class ZLMRESTfulUtils {
                                 String responseStr = Objects.requireNonNull(response.body()).string();
                                 callback.run(responseStr);
                             } catch (IOException e) {
-                                log.error(String.format("[ %s ]请求失败: %s", url, e.getMessage()));
+                                log.error(String.format("[ %s ]Request failed: %s", url, e.getMessage()));
                             }
 
                         }else {
@@ -146,15 +146,15 @@ public class ZLMRESTfulUtils {
 
                     @Override
                     public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                        log.error(String.format("连接ZLM失败: %s, %s", call.request().toString(), e.getMessage()));
+                        log.error(String.format("Failed to connect to ZLM: %s, %s", call.request().toString(), e.getMessage()));
 
                         if(e instanceof SocketTimeoutException){
-                            //读取超时超时异常
-                            log.error(String.format("读取ZLM数据失败: %s, %s", call.request().toString(), e.getMessage()));
+                            //Read timeout exception
+                            log.error(String.format("Failed to read ZLM data: %s, %s", call.request().toString(), e.getMessage()));
                         }
                         if(e instanceof ConnectException){
-                            //判断连接异常，我这里是报Failed to connect to 10.7.5.144
-                            log.error(String.format("连接ZLM失败: %s, %s", call.request().toString(), e.getMessage()));
+                            //It is determined that the connection is abnormal. Here is the report.Failed to connect to 10.7.5.144
+                            log.error(String.format("Failed to connect to ZLM: %s, %s", call.request().toString(), e.getMessage()));
                         }
                     }
                 });
@@ -193,7 +193,7 @@ public class ZLMRESTfulUtils {
                     File snapFolder = new File(targetPath);
                     if (!snapFolder.exists()) {
                         if (!snapFolder.mkdirs()) {
-                            log.warn("{}路径创建失败", snapFolder.getAbsolutePath());
+                            log.warn("{}Path creation failed", snapFolder.getAbsolutePath());
                         }
                     }
                     File snapFile = new File(targetPath + File.separator + fileName);
@@ -204,13 +204,13 @@ public class ZLMRESTfulUtils {
                     outStream.close();
                 }
             } else {
-                log.error("[ {} ]请求失败: {} {}", url, response.code(), response.message());
+                log.error("[ {} ]Request failed: {} {}", url, response.code(), response.message());
             }
         } catch (ConnectException e) {
-            log.error("连接ZLM失败: {}, {}", e.getCause().getMessage(), e.getMessage());
-            log.info("请检查media配置并确认ZLM已启动...");
+            log.error("Failed to connect to ZLM: {}, {}", e.getCause().getMessage(), e.getMessage());
+            log.info("Please check media configuration and confirm ZLM is started...");
         } catch (IOException e) {
-            log.error("[ {} ]请求失败: {}", url, e.getMessage());
+            log.error("[ {} ]Request failed: {}", url, e.getMessage());
         }
         return result;
     }
@@ -590,7 +590,7 @@ public class ZLMRESTfulUtils {
         param.put("enable_audio", enable_audio?1:0);
         param.put("rtp_type", rtp_type);
         param.put("timeout_sec", timeOut);
-        // 拉流重试次数,默认为3
+        // The number of retries to pull the stream, the default is3
         param.put("retry_count", 3);
 
         String response = sendPost(mediaServer, "addStreamProxy",param, null);

@@ -1,51 +1,51 @@
-<!-- 部署 -->
+<!-- Deployment -->
 
-# 部署
+# deploy
 
-**请仔细阅读以下内容**
+**Please read the following carefully**
 
-1. WVP-PRO与ZLM支持分开部署;
-2. 需要开放的端口
-   | 服务 | 端口 | 类型 | 必选 |
+1. WVP-PRO and ZLM support separate deployment;
+2. Ports that need to be opened
+| Service | Port | Type | Required |
    |-----|:-------------------------|-------------|-------|
-   | wvp | server.port | tcp | 是 |
-   | wvp | sip.port | udp and tcp | 是 |
-   | zlm | http.port | tcp | 是 |
-   | zlm | http.sslport | tcp | 否 |
-   | zlm | rtmp.port | tcp | 否 |
-   | zlm | rtmp.sslport | tcp | 否 |
-   | zlm | rtsp.port | udp and tcp | 否 |
-   | zlm | rtsp.sslport | udp and tcp | 否 |
-   | zlm | rtp_proxy.port | udp and tcp | 单端口开放 |
-   | zlm | rtp.port-range(在wvp中配置)  | udp and tcp | 多端口开放 |
+| wvp | server.port | tcp | yes |
+| wvp | sip.port | udp and tcp | yes |
+| zlm | http.port | tcp | yes |
+| zlm | http.sslport | tcp | no |
+| zlm | rtmp.port | tcp | no |
+| zlm | rtmp.sslport | tcp | no |
+| zlm | rtsp.port | udp and tcp | no |
+| zlm | rtsp.sslport | udp and tcp | no |
+| zlm | rtp_proxy.port | udp and tcp | single port open |
+| zlm | rtp.port-range (configured in wvp) | udp and tcp | multi-port opening |
 
-3. 测试环境部署建议所有服务部署在一台主机，关闭防火墙，减少因网络出现问题的可能;
-4. 生产环境按需开放端口，但是建议修改默认端口，尤其是5060端口，易受到攻击;
-5. zlm使用docker部署的情况，请使用host模式，或者端口映射一致，比如映射5060,应将外部端口也映射为5060端口;
-6. zlm与wvp会保持高频率的通信，所以不要去将wvp与zlm分属在两个网络，比如wvp在内网，zlm却在公网的情况。
-7. 启动服务，以linux为例
-   **启动WVP-PRO**
+3. For test environment deployment, it is recommended that all services be deployed on one host and the firewall is turned off to reduce the possibility of network problems;
+4. Open ports on demand in the production environment, but it is recommended to modify the default port, especially port 5060, which is vulnerable to attacks;
+5. When zlm is deployed using docker, please use host mode, or the port mapping is consistent, such as mapping 5060, the external port should also be mapped to port 5060;
+6. ZLM and WVP will maintain high-frequency communication, so do not separate WVP and ZLM into two networks. For example, WVP is on the internal network and ZLM is on the public network.
+7. Start the service, taking linux as an example
+**Start WVP-PRO**
 
 ```shell
 nohup java -jar wvp-pro-*.jar &
 ```
 
-**war包：**  
-下载Tomcat后将war包放入webapps中，启动Tomcat以解压war包，停止Tomcat后，删除ROOT目录以及war包，将解压后的war包目录重命名为ROOT，将配置文件中的Server.port配置为与Tomcat端口一致
-然后启动Tomcat。  
-**启动ZLM**
+**war package:**
+After downloading Tomcat, put the war package into webapps, start Tomcat to decompress the war package, stop Tomcat, delete the ROOT directory and war package, rename the decompressed war package directory to ROOT, and configure the Server.port in the configuration file to be consistent with the Tomcat port
+Then start Tomcat.
+**Start ZLM**
 
 ```shell
 nohup ./MediaServer -d -m 3 &
 ```
 
-### 前后端分离部署
+### Separate deployment of front-end and back-end
 
-前端基于 [vue-admin-template](https://github.com/PanJiaChen/vue-admin-template/blob/master/README-zh.md) 构建， 参考这儿即可。
+The front-end is built based on [vue-admin-template](https://github.com/PanJiaChen/vue-admin-template/blob/master/README-zh.md) , please refer to here.
 
-### 默认账号和密码
+###Default account and password
 
-部署完毕后，可以通过访问 ip加端口的方式访问 WVP ，WVP的默认登录账号和密码均为 admin。
+After deployment, you can access WVP by accessing IP and port. The default login account and password of WVP are both admin.
 
 
 

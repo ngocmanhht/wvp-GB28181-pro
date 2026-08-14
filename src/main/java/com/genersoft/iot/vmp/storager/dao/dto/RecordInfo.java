@@ -1,7 +1,7 @@
 package com.genersoft.iot.vmp.storager.dao.dto;
 
 /**
- * 录像记录
+ * Video recording
  */
 public class RecordInfo {
 
@@ -11,27 +11,27 @@ public class RecordInfo {
     private int id;
 
     /**
-     * 应用名
+     * Application name
      */
     private String app;
 
     /**
-     * 流ID
+     * flowID
      */
     private String stream;
 
     /**
-     * 对应的zlm流媒体的ID
+     * Corresponding zlm streaming mediaID
      */
     private String mediaServerId;
 
     /**
-     * 创建时间
+     * creation time
      */
     private String createTime;
 
     /**
-     * 类型 对应zlm的 originType
+     * Type corresponds to zlm originType
      * unknown = 0,
      * rtmp_push=1,
      * rtsp_push=2,
@@ -45,17 +45,17 @@ public class RecordInfo {
     private int type;
 
     /**
-     * 国标录像时的设备ID
+     * Equipment for national standard video recordingID
      */
     private String deviceId;
 
     /**
-     * 国标录像时的通道ID
+     * Channel during national standard recordingID
      */
     private String channelId;
 
     /**
-     * 拉流代理录像时的名称
+     * The name when streaming proxy recording
      */
     private String name;
 

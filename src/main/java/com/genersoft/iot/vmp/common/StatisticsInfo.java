@@ -3,7 +3,7 @@ package com.genersoft.iot.vmp.common;
 import lombok.Data;
 
 /**
- * 统计信息
+ * Statistics
  */
 @Data
 public class StatisticsInfo {
@@ -16,62 +16,62 @@ public class StatisticsInfo {
     private String deviceId;
 
     /**
-     * 分支
+     * branch
      */
     private String branch;
 
     /**
-     * git提交版本ID
+     * gitcommit versionID
      */
     private String gitCommitId;
 
     /**
-     * git地址
+     * gitaddress
      */
     private String gitUrl;
 
     /**
-     * 构建版本
+     * build version
      */
     private String version;
 
     /**
-     * 操作系统名称
+     * Operating system name
      */
     private String osName;
 
     /**
-     * 是否是docker环境
+     * Is it a docker environment?
      */
     private Boolean docker;
 
     /**
-     * 架构
+     * Architecture
      */
     private String arch;
 
     /**
-     * jdk版本
+     * jdkversion
      */
     private String jdkVersion;
 
     /**
-     * redis版本
+     * redisversion
      */
     private String redisVersion;
 
     /**
-     * sql数据库版本
+     * sqlDatabase version
      */
     private String sqlVersion;
 
     /**
-     * sql数据库类型， mysql/postgresql/金仓等
+     * sqlDatabase type， mysql/postgresql/Jin Cang et al.
      */
     private String sqlType;
 
     /**
-     * 创建时间
+     * creation time
      */
     private String time;
 

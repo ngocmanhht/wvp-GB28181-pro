@@ -8,9 +8,9 @@ import org.springframework.stereotype.Component;
 import javax.sip.ResponseEvent;
 
 /**    
- * @description: BYE请求响应器
+ * @description: BYErequest responder
  * @author: swwheihei
- * @date:   2020年5月3日 下午5:32:05     
+ * @date:   2020May 3rd, afternoon5:32:05     
  */
 @Component
 public class ByeResponseProcessor extends SIPResponseProcessorAbstract {
@@ -22,11 +22,11 @@ public class ByeResponseProcessor extends SIPResponseProcessorAbstract {
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
-		// 添加消息处理的订阅
+		// Add message processing subscription
 		sipProcessorObserver.addResponseProcessor(method, this);
 	}
 	/**
-	 * 处理BYE响应
+	 * Handling BYE responses
 	 * 
 	 * @param evt
 	 */
