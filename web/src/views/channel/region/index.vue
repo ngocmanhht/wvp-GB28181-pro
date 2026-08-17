@@ -122,7 +122,7 @@
 </template>
 
 <script>
-import RegionTree from '../..//common/RegionTree.vue'
+import RegionTree from '../../common/RegionTree.vue'
 import GbChannelSelect from '../../dialog/GbChannelSelect.vue'
 import UnusualRegionChannelSelect from './UnusualRegionChannelSelect.vue'
 
