@@ -117,19 +117,35 @@ elif [ "$mode_choice" = "2" ]; then
     log_info "Step 1: Building Web Frontend..."
     cd "$SCRIPT_DIR/web"
     
-    log_info "Installing npm dependencies (this may take a few minutes)..."
-    npm install
-    if [ $? -ne 0 ]; then
-        log_error "npm install failed. Trying with npmmirror registry..."
+    if command -v yarn &> /dev/null; then
+        log_info "Installing dependencies with Yarn (fast)..."
+        yarn config set registry https://registry.npmmirror.com
+        yarn install --network-timeout 600000
+        if [ $? -ne 0 ]; then
+            log_error "Yarn install failed. Retrying..."
+            yarn install
+            if [ $? -ne 0 ]; then
+                log_error "Frontend dependency installation failed. Exiting."
+                exit 1
+            fi
+        fi
+        log_info "Compiling Web assets with Yarn..."
+        yarn build:prod
+    else
+        log_info "Installing npm dependencies (this may take a few minutes)..."
         npm install --registry=https://registry.npmmirror.com
         if [ $? -ne 0 ]; then
-            log_error "Frontend dependency installation failed. Exiting."
-            exit 1
+            log_error "npm install failed. Retrying standard npm..."
+            npm install
+            if [ $? -ne 0 ]; then
+                log_error "Frontend dependency installation failed. Exiting."
+                exit 1
+            fi
         fi
+        log_info "Compiling Web assets with npm..."
+        npm run build:prod
     fi
-    
-    log_info "Compiling Web assets..."
-    npm run build:prod
+
     if [ $? -ne 0 ]; then
         log_error "Frontend compilation failed. Exiting."
         exit 1

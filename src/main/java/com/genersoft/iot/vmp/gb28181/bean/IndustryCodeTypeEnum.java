@@ -11,7 +11,7 @@ public enum IndustryCodeTypeEnum {
     SOCIAL_SECURITY__INTERNAL("02", "Internal access to social security ", "Including public security office building, detention room, etc."),
     SOCIAL_SECURITY_OTHER("03", "Other access to social security", ""),
     TRAFFIC_ROAD("04", "Traffic road access ", "Including monitoring of traffic conditions on major urban arterial roads, national highways, and highways"),
-    TRAFFIC_BAYONET("05", "Traffic checkpoint access", "Including intersections, "electronic police", checkpoints, toll stations, etc."),
+    TRAFFIC_BAYONET("05", "Traffic checkpoint access", "Including intersections, 'electronic police', checkpoints, toll stations, etc."),
     TRAFFIC_INTERNAL("06", "Traffic internal access", "Including traffic control office building, etc."),
     TRAFFIC_OTHER("07", "Transportation other access", ""),
     CITY_MANAGEMENT("08", "City management access", ""),

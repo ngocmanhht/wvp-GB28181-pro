@@ -2,14 +2,16 @@ FROM ubuntu:24.04 AS builder
 
 
 RUN apt-get update && \
-    apt-get install -y nodejs npm  && \
+    apt-get install -y nodejs npm && \
+    npm install -g yarn --registry=https://registry.npmmirror.com && \
     rm -rf /var/lib/apt/lists/*
 
 COPY ./web /build
 WORKDIR /build
 
-RUN npm --registry=https://registry.npmmirror.com install
-RUN npm run build:prod
+RUN yarn config set registry https://registry.npmmirror.com && \
+    yarn install --network-timeout 600000 && \
+    yarn build:prod
 
 WORKDIR /src/main/resources
 RUN ls
