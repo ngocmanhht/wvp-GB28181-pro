@@ -59,17 +59,13 @@ services:
     networks:
       - media-net
     ports:
-      #- "6080:80/tcp"     # [stream]HTTP  security considerations-It needs to be commented out during the non-testing phase, and the streaming address will be proxy by nginx instead.
-      #- "4443:443/tcp"     # [stream]HTTPS security considerations-It needs to be commented out during the non-testing phase, and the streaming address will be proxy by nginx instead.
-      - "${MediaRtmp:-10935}:${MediaRtmp:-10935}/tcp" # [collect flow]RTMP
-      - "${MediaRtmp:-10935}:${MediaRtmp:-10935}/udp" # [collect flow]RTMP
-      #- "41935:41935/tcp"   # [collect flow]RTMPS Invalid
-      - "${MediaRtsp:-5540}:${MediaRtsp:-5540}/tcp" # [collect flow]RTSP
-      - "${MediaRtsp:-5540}:${MediaRtsp:-5540}/udp" # [collect flow]RTSP
-      #- "45540:45540/tcp"   # [collect flow]RTSPS Invalid
-      - "${MediaRtp:-10000}:${MediaRtp:-10000}/tcp" # [collect flow]RTP
-      - "${MediaRtp:-10000}:${MediaRtp:-10000}/udp" # [collect flow]RTP
-      - "80:80/tcp"
+      - "80:80/tcp"                                       # [stream]HTTP ZLMediaKit direct access
+      - "${MediaRtmp:-10935}:${MediaRtmp:-10935}/tcp"     # [collect flow]RTMP
+      - "${MediaRtmp:-10935}:${MediaRtmp:-10935}/udp"     # [collect flow]RTMP
+      - "${MediaRtsp:-5540}:${MediaRtsp:-5540}/tcp"       # [collect flow]RTSP
+      - "${MediaRtsp:-5540}:${MediaRtsp:-5540}/udp"       # [collect flow]RTSP
+      - "${MediaRtp:-10000}:${MediaRtp:-10000}/tcp"       # [collect flow]RTP
+      - "${MediaRtp:-10000}:${MediaRtp:-10000}/udp"       # [collect flow]RTP
     volumes:
       - ./volumes/video:/opt/media/bin/www/record/
       - ./logs/media:/opt/media/log/

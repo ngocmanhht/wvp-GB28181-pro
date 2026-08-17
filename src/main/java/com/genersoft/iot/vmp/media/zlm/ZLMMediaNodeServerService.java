@@ -663,21 +663,27 @@ public class ZLMMediaNodeServerService implements IMediaNodeServerService {
         streamInfoResult.setRtmp(addr, mediaServer.getRtmpPort(),mediaServer.getRtmpSSlPort(), app,  stream, callIdParam);
         streamInfoResult.setRtsp(addr, mediaServer.getRtspPort(),mediaServer.getRtspSSLPort(), app,  stream, callIdParam);
 
+        int httpPort = mediaServer.getFlvPort() > 0 ? mediaServer.getFlvPort() : mediaServer.getHttpPort();
+        int httpSSLPort = mediaServer.getFlvSSLPort() > 0 ? mediaServer.getFlvSSLPort() : mediaServer.getHttpSSlPort();
+        int wsPort = mediaServer.getWsFlvPort() > 0 ? mediaServer.getWsFlvPort() : mediaServer.getHttpPort();
+        int wsSSLPort = mediaServer.getWsFlvSSLPort() > 0 ? mediaServer.getWsFlvSSLPort() : mediaServer.getHttpSSlPort();
+
         String flvFile = String.format("%s/%s.live.flv%s", app, stream, callIdParam);
-        streamInfoResult.setFlv(addr, mediaServer.getHttpPort(),mediaServer.getHttpSSlPort(), flvFile);
-        streamInfoResult.setWsFlv(addr, mediaServer.getHttpPort(),mediaServer.getHttpSSlPort(), flvFile);
+        streamInfoResult.setFlv(addr, httpPort, httpSSLPort, flvFile);
+        streamInfoResult.setWsFlv(addr, wsPort, wsSSLPort, flvFile);
 
         String mp4File = String.format("%s/%s.live.mp4%s", app, stream, callIdParam);
-        streamInfoResult.setFmp4(addr, mediaServer.getHttpPort(),mediaServer.getHttpSSlPort(), mp4File);
-        streamInfoResult.setWsMp4(addr, mediaServer.getHttpPort(),mediaServer.getHttpSSlPort(), mp4File);
+        int mp4Port = mediaServer.getMp4Port() > 0 ? mediaServer.getMp4Port() : httpPort;
+        streamInfoResult.setFmp4(addr, mp4Port, httpSSLPort, mp4File);
+        streamInfoResult.setWsMp4(addr, mp4Port, wsSSLPort, mp4File);
 
-        streamInfoResult.setHls(addr, mediaServer.getHttpPort(), mediaServer.getHttpSSlPort(), app,  stream, callIdParam);
-        streamInfoResult.setWsHls(addr, mediaServer.getHttpPort(), mediaServer.getHttpSSlPort(), app,  stream, callIdParam);
+        streamInfoResult.setHls(addr, httpPort, httpSSLPort, app,  stream, callIdParam);
+        streamInfoResult.setWsHls(addr, wsPort, wsSSLPort, app,  stream, callIdParam);
 
-        streamInfoResult.setTs(addr, mediaServer.getHttpPort(), mediaServer.getHttpSSlPort(), app,  stream, callIdParam);
-        streamInfoResult.setWsTs(addr, mediaServer.getHttpPort(), mediaServer.getHttpSSlPort(), app,  stream, callIdParam);
+        streamInfoResult.setTs(addr, httpPort, httpSSLPort, app,  stream, callIdParam);
+        streamInfoResult.setWsTs(addr, wsPort, wsSSLPort, app,  stream, callIdParam);
 
-        streamInfoResult.setRtc(addr, mediaServer.getHttpPort(), mediaServer.getHttpSSlPort(), app,  stream, callIdParam, isPlay);
+        streamInfoResult.setRtc(addr, httpPort, httpSSLPort, app,  stream, callIdParam, isPlay);
 
         streamInfoResult.setMediaInfo(mediaInfo);
 
