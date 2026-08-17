@@ -59,7 +59,6 @@ services:
     networks:
       - media-net
     ports:
-      - "80:80/tcp"                                       # [stream]HTTP ZLMediaKit direct access
       - "${MediaRtmp:-10935}:${MediaRtmp:-10935}/tcp"     # [collect flow]RTMP
       - "${MediaRtmp:-10935}:${MediaRtmp:-10935}/udp"     # [collect flow]RTMP
       - "${MediaRtsp:-5540}:${MediaRtsp:-5540}/tcp"       # [collect flow]RTSP
