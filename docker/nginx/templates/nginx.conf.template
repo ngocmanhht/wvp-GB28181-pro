@@ -63,6 +63,36 @@ server {
         proxy_read_timeout 300s;
     }
 
+    # ZLMediaKit WebRTC and Index API proxy
+    location /index/api/ {
+        proxy_pass http://polaris-media:80/index/api/;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_connect_timeout 60s;
+        proxy_read_timeout 3600s;
+        proxy_send_timeout 60s;
+    }
+
+    # Proxy all streaming formats (FLV, WS-FLV, HLS, TS, FMP4) for ANY application name
+    location ~* \.(flv|m3u8|ts|fmp4|mp4)$ {
+        proxy_pass http://polaris-media:80;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_connect_timeout 60s;
+        proxy_read_timeout 3600s;
+        proxy_send_timeout 60s;
+    }
+
     # Only proxies allowed/rtp/path at the beginning
     location ^~ /rtp/ {
         # Proxy to ZLMediakit service
