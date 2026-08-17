@@ -65,7 +65,7 @@ RUN mkdir -p /opt/wvp
 WORKDIR /opt/wvp
 COPY --from=builder /build/target /opt/wvp
 COPY ./docker/wvp/wvp /opt/wvp
-ENTRYPOINT ["java", "-Xms512m", "-Xmx1024m", "-XX:+HeapDumpOnOutOfMemoryError", "-XX:HeapDumpPath=/opt/ylcx/", "-jar", "wvp.jar", "--spring.config.location=/opt/ylcx/wvp/application.yml"]
+ENTRYPOINT ["java", "-Xms512m", "-Xmx1024m", "-XX:+HeapDumpOnOutOfMemoryError", "-XX:HeapDumpPath=/opt/ylcx/", "-jar", "wvp.jar", "--spring.config.additional-location=file:/opt/ylcx/wvp/"]
 
 
 

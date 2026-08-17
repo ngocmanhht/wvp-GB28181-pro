@@ -3,3 +3,7 @@ spring:
     name: wvp
   profiles:
     active: docker
+  config:
+    import:
+      - optional:file:/opt/ylcx/wvp/application-docker.yml
+      - optional:file:./application-docker.yml

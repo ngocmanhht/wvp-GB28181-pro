@@ -24,11 +24,11 @@ services:
     image: mysql:8  # Use the official MySQL 8 image
     restart: unless-stopped
     healthcheck:
-      test: [ "CMD", "bash", "-c", "cat < /dev/null > /dev/tcp/127.0.0.1/3306" ]
-      interval: 15s
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -u root -proot"]
+      interval: 5s
       timeout: 5s
-      retries: 10
-      start_period: 10s
+      retries: 20
+      start_period: 15s
     networks:
       - media-net
     environment:
@@ -92,9 +92,12 @@ services:
       - "${SIP_Port:-8116}:${SIP_Port:-8116}/udp"
       - "${SIP_Port:-8116}:${SIP_Port:-8116}/tcp"
     depends_on:
-      - polaris-redis
-      - polaris-mysql
-      - polaris-media
+      polaris-redis:
+        condition: service_healthy
+      polaris-mysql:
+        condition: service_healthy
+      polaris-media:
+        condition: service_started
     volumes:
       - ./wvp/config:/opt/wvp/config
       - ./wvp/wvp/:/opt/ylcx/wvp/
