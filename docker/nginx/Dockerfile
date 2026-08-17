@@ -10,7 +10,7 @@ COPY ./web /build
 WORKDIR /build
 
 RUN yarn config set registry https://registry.npmmirror.com
-RUN yarn install --network-timeout 600000
+RUN yarn install --network-timeout 600000 --ignore-engines
 RUN yarn build:prod
 
 WORKDIR /src/main/resources

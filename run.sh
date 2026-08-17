@@ -120,10 +120,10 @@ elif [ "$mode_choice" = "2" ]; then
     if command -v yarn &> /dev/null; then
         log_info "Installing dependencies with Yarn (fast)..."
         yarn config set registry https://registry.npmmirror.com
-        yarn install --network-timeout 600000
+        yarn install --network-timeout 600000 --ignore-engines
         if [ $? -ne 0 ]; then
             log_error "Yarn install failed. Retrying..."
-            yarn install
+            yarn install --ignore-engines
             if [ $? -ne 0 ]; then
                 log_error "Frontend dependency installation failed. Exiting."
                 exit 1
