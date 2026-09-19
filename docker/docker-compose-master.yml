@@ -57,7 +57,8 @@ services:
     networks:
       - wvp-master-net
     ports:
-      - "18978:18978"                            # REST API & Web Control Plane
+      - "${WebHttp:-80}:18978"                   # Web Control Plane & REST API qua cổng 80 (hoặc WebHttp từ .env)
+      - "18978:18978"                            # Cổng gốc WVP
       - "${SIP_Port:-8116}:${SIP_Port:-8116}/udp" # SIP Signaling GB28181
       - "${SIP_Port:-8116}:${SIP_Port:-8116}/tcp"
     depends_on:
