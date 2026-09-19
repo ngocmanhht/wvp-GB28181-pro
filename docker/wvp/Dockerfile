@@ -12,7 +12,7 @@ COPY pom.xml /build/pom.xml
 COPY src /build/src
 
 # Biên dịch song song đa nhân (-T 1C) với BuildKit cache mount để tái sử dụng thư viện
-RUN --mount=type=cache,target=/root/.m2 mvn clean package -Dmaven.test.skip=true -T 1C
+RUN --mount=type=cache,target=/root/.m2 mvn clean package -Dmaven.test.skip=true -Dgit.commit.id.skip=true -T 1C
 
 # ==============================================================================
 # STAGE 2: Runtime Runner Image
