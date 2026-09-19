@@ -102,7 +102,7 @@ services:
     depends_on:
       - polaris-wvp
     volumes:
-      - ./nginx/templates/:/etc/nginx/templates
+      - ./nginx/templates/nginx-master.conf.template:/etc/nginx/templates/default.conf.template
       - ./logs/nginx:/var/log/nginx
     environment:
       Stream_IP: ${Stream_IP:-27.71.24.106}
