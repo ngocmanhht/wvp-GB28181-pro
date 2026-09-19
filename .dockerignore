@@ -1,1 +1,28 @@
-docker/volumes
+# Git & IDE
+.git
+.gitignore
+.gitmodules
+.idea
+.vscode
+*.iml
+.DS_Store
+
+# Temporary & Cache
+.chrome-tmp/
+*.log
+logs/
+target/
+*.pptx
+*.pdf
+*.png
+*.mp4
+
+# Docker & Volumes
+docker/volumes/
+docker/logs/
+volumes/
+zlm-node-standalone/volumes/
+
+# Web frontend dependencies & build outputs (Frontend should be prebuilt or separated)
+web/node_modules/
+web/dist/

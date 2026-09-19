@@ -1,85 +1,39 @@
-FROM ringcentral/jdk:21.0.9 AS builder
+# syntax=docker/dockerfile:1
+# ==============================================================================
+# Multi-stage optimized Dockerfile for WVP-GB28181-PRO Master Control Plane
+# Tối ưu hóa: Layer Caching + Pre-installed Maven + BuildKit Cache Mount + Multi-thread
+# ==============================================================================
+
+# STAGE 1: Builder (Sử dụng image có sẵn Maven 3.9 & JDK 21 để không tốn thời gian apt-get)
+FROM maven:3.9-eclipse-temurin-21 AS builder
+
+WORKDIR /build
+
+# Tối ưu 1: Copy riêng pom.xml trước để cache toàn bộ thư viện dependencies
+COPY pom.xml /build/pom.xml
+
+# Tối ưu 2: Tải dependencies với BuildKit cache mount để tái sử dụng giữa các lần build
+RUN --mount=type=cache,target=/root/.m2 mvn dependency:go-offline -B || true
+
+# Tối ưu 3: Copy mã nguồn và biên dịch song song đa nhân (-T 1C)
+COPY src /build/src
+RUN --mount=type=cache,target=/root/.m2 mvn package -Dmaven.test.skip=true -T 1C
+
+# ==============================================================================
+# STAGE 2: Runtime Runner Image (Nhẹ và khởi động tức thì)
+# ==============================================================================
+FROM ringcentral/jdk:21.0.9
 
 EXPOSE 18978/tcp
 EXPOSE 8116/tcp
 EXPOSE 8116/udp
-EXPOSE 8080/tcp
 
-#RUN apt-get update && \
-         #DEBIAN_FRONTEND="noninteractive" \
-         #apt-get install -y --no-install-recommends \
-         #wget \
-         #cmake \
-         #maven \
-         #git \
-         #ca-certificates \
-         #tzdata \
-         #curl \
-         #libpcre3 \
-         #libpcre3-dev \
-         #zlib1g-dev \
-         #openssl \
-         #libssl-dev \
-         #gdb && \
-         #apt-get autoremove -y && \
-         #apt-get clean -y && \
-         #rm -rf /var/lib/apt/lists/*
-
-## install jdk1.8
-#RUN mkdir -p /opt/download
-#WORKDIR /opt/download
-#RUN if [ "$Platfrom" = "arm64" ]; \
-    #then \
-        #wget https://polaris-tian-generic.pkg.coding.net/qt/autopliot/jdk-8u411-linux-aarch64.tar.gz?version=latest --no-check-certificate -O jdk-8.tar.gz && \
-        #tar -zxvf /opt/download/jdk-8.tar.gz -C /usr/local/ --transform 's/jdk1.8.0_411/java/' && \
-        #rm /opt/download/jdk-8.tar.gz; \
-    #else \
-        #wget https://polaris-tian-generic.pkg.coding.net/qt/autopliot/jdk-8u202-linux-x64.tar.gz?version=latest --no-check-certificate -O jdk-8.tar.gz && \
-        #tar -zxvf /opt/download/jdk-8.tar.gz -C /usr/local/ --transform 's/jdk1.8.0_202/java/' && \
-        #rm /opt/download/jdk-8.tar.gz; \
-    #fi
-
-#ENV JAVA_HOME /usr/local/java/
-#ENV JRE_HOME ${JAVA_HOME}/jre
-#ENV CLASSPATH .:${JAVA_HOME}/lib:${JRE_HOME}/lib
-#ENV PATH ${JAVA_HOME}/bin:$PATH
-
-RUN java -version && javac -version
-
-#RUN sed -i 's/deb.debian.org/mirrors.aliyun.com/g' /etc/apt/sources.list.d/debian.sources && \
-RUN apt-get update && \
-    apt-get install -y maven && \
-    rm -rf /var/lib/apt/lists/*
-
-
-COPY . /build
-WORKDIR /build
-RUN ls && mvn clean package -Dmaven.test.skip=true
-WORKDIR /build/target
-#ȷ���ļ���һ��
-RUN mv wvp-pro-*.jar wvp.jar
-
-
-FROM ringcentral/jdk:21.0.9
-RUN mkdir -p /opt/wvp
+RUN mkdir -p /opt/wvp /opt/ylcx/wvp
 WORKDIR /opt/wvp
-COPY --from=builder /build/target /opt/wvp
-COPY ./docker/wvp/wvp /opt/wvp
+
+# Copy file jar đã biên dịch từ Stage 1
+COPY --from=builder /build/target/wvp-pro-*.jar /opt/wvp/wvp.jar
+COPY ./docker/wvp/wvp /opt/wvp/
+COPY ./docker/wvp/wvp /opt/ylcx/wvp/
+
 ENTRYPOINT ["java", "-Xms512m", "-Xmx1024m", "-XX:+HeapDumpOnOutOfMemoryError", "-XX:HeapDumpPath=/opt/ylcx/", "-jar", "wvp.jar", "--spring.config.additional-location=file:/opt/ylcx/wvp/"]
-
-
-
-#RUN mkdir -p /opt/wvp
-#WORKDIR /opt/wvp
-#COPY ./wvp /opt/wvp
-#
-#WORKDIR /home
-#RUN cd /home && \
-    #git clone https://gitee.com/pan648540858/wvp-GB28181-pro.git
-#
-#RUN cd /home/wvp-GB28181-pro && \
-    #mvn clean package -Dmaven.test.skip=true && \
-    #cp /home/wvp-GB28181-pro/target/*.jar /opt/wvp/wvp.jar
-#
-#WORKDIR /opt/wvp
-#ENTRYPOINT ["java", "-Xms512m", "-Xmx1024m", "-XX:+HeapDumpOnOutOfMemoryError", "-XX:HeapDumpPath=/opt/ylcx/", "-jar", "wvp.jar", "--spring.config.location=/opt/ylcx/wvp/application.yml"]

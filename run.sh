@@ -76,9 +76,10 @@ fi
 # Ask the user how they want to run the project
 echo ""
 echo "Select execution mode:"
-echo "1) Run with Docker Compose (Recommended - builds and starts all services: WVP, Web, Redis, MySQL, ZLMediaKit, Nginx)"
-echo "2) Run locally (Requires local Redis, MySQL, ZLMediaKit already running on localhost)"
-read -p "Enter selection (1 or 2): " mode_choice
+echo "1) Run WVP Master ONLY (Recommended - Pure Control Plane, KHÔNG kèm ZLMediaKit)"
+echo "2) Run All-in-One Full Stack (WVP + ZLMediaKit chạy chung 1 máy để test nhanh)"
+echo "3) Run locally (Requires local Redis, MySQL running on localhost)"
+read -p "Enter selection (1, 2, or 3): " mode_choice
 
 if [ "$mode_choice" = "1" ]; then
     if [ "$has_docker" = "false" ]; then
@@ -86,8 +87,41 @@ if [ "$mode_choice" = "1" ]; then
         exit 1
     fi
     
-    log_info "Starting full stack with Docker Compose..."
+    log_info "Starting WVP Master Pure Control Plane (Không kèm ZLMediaKit)..."
     cd "$SCRIPT_DIR/docker"
+    export DOCKER_BUILDKIT=1
+    export COMPOSE_DOCKER_CLI_BUILD=1
+    
+    # Check if docker-compose or docker compose is available
+    if docker compose version &> /dev/null; then
+        log_info "Running: docker compose -f docker-compose-master.yml up -d --build"
+        docker compose -f docker-compose-master.yml up -d --build
+    else
+        log_info "Running: docker-compose -f docker-compose-master.yml up -d --build"
+        docker-compose -f docker-compose-master.yml up -d --build
+    fi
+    
+    if [ $? -eq 0 ]; then
+        log_success "WVP Master Control Plane started successfully in Docker!"
+        log_info "• Web Dashboard & REST API: http://localhost:18978"
+        log_info "• SIP Signaling Port (GB28181): 8116 UDP/TCP"
+        log_info "• Default login credentials: admin / admin"
+        log_info "• Để thêm ZLMediaKit Worker: Dùng thư mục 'zlm-node-standalone' trên máy chủ Worker."
+    else
+        log_error "Failed to start WVP Master services."
+        exit 1
+    fi
+
+elif [ "$mode_choice" = "2" ]; then
+    if [ "$has_docker" = "false" ]; then
+        log_error "Docker is required for this mode but it is not installed. Exiting."
+        exit 1
+    fi
+    
+    log_info "Starting All-in-One Full Stack with Docker Compose (kèm ZLMediaKit nội bộ)..."
+    cd "$SCRIPT_DIR/docker"
+    export DOCKER_BUILDKIT=1
+    export COMPOSE_DOCKER_CLI_BUILD=1
     
     # Check if docker-compose or docker compose is available
     if docker compose version &> /dev/null; then
@@ -99,15 +133,15 @@ if [ "$mode_choice" = "1" ]; then
     fi
     
     if [ $? -eq 0 ]; then
-        log_success "All services started successfully in Docker!"
-        log_info "You can access the WVP Web Platform at: http://localhost:8080"
-        log_info "Default login credentials: admin / admin"
+        log_success "All-in-One services started successfully in Docker!"
+        log_info "• WVP Web Dashboard: http://localhost:18978"
+        log_info "• Default login credentials: admin / admin"
     else
         log_error "Failed to start Docker Compose services."
         exit 1
     fi
 
-elif [ "$mode_choice" = "2" ]; then
+elif [ "$mode_choice" = "3" ]; then
     # Local build and run
     if [ "$has_node" = "false" ]; then
         log_error "Node.js is required to build the frontend. Exiting."
