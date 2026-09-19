@@ -57,8 +57,7 @@ services:
     networks:
       - wvp-master-net
     ports:
-      - "${WebHttp:-80}:18978"                   # Web Control Plane & REST API qua cổng 80 (hoặc WebHttp từ .env)
-      - "18978:18978"                            # Cổng gốc WVP
+      - "18978:18978"                            # REST API WVP
       - "${SIP_Port:-8116}:${SIP_Port:-8116}/udp" # SIP Signaling GB28181
       - "${SIP_Port:-8116}:${SIP_Port:-8116}/tcp"
     depends_on:
@@ -91,6 +90,24 @@ services:
       MEDIA_AUTO_CONFIG: "false"
       # Hỗ trợ cấu hình Multi CLUSTER_JOIN_TOKEN (phân tách bằng dấu phẩy)
       MEDIA_SECRET: "${MEDIA_SECRET:-token_north_2026,token_south_2026,token_danang_2026,wvp_cluster_join_secret_key_2026}"
+
+  # Web Admin Vue Frontend & Reverse Proxy
+  polaris-nginx:
+    build:
+      context: ..
+      dockerfile: ./docker/nginx/Dockerfile
+    restart: always
+    ports:
+      - "${WebHttp:-80}:8080"
+    depends_on:
+      - polaris-wvp
+    volumes:
+      - ./nginx/templates/:/etc/nginx/templates
+      - ./logs/nginx:/var/log/nginx
+    environment:
+      Stream_IP: ${Stream_IP:-27.71.24.106}
+    networks:
+      - wvp-master-net
 
 networks:
   wvp-master-net:
