@@ -266,12 +266,7 @@ public class ZLMHttpHookListener {
                     mediaServer.setStreamIp(!ObjectUtils.isEmpty(streamIp) ? streamIp : mediaServer.getIp());
                     mediaServer.setHookIp(request.getLocalAddr());
 
-                    int httpPort = 80;
-                    try {
-                        if (zlmServerConfig.getHttpPort() != null) {
-                            httpPort = Integer.parseInt(zlmServerConfig.getHttpPort());
-                        }
-                    } catch (Exception ignored) {}
+                    int httpPort = zlmServerConfig.getHttpPort() > 0 ? zlmServerConfig.getHttpPort() : 80;
                     mediaServer.setHttpPort(httpPort);
 
                     // Bảo mật chia vùng: Lưu đúng Secret riêng biệt của từng Node
