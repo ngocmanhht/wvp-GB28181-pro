@@ -73,6 +73,19 @@ services:
     environment:
       TZ: "Asia/Ho_Chi_Minh"
       RUN_ENV: "docker"
+      REDIS_HOST: polaris-redis
+      REDIS_PORT: 6379
+      DATABASE_HOST: polaris-mysql
+      DATABASE_PORT: 3306
+      DATABASE_USER: wvp_user
+      DATABASE_PASSWORD: wvp_password
+      SIP_ShowIP: ${SIP_ShowIP:-127.0.0.1}
+      SIP_Port: ${SIP_Port:-8116}
+      SIP_Domain: ${SIP_Domain:-3402000000}
+      SIP_Id: ${SIP_Id:-34020000002000000001}
+      SIP_Password: ${SIP_Password:-wvp_sip_password}
+      RecordSip: ${RecordSip:-false}
+      RecordPushLive: ${RecordPushLive:-false}
       MEDIA_ID: "none"
       MEDIA_HTTP_PORT: 0
       MEDIA_AUTO_CONFIG: "false"

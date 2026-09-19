@@ -91,22 +91,18 @@ media:
   sdp-ip: ${SDP_IP:}
   # [Optional] zlmThe IP used by the server to access WVP. The default is 127.0.0.1. This must be configured when zlm and wvp are not deployed on the same server.
   hook-ip: ${ZLM_HOOK_HOST:127.0.0.1}
-  secret: ${MEDIA_SECRET:your_shared_secret_key}
+  secret: ${MEDIA_SECRET:token_north_2026,token_south_2026,token_danang_2026,wvp_cluster_join_secret_key_2026}
   # [Optional] sslport
   http-ssl-port: 0
-  flv-port: ${MediaHttp:}
-  flv-ssl-port: ${MediaHttps:}
-  ws-flv-port: ${MediaHttp:}
-  ws-flv-ssl-port: ${MediaHttps:}
-  rtp-proxy-port: ${MediaRtp:}
-  rtmp-port: ${MediaRtmp:}
+  flv-port: ${MediaHttp:80}
+  flv-ssl-port: ${MediaHttps:8081}
+  ws-flv-port: ${MediaHttp:80}
+  ws-flv-ssl-port: ${MediaHttps:8081}
+  rtp-proxy-port: ${MediaRtp:10000}
+  rtmp-port: ${MediaRtmp:10935}
   rtmp-ssl-port: 0
-  rtsp-port: ${MediaRtsp:}
+  rtsp-port: ${MediaRtsp:5540}
   rtsp-ssl-port: 0
-  # [Optional] Whether to automatically configure ZLM. If you want to configure ZLM manually, you can set it to false. It is not recommended for new users to modify it.
-  auto-config: true
-  # [Optional] 
-  secret: ${ZLM_SERCERT}
   # Enable multi-port mode. Multi-port mode uses ports to distinguish each flow for better compatibility. Single port uses the ssrc of the flow to distinguish. For on-demand timeout, it is recommended to use multi-port testing.
   rtp:
     # [Optional] Whether to enable multi-port mode. When enabled, the port will be selected within the portRange range for media streaming.
