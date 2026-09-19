@@ -18,6 +18,17 @@
 
     <repositories>
         <repository>
+            <id>central</id>
+            <name>Maven Central Fast CDN</name>
+            <url>https://repo1.maven.org/maven2</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+        </repository>
+        <repository>
             <id>nexus-aliyun</id>
             <name>Nexus aliyun</name>
             <url>https://maven.aliyun.com/repository/public</url>
@@ -36,6 +47,17 @@
     </repositories>
 
     <pluginRepositories>
+        <pluginRepository>
+            <id>central</id>
+            <name>Maven Central Fast CDN</name>
+            <url>https://repo1.maven.org/maven2</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+        </pluginRepository>
         <pluginRepository>
             <id>nexus-aliyun</id>
             <name>Nexus aliyun</name>
