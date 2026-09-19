@@ -1,0 +1,83 @@
+version: "3"
+services:
+  polaris-redis:
+    image: redis:latest
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    networks:
+      - wvp-master-net
+    volumes:
+      - ./redis/conf/redis.conf:/opt/polaris/redis/redis.conf
+      - ./volumes/redis/data/:/data
+    environment:
+      TZ: "Asia/Ho_Chi_Minh"
+    command: redis-server /opt/polaris/redis/redis.conf --appendonly yes
+
+  polaris-mysql:
+    image: mysql:8
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -u root -proot"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 15s
+    networks:
+      - wvp-master-net
+    environment:
+      MYSQL_DATABASE: wvp
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: wvp_user
+      MYSQL_PASSWORD: wvp_password
+      TZ: "Asia/Ho_Chi_Minh"
+    volumes:
+      - ./mysql/conf:/etc/mysql/conf.d
+      - ./logs/mysql:/logs
+      - ./volumes/mysql/data:/var/lib/mysql
+      - ../database/2.7.4/init-mysql-2.7.4.sql:/docker-entrypoint-initdb.d/init.sql
+    command: [
+        "--innodb-buffer-pool-size=80M",
+        "--character-set-server=utf8mb4",
+        "--collation-server=utf8mb4_general_ci",
+        "--default-time-zone=+7:00",
+        "--lower-case-table-names=1",
+      ]
+
+  # WVP Master - PURE CONTROL PLANE (Không kèm ZLMediaKit)
+  polaris-wvp:
+    build:
+      context: ..
+      dockerfile: ./docker/wvp/Dockerfile
+    restart: always
+    networks:
+      - wvp-master-net
+    ports:
+      - "18978:18978"                            # REST API & Web Control Plane
+      - "${SIP_Port:-8116}:${SIP_Port:-8116}/udp" # SIP Signaling GB28181
+      - "${SIP_Port:-8116}:${SIP_Port:-8116}/tcp"
+    depends_on:
+      polaris-redis:
+        condition: service_healthy
+      polaris-mysql:
+        condition: service_healthy
+    volumes:
+      - ./wvp/config:/opt/wvp/config
+      - ./wvp/wvp/:/opt/ylcx/wvp/
+      - ./logs/wvp:/opt/wvp/logs/
+    environment:
+      TZ: "Asia/Ho_Chi_Minh"
+      RUN_ENV: "docker"
+      MEDIA_ID: "none"
+      MEDIA_HTTP_PORT: 0
+      MEDIA_AUTO_CONFIG: "false"
+      # Hỗ trợ cấu hình Multi CLUSTER_JOIN_TOKEN (phân tách bằng dấu phẩy)
+      MEDIA_SECRET: "${MEDIA_SECRET:-token_north_2026,token_south_2026,token_danang_2026,wvp_cluster_join_secret_key_2026}"
+
+networks:
+  wvp-master-net:
+    driver: bridge

@@ -38,14 +38,19 @@ public class MediaServerConfig{
     public void onApplicationReady(){
         // Clear the cache information of all online nodes
         mediaServerService.clearMediaServerForOnline();
-        MediaServer mediaSerItemInConfig = mediaConfig.buildMediaSer();
-        mediaSerItemInConfig.setServerId(userSetting.getServerId());
         mediaServerService.deleteDefault();
         // Send media node change event
         mediaServerService.syncCatchFromDatabase();
         // Get all zlms and enable active connections
         List<MediaServer> all = mediaServerService.getAllFromDatabaseWithOutDefault();
-        all.add(mediaSerItemInConfig);
+        if (mediaConfig.getHttpPort() != null && mediaConfig.getHttpPort() > 0 
+                && mediaConfig.getId() != null && !"none".equalsIgnoreCase(mediaConfig.getId().trim())) {
+            MediaServer mediaSerItemInConfig = mediaConfig.buildMediaSer();
+            mediaSerItemInConfig.setServerId(userSetting.getServerId());
+            all.add(mediaSerItemInConfig);
+        } else {
+            log.info("[media node] Chế độ Thuần Control Plane: Không tải Node ZLMediaKit mặc định cục bộ.");
+        }
         log.info("[media node] Load node list, total{}nodes", all.size());
         MediaServerChangeEvent event = new MediaServerChangeEvent(this);
         event.setMediaServerItemList(all);

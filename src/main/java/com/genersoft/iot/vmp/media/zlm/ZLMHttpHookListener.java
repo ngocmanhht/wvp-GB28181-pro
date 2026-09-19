@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.*;
 import jakarta.servlet.http.HttpServletRequest;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -238,6 +239,55 @@ public class ZLMHttpHookListener {
             MediaServer mediaServer = mediaServerService.getOne(zlmServerConfig.getMediaServerId());
             if (mediaServer == null && Objects.equals(mediaConfig.getId(), zlmServerConfig.getGeneralMediaServerId())) {
                 mediaServer = mediaConfig.buildMediaSer();
+            }
+            if (mediaServer == null) {
+                // Hỗ trợ Multi CLUSTER_JOIN_TOKEN (Phân tách bằng dấu phẩy ',' hoặc chấm phẩy ';')
+                String requestToken = request.getParameter("secret");
+                String clusterTokens = mediaConfig.getSecret();
+                boolean isTokenValid = false;
+                if (!ObjectUtils.isEmpty(clusterTokens) && !ObjectUtils.isEmpty(requestToken)) {
+                    isTokenValid = Arrays.stream(clusterTokens.split("[,;]"))
+                            .map(String::trim)
+                            .filter(t -> !t.isEmpty())
+                            .anyMatch(t -> t.equals(requestToken.trim()));
+                }
+                if (isTokenValid) {
+                    log.info("[ZLM Cluster Join] Xác thực Cluster Token thành công! Tự động đăng ký Node mới: {}", zlmServerConfig.getGeneralMediaServerId());
+                    mediaServer = new MediaServer();
+                    mediaServer.setId(zlmServerConfig.getGeneralMediaServerId());
+                    mediaServer.setServerId(userSetting.getServerId());
+
+                    String nodeIp = request.getParameter("node_ip");
+                    mediaServer.setIp(!ObjectUtils.isEmpty(nodeIp) ? nodeIp : request.getRemoteAddr());
+
+                    String sdpIp = request.getParameter("sdp_ip");
+                    String streamIp = request.getParameter("stream_ip");
+                    mediaServer.setSdpIp(!ObjectUtils.isEmpty(sdpIp) ? sdpIp : mediaServer.getIp());
+                    mediaServer.setStreamIp(!ObjectUtils.isEmpty(streamIp) ? streamIp : mediaServer.getIp());
+                    mediaServer.setHookIp(request.getLocalAddr());
+
+                    int httpPort = 80;
+                    try {
+                        if (zlmServerConfig.getHttpPort() != null) {
+                            httpPort = Integer.parseInt(zlmServerConfig.getHttpPort());
+                        }
+                    } catch (Exception ignored) {}
+                    mediaServer.setHttpPort(httpPort);
+
+                    // Bảo mật chia vùng: Lưu đúng Secret riêng biệt của từng Node
+                    mediaServer.setSecret(zlmServerConfig.getApiSecret());
+                    mediaServer.setType("zlm");
+                    mediaServer.setAutoConfig(false);
+                    mediaServer.setRtpEnable(true);
+                    mediaServer.setRtpPortRange("30000,30500");
+                    mediaServer.setSendRtpPortRange("50000,55000");
+                    mediaServer.setHookAliveInterval(10f);
+                    mediaServer.setStatus(false);
+
+                    mediaServerService.add(mediaServer);
+                } else {
+                    log.warn("[ZLM Cluster Join] Từ chối Node {}: Sai hoặc thiếu Cluster Join Token!", zlmServerConfig.getGeneralMediaServerId());
+                }
             }
             if (mediaServer != null) {
                 event.setMediaServer(mediaServer);
