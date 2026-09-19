@@ -29,20 +29,20 @@
             </releases>
         </repository>
         <repository>
+            <id>ECC</id>
+            <url>https://maven.ecc.no/releases</url>
+        </repository>
+        <!-- 3. FALLBACK: Nexus Aliyun (Chỉ tìm khi Maven Central và ECC không có gói đặc thù) -->
+        <repository>
             <id>nexus-aliyun</id>
-            <name>Nexus aliyun</name>
+            <name>Nexus aliyun fallback</name>
             <url>https://maven.aliyun.com/repository/public</url>
-            <layout>default</layout>
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
             <releases>
                 <enabled>true</enabled>
             </releases>
-        </repository>
-        <repository>
-            <id>ECC</id>
-            <url>https://maven.ecc.no/releases</url>
         </repository>
     </repositories>
 
@@ -58,9 +58,10 @@
                 <enabled>true</enabled>
             </releases>
         </pluginRepository>
+        <!-- FALLBACK: Aliyun Plugins -->
         <pluginRepository>
             <id>nexus-aliyun</id>
-            <name>Nexus aliyun</name>
+            <name>Nexus aliyun fallback</name>
             <url>https://maven.aliyun.com/repository/public</url>
             <snapshots>
                 <enabled>false</enabled>
