@@ -27,6 +27,17 @@ server {
         proxy_send_timeout 60s;
     }
 
+	location /index/hook/ {
+		proxy_set_header Host $http_host;
+		proxy_set_header X-Real-IP $remote_addr;
+		proxy_set_header REMOTE-HOST $remote_addr;
+		proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_pass http://polaris-wvp:18978;
+        proxy_connect_timeout 60s;
+        proxy_read_timeout 120s;
+        proxy_send_timeout 60s;
+    }
+
     error_page   500 502 503 504  /50x.html;
     location = /50x.html {
         root   html;
