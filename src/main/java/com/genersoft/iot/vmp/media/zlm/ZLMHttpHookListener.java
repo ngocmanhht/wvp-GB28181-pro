@@ -243,13 +243,34 @@ public class ZLMHttpHookListener {
             if (mediaServer == null) {
                 // Hỗ trợ Multi CLUSTER_JOIN_TOKEN (Phân tách bằng dấu phẩy ',' hoặc chấm phẩy ';')
                 String requestToken = request.getParameter("secret");
+                String nodeIp = request.getParameter("node_ip");
+                String sdpIp = request.getParameter("sdp_ip");
+                String streamIp = request.getParameter("stream_ip");
+
+                // Nếu request query parameter trống, trích xuất từ hook.admin_params trong body JSON
+                if (ObjectUtils.isEmpty(requestToken) && !ObjectUtils.isEmpty(zlmServerConfig.getHookAdminParams())) {
+                    String adminParams = zlmServerConfig.getHookAdminParams();
+                    for (String pair : adminParams.split("&")) {
+                        String[] kv = pair.split("=", 2);
+                        if (kv.length == 2) {
+                            String k = kv[0].trim();
+                            String v = kv[1].trim();
+                            if ("secret".equalsIgnoreCase(k)) requestToken = v;
+                            else if ("node_ip".equalsIgnoreCase(k)) nodeIp = v;
+                            else if ("sdp_ip".equalsIgnoreCase(k)) sdpIp = v;
+                            else if ("stream_ip".equalsIgnoreCase(k)) streamIp = v;
+                        }
+                    }
+                }
+
                 String clusterTokens = mediaConfig.getSecret();
                 boolean isTokenValid = false;
                 if (!ObjectUtils.isEmpty(clusterTokens) && !ObjectUtils.isEmpty(requestToken)) {
+                    final String tokenToMatch = requestToken.trim();
                     isTokenValid = Arrays.stream(clusterTokens.split("[,;]"))
                             .map(String::trim)
                             .filter(t -> !t.isEmpty())
-                            .anyMatch(t -> t.equals(requestToken.trim()));
+                            .anyMatch(t -> t.equals(tokenToMatch));
                 }
                 if (isTokenValid) {
                     log.info("[ZLM Cluster Join] Xác thực Cluster Token thành công! Tự động đăng ký Node mới: {}", zlmServerConfig.getGeneralMediaServerId());
@@ -257,11 +278,7 @@ public class ZLMHttpHookListener {
                     mediaServer.setId(zlmServerConfig.getGeneralMediaServerId());
                     mediaServer.setServerId(userSetting.getServerId());
 
-                    String nodeIp = request.getParameter("node_ip");
                     mediaServer.setIp(!ObjectUtils.isEmpty(nodeIp) ? nodeIp : request.getRemoteAddr());
-
-                    String sdpIp = request.getParameter("sdp_ip");
-                    String streamIp = request.getParameter("stream_ip");
                     mediaServer.setSdpIp(!ObjectUtils.isEmpty(sdpIp) ? sdpIp : mediaServer.getIp());
                     mediaServer.setStreamIp(!ObjectUtils.isEmpty(streamIp) ? streamIp : mediaServer.getIp());
                     mediaServer.setHookIp(request.getLocalAddr());
@@ -281,7 +298,8 @@ public class ZLMHttpHookListener {
 
                     mediaServerService.add(mediaServer);
                 } else {
-                    log.warn("[ZLM Cluster Join] Từ chối Node {}: Sai hoặc thiếu Cluster Join Token!", zlmServerConfig.getGeneralMediaServerId());
+                    log.warn("[ZLM Cluster Join] Từ chối Node {}: Sai hoặc thiếu Cluster Join Token! (Nhận được: '{}', Cấu hình trên Master: '{}')", 
+                            zlmServerConfig.getGeneralMediaServerId(), requestToken, clusterTokens);
                 }
             }
             if (mediaServer != null) {
