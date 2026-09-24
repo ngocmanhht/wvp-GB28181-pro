@@ -55,6 +55,8 @@ media:
     id:
     # [Must be modified] zlmServer's intranetIP
     ip: ${ZLM_HOST:127.0.0.1}
+    # IP WVP dung de ZLM ban webhook ve (uu tien doc tu bien moi truong ZLM_HOOK_HOST)
+    hook-ip: ${ZLM_HOOK_HOST:192.168.100.1}
     # [Must be modified] zlmServer'shttp.port
     http-port: ${ZLM_PORT:80}
     # [Optional] zlmServer'shook.admin_params=secret

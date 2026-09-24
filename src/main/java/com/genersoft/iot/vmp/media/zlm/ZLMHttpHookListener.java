@@ -281,7 +281,12 @@ public class ZLMHttpHookListener {
                     mediaServer.setIp(!ObjectUtils.isEmpty(nodeIp) ? nodeIp : request.getRemoteAddr());
                     mediaServer.setSdpIp(!ObjectUtils.isEmpty(sdpIp) ? sdpIp : mediaServer.getIp());
                     mediaServer.setStreamIp(!ObjectUtils.isEmpty(streamIp) ? streamIp : mediaServer.getIp());
-                    mediaServer.setHookIp(request.getLocalAddr());
+                    String defaultHookIp = mediaConfig.getHookIp();
+                    if (!ObjectUtils.isEmpty(defaultHookIp) && !"127.0.0.1".equals(defaultHookIp)) {
+                        mediaServer.setHookIp(defaultHookIp);
+                    } else {
+                        mediaServer.setHookIp(request.getLocalAddr());
+                    }
 
                     int httpPort = zlmServerConfig.getHttpPort() > 0 ? zlmServerConfig.getHttpPort() : 80;
                     mediaServer.setHttpPort(httpPort);

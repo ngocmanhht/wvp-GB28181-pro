@@ -88,6 +88,8 @@ services:
       MEDIA_ID: "none"
       MEDIA_HTTP_PORT: 0
       MEDIA_AUTO_CONFIG: "false"
+      # IP WVP dung de ZLM node ban webhook ve (ZLM_HOOK_HOST)
+      ZLM_HOOK_HOST: "${ZLM_HOOK_HOST:-192.168.100.1}"
       # Hỗ trợ cấu hình Multi CLUSTER_JOIN_TOKEN (phân tách bằng dấu phẩy)
       MEDIA_SECRET: "${MEDIA_SECRET:-token_north_2026,token_south_2026,token_danang_2026,wvp_cluster_join_secret_key_2026}"
 
