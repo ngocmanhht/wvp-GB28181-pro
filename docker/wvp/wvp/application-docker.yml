@@ -36,13 +36,14 @@ spring:
         # mysqldata source
         type: com.zaxxer.hikari.HikariDataSource
         driver-class-name: com.mysql.cj.jdbc.Driver
-        url: jdbc:mysql://${DATABASE_HOST:127.0.0.1}:${DATABASE_PORT:3306}/wvp?useUnicode=true&characterEncoding=UTF8&rewriteBatchedStatements=true&serverTimezone=PRC&useSSL=false&allowMultiQueries=true&allowPublicKeyRetrieval=true
+        url: jdbc:mysql://${DATABASE_HOST:127.0.0.1}:${DATABASE_PORT:3306}/wvp?useUnicode=true&characterEncoding=UTF8&rewriteBatchedStatements=true&serverTimezone=Asia/Ho_Chi_Minh&useSSL=false&allowMultiQueries=true&allowPublicKeyRetrieval=true
         username: ${DATABASE_USER:root}
         password: ${DATABASE_PASSWORD:root}
 
 #[Optional] The listening HTTP port, web pages and interface calls are all on this port
 server:
     port: 18978
+    forward-headers-strategy: framework
     ssl:
         # [Optional] Whether to enable HTTPS access
         # dockerRun inside, not needed internallyHTTPS
@@ -91,6 +92,7 @@ media:
   sdp-ip: ${SDP_IP:}
   # [Optional] zlmThe IP used by the server to access WVP. The default is 127.0.0.1. This must be configured when zlm and wvp are not deployed on the same server.
   hook-ip: ${ZLM_HOOK_HOST:127.0.0.1}
+  hook-port: ${ZLM_HOOK_PORT:80}
   secret: ${MEDIA_SECRET:token_north_2026,token_south_2026,token_danang_2026,wvp_cluster_join_secret_key_2026}
   # [Optional] sslport
   http-ssl-port: 0
@@ -134,7 +136,7 @@ user-settings:
     #   - http://127.0.0.1:8080
     #   - http://0.0.0.0:8080
     #   - ${NGINX_HOST}
-    jwkFile: classpath:xxxxxxxxxxx.json
+    jwkFile: ${JWK_FILE:/opt/wvp/config/jwk.json}
 logging:
   config: classpath:logback-spring.xml
 

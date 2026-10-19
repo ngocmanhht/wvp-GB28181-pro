@@ -3,6 +3,7 @@ package com.genersoft.iot.vmp.media.zlm;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
 import com.genersoft.iot.vmp.conf.DynamicTask;
+import com.genersoft.iot.vmp.conf.MediaConfig;
 import com.genersoft.iot.vmp.conf.UserSetting;
 import com.genersoft.iot.vmp.gb28181.event.EventPublisher;
 import com.genersoft.iot.vmp.media.bean.MediaServer;
@@ -52,6 +53,9 @@ public class ZLMMediaServerStatusManager {
 
     @Autowired
     private UserSetting userSetting;
+
+    @Autowired
+    private MediaConfig mediaConfig;
 
     @Value("${server.ssl.enabled:false}")
     private boolean sslEnabled;
@@ -204,7 +208,11 @@ public class ZLMMediaServerStatusManager {
             mediaServer.setHookAliveInterval(config.getHookAliveInterval());
             initPort(mediaServer, config);
             mediaServerService.update(mediaServer);
-            setZLMConfig(mediaServer, false);
+            if (mediaServer.isAutoConfig()) {
+                setZLMConfig(mediaServer, false);
+            } else {
+                log.info("[media service node] AutoConfig is disabled, skipping ZLM config overwrite: {}", mediaServer.getId());
+            }
         }
         offlineZlmPrimaryMap.remove(mediaServer.getId());
         offlineZlmsecondaryMap.remove(mediaServer.getId());
@@ -254,7 +262,13 @@ public class ZLMMediaServerStatusManager {
         log.info("[media service node] Setting up ：{} -> {}:{}",
                 mediaServerItem.getId(), mediaServerItem.getIp(), mediaServerItem.getHttpPort());
         String protocol = sslEnabled ? "https" : "http";
-        String hookPrefix = String.format("%s://%s:%s%s/index/hook", protocol, mediaServerItem.getHookIp(), serverPort, (serverServletContextPath == null || "/".equals(serverServletContextPath)) ? "" : serverServletContextPath);
+        int portToUse = (mediaConfig != null && mediaConfig.getHookPort() != null && mediaConfig.getHookPort() > 0) ? mediaConfig.getHookPort() : serverPort;
+        String hookPrefix;
+        if ((sslEnabled && portToUse == 443) || (!sslEnabled && portToUse == 80)) {
+            hookPrefix = String.format("%s://%s%s/index/hook", protocol, mediaServerItem.getHookIp(), (serverServletContextPath == null || "/".equals(serverServletContextPath)) ? "" : serverServletContextPath);
+        } else {
+            hookPrefix = String.format("%s://%s:%s%s/index/hook", protocol, mediaServerItem.getHookIp(), portToUse, (serverServletContextPath == null || "/".equals(serverServletContextPath)) ? "" : serverServletContextPath);
+        }
 
         Map<String, Object> param = new HashMap<>();
         if (mediaServerItem.getRtspPort() != 0) {

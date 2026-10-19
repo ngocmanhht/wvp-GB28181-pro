@@ -32,6 +32,9 @@ public class MediaConfig{
     @Value("${media.hook-ip:127.0.0.1}")
     private String hookIp;
 
+    @Value("${media.hook-port:0}")
+    private Integer hookPort = 0;
+
     @Value("${sip.domain}")
     private String sipDomain;
 

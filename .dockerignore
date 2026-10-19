@@ -21,7 +21,6 @@ target/
 docker/volumes/
 docker/logs/
 volumes/
-zlm-node-standalone/volumes/
 
 # Web frontend dependencies & build outputs (Frontend should be prebuilt or separated)
 web/node_modules/

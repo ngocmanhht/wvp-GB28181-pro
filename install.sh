@@ -35,9 +35,9 @@ Description=${SERVICE_NAME}
 After=syslog.target
 
 [Service]
-User=$USER
+User=${SUDO_USER:-$USER}
 WorkingDirectory=${WORD_DIR}
-ExecStart=java -jar ${jar_files}
+ExecStart=java -Xms512m -Xmx2048m -XX:+HeapDumpOnOutOfMemoryError -jar ${WORD_DIR}/${jar_files[0]}
 SuccessExitStatus=143
 Restart=on-failure
 RestartSec=10s

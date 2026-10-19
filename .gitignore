@@ -8,8 +8,10 @@ logs/*
 *.ctxt
 
 # Mobile Tools for Java (J2ME)
-.mtj.tmp/
-src/main/resources/application-*.yml
+# Custom application profiles
+!src/main/resources/application-dev.yml
+!src/main/resources/application-docker.yml
+!src/main/resources/application-prod.yml
 # Package Files #
 #*.jar
 *.war

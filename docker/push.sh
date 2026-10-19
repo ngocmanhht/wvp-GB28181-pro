@@ -1,15 +1,20 @@
-#/bin/bash
+#!/bin/bash
 set -e
 
-version=2.7.3
+version=2.7.4
 
-docker push polaris-tian-docker.pkg.coding.net/qt/polaris/ylcx-media:latest
-docker push polaris-tian-docker.pkg.coding.net/qt/polaris/ylcx-mysql:latest
-docker push polaris-tian-docker.pkg.coding.net/qt/polaris/ylcx-redis:latest
-docker push polaris-tian-docker.pkg.coding.net/qt/polaris/ylcx-wvp:latest
-docker push polaris-tian-docker.pkg.coding.net/qt/polaris/ylcx-nginx:latest
-docker push polaris-tian-docker.pkg.coding.net/qt/polaris/ylcx-media:${version}
-docker push polaris-tian-docker.pkg.coding.net/qt/polaris/ylcx-mysql:${version}
-docker push polaris-tian-docker.pkg.coding.net/qt/polaris/ylcx-redis:${version}
-docker push polaris-tian-docker.pkg.coding.net/qt/polaris/ylcx-wvp:${version}
-docker push polaris-tian-docker.pkg.coding.net/qt/polaris/ylcx-nginx:${version}
+if [ -z "$DOCKER_REGISTRY" ]; then
+    echo "ERROR: DOCKER_REGISTRY environment variable is not set."
+    echo "Usage: DOCKER_REGISTRY=your-registry.example.com ./push.sh"
+    exit 1
+fi
+
+services=("media" "mysql" "redis" "wvp" "nginx")
+
+for svc in "${services[@]}"; do
+    echo "Pushing ${DOCKER_REGISTRY}/ylcx-${svc}:${version} ..."
+    docker push "${DOCKER_REGISTRY}/ylcx-${svc}:${version}"
+    docker push "${DOCKER_REGISTRY}/ylcx-${svc}:latest"
+done
+
+echo "All images pushed successfully to ${DOCKER_REGISTRY}!"

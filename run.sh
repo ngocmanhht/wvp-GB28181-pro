@@ -103,10 +103,11 @@ if [ "$mode_choice" = "1" ]; then
     
     if [ $? -eq 0 ]; then
         log_success "WVP Master Control Plane started successfully in Docker!"
-        log_info "• Web Dashboard & REST API: http://localhost:18978"
+        log_info "• Web Dashboard (Nginx): http://localhost (hoặc http://localhost:80)"
+        log_info "• WVP REST API Backend: http://localhost:18978"
         log_info "• SIP Signaling Port (GB28181): 8116 UDP/TCP"
         log_info "• Default login credentials: admin / admin"
-        log_info "• Để thêm ZLMediaKit Worker: Dùng thư mục 'zlm-node-standalone' trên máy chủ Worker."
+        log_info "• Để thêm ZLMediaKit Worker: Dùng thư mục 'zlm-node' (nằm cạnh thư mục này) trên máy chủ Worker."
     else
         log_error "Failed to start WVP Master services."
         exit 1
@@ -134,7 +135,8 @@ elif [ "$mode_choice" = "2" ]; then
     
     if [ $? -eq 0 ]; then
         log_success "All-in-One services started successfully in Docker!"
-        log_info "• WVP Web Dashboard: http://localhost:18978"
+        log_info "• WVP Web Dashboard (Nginx): http://localhost (hoặc http://localhost:80)"
+        log_info "• WVP REST API Backend: http://localhost:18978"
         log_info "• Default login credentials: admin / admin"
     else
         log_error "Failed to start Docker Compose services."

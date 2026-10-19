@@ -1,7 +1,7 @@
 version: "3"
 services:
   polaris-redis:
-    image: redis:latest # Use the official Redis image
+    image: redis:latest
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
@@ -11,20 +11,18 @@ services:
       start_period: 10s
     networks:
       - media-net
-    # ports:
-    #   - 6379:6379
     volumes:
       - ./redis/conf/redis.conf:/opt/polaris/redis/redis.conf
       - ./volumes/redis/data/:/data
     environment:
-      TZ: "Asia/Shanghai"
+      TZ: "Asia/Ho_Chi_Minh"
     command: redis-server /opt/polaris/redis/redis.conf --appendonly yes
 
   polaris-mysql:
-    image: mysql:8 # Use the official MySQL 8 image
+    image: mysql:8
     restart: unless-stopped
     healthcheck:
-      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -u root -proot"]
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -u root -p${MYSQL_ROOT_PASSWORD:-root}"]
       interval: 5s
       timeout: 5s
       retries: 20
@@ -33,38 +31,39 @@ services:
       - media-net
     environment:
       MYSQL_DATABASE: wvp
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_USER: wvp_user
-      MYSQL_PASSWORD: wvp_password
-      TZ: Asia/Shanghai
-    # ports:
-    #   - 3306:3306
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root}
+      MYSQL_USER: ${MYSQL_USER:-wvp_user}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-wvp_password}
+      TZ: "Asia/Ho_Chi_Minh"
     volumes:
       - ./mysql/conf:/etc/mysql/conf.d
       - ./logs/mysql:/logs
       - ./volumes/mysql/data:/var/lib/mysql
-      - ../database/2.7.4/init-mysql-2.7.4.sql:/docker-entrypoint-initdb.d/init.sql # Initialization SQL script directory
+      - ../database/2.7.4/init-mysql-2.7.4.sql:/docker-entrypoint-initdb.d/init.sql
     command: [
-        # '--default-authentication-plugin=mysql_native_password',
-        "--innodb-buffer-pool-size=80M",
+        "--innodb-buffer-pool-size=${MYSQL_INNODB_BUFFER_POOL_SIZE:-512M}",
         "--character-set-server=utf8mb4",
         "--collation-server=utf8mb4_general_ci",
-        "--default-time-zone=+8:00",
+        "--default-time-zone=+07:00",
         "--lower-case-table-names=1",
       ]
 
   polaris-media:
-    image: zlmediakit/zlmediakit:master # Replace with official image
+    image: zlmediakit/zlmediakit:master
     restart: always
     networks:
       - media-net
     ports:
-      - "${MediaRtmp:-10935}:${MediaRtmp:-10935}/tcp"     # [collect flow]RTMP
-      - "${MediaRtmp:-10935}:${MediaRtmp:-10935}/udp"     # [collect flow]RTMP
-      - "${MediaRtsp:-5540}:${MediaRtsp:-5540}/tcp"       # [collect flow]RTSP
-      - "${MediaRtsp:-5540}:${MediaRtsp:-5540}/udp"       # [collect flow]RTSP
-      - "${MediaRtp:-10000}:${MediaRtp:-10000}/tcp"       # [collect flow]RTP
-      - "${MediaRtp:-10000}:${MediaRtp:-10000}/udp"       # [collect flow]RTP
+      - "${MediaRtmp:-10935}:${MediaRtmp:-10935}/tcp"     # [collect flow] RTMP
+      - "${MediaRtmp:-10935}:${MediaRtmp:-10935}/udp"     # [collect flow] RTMP
+      - "${MediaRtsp:-5540}:${MediaRtsp:-5540}/tcp"       # [collect flow] RTSP
+      - "${MediaRtsp:-5540}:${MediaRtsp:-5540}/udp"       # [collect flow] RTSP
+      - "${MediaRtp:-10000}:${MediaRtp:-10000}/tcp"       # [collect flow] RTP
+      - "${MediaRtp:-10000}:${MediaRtp:-10000}/udp"       # [collect flow] RTP
+      - "8000:8000/udp"                                   # WebRTC RTC UDP
+      - "8000:8000/tcp"                                   # WebRTC RTC TCP
+      - "30000-30500:30000-30500/udp"                     # GB28181 RTP Port Range UDP
+      - "30000-30500:30000-30500/tcp"                     # GB28181 RTP Port Range TCP
     volumes:
       - ./volumes/video:/opt/media/bin/www/record/
       - ./logs/media:/opt/media/log/
@@ -72,10 +71,9 @@ services:
     command: ["MediaServer", "-c", "/conf/config.ini", "-l", "0"]
 
   polaris-wvp:
-    # Explicitly specify the build context and Dockerfile path
     build:
-      context: .. # The root path of the build context
-      dockerfile: ./docker/wvp/Dockerfile # Dockerfile location relative to context path
+      context: ..
+      dockerfile: ./docker/wvp/Dockerfile
     restart: always
     networks:
       - media-net
@@ -95,20 +93,16 @@ services:
       - ./wvp/wvp/:/opt/ylcx/wvp/
       - ./logs/wvp:/opt/wvp/logs/
     environment:
-      TZ: "Asia/Shanghai"
-      # docker env
+      TZ: "Asia/Ho_Chi_Minh"
       RUN_ENV: "docker"
-      # stream linkedIP
-      Stream_IP: ${Stream_IP}
-      # SDPinsideIP
-      SDP_IP: ${SDP_IP}
-      # [Optional] zlmThe IP used by the server to access WVP. The default is 127.0.0.1. This must be configured when zlm and wvp are not deployed on the same server.
+      Stream_IP: ${Stream_IP:-127.0.0.1}
+      SDP_IP: ${SDP_IP:-127.0.0.1}
       ZLM_HOOK_HOST: polaris-wvp
+      ZLM_HOOK_PORT: ${WebHttp:-80}
       ZLM_HOST: polaris-media
-      ZLM_SERCERT: su6TiedN2rVAmBbIDX0aa0QTiBJLBdcf
+      ZLM_SECRET: ${ZLM_SECRET:-su6TiedN2rVAmBbIDX0aa0QTiBJLBdcf}
 
-      MediaHttp: ${WebHttp:-8080}
-      #MediaHttps: ${WebHttps:-8081}
+      MediaHttp: ${WebHttp:-80}
       MediaRtmp: ${MediaRtmp:-10935}
       MediaRtsp: ${MediaRtsp:-5540}
       MediaRtp: ${MediaRtp:-10000}
@@ -118,33 +112,31 @@ services:
 
       DATABASE_HOST: polaris-mysql
       DATABASE_PORT: 3306
-      DATABASE_USER: wvp_user
-      DATABASE_PASSWORD: wvp_password
+      DATABASE_USER: ${MYSQL_USER:-wvp_user}
+      DATABASE_PASSWORD: ${MYSQL_PASSWORD:-wvp_password}
 
-      SIP_ShowIP: ${SIP_ShowIP}
+      SIP_ShowIP: ${SIP_ShowIP:-127.0.0.1}
       SIP_Port: ${SIP_Port:-8116}
-      SIP_Domain: ${SIP_Domain}
-      SIP_Id: ${SIP_Id}
-      SIP_Password: ${SIP_Password}
+      SIP_Domain: ${SIP_Domain:-3402000000}
+      SIP_Id: ${SIP_Id:-34020000002000000001}
+      SIP_Password: ${SIP_Password:-wvp_sip_password}
 
-      RecordSip: ${RecordSip}
-      RecordPushLive: ${RecordPushLive}
+      RecordSip: ${RecordSip:-true}
+      RecordPushLive: ${RecordPushLive:-false}
 
   polaris-nginx:
-    # Explicitly specify the build context and Dockerfile path
     build:
-      context: .. # The root path of the build context
-      dockerfile: ./docker/nginx/Dockerfile # Dockerfile location relative to context path
+      context: ..
+      dockerfile: ./docker/nginx/Dockerfile
     ports:
-      - "${WebHttp:-8080}:8080"
+      - "${WebHttp:-80}:8080"
     depends_on:
       - polaris-wvp
     volumes:
       - ./nginx/templates/:/etc/nginx/templates
       - ./logs/nginx:/var/log/nginx
     environment:
-      # stream linkedIP
-      Stream_IP: ${Stream_IP}
+      Stream_IP: ${Stream_IP:-127.0.0.1}
     networks:
       - media-net
 

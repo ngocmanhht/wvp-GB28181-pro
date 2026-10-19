@@ -1,11 +1,16 @@
-#/bin/bash
+#!/bin/bash
 set -e
 
-version=2.7.3
+version=2.7.4
 
-rm ./dist/static/js/config.js
-cp ./config.js ./dist/static/js/
+if [ -f "./dist/static/js/config.js" ]; then
+    rm -f ./dist/static/js/config.js
+    cp ./config.js ./dist/static/js/
+fi
 
 docker build -t polaris-nginx:${version} .
-docker tag polaris-nginx:${version} polaris-tian-docker.pkg.coding.net/qt/polaris/polaris-nginx:${version}
-docker tag polaris-nginx:${version} polaris-tian-docker.pkg.coding.net/qt/polaris/polaris-nginx:latest
+
+if [ -n "$DOCKER_REGISTRY" ]; then
+    docker tag polaris-nginx:${version} "${DOCKER_REGISTRY}/polaris-nginx:${version}"
+    docker tag polaris-nginx:${version} "${DOCKER_REGISTRY}/polaris-nginx:latest"
+fi

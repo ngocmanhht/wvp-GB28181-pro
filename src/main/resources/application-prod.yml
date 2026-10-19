@@ -1,0 +1,105 @@
+spring:
+  application:
+    name: wvp-pro
+  mvc:
+    async:
+      request-timeout: 30000
+  thymeleaf:
+    cache: true
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 200MB
+  cache:
+    type: redis
+  data:
+    redis:
+      host: ${REDIS_HOST:127.0.0.1}
+      port: ${REDIS_PORT:6379}
+      database: ${REDIS_DB:0}
+      password: ${REDIS_PWD:}
+      timeout: 10000
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${DATABASE_HOST:127.0.0.1}:${DATABASE_PORT:3306}/${DATABASE_NAME:wvp}?useUnicode=true&characterEncoding=UTF8&rewriteBatchedStatements=true&serverTimezone=Asia/Ho_Chi_Minh&useSSL=false&allowMultiQueries=true&allowPublicKeyRetrieval=true
+    username: ${DATABASE_USER:wvp_user}
+    password: ${DATABASE_PASSWORD:wvp_password}
+    hikari:
+      minimum-idle: 10
+      maximum-pool-size: 50
+      idle-timeout: 30000
+      pool-name: WvpPool
+      max-lifetime: 1800000
+      connection-timeout: 30000
+
+server:
+  port: ${SERVER_PORT:18978}
+  forward-headers-strategy: framework
+  ssl:
+    enabled: ${SSL_ENABLED:false}
+
+sip:
+  ip: ${SIP_IP:0.0.0.0}
+  show-ip: ${SIP_ShowIP:127.0.0.1}
+  port: ${SIP_Port:8116}
+  domain: ${SIP_Domain:3402000000}
+  id: ${SIP_Id:34020000002000000001}
+  password: ${SIP_Password:wvp_sip_password}
+  register-time-interval: 60
+  ptz-speed: 50
+  alarm: true
+  timeout: 1000
+
+media:
+  id: ${MEDIA_ID:none}
+  ip: ${ZLM_HOST:127.0.0.1}
+  http-port: ${MEDIA_HTTP_PORT:0}
+  auto-config: ${MEDIA_AUTO_CONFIG:false}
+  stream-ip: ${Stream_IP:}
+  sdp-ip: ${SDP_IP:}
+  hook-ip: ${ZLM_HOOK_HOST:127.0.0.1}
+  hook-port: ${ZLM_HOOK_PORT:80}
+  secret: ${MEDIA_SECRET:wvp_cluster_join_secret_key_2026}
+  http-ssl-port: 0
+  flv-port: ${MediaHttp:80}
+  flv-ssl-port: ${MediaHttps:8081}
+  ws-flv-port: ${MediaHttp:80}
+  ws-flv-ssl-port: ${MediaHttps:8081}
+  rtp-proxy-port: ${MediaRtp:10000}
+  rtmp-port: ${MediaRtmp:10935}
+  rtmp-ssl-port: 0
+  rtsp-port: ${MediaRtsp:5540}
+  rtsp-ssl-port: 0
+  rtp:
+    enable: true
+    port-range: 30000,30500
+    send-port-range: 50000,55000
+  record-path: /opt/media/bin/www/record/
+  record-day: 7
+  record-assist-port: 0
+
+user-settings:
+  auto-apply-play: true
+  play-timeout: 30000
+  wait-track: false
+  record-push-live: ${RecordPushLive:false}
+  record-sip: ${RecordSip:false}
+  stream-on-demand: true
+  interface-authentication: true
+  broadcast-for-platform: TCP-PASSIVE
+  push-stream-after-ack: true
+  send-to-platforms-when-id-lost: true
+  push-authority: true
+  jwkFile: ${JWK_FILE:./config/jwk.json}
+
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false
+
+logging:
+  config: classpath:logback-spring.xml
+  level:
+    root: info

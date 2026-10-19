@@ -22,7 +22,7 @@ services:
     image: mysql:8
     restart: unless-stopped
     healthcheck:
-      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -u root -proot"]
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -u root -p${MYSQL_ROOT_PASSWORD:-root}"]
       interval: 5s
       timeout: 5s
       retries: 20
@@ -31,9 +31,9 @@ services:
       - wvp-master-net
     environment:
       MYSQL_DATABASE: wvp
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_USER: wvp_user
-      MYSQL_PASSWORD: wvp_password
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root}
+      MYSQL_USER: ${MYSQL_USER:-wvp_user}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-wvp_password}
       TZ: "Asia/Ho_Chi_Minh"
     volumes:
       - ./mysql/conf:/etc/mysql/conf.d
@@ -41,14 +41,14 @@ services:
       - ./volumes/mysql/data:/var/lib/mysql
       - ../database/2.7.4/init-mysql-2.7.4.sql:/docker-entrypoint-initdb.d/init.sql
     command: [
-        "--innodb-buffer-pool-size=80M",
+        "--innodb-buffer-pool-size=${MYSQL_INNODB_BUFFER_POOL_SIZE:-512M}",
         "--character-set-server=utf8mb4",
         "--collation-server=utf8mb4_general_ci",
-        "--default-time-zone=+7:00",
+        "--default-time-zone=+07:00",
         "--lower-case-table-names=1",
       ]
 
-  # WVP Master - PURE CONTROL PLANE (Không kèm ZLMediaKit)
+  # WVP Master - PURE CONTROL PLANE (Không kèm ZLMediaKit nội bộ)
   polaris-wvp:
     build:
       context: ..
@@ -76,8 +76,8 @@ services:
       REDIS_PORT: 6379
       DATABASE_HOST: polaris-mysql
       DATABASE_PORT: 3306
-      DATABASE_USER: wvp_user
-      DATABASE_PASSWORD: wvp_password
+      DATABASE_USER: ${MYSQL_USER:-wvp_user}
+      DATABASE_PASSWORD: ${MYSQL_PASSWORD:-wvp_password}
       SIP_ShowIP: ${SIP_ShowIP:-127.0.0.1}
       SIP_Port: ${SIP_Port:-8116}
       SIP_Domain: ${SIP_Domain:-3402000000}
@@ -88,10 +88,11 @@ services:
       MEDIA_ID: "none"
       MEDIA_HTTP_PORT: 0
       MEDIA_AUTO_CONFIG: "false"
-      # IP WVP dung de ZLM node ban webhook ve (ZLM_HOOK_HOST)
-      ZLM_HOOK_HOST: "${ZLM_HOOK_HOST:-192.168.100.1}"
+      # IP WVP dùng để ZLM node bắn webhook về (ZLM_HOOK_HOST)
+      ZLM_HOOK_HOST: "${ZLM_HOOK_HOST:-127.0.0.1}"
+      ZLM_HOOK_PORT: "${ZLM_HOOK_PORT:-80}"
       # Hỗ trợ cấu hình Multi CLUSTER_JOIN_TOKEN (phân tách bằng dấu phẩy)
-      MEDIA_SECRET: "${MEDIA_SECRET:-token_north_2026,token_south_2026,token_danang_2026,wvp_cluster_join_secret_key_2026}"
+      MEDIA_SECRET: "${MEDIA_SECRET:-wvp_cluster_join_secret_key_2026}"
 
   # Web Admin Vue Frontend & Reverse Proxy
   polaris-nginx:
@@ -107,7 +108,7 @@ services:
       - ./nginx/templates/nginx-master.conf.template:/etc/nginx/templates/default.conf.template
       - ./logs/nginx:/var/log/nginx
     environment:
-      Stream_IP: ${Stream_IP:-27.71.24.106}
+      Stream_IP: ${Stream_IP:-127.0.0.1}
     networks:
       - wvp-master-net
 

@@ -246,19 +246,39 @@ public class ZLMHttpHookListener {
                 String nodeIp = request.getParameter("node_ip");
                 String sdpIp = request.getParameter("sdp_ip");
                 String streamIp = request.getParameter("stream_ip");
+                String portParam = request.getParameter("http_port");
+                if (ObjectUtils.isEmpty(portParam)) {
+                    portParam = request.getParameter("port");
+                }
 
                 // Nếu request query parameter trống, trích xuất từ hook.admin_params trong body JSON
-                if (ObjectUtils.isEmpty(requestToken) && !ObjectUtils.isEmpty(zlmServerConfig.getHookAdminParams())) {
+                if (!ObjectUtils.isEmpty(zlmServerConfig.getHookAdminParams())) {
                     String adminParams = zlmServerConfig.getHookAdminParams();
                     for (String pair : adminParams.split("&")) {
                         String[] kv = pair.split("=", 2);
                         if (kv.length == 2) {
                             String k = kv[0].trim();
                             String v = kv[1].trim();
-                            if ("secret".equalsIgnoreCase(k)) requestToken = v;
-                            else if ("node_ip".equalsIgnoreCase(k)) nodeIp = v;
-                            else if ("sdp_ip".equalsIgnoreCase(k)) sdpIp = v;
-                            else if ("stream_ip".equalsIgnoreCase(k)) streamIp = v;
+                            if ("secret".equalsIgnoreCase(k) && ObjectUtils.isEmpty(requestToken)) requestToken = v;
+                            else if ("node_ip".equalsIgnoreCase(k) && ObjectUtils.isEmpty(nodeIp)) nodeIp = v;
+                            else if ("sdp_ip".equalsIgnoreCase(k) && ObjectUtils.isEmpty(sdpIp)) sdpIp = v;
+                            else if ("stream_ip".equalsIgnoreCase(k) && ObjectUtils.isEmpty(streamIp)) streamIp = v;
+                            else if (("http_port".equalsIgnoreCase(k) || "port".equalsIgnoreCase(k)) && ObjectUtils.isEmpty(portParam)) portParam = v;
+                        }
+                    }
+                }
+
+                // Nếu node_ip không được truyền, kiểm tra Header Proxy (X-Forwarded-For, X-Real-IP) trước khi fallback về request.getRemoteAddr()
+                if (ObjectUtils.isEmpty(nodeIp)) {
+                    String xForwardedFor = request.getHeader("X-Forwarded-For");
+                    if (!ObjectUtils.isEmpty(xForwardedFor)) {
+                        nodeIp = xForwardedFor.split(",")[0].trim();
+                    } else {
+                        String xRealIp = request.getHeader("X-Real-IP");
+                        if (!ObjectUtils.isEmpty(xRealIp)) {
+                            nodeIp = xRealIp.trim();
+                        } else {
+                            nodeIp = request.getRemoteAddr();
                         }
                     }
                 }
@@ -278,7 +298,7 @@ public class ZLMHttpHookListener {
                     mediaServer.setId(zlmServerConfig.getGeneralMediaServerId());
                     mediaServer.setServerId(userSetting.getServerId());
 
-                    mediaServer.setIp(!ObjectUtils.isEmpty(nodeIp) ? nodeIp : request.getRemoteAddr());
+                    mediaServer.setIp(nodeIp);
                     mediaServer.setSdpIp(!ObjectUtils.isEmpty(sdpIp) ? sdpIp : mediaServer.getIp());
                     mediaServer.setStreamIp(!ObjectUtils.isEmpty(streamIp) ? streamIp : mediaServer.getIp());
                     String defaultHookIp = mediaConfig.getHookIp();
@@ -289,6 +309,12 @@ public class ZLMHttpHookListener {
                     }
 
                     int httpPort = zlmServerConfig.getHttpPort() > 0 ? zlmServerConfig.getHttpPort() : 80;
+                    if (!ObjectUtils.isEmpty(portParam)) {
+                        try {
+                            int p = Integer.parseInt(portParam.trim());
+                            if (p > 0) httpPort = p;
+                        } catch (NumberFormatException ignored) {}
+                    }
                     mediaServer.setHttpPort(httpPort);
 
                     // Bảo mật chia vùng: Lưu đúng Secret riêng biệt của từng Node
@@ -299,6 +325,7 @@ public class ZLMHttpHookListener {
                     mediaServer.setRtpPortRange("30000,30500");
                     mediaServer.setSendRtpPortRange("50000,55000");
                     mediaServer.setHookAliveInterval(10f);
+                    mediaServer.setRecordDay(mediaConfig.getRecordDay() != null ? mediaConfig.getRecordDay() : 7);
                     mediaServer.setStatus(false);
 
                     mediaServerService.add(mediaServer);

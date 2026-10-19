@@ -1,5 +1,5 @@
 
-window.baseUrl = "http://10.10.1.124:18978"
+window.baseUrl = ""
 
 // mapComponent global parameters, commenting this content can turn off the map function
 window.mapParam = {
