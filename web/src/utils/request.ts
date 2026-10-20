@@ -6,7 +6,7 @@ import router from '@/router'
 let isRelogging = false
 
 const service: AxiosInstance = axios.create({
-  baseURL: '', // baseURL empty so relative paths like /api/... work with Vite proxy
+  baseURL: (import.meta.env.VITE_APP_BASE_API as string) || '',
   timeout: 30000,
 })
 

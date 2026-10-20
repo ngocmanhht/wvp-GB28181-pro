@@ -74,8 +74,14 @@ function drawTimeline() {
   const width = containerRef.value.clientWidth
   const height = containerRef.value.clientHeight
 
-  canvas.width = width
-  canvas.height = height
+  const dpr = window.devicePixelRatio || 1
+  canvas.width = Math.floor(width * dpr)
+  canvas.height = Math.floor(height * dpr)
+  canvas.style.width = `${width}px`
+  canvas.style.height = `${height}px`
+
+  ctx.setTransform(1, 0, 0, 1, 0, 0)
+  ctx.scale(dpr, dpr)
 
   // Background
   ctx.fillStyle = '#020617'

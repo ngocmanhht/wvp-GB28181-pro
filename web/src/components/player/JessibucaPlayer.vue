@@ -263,13 +263,25 @@ watch(
   }
 )
 
+let resizeObserver: ResizeObserver | null = null
+
 onMounted(() => {
   if (props.videoUrl && props.autoplay) {
     play(props.videoUrl)
   }
+
+  if (containerRef.value) {
+    resizeObserver = new ResizeObserver(() => {
+      if (playerInstance.value && typeof playerInstance.value.resize === 'function') {
+        playerInstance.value.resize()
+      }
+    })
+    resizeObserver.observe(containerRef.value)
+  }
 })
 
 onBeforeUnmount(() => {
+  resizeObserver?.disconnect()
   destroyPlayer()
 })
 
