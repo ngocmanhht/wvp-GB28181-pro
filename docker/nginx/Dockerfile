@@ -2,16 +2,13 @@
 # Multi-stage Dockerfile for WVP Web Frontend & Nginx Proxy
 # ==============================================================================
 
-# STAGE 1: Frontend Builder (Node.js 18 with yarn)
-FROM node:18-alpine AS builder
+# STAGE 1: Frontend Builder (Node.js 20 with yarn & BuildKit cache)
+FROM node:20-alpine AS builder
 
 WORKDIR /build
 
-# Webpack 4 crypto hashing requires OpenSSL legacy provider on Node 17+
-ENV NODE_OPTIONS="--openssl-legacy-provider"
-
 COPY ./web/package.json ./
-RUN yarn config set registry https://registry.npmmirror.com && \
+RUN --mount=type=cache,target=/usr/local/share/.cache/yarn \
     yarn install --network-timeout 600000 --ignore-engines
 
 COPY ./web /build
