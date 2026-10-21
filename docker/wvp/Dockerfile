@@ -30,4 +30,6 @@ COPY --from=builder /build/target/wvp-pro-*.jar /opt/wvp/wvp.jar
 COPY ./docker/wvp/wvp /opt/wvp/
 COPY ./docker/wvp/wvp /opt/ylcx/wvp/
 
-ENTRYPOINT ["java", "-Xms512m", "-Xmx1024m", "-XX:+HeapDumpOnOutOfMemoryError", "-XX:HeapDumpPath=/opt/ylcx/", "-jar", "wvp.jar", "--spring.config.additional-location=file:/opt/ylcx/wvp/"]
+ENV JAVA_OPTS="-Xms1024m -Xmx2048m -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/opt/ylcx/"
+
+ENTRYPOINT ["sh", "-c", "exec java $JAVA_OPTS -jar wvp.jar --spring.config.additional-location=file:/opt/ylcx/wvp/"]

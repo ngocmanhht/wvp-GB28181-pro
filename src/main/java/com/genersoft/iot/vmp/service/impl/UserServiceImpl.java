@@ -1,5 +1,6 @@
 package com.genersoft.iot.vmp.service.impl;
 
+import com.genersoft.iot.vmp.conf.security.SecurityUtils;
 import com.genersoft.iot.vmp.service.IUserService;
 import com.genersoft.iot.vmp.storager.dao.UserMapper;
 import com.genersoft.iot.vmp.storager.dao.dto.User;
@@ -19,7 +20,14 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public User getUser(String username, String password) {
-        return userMapper.select(username, password);
+        User user = userMapper.getUserByUsername(username);
+        if (user == null || user.getPassword() == null) {
+            return null;
+        }
+        if (SecurityUtils.matchesPassword(password, user.getPassword())) {
+            return user;
+        }
+        return null;
     }
 
     @Override

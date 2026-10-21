@@ -36,8 +36,7 @@ public class DefaultUserDetailsServiceImpl implements UserDetailsService {
             log.info("Login user：{} does not exist", username);
             throw new UsernameNotFoundException("Login user：" + username + " does not exist");
         }
-        String password = SecurityUtils.encryptPassword(user.getPassword());
-        user.setPassword(password);
+        // Mật khẩu trong CSDL tuân thủ chuẩn Password + Salt + BCrypt băm an toàn
         return new LoginUser(user, LocalDateTime.now());
     }
 

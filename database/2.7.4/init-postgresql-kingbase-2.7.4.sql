@@ -703,7 +703,7 @@ create table IF NOT EXISTS wvp_user
 COMMENT ON TABLE wvp_user IS 'Platform user information';
 COMMENT ON COLUMN wvp_user.id IS 'primary keyID';
 COMMENT ON COLUMN wvp_user.username IS 'Username';
-COMMENT ON COLUMN wvp_user.password IS 'Password（MD5）';
+COMMENT ON COLUMN wvp_user.password IS 'Password (BCrypt + Salt)';
 COMMENT ON COLUMN wvp_user.role_id IS 'roleID';
 COMMENT ON COLUMN wvp_user.create_time IS 'creation time';
 COMMENT ON COLUMN wvp_user.update_time IS 'Update time';
@@ -754,8 +754,9 @@ COMMENT ON COLUMN wvp_user_api_key.update_time IS 'Update time';
 
 
 /*initial data*/
+-- Khởi tạo tài khoản quản trị mặc định: username 'admin', mật khẩu 'admin' (đã băm bằng chuẩn Password + Salt + BCrypt)
 INSERT INTO wvp_user
-VALUES (1, 'admin', '21232f297a57a5a743894a0e4a801fc3', 1, '2021-04-13 14:14:57', '2021-04-13 14:14:57',
+VALUES (1, 'admin', '$2a$10$8JcW5EoNAT/sJShwZ/6BsOycIQd9gfnIWu0sA36m5jYWBdZT0xfFi', 1, '2021-04-13 14:14:57', '2021-04-13 14:14:57',
         '3e80d1762a324d5b0ff636e0bd16f1e3');
 INSERT INTO wvp_user_role
 VALUES (1, 'admin', '0', '2021-04-13 14:14:57', '2021-04-13 14:14:57');

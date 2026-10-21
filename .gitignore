@@ -1,6 +1,12 @@
 # Compiled class file
 *.class
 
+# Environment & Secret files
+.env
+.env.local
+.env.*.local
+docker/.env
+
 # Log file
 *.log
 logs/*

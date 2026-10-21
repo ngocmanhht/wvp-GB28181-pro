@@ -24,8 +24,15 @@ spring:
         type: com.zaxxer.hikari.HikariDataSource
         driver-class-name: com.mysql.cj.jdbc.Driver
         url: jdbc:mysql://${DATABASE_HOST:127.0.0.1}:${DATABASE_PORT:3306}/wvp?useUnicode=true&characterEncoding=UTF8&rewriteBatchedStatements=true&serverTimezone=Asia/Ho_Chi_Minh&useSSL=false&allowMultiQueries=true&allowPublicKeyRetrieval=true
-        username: ${DATABASE_USER:root}
-        password: ${DATABASE_PASSWORD:root}
+        username: ${DATABASE_USER:wvp_user}
+        password: ${DATABASE_PASSWORD:wvp_password}
+        hikari:
+          minimum-idle: 10
+          maximum-pool-size: 50
+          idle-timeout: 30000
+          pool-name: WvpPool
+          max-lifetime: 1800000
+          connection-timeout: 30000
 # [Optional] WVPThe listening HTTP port, web pages and interface calls are all on this port
 server:
     port: ${SERVER_PORT:18978}

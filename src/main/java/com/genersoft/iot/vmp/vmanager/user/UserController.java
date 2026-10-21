@@ -28,6 +28,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Tag(name  = "User management")
 @RestController
@@ -48,10 +49,9 @@ public class UserController {
 
     @GetMapping("/login")
     @PostMapping("/login")
-    @Operation(summary = "Login", description = "AccessToken is returned after successful login, which can be obtained from the return value or from the response header.，" +
-            "Subsequent requests need to add request headers 'access-token'Or put it in the parameters")
+    @Operation(summary = "Login", description = "AccessToken is returned after successful login, which can be obtained from the return value or from the response header.")
     @Parameter(name = "username", description = "Username", required = true)
-    @Parameter(name = "password", description = "Password (32-bit md5 encryption）", required = true)
+    @Parameter(name = "password", description = "Password", required = true)
     public LoginUser login(HttpServletRequest request, HttpServletResponse response, @RequestParam String username, @RequestParam String password){
         LoginUser user;
         try {
@@ -74,8 +74,8 @@ public class UserController {
     @PostMapping("/changePassword")
     @Operation(summary = "Change password", security = @SecurityRequirement(name = JwtUtils.HEADER))
     @Parameter(name = "username", description = "Username", required = true)
-    @Parameter(name = "oldpassword", description = "Old password (md5 encrypted password）", required = true)
-    @Parameter(name = "password", description = "New password (unmd5 encrypted password)）", required = true)
+    @Parameter(name = "oldPassword", description = "Old password", required = true)
+    @Parameter(name = "password", description = "New password", required = true)
     public void changePassword(@RequestParam String oldPassword, @RequestParam String password){
         // Get the currently logged in userid
         LoginUser userInfo = SecurityUtils.getUserInfo();
@@ -90,7 +90,7 @@ public class UserController {
                 throw new ControllerException(ErrorCode.ERROR100);
             }
             //int userId = SecurityUtils.getUserId();
-            boolean result = userService.changePassword(user.getId(), DigestUtils.md5DigestAsHex(password.getBytes()));
+            boolean result = userService.changePassword(user.getId(), SecurityUtils.encryptPassword(password));
             if (!result) {
                 throw new ControllerException(ErrorCode.ERROR100);
             }
@@ -103,7 +103,7 @@ public class UserController {
     @PostMapping("/add")
     @Operation(summary = "Add user", security = @SecurityRequirement(name = JwtUtils.HEADER))
     @Parameter(name = "username", description = "Username", required = true)
-    @Parameter(name = "password", description = "Password (unmd5 encrypted password)）", required = true)
+    @Parameter(name = "password", description = "Password", required = true)
     @Parameter(name = "roleId", description = "roleID", required = true)
     public void add(@RequestParam String username,
                                                  @RequestParam String password,
@@ -119,9 +119,10 @@ public class UserController {
         }
         User user = new User();
         user.setUsername(username);
-        user.setPassword(DigestUtils.md5DigestAsHex(password.getBytes()));
-        //The generation rules for pushKey for new users are:md5(Timestamp+Username)
-        user.setPushKey(DigestUtils.md5DigestAsHex((System.currentTimeMillis()+password).getBytes()));
+        // Lưu mật khẩu dưới dạng Password + Salt + BCrypt băm an toàn
+        user.setPassword(SecurityUtils.encryptPassword(password));
+        // PushKey ngẫu nhiên bằng UUID bảo mật
+        user.setPushKey(UUID.randomUUID().toString().replace("-", ""));
         Role role = roleService.getRoleById(roleId);
 
         if (role == null) {
@@ -193,9 +194,9 @@ public class UserController {
 
     @PostMapping("/changePasswordForAdmin")
     @Operation(summary = "Administrator changes ordinary user password", security = @SecurityRequirement(name = JwtUtils.HEADER))
-    @Parameter(name = "adminId", description = "Administratorid", required = true)
-    @Parameter(name = "userId", description = "Userid", required = true)
-    @Parameter(name = "password", description = "New password (unmd5 encrypted password)）", required = true)
+    @Parameter(name = "adminId", description = "Administrator ID", required = true)
+    @Parameter(name = "userId", description = "User ID", required = true)
+    @Parameter(name = "password", description = "New password", required = true)
     public void changePasswordForAdmin(@RequestParam int userId, @RequestParam String password) {
         // Get the currently logged in userid
         LoginUser userInfo = SecurityUtils.getUserInfo();
@@ -204,7 +205,7 @@ public class UserController {
         }
         Role role = userInfo.getRole();
         if (role != null && role.getId() == 1) {
-            boolean result = userService.changePassword(userId, DigestUtils.md5DigestAsHex(password.getBytes()));
+            boolean result = userService.changePassword(userId, SecurityUtils.encryptPassword(password));
             if (!result) {
                 throw new ControllerException(ErrorCode.ERROR100);
             }
@@ -220,7 +221,10 @@ public class UserController {
         if (userInfo == null) {
             throw new ControllerException(ErrorCode.ERROR100);
         }
-        User user = userService.getUser(userInfo.getUsername(), userInfo.getPassword());
+        User user = userService.getUserById(userInfo.getId());
+        if (user == null) {
+            user = userService.getUserByUsername(userInfo.getUsername());
+        }
         return new LoginUser(user, LocalDateTime.now());
     }
 }

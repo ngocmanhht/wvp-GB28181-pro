@@ -1,5 +1,4 @@
 import { BaseService } from './base.service'
-import CryptoJS from 'crypto-js'
 
 export class UserService extends BaseService {
   private static instance: UserService
@@ -16,10 +15,9 @@ export class UserService extends BaseService {
   }
 
   public login(params: { username: string; password: string }) {
-    const md5Password = CryptoJS.MD5(params.password).toString()
     return this.get('/api/user/login', {
       username: params.username.trim(),
-      password: md5Password,
+      password: params.password,
     })
   }
 
@@ -40,18 +38,14 @@ export class UserService extends BaseService {
   }
 
   public addUser(data: { username: string; password?: string; roleId: number | string }) {
-    const payload = { ...data }
-    if (payload.password) {
-      payload.password = CryptoJS.MD5(payload.password).toString()
-    }
-    return this.http.post('/api/user/add', null, { params: payload })
+    return this.http.post('/api/user/add', null, { params: data })
   }
 
   public changePassword(data: { oldPassword?: string; password: string }) {
     return this.http.post('/api/user/changePassword', null, {
       params: {
-        oldPassword: data.oldPassword ? CryptoJS.MD5(data.oldPassword).toString() : '',
-        password: CryptoJS.MD5(data.password).toString(),
+        oldPassword: data.oldPassword || '',
+        password: data.password,
       },
     })
   }

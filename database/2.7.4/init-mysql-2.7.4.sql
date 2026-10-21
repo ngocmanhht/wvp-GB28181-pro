@@ -385,7 +385,7 @@ create table IF NOT EXISTS wvp_user
 (
     id          serial primary key COMMENT 'primary keyID',
     username    character varying(255) COMMENT 'Username',
-    password    character varying(255) COMMENT 'Password（MD5）',
+    password    character varying(255) COMMENT 'Password (BCrypt + Salt)',
     role_id     integer COMMENT 'roleID',
     create_time character varying(50) COMMENT 'creation time',
     update_time character varying(50) COMMENT 'Update time',
@@ -421,9 +421,9 @@ create table IF NOT EXISTS wvp_user_api_key
 
 
 /*initial data*/
--- Initialize the administrator account, account admin and password admin (after MD5 encryption）
+-- Khởi tạo tài khoản quản trị mặc định: username 'admin', mật khẩu 'admin' (đã băm bằng chuẩn Password + Salt + BCrypt)
 INSERT INTO wvp_user
-VALUES (1, 'admin', '21232f297a57a5a743894a0e4a801fc3', 1, '2021-04-13 14:14:57', '2021-04-13 14:14:57',
+VALUES (1, 'admin', '$2a$10$8JcW5EoNAT/sJShwZ/6BsOycIQd9gfnIWu0sA36m5jYWBdZT0xfFi', 1, '2021-04-13 14:14:57', '2021-04-13 14:14:57',
         '3e80d1762a324d5b0ff636e0bd16f1e3');
 -- Initialize administrator role
 INSERT INTO wvp_user_role

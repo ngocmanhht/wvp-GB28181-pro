@@ -1,14 +1,14 @@
 version: "3"
 services:
   polaris-redis:
-    image: redis:latest
+    image: redis:7-alpine
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
-      interval: 15s
+      test: ["CMD-SHELL", "redis-cli -a ${REDIS_PWD:-wvp_redis_secure_password_2026} ping | grep PONG"]
+      interval: 10s
       timeout: 5s
       retries: 10
-      start_period: 10s
+      start_period: 5s
     networks:
       - media-net
     volumes:
@@ -16,7 +16,12 @@ services:
       - ./volumes/redis/data/:/data
     environment:
       TZ: "Asia/Ho_Chi_Minh"
-    command: redis-server /opt/polaris/redis/redis.conf --appendonly yes
+    command: redis-server /opt/polaris/redis/redis.conf --requirepass ${REDIS_PWD:-wvp_redis_secure_password_2026} --appendonly yes
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "5"
 
   polaris-mysql:
     image: mysql:8
@@ -47,10 +52,24 @@ services:
         "--default-time-zone=+07:00",
         "--lower-case-table-names=1",
       ]
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "5"
 
   polaris-media:
-    image: zlmediakit/zlmediakit:master
+    image: ${ZLM_IMAGE:-zlmediakit/zlmediakit:master}
     restart: always
+    ulimits:
+      nofile:
+        soft: 65535
+        hard: 65535
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "5"
     networks:
       - media-net
     ports:
@@ -95,6 +114,7 @@ services:
     environment:
       TZ: "Asia/Ho_Chi_Minh"
       RUN_ENV: "docker"
+      JAVA_OPTS: "${JAVA_OPTS:--Xms1024m -Xmx2048m -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/opt/ylcx/}"
       Stream_IP: ${Stream_IP:-127.0.0.1}
       SDP_IP: ${SDP_IP:-127.0.0.1}
       ZLM_HOOK_HOST: polaris-wvp
@@ -109,6 +129,7 @@ services:
 
       REDIS_HOST: polaris-redis
       REDIS_PORT: 6379
+      REDIS_PWD: "${REDIS_PWD:-wvp_redis_secure_password_2026}"
 
       DATABASE_HOST: polaris-mysql
       DATABASE_PORT: 3306
@@ -123,6 +144,11 @@ services:
 
       RecordSip: ${RecordSip:-true}
       RecordPushLive: ${RecordPushLive:-false}
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "5"
 
   polaris-nginx:
     build:
@@ -139,6 +165,11 @@ services:
       Stream_IP: ${Stream_IP:-127.0.0.1}
     networks:
       - media-net
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "5"
 
 networks:
   media-net:

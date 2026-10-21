@@ -20,9 +20,9 @@ spring:
           # [Must be modified] port number
           port: ${REDIS_PORT:6379}
           # [Optional] database DB
-          database: 1
+          database: ${REDIS_DB:1}
           # [Optional] Access password. If your redis server does not have a password set, you do not need to use a password to connect.
-          password:
+          password: ${REDIS_PWD:}
           # [Optional] timeout
           timeout: 10000
          ## [Optional] The maximum number of jedis instances that can be allocated to a pool
@@ -37,8 +37,15 @@ spring:
         type: com.zaxxer.hikari.HikariDataSource
         driver-class-name: com.mysql.cj.jdbc.Driver
         url: jdbc:mysql://${DATABASE_HOST:127.0.0.1}:${DATABASE_PORT:3306}/wvp?useUnicode=true&characterEncoding=UTF8&rewriteBatchedStatements=true&serverTimezone=Asia/Ho_Chi_Minh&useSSL=false&allowMultiQueries=true&allowPublicKeyRetrieval=true
-        username: ${DATABASE_USER:root}
-        password: ${DATABASE_PASSWORD:root}
+        username: ${DATABASE_USER:wvp_user}
+        password: ${DATABASE_PASSWORD:wvp_password}
+        hikari:
+          minimum-idle: 10
+          maximum-pool-size: 50
+          idle-timeout: 30000
+          pool-name: WvpPool
+          max-lifetime: 1800000
+          connection-timeout: 30000
 
 #[Optional] The listening HTTP port, web pages and interface calls are all on this port
 server:
@@ -108,7 +115,7 @@ media:
   # Enable multi-port mode. Multi-port mode uses ports to distinguish each flow for better compatibility. Single port uses the ssrc of the flow to distinguish. For on-demand timeout, it is recommended to use multi-port testing.
   rtp:
     # [Optional] Whether to enable multi-port mode. When enabled, the port will be selected within the portRange range for media streaming.
-    enable: false
+    enable: true
     # [Optional] 
     port-range: 30000,30500 
     # [Optional] 

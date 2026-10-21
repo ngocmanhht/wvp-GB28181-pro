@@ -72,13 +72,34 @@ public class SecurityUtils {
     }
 
     /**
-     * generateBCryptPasswordEncoderPassword
+     * generateBCryptPasswordEncoderPassword (Password + Salt + Hash)
      *
      * @param password Password
-     * @return encrypted string
+     * @return encrypted string with random 128-bit salt
      */
     public static String encryptPassword(String password) {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         return passwordEncoder.encode(password);
+    }
+
+    /**
+     * Kiểm tra xem chuỗi mật khẩu đã được băm bằng chuẩn Password + Salt + BCrypt chưa
+     */
+    public static boolean isBcrypt(String password) {
+        if (password == null || password.trim().isEmpty()) {
+            return false;
+        }
+        return password.startsWith("$2a$") || password.startsWith("$2b$") || password.startsWith("$2y$");
+    }
+
+    /**
+     * So khớp mật khẩu dạng thô (hoặc MD5 từ frontend) với chuỗi hash có Salt trong CSDL
+     */
+    public static boolean matchesPassword(String rawPassword, String encodedPassword) {
+        if (rawPassword == null || encodedPassword == null) {
+            return false;
+        }
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        return passwordEncoder.matches(rawPassword, encodedPassword);
     }
 }
