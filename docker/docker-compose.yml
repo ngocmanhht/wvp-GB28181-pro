@@ -3,11 +3,11 @@ services:
     image: redis:7-alpine
     restart: unless-stopped
     healthcheck:
-      test: ["CMD-SHELL", "redis-cli -a ${REDIS_PWD:-wvp_redis_secure_password_2026} ping | grep PONG"]
-      interval: 10s
-      timeout: 5s
-      retries: 10
-      start_period: 5s
+      test: ["CMD-SHELL", "redis-cli ping 2>/dev/null | grep -q PONG || redis-cli -a \"${REDIS_PWD:-wvp_redis_secure_password_2026}\" ping 2>/dev/null | grep -q PONG || exit 1"]
+      interval: 3s
+      timeout: 3s
+      retries: 15
+      start_period: 3s
     networks:
       - media-net
     volumes:
@@ -15,7 +15,8 @@ services:
       - ./volumes/redis/data/:/data
     environment:
       TZ: "Asia/Ho_Chi_Minh"
-    command: redis-server /opt/polaris/redis/redis.conf --requirepass ${REDIS_PWD:-wvp_redis_secure_password_2026} --appendonly yes
+      REDISCLI_AUTH: "${REDIS_PWD:-wvp_redis_secure_password_2026}"
+    command: redis-server /opt/polaris/redis/redis.conf --requirepass ${REDIS_PWD:-wvp_redis_secure_password_2026}
     logging:
       driver: "json-file"
       options:

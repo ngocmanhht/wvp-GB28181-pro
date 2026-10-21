@@ -87,6 +87,16 @@ if [ "$mode_choice" = "1" ]; then
         exit 1
     fi
     
+    log_info "Preparing storage volumes and checking permissions..."
+    mkdir -p "$SCRIPT_DIR/docker/volumes/redis/data" \
+             "$SCRIPT_DIR/docker/volumes/mysql/data" \
+             "$SCRIPT_DIR/docker/logs/wvp" \
+             "$SCRIPT_DIR/docker/logs/mysql" \
+             "$SCRIPT_DIR/docker/logs/nginx" \
+             "$SCRIPT_DIR/docker/media/record" \
+             "$SCRIPT_DIR/docker/logs/media" 2>/dev/null || true
+    chmod -R 777 "$SCRIPT_DIR/docker/volumes" "$SCRIPT_DIR/docker/logs" 2>/dev/null || true
+
     log_info "Starting WVP Master Pure Control Plane (Không kèm ZLMediaKit)..."
     cd "$SCRIPT_DIR/docker"
     export DOCKER_BUILDKIT=1
@@ -94,11 +104,11 @@ if [ "$mode_choice" = "1" ]; then
     
     # Check if docker-compose or docker compose is available
     if docker compose version &> /dev/null; then
-        log_info "Running: docker compose -f docker-compose-master.yml up -d --build"
-        docker compose -f docker-compose-master.yml up -d --build
+        log_info "Running: docker compose -f docker-compose-master.yml up -d --build --force-recreate"
+        docker compose -f docker-compose-master.yml up -d --build --force-recreate
     else
-        log_info "Running: docker-compose -f docker-compose-master.yml up -d --build"
-        docker-compose -f docker-compose-master.yml up -d --build
+        log_info "Running: docker-compose -f docker-compose-master.yml up -d --build --force-recreate"
+        docker-compose -f docker-compose-master.yml up -d --build --force-recreate
     fi
     
     if [ $? -eq 0 ]; then
@@ -119,6 +129,16 @@ elif [ "$mode_choice" = "2" ]; then
         exit 1
     fi
     
+    log_info "Preparing storage volumes and checking permissions..."
+    mkdir -p "$SCRIPT_DIR/docker/volumes/redis/data" \
+             "$SCRIPT_DIR/docker/volumes/mysql/data" \
+             "$SCRIPT_DIR/docker/logs/wvp" \
+             "$SCRIPT_DIR/docker/logs/mysql" \
+             "$SCRIPT_DIR/docker/logs/nginx" \
+             "$SCRIPT_DIR/docker/media/record" \
+             "$SCRIPT_DIR/docker/logs/media" 2>/dev/null || true
+    chmod -R 777 "$SCRIPT_DIR/docker/volumes" "$SCRIPT_DIR/docker/logs" "$SCRIPT_DIR/docker/media" 2>/dev/null || true
+
     log_info "Starting All-in-One Full Stack with Docker Compose (kèm ZLMediaKit nội bộ)..."
     cd "$SCRIPT_DIR/docker"
     export DOCKER_BUILDKIT=1
@@ -126,11 +146,11 @@ elif [ "$mode_choice" = "2" ]; then
     
     # Check if docker-compose or docker compose is available
     if docker compose version &> /dev/null; then
-        log_info "Running: docker compose up -d --build"
-        docker compose up -d --build
+        log_info "Running: docker compose up -d --build --force-recreate"
+        docker compose up -d --build --force-recreate
     else
-        log_info "Running: docker-compose up -d --build"
-        docker-compose up -d --build
+        log_info "Running: docker-compose up -d --build --force-recreate"
+        docker-compose up -d --build --force-recreate
     fi
     
     if [ $? -eq 0 ]; then
