@@ -1,7 +1,6 @@
 /* Ensure database, user and permissions */
 CREATE DATABASE IF NOT EXISTS wvp CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 CREATE USER IF NOT EXISTS 'wvp_user'@'%' IDENTIFIED BY 'wvp_password';
-ALTER USER 'wvp_user'@'%' IDENTIFIED BY 'wvp_password';
 GRANT ALL PRIVILEGES ON wvp.* TO 'wvp_user'@'%';
 FLUSH PRIVILEGES;
 
