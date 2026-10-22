@@ -15,7 +15,7 @@ export class UserService extends BaseService {
   }
 
   public login(params: { username: string; password: string }) {
-    return this.get('/api/user/login', {
+    return this.post('/api/user/login', {
       username: params.username.trim(),
       password: params.password,
     })

@@ -4,6 +4,7 @@ import com.genersoft.iot.vmp.conf.UserSetting;
 import com.genersoft.iot.vmp.conf.exception.ControllerException;
 import com.genersoft.iot.vmp.conf.security.JwtUtils;
 import com.genersoft.iot.vmp.conf.security.SecurityUtils;
+import com.genersoft.iot.vmp.conf.security.dto.LoginDTO;
 import com.genersoft.iot.vmp.conf.security.dto.LoginUser;
 import com.genersoft.iot.vmp.service.IRoleService;
 import com.genersoft.iot.vmp.service.IUserService;
@@ -47,22 +48,33 @@ public class UserController {
     @Autowired
     private UserSetting userSetting;
 
-    @GetMapping("/login")
     @PostMapping("/login")
     @Operation(summary = "Login", description = "AccessToken is returned after successful login, which can be obtained from the return value or from the response header.")
-    @Parameter(name = "username", description = "Username", required = true)
-    @Parameter(name = "password", description = "Password", required = true)
-    public LoginUser login(HttpServletRequest request, HttpServletResponse response, @RequestParam String username, @RequestParam String password){
+    public LoginUser login(HttpServletRequest request, HttpServletResponse response,
+                           @RequestBody(required = false) LoginDTO loginDto,
+                           @RequestParam(required = false) String username,
+                           @RequestParam(required = false) String password){
+        String finalUsername = (loginDto != null && !ObjectUtils.isEmpty(loginDto.getUsername()))
+                ? loginDto.getUsername().trim()
+                : (username != null ? username.trim() : null);
+        String finalPassword = (loginDto != null && !ObjectUtils.isEmpty(loginDto.getPassword()))
+                ? loginDto.getPassword()
+                : password;
+
+        if (ObjectUtils.isEmpty(finalUsername) || ObjectUtils.isEmpty(finalPassword)) {
+            throw new ControllerException(ErrorCode.ERROR100.getCode(), "Username and password cannot be empty");
+        }
+
         LoginUser user;
         try {
-            user = SecurityUtils.login(username, password, authenticationManager);
+            user = SecurityUtils.login(finalUsername, finalPassword, authenticationManager);
         } catch (AuthenticationException e) {
             throw new ControllerException(ErrorCode.ERROR100.getCode(), e.getMessage());
         }
         if (user == null) {
             throw new ControllerException(ErrorCode.ERROR100.getCode(), "Wrong username or password");
-        }else {
-            String jwt = JwtUtils.createToken(username);
+        } else {
+            String jwt = JwtUtils.createToken(finalUsername);
             response.setHeader(JwtUtils.getHeader(), jwt);
             user.setAccessToken(jwt);
             user.setServerId(userSetting.getServerId());
