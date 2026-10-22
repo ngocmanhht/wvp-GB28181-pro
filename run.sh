@@ -103,6 +103,13 @@ if [ "$mode_choice" = "1" ]; then
         rm -rf "$SCRIPT_DIR/docker/volumes/redis/data"/* 2>/dev/null || true
     fi
 
+    # Check if MySQL data directory was corrupted by a previous interrupted initialization
+    if [ -d "$SCRIPT_DIR/docker/volumes/mysql/data" ] && [ "$(ls -A "$SCRIPT_DIR/docker/volumes/mysql/data" 2>/dev/null)" ] && [ ! -d "$SCRIPT_DIR/docker/volumes/mysql/data/wvp" ]; then
+        log_warning "Detected incomplete/corrupted MySQL initialization (database 'wvp' was never created)."
+        log_info "Auto-cleaning broken MySQL data files to allow a fresh, healthy initialization..."
+        rm -rf "$SCRIPT_DIR/docker/volumes/mysql/data"/* 2>/dev/null || true
+    fi
+
     log_info "Starting WVP Master Pure Control Plane (Không kèm ZLMediaKit)..."
     cd "$SCRIPT_DIR/docker"
     export DOCKER_BUILDKIT=1
@@ -180,6 +187,13 @@ elif [ "$mode_choice" = "2" ]; then
     if [ -d "$SCRIPT_DIR/docker/volumes/redis/data/appendonlydir" ] || [ -f "$SCRIPT_DIR/docker/volumes/redis/data/dump.rdb" ]; then
         log_info "Cleaning stale Redis cache files to ensure clean database startup..."
         rm -rf "$SCRIPT_DIR/docker/volumes/redis/data"/* 2>/dev/null || true
+    fi
+
+    # Check if MySQL data directory was corrupted by a previous interrupted initialization
+    if [ -d "$SCRIPT_DIR/docker/volumes/mysql/data" ] && [ "$(ls -A "$SCRIPT_DIR/docker/volumes/mysql/data" 2>/dev/null)" ] && [ ! -d "$SCRIPT_DIR/docker/volumes/mysql/data/wvp" ]; then
+        log_warning "Detected incomplete/corrupted MySQL initialization (database 'wvp' was never created)."
+        log_info "Auto-cleaning broken MySQL data files to allow a fresh, healthy initialization..."
+        rm -rf "$SCRIPT_DIR/docker/volumes/mysql/data"/* 2>/dev/null || true
     fi
 
     log_info "Starting All-in-One Full Stack with Docker Compose (kèm ZLMediaKit nội bộ)..."
