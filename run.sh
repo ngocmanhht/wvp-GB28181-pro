@@ -128,10 +128,46 @@ if [ "$mode_choice" = "1" ]; then
     
     if [ $? -eq 0 ]; then
         echo ""
+        log_info "Synchronizing MySQL user permissions and database schema..."
+        compose_cmd="docker compose -f docker-compose-master.yml"
+        if ! docker compose version &>/dev/null; then
+            compose_cmd="docker-compose -f docker-compose-master.yml"
+        fi
+
+        # Wait up to 30s for MySQL to be ready
+        log_info "Waiting for MySQL service to accept connections..."
+        for attempt in {1..15}; do
+            if $compose_cmd exec -T polaris-mysql mysqladmin ping -uroot -p"${MYSQL_ROOT_PASSWORD:-root}" --silent &>/dev/null; then
+                break
+            fi
+            sleep 2
+        done
+
+        # Ensure wvp_user exists and has correct password in MySQL
+        $compose_cmd exec -T polaris-mysql mysql -uroot -p"${MYSQL_ROOT_PASSWORD:-root}" -e "
+            CREATE DATABASE IF NOT EXISTS wvp CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+            CREATE USER IF NOT EXISTS '${MYSQL_USER:-wvp_user}'@'%' IDENTIFIED BY '${MYSQL_PASSWORD:-wvp_password}';
+            ALTER USER '${MYSQL_USER:-wvp_user}'@'%' IDENTIFIED BY '${MYSQL_PASSWORD:-wvp_password}';
+            GRANT ALL PRIVILEGES ON wvp.* TO '${MYSQL_USER:-wvp_user}'@'%';
+            FLUSH PRIVILEGES;
+        " 2>/dev/null || true
+
+        # Check if tables exist, if not import init-mysql.sql
+        table_count=$($compose_cmd exec -T polaris-mysql mysql -uroot -p"${MYSQL_ROOT_PASSWORD:-root}" -N -e "SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = 'wvp';" 2>/dev/null || echo 0)
+        if [ -z "$table_count" ] || [ "$table_count" -lt 5 ]; then
+            log_info "Tables not found in 'wvp' database. Importing initial schema..."
+            $compose_cmd exec -T polaris-mysql mysql -uroot -p"${MYSQL_ROOT_PASSWORD:-root}" wvp < "$SCRIPT_DIR/database/2.7.4/init-mysql-2.7.4.sql" 2>/dev/null || true
+        fi
+
+        # Restart polaris-wvp so it reconnects cleanly with the guaranteed permissions
+        $compose_cmd restart polaris-wvp 2>/dev/null || true
+
+        echo ""
         log_info "Containers launched! Waiting for WVP Java Backend to finish booting (usually 20-30s)..."
         wvp_ready=false
-        for i in {1..30}; do
-            if curl -s -m 2 http://127.0.0.1:18978/api/user/login &>/dev/null || curl -s -m 2 http://localhost:18978/api/user/login &>/dev/null; then
+        for i in {1..35}; do
+            http_code=$(curl -s -o /dev/null -w "%{http_code}" -m 2 http://127.0.0.1:18978/api/user/login 2>/dev/null || true)
+            if [ -n "$http_code" ] && [ "$http_code" != "000" ] && [ "$http_code" != "502" ]; then
                 wvp_ready=true
                 break
             fi
@@ -214,10 +250,46 @@ elif [ "$mode_choice" = "2" ]; then
     
     if [ $? -eq 0 ]; then
         echo ""
+        log_info "Synchronizing MySQL user permissions and database schema..."
+        compose_cmd="docker compose -f docker-compose.yml"
+        if ! docker compose version &>/dev/null; then
+            compose_cmd="docker-compose -f docker-compose.yml"
+        fi
+
+        # Wait up to 30s for MySQL to be ready
+        log_info "Waiting for MySQL service to accept connections..."
+        for attempt in {1..15}; do
+            if $compose_cmd exec -T polaris-mysql mysqladmin ping -uroot -p"${MYSQL_ROOT_PASSWORD:-root}" --silent &>/dev/null; then
+                break
+            fi
+            sleep 2
+        done
+
+        # Ensure wvp_user exists and has correct password in MySQL
+        $compose_cmd exec -T polaris-mysql mysql -uroot -p"${MYSQL_ROOT_PASSWORD:-root}" -e "
+            CREATE DATABASE IF NOT EXISTS wvp CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+            CREATE USER IF NOT EXISTS '${MYSQL_USER:-wvp_user}'@'%' IDENTIFIED BY '${MYSQL_PASSWORD:-wvp_password}';
+            ALTER USER '${MYSQL_USER:-wvp_user}'@'%' IDENTIFIED BY '${MYSQL_PASSWORD:-wvp_password}';
+            GRANT ALL PRIVILEGES ON wvp.* TO '${MYSQL_USER:-wvp_user}'@'%';
+            FLUSH PRIVILEGES;
+        " 2>/dev/null || true
+
+        # Check if tables exist, if not import init-mysql.sql
+        table_count=$($compose_cmd exec -T polaris-mysql mysql -uroot -p"${MYSQL_ROOT_PASSWORD:-root}" -N -e "SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = 'wvp';" 2>/dev/null || echo 0)
+        if [ -z "$table_count" ] || [ "$table_count" -lt 5 ]; then
+            log_info "Tables not found in 'wvp' database. Importing initial schema..."
+            $compose_cmd exec -T polaris-mysql mysql -uroot -p"${MYSQL_ROOT_PASSWORD:-root}" wvp < "$SCRIPT_DIR/database/2.7.4/init-mysql-2.7.4.sql" 2>/dev/null || true
+        fi
+
+        # Restart polaris-wvp so it reconnects cleanly with the guaranteed permissions
+        $compose_cmd restart polaris-wvp 2>/dev/null || true
+
+        echo ""
         log_info "Containers launched! Waiting for WVP Java Backend to finish booting (usually 20-30s)..."
         wvp_ready=false
-        for i in {1..30}; do
-            if curl -s -m 2 http://127.0.0.1:18978/api/user/login &>/dev/null || curl -s -m 2 http://localhost:18978/api/user/login &>/dev/null; then
+        for i in {1..35}; do
+            http_code=$(curl -s -o /dev/null -w "%{http_code}" -m 2 http://127.0.0.1:18978/api/user/login 2>/dev/null || true)
+            if [ -n "$http_code" ] && [ "$http_code" != "000" ] && [ "$http_code" != "502" ]; then
                 wvp_ready=true
                 break
             fi
