@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col gap-4 select-none">
     <!-- Header -->
-    <div class="p-4 bg-slate-900 border border-slate-800 rounded-xl flex flex-wrap items-center justify-between gap-3 shadow">
+    <div class="p-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl flex flex-wrap items-center justify-between gap-3 shadow transition-colors">
       <div class="flex items-center gap-3 flex-wrap">
         <el-input
           v-model="searchQuery"
@@ -18,18 +18,25 @@
         </el-button>
       </div>
 
-      <div class="flex items-center gap-2">
+      <div class="flex items-center gap-2 flex-wrap">
         <el-button type="success" size="default" @click="openPushUrlGenerator" class="!rounded-lg">
           <el-icon class="mr-1"><Upload /></el-icon> Generate Push URL
         </el-button>
-        <el-button size="default" @click="loadPushes" class="!rounded-lg !bg-slate-800 !text-slate-200 !border-slate-700">
+        <el-button size="default" @click="triggerExcelImport" class="!rounded-lg">
+          <el-icon class="mr-1"><DocumentAdd /></el-icon> Import Excel
+        </el-button>
+        <input type="file" ref="fileInputRef" class="hidden" accept=".xlsx,.xls" @change="handleFileSelected" />
+        <el-button size="default" @click="exportExcel" class="!rounded-lg">
+          <el-icon class="mr-1"><Download /></el-icon> Export Excel
+        </el-button>
+        <el-button size="default" @click="loadPushes" class="!rounded-lg bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-200 border-slate-200 dark:border-slate-700">
           <el-icon class="mr-1"><Refresh /></el-icon> Refresh
         </el-button>
       </div>
     </div>
 
     <!-- Push Data Table -->
-    <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 shadow overflow-hidden">
+    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4 shadow overflow-hidden transition-colors">
       <el-table
         :data="pushList"
         v-loading="loading"
@@ -38,13 +45,13 @@
       >
         <el-table-column prop="app" label="App" width="120">
           <template #default="{ row }">
-            <span class="font-mono text-xs text-blue-400 font-semibold">{{ row.app }}</span>
+            <span class="font-mono text-xs text-blue-600 dark:text-blue-400 font-semibold">{{ row.app }}</span>
           </template>
         </el-table-column>
 
         <el-table-column prop="stream" label="Stream ID" min-width="160">
           <template #default="{ row }">
-            <span class="font-mono font-medium text-slate-200">{{ row.stream }}</span>
+            <span class="font-mono font-medium text-slate-800 dark:text-slate-200">{{ row.stream }}</span>
           </template>
         </el-table-column>
 
@@ -52,14 +59,14 @@
           <template #default="{ row }">
             <span
               v-if="row.pushing"
-              class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
+              class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20"
             >
               <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
               Ingesting
             </span>
             <span
               v-else
-              class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-800 text-slate-500"
+              class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-100 dark:bg-slate-800 text-slate-500"
             >
               Idle
             </span>
@@ -68,11 +75,12 @@
 
         <el-table-column prop="createTime" label="Created Time" min-width="160">
           <template #default="{ row }">
-            <span class="font-mono text-xs text-slate-400">{{ row.createTime || 'N/A' }}</span>
+            <span class="font-mono text-xs text-slate-500 dark:text-slate-400">{{ row.createTime || 'N/A' }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column label="Actions" width="180" align="right" fixed="right">
+        <!-- Actions -->
+        <el-table-column label="Actions" width="260" align="right" fixed="right">
           <template #default="{ row }">
             <div class="flex items-center justify-end gap-1.5">
               <el-button
@@ -80,16 +88,25 @@
                 size="small"
                 type="primary"
                 plain
-                @click="previewPush(row)"
+                @click="previewStream(row)"
               >
                 Play
               </el-button>
 
               <el-button
                 size="small"
+                :type="row.gbId ? 'success' : 'info'"
+                plain
+                @click="toggleGbJoin(row)"
+              >
+                {{ row.gbId ? 'Joined GB' : 'Join GB' }}
+              </el-button>
+
+              <el-button
+                size="small"
                 type="danger"
                 plain
-                @click="handleDelete(row)"
+                @click="deletePush(row)"
               >
                 Delete
               </el-button>
@@ -112,46 +129,38 @@
       </div>
     </div>
 
-    <!-- Push URL Modal -->
-    <el-dialog
-      v-model="urlModalVisible"
-      title="RTMP / RTSP Push Ingest URL Generator"
-      width="600px"
-      destroy-on-close
-    >
-      <div class="flex flex-col gap-4 py-2">
-        <p class="text-xs text-slate-400">
-          Use OBS, ffmpeg, or your hardware encoder to push a live video stream to the following URL:
-        </p>
-
-        <div class="flex flex-col gap-2">
-          <span class="text-xs font-medium text-slate-300">RTMP Push URL:</span>
-          <el-input :value="rtmpPushUrl" readonly size="default">
-            <template #append>
-              <el-button @click="copyText(rtmpPushUrl)">Copy</el-button>
-            </template>
-          </el-input>
+    <!-- Push URL Generator Modal -->
+    <el-dialog v-model="generatorModalVisible" title="Generate RTMP / RTSP Push URL" width="600px" destroy-on-close>
+      <el-form label-width="110px" class="py-2 text-xs">
+        <el-form-item label="App Name">
+          <el-input v-model="genForm.app" placeholder="live" />
+        </el-form-item>
+        <el-form-item label="Stream ID">
+          <el-input v-model="genForm.stream" placeholder="e.g. cam01" />
+        </el-form-item>
+        <div class="p-3 rounded-lg bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 flex flex-col gap-2 font-mono text-xs">
+          <span class="text-slate-400 font-sans font-semibold">Generated Ingest Addresses:</span>
+          <div class="text-blue-600 dark:text-blue-400 select-all break-all">
+            rtmp://{{ hostUrl }}:1935/{{ genForm.app }}/{{ genForm.stream }}
+          </div>
+          <div class="text-emerald-600 dark:text-emerald-400 select-all break-all">
+            rtsp://{{ hostUrl }}:554/{{ genForm.app }}/{{ genForm.stream }}
+          </div>
         </div>
-
-        <div class="flex flex-col gap-2">
-          <span class="text-xs font-medium text-slate-300">RTSP Push URL:</span>
-          <el-input :value="rtspPushUrl" readonly size="default">
-            <template #append>
-              <el-button @click="copyText(rtspPushUrl)">Copy</el-button>
-            </template>
-          </el-input>
-        </div>
-      </div>
+      </el-form>
+      <template #footer>
+        <el-button type="primary" @click="generatorModalVisible = false">Close</el-button>
+      </template>
     </el-dialog>
 
-    <!-- Play Stream Modal -->
+    <!-- Preview Modal -->
     <el-dialog
-      v-model="playModalVisible"
-      :title="`Push Stream Preview: ${currentPush?.app}/${currentPush?.stream}`"
-      width="750px"
+      v-model="previewModalVisible"
+      :title="`Live Push: ${activeStream?.app}/${activeStream?.stream}`"
+      width="780px"
       destroy-on-close
     >
-      <div class="w-full h-[420px]">
+      <div class="w-full h-[450px]">
         <PlayerTabs v-if="streamInfo" :stream-info="streamInfo" :show-tab="true" />
       </div>
     </el-dialog>
@@ -159,13 +168,15 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, computed, onMounted } from 'vue'
+import { ref, reactive, onMounted } from 'vue'
 import { streamService } from '@/api'
 import PlayerTabs from '@/components/player/PlayerTabs.vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { Search, Upload, Refresh } from '@element-plus/icons-vue'
+import { Search, Upload, Refresh, DocumentAdd, Download } from '@element-plus/icons-vue'
+import * as XLSX from 'xlsx'
 
 const searchQuery = ref('')
+const hostUrl = ref(window.location.hostname)
 const loading = ref(false)
 const pushList = ref<any[]>([])
 
@@ -175,22 +186,16 @@ const pagination = reactive({
   total: 0,
 })
 
-const urlModalVisible = ref(false)
-const playModalVisible = ref(false)
-const currentPush = ref<any>(null)
+const generatorModalVisible = ref(false)
+const genForm = reactive({
+  app: 'live',
+  stream: `stream_${Date.now().toString().slice(-4)}`,
+})
+
+const previewModalVisible = ref(false)
+const activeStream = ref<any>(null)
 const streamInfo = ref<any>(null)
-
-const generatedStreamId = ref('')
-
-const rtmpPushUrl = computed(() => {
-  const host = window.location.hostname
-  return `rtmp://${host}:1935/live/${generatedStreamId.value || 'test'}`
-})
-
-const rtspPushUrl = computed(() => {
-  const host = window.location.hostname
-  return `rtsp://${host}:554/live/${generatedStreamId.value || 'test'}`
-})
+const fileInputRef = ref<HTMLInputElement | null>(null)
 
 async function loadPushes() {
   loading.value = true
@@ -205,49 +210,111 @@ async function loadPushes() {
       pagination.total = res.data.total || 0
     }
   } catch (e) {
-    console.error('Failed to load pushes:', e)
+    console.warn('Failed to load pushes:', e)
   } finally {
     loading.value = false
   }
 }
 
 function openPushUrlGenerator() {
-  generatedStreamId.value = `stream_${Math.floor(Math.random() * 900000 + 100000)}`
-  urlModalVisible.value = true
+  genForm.app = 'live'
+  genForm.stream = `stream_${Date.now().toString().slice(-4)}`
+  generatorModalVisible.value = true
 }
 
-function copyText(text: string) {
-  navigator.clipboard.writeText(text)
-  ElMessage.success('Copied URL to clipboard!')
-}
-
-function previewPush(row: any) {
-  currentPush.value = row
-  const host = window.location.hostname
-  const port = window.location.port ? `:${window.location.port}` : ''
-  const isHttps = window.location.protocol === 'https:'
-  const wsProto = isHttps ? 'wss:' : 'ws:'
-
+function previewStream(row: any) {
+  activeStream.value = row
   streamInfo.value = {
-    ws_flv: `${wsProto}//${host}${port}/${row.app}/${row.stream}.live.flv`,
-    wss_flv: `wss://${host}${port}/${row.app}/${row.stream}.live.flv`,
-    flv: `${window.location.protocol}//${host}${port}/${row.app}/${row.stream}.live.flv`,
-    rtc: `${window.location.protocol}//${host}${port}/index/api/webrtc?app=${row.app}&stream=${row.stream}&type=play`,
-    rtcs: `https://${host}${port}/index/api/webrtc?app=${row.app}&stream=${row.stream}&type=play`,
+    app: row.app,
+    stream: row.stream,
+    ws_flv: `${location.protocol === 'https:' ? 'wss:' : 'ws:'}//${location.host}/${row.app}/${row.stream}.live.flv`,
+    flv: `${location.origin}/${row.app}/${row.stream}.live.flv`,
+    rtc: `${location.origin}/index/api/webrtc?app=${row.app}&stream=${row.stream}&type=play`,
   }
-  playModalVisible.value = true
+  previewModalVisible.value = true
 }
 
-function handleDelete(row: any) {
-  ElMessageBox.confirm(`Delete push stream ${row.app}/${row.stream}?`, 'Delete Push Stream', {
+async function toggleGbJoin(row: any) {
+  try {
+    if (row.gbId) {
+      await streamService.removeFromGb({ app: row.app, stream: row.stream })
+      ElMessage.success('Stream removed from GB cascade catalog')
+    } else {
+      await streamService.saveToGb({ app: row.app, stream: row.stream, name: row.stream })
+      ElMessage.success('Stream assigned GB ID and published to catalog')
+    }
+    loadPushes()
+  } catch (e: any) {
+    ElMessage.error(e.message || 'Action failed')
+  }
+}
+
+function deletePush(row: any) {
+  ElMessageBox.confirm(`Remove stream push configuration for ${row.app}/${row.stream}?`, 'Confirm Delete', {
     confirmButtonText: 'Delete',
     cancelButtonText: 'Cancel',
-    type: 'warning'
+    type: 'warning',
   }).then(async () => {
     await streamService.deleteStreamPush(row.app, row.stream)
-    ElMessage.success('Push stream removed')
+    ElMessage.success('Stream push entry removed')
     loadPushes()
   })
+}
+
+function triggerExcelImport() {
+  fileInputRef.value?.click()
+}
+
+function handleFileSelected(e: Event) {
+  const files = (e.target as HTMLInputElement).files
+  if (!files || files.length === 0) return
+  const file = files[0]
+  const reader = new FileReader()
+
+  reader.onload = async (evt) => {
+    try {
+      const data = new Uint8Array(evt.target?.result as ArrayBuffer)
+      const workbook = XLSX.read(data, { type: 'array' })
+      const firstSheet = workbook.Sheets[workbook.SheetNames[0]]
+      const rows: any[] = XLSX.utils.sheet_to_json(firstSheet)
+
+      let importedCount = 0
+      for (const r of rows) {
+        if (r.app && r.stream) {
+          await streamService.addStreamPush({
+            app: r.app,
+            stream: r.stream,
+            name: r.name || r.stream,
+          })
+          importedCount++
+        }
+      }
+      ElMessage.success(`Successfully imported ${importedCount} push streams from Excel!`)
+      loadPushes()
+    } catch (err) {
+      ElMessage.error('Failed to parse Excel file')
+    }
+  }
+  reader.readAsArrayBuffer(file)
+}
+
+function exportExcel() {
+  if (pushList.value.length === 0) {
+    ElMessage.warning('No stream push data to export')
+    return
+  }
+  const exportData = pushList.value.map((item) => ({
+    App: item.app,
+    Stream: item.stream,
+    Status: item.pushing ? 'Ingesting' : 'Idle',
+    CreatedTime: item.createTime || '',
+  }))
+
+  const ws = XLSX.utils.json_to_sheet(exportData)
+  const wb = XLSX.utils.book_new()
+  XLSX.utils.book_append_sheet(wb, ws, 'StreamPush')
+  XLSX.writeFile(wb, `wvp_stream_push_${Date.now()}.xlsx`)
+  ElMessage.success('Excel exported successfully')
 }
 
 onMounted(() => {

@@ -3,13 +3,23 @@
 @tailwind utilities;
 
 :root {
-  --el-color-primary: #3b82f6;
+  --el-color-primary: #2563eb;
   --el-color-primary-light-3: #60a5fa;
   --el-color-primary-light-5: #93c5fd;
   --el-color-primary-light-7: #bfdbfe;
   --el-color-primary-light-8: #dbeafe;
   --el-color-primary-light-9: #eff6ff;
   --el-color-primary-dark-2: #1d4ed8;
+
+  --el-bg-color: #ffffff;
+  --el-bg-color-overlay: #ffffff;
+  --el-border-color: #e2e8f0;
+  --el-border-color-light: #f1f5f9;
+  --el-border-color-lighter: #f8fafc;
+  --el-text-color-primary: #0f172a;
+  --el-text-color-regular: #334155;
+  --el-text-color-secondary: #64748b;
+  --el-fill-color-blank: #ffffff;
 }
 
 html, body, #app {
@@ -28,20 +38,33 @@ html, body, #app {
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(15, 23, 42, 0.6);
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(100, 116, 139, 0.5);
+  background: rgba(148, 163, 184, 0.4);
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
+  background: rgba(100, 116, 139, 0.7);
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: rgba(100, 116, 139, 0.5);
+}
+.dark ::-webkit-scrollbar-thumb:hover {
   background: rgba(148, 163, 184, 0.8);
 }
 
 /* Glassmorphism card utility */
 .glass-panel {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+}
+
+.dark .glass-panel {
   background: rgba(30, 41, 59, 0.7);
   backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -60,25 +83,30 @@ html, body, #app {
   --el-fill-color-blank: #0f172a;
 }
 
-.el-table {
+.dark .el-table {
   --el-table-bg-color: transparent !important;
   --el-table-tr-bg-color: transparent !important;
   --el-table-header-bg-color: rgba(30, 41, 59, 0.8) !important;
   --el-table-border-color: rgba(51, 65, 85, 0.5) !important;
 }
 
-.el-table__row:hover > td {
+.dark .el-table__row:hover > td {
   background-color: rgba(51, 65, 85, 0.4) !important;
 }
 
-.el-card {
+.dark .el-card {
   --el-card-bg-color: rgba(30, 41, 59, 0.7) !important;
   --el-card-border-color: rgba(51, 65, 85, 0.6) !important;
 }
 
-.el-dialog {
+.dark .el-dialog {
   --el-dialog-bg-color: #1e293b !important;
   border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px !important;
+  overflow: hidden;
+}
+
+.el-dialog {
   border-radius: 12px !important;
   overflow: hidden;
 }

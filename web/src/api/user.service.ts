@@ -34,7 +34,7 @@ export class UserService extends BaseService {
   }
 
   public deleteUser(id: number | string) {
-    return this.delete('/api/user/delete', { id })
+    return this.delete(`/api/user/delete?id=${id}`)
   }
 
   public addUser(data: { username: string; password?: string; roleId: number | string }) {
@@ -50,8 +50,17 @@ export class UserService extends BaseService {
     })
   }
 
-  public getApiKeyList(params: { page: number; count: number }) {
-    return this.get('/api/userApiKey/list', params)
+  public changePasswordForAdmin(data: { userId: number | string; password: string }) {
+    return this.http.post('/api/user/changePasswordForAdmin', null, {
+      params: {
+        userId: data.userId,
+        password: data.password,
+      },
+    })
+  }
+
+  public changePushKey(params: { userId: number | string; pushKey: string }) {
+    return this.http.post('/api/user/changePushKey', null, { params })
   }
 }
 

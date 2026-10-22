@@ -1,11 +1,11 @@
 <template>
-  <div class="w-full bg-slate-900 border border-slate-800 rounded-xl p-3 flex flex-col gap-2 select-none shadow-lg">
+  <div class="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-3 flex flex-col gap-2 select-none shadow-lg transition-colors">
     <!-- Timeline Header -->
-    <div class="flex items-center justify-between text-xs text-slate-300">
+    <div class="flex items-center justify-between text-xs text-slate-700 dark:text-slate-300">
       <div class="flex items-center gap-2">
         <span class="w-2 h-2 rounded-full bg-blue-500"></span>
         <span class="font-medium">Video Scrubber Timeline</span>
-        <span class="font-mono text-emerald-400 font-semibold ml-2">{{ currentTimeText }}</span>
+        <span class="font-mono text-emerald-600 dark:text-emerald-400 font-semibold ml-2">{{ currentTimeText }}</span>
       </div>
 
       <!-- Zoom and controls -->
@@ -22,7 +22,7 @@
     <!-- Canvas Scrubber Bar -->
     <div
       ref="containerRef"
-      class="relative w-full h-16 bg-slate-950 rounded-lg overflow-hidden cursor-pointer border border-slate-800"
+      class="relative w-full h-16 bg-slate-100 dark:bg-slate-950 rounded-lg overflow-hidden cursor-pointer border border-slate-200 dark:border-slate-800"
       @mousedown="startDragging"
     >
       <canvas ref="canvasRef" class="w-full h-full block"></canvas>
@@ -33,6 +33,7 @@
 <script setup lang="ts">
 import { ref, onMounted, onBeforeUnmount, watch, computed } from 'vue'
 import dayjs from 'dayjs'
+import { useAppStore } from '@/stores/app'
 
 export interface RecordSlice {
   startTime: number // timestamp in ms
@@ -53,6 +54,7 @@ const props = withDefaults(
 
 const emit = defineEmits(['timeChange', 'seek'])
 
+const appStore = useAppStore()
 const containerRef = ref<HTMLDivElement | null>(null)
 const canvasRef = ref<HTMLCanvasElement | null>(null)
 
@@ -83,8 +85,10 @@ function drawTimeline() {
   ctx.setTransform(1, 0, 0, 1, 0, 0)
   ctx.scale(dpr, dpr)
 
+  const isDark = appStore.isDark
+
   // Background
-  ctx.fillStyle = '#020617'
+  ctx.fillStyle = isDark ? '#020617' : '#f8fafc'
   ctx.fillRect(0, 0, width, height)
 
   // Calculate start and end range around internalTime or start of today
@@ -107,13 +111,12 @@ function drawTimeline() {
   }
 
   // 2. Draw Time Ruler Ticks
-  ctx.strokeStyle = '#334155'
-  ctx.fillStyle = '#94a3b8'
+  ctx.strokeStyle = isDark ? '#334155' : '#cbd5e1'
+  ctx.fillStyle = isDark ? '#94a3b8' : '#64748b'
   ctx.font = '10px monospace'
   ctx.textAlign = 'center'
 
-  // Step depending on zoom
-  const stepMs = (rangeMs / (zoomLevel.value <= 1 ? 6 : 12))
+  const stepMs = rangeMs / (zoomLevel.value <= 1 ? 6 : 12)
 
   const firstTick = Math.ceil(startMs / stepMs) * stepMs
   for (let t = firstTick; t <= endMs; t += stepMs) {
@@ -199,6 +202,13 @@ watch(
   }
 )
 
+watch(
+  () => appStore.isDark,
+  () => {
+    drawTimeline()
+  }
+)
+
 let resizeObserver: ResizeObserver | null = null
 
 onMounted(() => {
@@ -221,6 +231,6 @@ defineExpose({
   setTime: (ts: number) => {
     internalTime.value = ts
     drawTimeline()
-  }
+  },
 })
 </script>

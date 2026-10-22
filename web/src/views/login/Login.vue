@@ -1,20 +1,34 @@
 <template>
-  <div class="relative w-screen h-screen overflow-hidden flex items-center justify-center bg-slate-950 text-slate-100 select-none">
+  <div class="relative w-screen h-screen overflow-hidden flex items-center justify-center bg-slate-100 dark:bg-slate-950 text-slate-800 dark:text-slate-100 select-none transition-colors duration-200">
     <!-- Ambient Background Effects -->
-    <div class="absolute -top-40 -left-40 w-96 h-96 bg-blue-600/20 rounded-full blur-3xl pointer-events-none"></div>
-    <div class="absolute -bottom-40 -right-40 w-96 h-96 bg-indigo-600/20 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="absolute -top-40 -left-40 w-96 h-96 bg-blue-500/10 dark:bg-blue-600/20 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="absolute -bottom-40 -right-40 w-96 h-96 bg-indigo-500/10 dark:bg-indigo-600/20 rounded-full blur-3xl pointer-events-none"></div>
+
+    <!-- Theme Switcher Top Right -->
+    <div class="absolute top-5 right-5 z-20">
+      <button
+        @click="appStore.toggleTheme"
+        class="w-10 h-10 rounded-xl flex items-center justify-center bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 shadow hover:scale-105 transition"
+        title="Toggle Theme"
+      >
+        <el-icon class="text-xl">
+          <Sunny v-if="appStore.isDark" class="text-amber-400" />
+          <Moon v-else class="text-slate-600" />
+        </el-icon>
+      </button>
+    </div>
 
     <!-- Login Glass Card -->
-    <div class="relative w-full max-w-md p-8 mx-4 rounded-2xl bg-slate-900/80 border border-slate-800 backdrop-blur-xl shadow-2xl flex flex-col gap-6 z-10">
+    <div class="relative w-full max-w-md p-8 mx-4 rounded-2xl bg-white/90 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 backdrop-blur-xl shadow-2xl flex flex-col gap-6 z-10 transition-colors">
       <!-- Header / Logo -->
       <div class="flex flex-col items-center text-center gap-2">
         <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center shadow-lg shadow-blue-500/30">
           <el-icon class="text-3xl text-white"><VideoCamera /></el-icon>
         </div>
-        <h1 class="text-2xl font-bold tracking-tight bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent">
+        <h1 class="text-2xl font-bold tracking-tight text-slate-800 dark:text-white">
           WVP-PRO Platform
         </h1>
-        <p class="text-xs text-slate-400">
+        <p class="text-xs text-slate-500 dark:text-slate-400">
           GB28181 & ZLMediaKit Video Surveillance Gateway
         </p>
       </div>
@@ -27,7 +41,6 @@
             placeholder="Username (e.g. admin)"
             size="large"
             :prefix-icon="User"
-            class="custom-input"
           />
         </el-form-item>
 
@@ -39,7 +52,6 @@
             size="large"
             :prefix-icon="Lock"
             show-password
-            class="custom-input"
             @keyup.enter="handleLogin"
           />
         </el-form-item>
@@ -56,7 +68,7 @@
       </el-form>
 
       <!-- Footer Info -->
-      <div class="flex items-center justify-between text-[11px] text-slate-500 border-t border-slate-800 pt-4">
+      <div class="flex items-center justify-between text-[11px] text-slate-500 border-t border-slate-200 dark:border-slate-800 pt-4">
         <span class="flex items-center gap-1.5">
           <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
           Gateway Ready
@@ -71,12 +83,14 @@
 import { ref, reactive } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useUserStore } from '@/stores/user'
+import { useAppStore } from '@/stores/app'
 import { ElMessage, FormInstance } from 'element-plus'
-import { VideoCamera, User, Lock } from '@element-plus/icons-vue'
+import { VideoCamera, User, Lock, Sunny, Moon } from '@element-plus/icons-vue'
 
 const router = useRouter()
 const route = useRoute()
 const userStore = useUserStore()
+const appStore = useAppStore()
 
 const formRef = ref<FormInstance>()
 const loading = ref(false)
@@ -113,20 +127,3 @@ async function handleLogin() {
   })
 }
 </script>
-
-<style scoped>
-:deep(.el-input__wrapper) {
-  background-color: rgba(15, 23, 42, 0.8) !important;
-  border: 1px solid #334155 !important;
-  border-radius: 12px !important;
-  box-shadow: none !important;
-  padding: 8px 14px;
-}
-:deep(.el-input__wrapper.is-focus) {
-  border-color: #3b82f6 !important;
-  box-shadow: 0 0 0 1px #3b82f6 !important;
-}
-:deep(.el-input__inner) {
-  color: #f8fafc !important;
-}
-</style>

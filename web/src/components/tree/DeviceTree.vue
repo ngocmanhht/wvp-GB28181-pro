@@ -1,12 +1,12 @@
 <template>
-  <div class="h-full flex flex-col bg-slate-900 border border-slate-800 rounded-xl overflow-hidden select-none">
+  <div class="h-full flex flex-col bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden select-none transition-colors">
     <!-- Header & Search input -->
-    <div class="p-3 border-b border-slate-800 bg-slate-900/90 flex flex-col gap-2">
+    <div class="p-3 border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/90 flex flex-col gap-2">
       <div class="flex items-center justify-between">
-        <span class="font-semibold text-xs tracking-wide uppercase text-slate-400">Device Tree</span>
+        <span class="font-semibold text-xs tracking-wide uppercase text-slate-500 dark:text-slate-400">Device Tree</span>
         <button
           @click="loadDevices"
-          class="text-xs text-blue-400 hover:text-blue-300 flex items-center gap-1"
+          class="text-xs text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1"
           title="Refresh"
         >
           <el-icon><Refresh /></el-icon> Refresh
@@ -15,7 +15,7 @@
 
       <el-input
         v-model="searchQuery"
-        placeholder="Filter channels..."
+        placeholder="Filter cameras..."
         size="small"
         clearable
         :prefix-icon="Search"
@@ -38,14 +38,14 @@
           <div class="flex items-center justify-between w-full pr-2 text-xs py-1">
             <div class="flex items-center gap-2 truncate">
               <!-- Node Icon: Device vs Camera Channel -->
-              <span v-if="data.isDevice" class="text-blue-400">
+              <span v-if="data.isDevice" class="text-blue-500">
                 <el-icon><Monitor /></el-icon>
               </span>
-              <span v-else :class="data.online ? 'text-emerald-400' : 'text-slate-500'">
+              <span v-else :class="data.online ? 'text-emerald-500' : 'text-slate-400'">
                 <el-icon><VideoCamera /></el-icon>
               </span>
 
-              <span :class="data.online === false ? 'text-slate-500 line-through' : 'text-slate-200'" class="truncate">
+              <span :class="data.online === false ? 'text-slate-400 line-through' : 'text-slate-700 dark:text-slate-200'" class="truncate">
                 {{ data.name || data.deviceId || 'Channel' }}
               </span>
             </div>
@@ -54,7 +54,7 @@
             <span
               v-if="!data.isDevice"
               class="w-2 h-2 rounded-full flex-shrink-0"
-              :class="data.online ? 'bg-emerald-500 shadow-sm shadow-emerald-500/50' : 'bg-slate-600'"
+              :class="data.online ? 'bg-emerald-500 shadow-sm shadow-emerald-500/50' : 'bg-slate-300 dark:bg-slate-600'"
             ></span>
           </div>
         </template>
@@ -92,50 +92,46 @@ function filterNode(value: string, data: any) {
 async function loadDevices() {
   loading.value = true
   try {
-    const res: any = await deviceService.getDevices({ page: 1, count: 50 })
-    if (res && res.data && res.data.list) {
-      const devList = res.data.list
+    const [devRes, chanRes]: any = await Promise.allSettled([
+      deviceService.getDevices({ page: 1, count: 100 }),
+      deviceService.getAllChannels({ page: 1, count: 500 }),
+    ])
 
-      // Fetch channels for each device
-      const tree: any[] = []
-      for (const dev of devList) {
-        const devNode: any = {
-          id: dev.deviceId,
-          deviceId: dev.deviceId,
-          name: dev.name || dev.deviceId,
-          isDevice: true,
-          online: dev.onLine,
-          children: []
-        }
+    const devList = (devRes.status === 'fulfilled' && devRes.value?.data?.list) ? devRes.value.data.list : []
+    const allChannels = (chanRes.status === 'fulfilled' && chanRes.value?.data?.list) ? chanRes.value.data.list : []
 
-        try {
-          const chanRes: any = await deviceService.getDeviceChannels({
-            deviceId: dev.deviceId,
-            page: 1,
-            count: 100
-          })
-          if (chanRes && chanRes.data && chanRes.data.list) {
-            devNode.children = chanRes.data.list.map((c: any) => ({
-              id: `${dev.deviceId}_${c.channelId}`,
-              deviceId: dev.deviceId,
-              channelId: c.channelId,
-              name: c.name || `CH-${c.channelId}`,
-              isDevice: false,
-              online: c.status === 1 || c.status === true || c.online === true,
-              channelInfo: c
-            }))
-          }
-        } catch (e) {
-          console.warn('Failed to fetch channels for device', dev.deviceId)
-        }
-
-        tree.push(devNode)
+    // Group channels by deviceId in memory (O(n) fast aggregation)
+    const channelMap = new Map<string, any[]>()
+    for (const ch of allChannels) {
+      if (!channelMap.has(ch.deviceId)) {
+        channelMap.set(ch.deviceId, [])
       }
-
-      treeData.value = tree
+      channelMap.get(ch.deviceId)!.push({
+        id: `${ch.deviceId}_${ch.channelId}`,
+        deviceId: ch.deviceId,
+        channelId: ch.channelId,
+        name: ch.name || `CH-${ch.channelId}`,
+        isDevice: false,
+        online: ch.status === 1 || ch.status === true || ch.online === true,
+        channelInfo: ch,
+      })
     }
+
+    const tree: any[] = []
+    for (const dev of devList) {
+      tree.push({
+        id: dev.deviceId,
+        deviceId: dev.deviceId,
+        name: dev.name || dev.deviceId,
+        isDevice: true,
+        online: dev.onLine,
+        children: channelMap.get(dev.deviceId) || [],
+      })
+    }
+
+    treeData.value = tree
   } catch (e) {
-    console.error('Failed to load device tree:', e)
+    console.warn('Failed to load device tree:', e)
   } finally {
     loading.value = false
   }
@@ -152,24 +148,30 @@ onMounted(() => {
 })
 
 defineExpose({
-  refresh: loadDevices
+  refresh: loadDevices,
 })
 </script>
 
 <style scoped>
 :deep(.el-tree) {
   background: transparent !important;
-  color: #cbd5e1;
 }
 :deep(.el-tree-node__content) {
   border-radius: 6px;
   margin: 2px 0;
   transition: background-color 0.15s;
 }
-:deep(.el-tree-node__content:hover) {
+.dark :deep(.el-tree-node__content:hover) {
   background: rgba(51, 65, 85, 0.4) !important;
 }
+:deep(.el-tree-node__content:hover) {
+  background: rgba(241, 245, 249, 0.8);
+}
 :deep(.el-tree-node.is-current > .el-tree-node__content) {
+  background: rgba(37, 99, 235, 0.1) !important;
+  color: #2563eb !important;
+}
+.dark :deep(.el-tree-node.is-current > .el-tree-node__content) {
   background: rgba(56, 189, 248, 0.15) !important;
   color: #38bdf8 !important;
 }

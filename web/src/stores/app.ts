@@ -9,22 +9,29 @@ export interface TagView {
 
 export const useAppStore = defineStore("app", () => {
   const sidebarCollapsed = ref(false);
-  const isDark = ref(true); // Default to sleek dark mode for surveillance UI
+  const savedTheme = localStorage.getItem("wvp_theme");
+  const isDark = ref(savedTheme !== null ? savedTheme === "dark" : true);
   const visitedViews = ref<TagView[]>([
     { name: "Dashboard", path: "/dashboard", title: "Dashboard" },
   ]);
+
+  function applyTheme(dark: boolean) {
+    isDark.value = dark;
+    if (dark) {
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("wvp_theme", "dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("wvp_theme", "light");
+    }
+  }
 
   function toggleSidebar() {
     sidebarCollapsed.value = !sidebarCollapsed.value;
   }
 
   function toggleTheme() {
-    isDark.value = !isDark.value;
-    if (isDark.value) {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
+    applyTheme(!isDark.value);
   }
 
   function addVisitedView(view: TagView) {
@@ -41,6 +48,7 @@ export const useAppStore = defineStore("app", () => {
     sidebarCollapsed,
     isDark,
     visitedViews,
+    applyTheme,
     toggleSidebar,
     toggleTheme,
     addVisitedView,

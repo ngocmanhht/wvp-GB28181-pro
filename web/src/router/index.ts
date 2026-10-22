@@ -14,6 +14,12 @@ export const routes: Array<RouteRecordRaw> = [
     meta: { hidden: true }
   },
   {
+    path: '/play/share',
+    name: 'SharePlayer',
+    component: () => import('@/views/share/SharePlayer.vue'),
+    meta: { hidden: true, public: true }
+  },
+  {
     path: '/',
     component: AppLayout,
     redirect: '/dashboard',
@@ -28,7 +34,7 @@ export const routes: Array<RouteRecordRaw> = [
         path: 'live',
         name: 'LiveView',
         component: () => import('@/views/live/LiveView.vue'),
-        meta: { title: 'Live Monitor', icon: 'VideoCamera' }
+        meta: { title: 'Split Live Monitor', icon: 'VideoCamera' }
       },
       {
         path: 'channel',
@@ -55,6 +61,12 @@ export const routes: Array<RouteRecordRaw> = [
         meta: { title: 'Device Record', hidden: true }
       },
       {
+        path: 'jtDevice',
+        name: 'JTDevice',
+        component: () => import('@/views/jtDevice/JtDeviceView.vue'),
+        meta: { title: 'JT1078 Vehicles', icon: 'Van' }
+      },
+      {
         path: 'stream/proxy',
         name: 'StreamProxy',
         component: () => import('@/views/stream/StreamProxy.vue'),
@@ -67,10 +79,28 @@ export const routes: Array<RouteRecordRaw> = [
         meta: { title: 'Stream Push', icon: 'Upload' }
       },
       {
+        path: 'org/region',
+        name: 'OrgRegion',
+        component: () => import('@/views/org/RegionView.vue'),
+        meta: { title: 'Administrative Division', icon: 'OfficeBuilding' }
+      },
+      {
+        path: 'org/group',
+        name: 'OrgGroup',
+        component: () => import('@/views/org/GroupView.vue'),
+        meta: { title: 'Business Grouping', icon: 'Folder' }
+      },
+      {
         path: 'cloudRecord',
         name: 'CloudRecord',
         component: () => import('@/views/cloudRecord/CloudRecordList.vue'),
         meta: { title: 'Cloud Record', icon: 'Film' }
+      },
+      {
+        path: 'recordPlan',
+        name: 'RecordPlan',
+        component: () => import('@/views/recordPlan/RecordPlanView.vue'),
+        meta: { title: 'Recording Plan', icon: 'Calendar' }
       },
       {
         path: 'map',
@@ -100,7 +130,7 @@ export const routes: Array<RouteRecordRaw> = [
         path: 'user',
         name: 'UserList',
         component: () => import('@/views/user/UserList.vue'),
-        meta: { title: 'Users', icon: 'User' }
+        meta: { title: 'Users & API Keys', icon: 'User' }
       },
       {
         path: 'systemInfo',
@@ -113,6 +143,12 @@ export const routes: Array<RouteRecordRaw> = [
         name: 'RealLog',
         component: () => import('@/views/operations/RealLog.vue'),
         meta: { title: 'Real-time Logs', icon: 'Document' }
+      },
+      {
+        path: 'operations/history',
+        name: 'HistoryLog',
+        component: () => import('@/views/operations/HistoryLog.vue'),
+        meta: { title: 'Audit History Logs', icon: 'DocumentCopy' }
       }
     ]
   },
@@ -133,6 +169,11 @@ const router = createRouter({
 router.beforeEach((to, _from, next) => {
   NProgress.start()
   const token = getToken()
+
+  if (to.meta?.public || to.path === '/play/share') {
+    next()
+    return
+  }
 
   if (to.path === '/login') {
     if (token) {

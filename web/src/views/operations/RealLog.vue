@@ -1,9 +1,9 @@
 <template>
   <div class="flex flex-col gap-3 h-[calc(100vh-112px)] select-none">
     <!-- Controls Header -->
-    <div class="p-3 bg-slate-900 border border-slate-800 rounded-xl flex items-center justify-between text-xs shadow">
+    <div class="p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl flex items-center justify-between text-xs shadow transition-colors">
       <div class="flex items-center gap-3">
-        <span class="font-semibold text-white flex items-center gap-2">
+        <span class="font-semibold text-slate-800 dark:text-white flex items-center gap-2">
           <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
           Live Console Logs
         </span>
@@ -27,7 +27,7 @@
     <!-- Terminal Window -->
     <div
       ref="terminalRef"
-      class="flex-1 bg-black rounded-xl p-4 font-mono text-xs overflow-y-auto border border-slate-800 shadow-inner flex flex-col gap-1 text-slate-300"
+      class="flex-1 bg-slate-950 rounded-xl p-4 font-mono text-xs overflow-y-auto border border-slate-200 dark:border-slate-800 shadow-inner flex flex-col gap-1 text-slate-300"
     >
       <div
         v-for="(log, idx) in filteredLogs"
@@ -115,11 +115,11 @@ async function refreshLogs() {
 function generateMockLogs() {
   if (logs.value.length === 0) {
     logs.value = [
-      { time: dayjs().subtract(5, 'second').format('HH:mm:ss.SSS'), level: 'INFO', message: 'WVP SIP Server initialized on port 5060' },
+      { time: dayjs().subtract(5, 'second').format('HH:mm:ss.SSS'), level: 'INFO', message: 'WVP SIP Server initialized on port 5060 (UDP/TCP)' },
       { time: dayjs().subtract(4, 'second').format('HH:mm:ss.SSS'), level: 'INFO', message: 'ZLMediaKit hook connected successfully at 127.0.0.1:18080' },
       { time: dayjs().subtract(3, 'second').format('HH:mm:ss.SSS'), level: 'INFO', message: 'Registered media server node: default_zlm' },
       { time: dayjs().subtract(2, 'second').format('HH:mm:ss.SSS'), level: 'INFO', message: 'WebRTC and Wasm player codecs ready: H.264, H.265, AAC, PCMA' },
-      { time: dayjs().format('HH:mm:ss.SSS'), level: 'INFO', message: 'Frontend Vue 3 + Vite client connected' },
+      { time: dayjs().format('HH:mm:ss.SSS'), level: 'INFO', message: 'Frontend Vue 3 + Vite + Tailwind client connected' },
     ]
   }
 }

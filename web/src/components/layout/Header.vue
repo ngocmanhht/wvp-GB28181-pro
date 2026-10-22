@@ -1,10 +1,10 @@
 <template>
-  <header class="h-16 bg-slate-900/90 border-b border-slate-800 backdrop-blur-md px-4 flex items-center justify-between z-10">
+  <header class="h-16 bg-white/90 dark:bg-slate-900/90 border-b border-slate-200 dark:border-slate-800 backdrop-blur-md px-4 flex items-center justify-between z-10 transition-colors duration-200">
     <!-- Left: Collapse toggle + Breadcrumb -->
     <div class="flex items-center gap-4">
       <button
         @click="appStore.toggleSidebar"
-        class="w-9 h-9 rounded-lg flex items-center justify-center text-slate-400 hover:text-white hover:bg-slate-800 transition"
+        class="w-9 h-9 rounded-lg flex items-center justify-center text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition"
       >
         <el-icon class="text-xl">
           <Fold v-if="!appStore.sidebarCollapsed" />
@@ -22,15 +22,15 @@
     <!-- Right: Status indicator + System actions + Profile -->
     <div class="flex items-center gap-3">
       <!-- Media Server Status Pill -->
-      <div class="hidden md:flex items-center gap-2 px-3 py-1 rounded-full bg-slate-800/80 border border-slate-700/60 text-xs">
-        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-        <span class="text-slate-300">ZLM Server: <strong class="text-emerald-400">Online</strong></span>
+      <div class="hidden md:flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/60 text-xs">
+        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+        <span class="text-slate-600 dark:text-slate-300">ZLM Server: <strong class="text-emerald-600 dark:text-emerald-400">Online</strong></span>
       </div>
 
       <!-- Fullscreen Toggle -->
       <button
         @click="toggleFullscreen"
-        class="w-9 h-9 rounded-lg flex items-center justify-center text-slate-400 hover:text-white hover:bg-slate-800 transition"
+        class="w-9 h-9 rounded-lg flex items-center justify-center text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition"
         title="Toggle Fullscreen"
       >
         <el-icon class="text-lg"><FullScreen /></el-icon>
@@ -39,34 +39,34 @@
       <!-- Dark / Light Theme Toggle -->
       <button
         @click="appStore.toggleTheme"
-        class="w-9 h-9 rounded-lg flex items-center justify-center text-slate-400 hover:text-white hover:bg-slate-800 transition"
+        class="w-9 h-9 rounded-lg flex items-center justify-center text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition"
         title="Toggle Theme"
       >
         <el-icon class="text-lg">
-          <Moon v-if="appStore.isDark" />
-          <Sunny v-else />
+          <Sunny v-if="appStore.isDark" class="text-amber-400" />
+          <Moon v-else class="text-slate-600" />
         </el-icon>
       </button>
 
-      <div class="h-5 w-[1px] bg-slate-800 mx-1"></div>
+      <div class="h-5 w-[1px] bg-slate-200 dark:bg-slate-800 mx-1"></div>
 
       <!-- User Profile Dropdown -->
       <el-dropdown trigger="click" @command="handleCommand">
-        <div class="flex items-center gap-2.5 cursor-pointer px-2 py-1.5 rounded-lg hover:bg-slate-800 transition">
+        <div class="flex items-center gap-2.5 cursor-pointer px-2 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition">
           <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-blue-500 to-cyan-400 flex items-center justify-center text-white font-bold text-sm shadow-md">
             {{ userInitial }}
           </div>
-          <span class="text-sm font-medium text-slate-200 hidden sm:inline">{{ userStore.username || 'Admin' }}</span>
+          <span class="text-sm font-medium text-slate-700 dark:text-slate-200 hidden sm:inline">{{ userStore.username || 'Admin' }}</span>
           <el-icon class="text-xs text-slate-400"><ArrowDown /></el-icon>
         </div>
 
         <template #dropdown>
-          <el-dropdown-menu class="bg-slate-800 border-slate-700 text-slate-200">
+          <el-dropdown-menu class="bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700">
             <el-dropdown-item command="password">
               <el-icon><Key /></el-icon>
               <span>Change Password</span>
             </el-dropdown-item>
-            <el-dropdown-item divided command="logout" class="text-rose-400">
+            <el-dropdown-item divided command="logout" class="text-rose-500 dark:text-rose-400">
               <el-icon><SwitchButton /></el-icon>
               <span>Sign Out</span>
             </el-dropdown-item>

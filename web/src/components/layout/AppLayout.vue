@@ -1,5 +1,5 @@
 <template>
-  <div class="flex h-screen w-screen overflow-hidden bg-slate-950 text-slate-100 font-sans">
+  <div class="flex h-screen w-screen overflow-hidden bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 font-sans transition-colors duration-200">
     <!-- Sidebar -->
     <Sidebar />
 
@@ -12,7 +12,7 @@
       <TagsView />
 
       <!-- Router Main View Area -->
-      <main class="flex-1 overflow-y-auto overflow-x-hidden p-4 bg-slate-950/80">
+      <main class="flex-1 overflow-y-auto overflow-x-hidden p-4 bg-slate-100/70 dark:bg-slate-950/80 transition-colors duration-200">
         <router-view v-slot="{ Component, route }">
           <transition name="fade-transform" mode="out-in">
             <component :is="Component" :key="route.fullPath" />

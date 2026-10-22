@@ -6,10 +6,12 @@
 
 <script setup lang="ts">
 import { onMounted } from 'vue'
+import { useAppStore } from '@/stores/app'
+
+const appStore = useAppStore()
 
 onMounted(() => {
-  // Ensure dark class is active on root by default
-  document.documentElement.classList.add('dark')
+  appStore.applyTheme(appStore.isDark)
 })
 </script>
 

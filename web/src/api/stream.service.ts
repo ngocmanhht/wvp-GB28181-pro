@@ -23,6 +23,10 @@ export class StreamService extends BaseService {
     return this.post('/api/proxy/save', data)
   }
 
+  public updateStreamProxy(data: any) {
+    return this.post('/api/proxy/update', data)
+  }
+
   public deleteStreamProxy(app: string, stream: string) {
     return this.delete('/api/proxy/del', { app, stream })
   }
@@ -35,6 +39,10 @@ export class StreamService extends BaseService {
     return this.get('/api/proxy/stop', { app, stream })
   }
 
+  public queryFfmpegCmdList(mediaServerId?: string) {
+    return this.get('/api/proxy/ffmpeg_cmd/list', { mediaServerId })
+  }
+
   // Stream Push (Ingest)
   public getStreamPushList(params: { page: number; count: number; query?: string; pushing?: boolean | string }) {
     return this.get('/api/push/list', params)
@@ -44,8 +52,24 @@ export class StreamService extends BaseService {
     return this.post('/api/push/add', data)
   }
 
+  public updateStreamPush(data: any) {
+    return this.post('/api/push/update', data)
+  }
+
   public deleteStreamPush(app: string, stream: string) {
     return this.delete('/api/push/delete', { app, stream })
+  }
+
+  public batchDeleteStreamPush(ids: (string | number)[]) {
+    return this.delete('/api/push/batch/delete', null, { data: ids })
+  }
+
+  public saveToGb(data: any) {
+    return this.post('/api/push/save_to_gb', data)
+  }
+
+  public removeFromGb(data: any) {
+    return this.delete('/api/push/remove_from_gb', null, { data })
   }
 }
 
