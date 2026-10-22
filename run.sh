@@ -120,20 +120,42 @@ if [ "$mode_choice" = "1" ]; then
     fi
     
     if [ $? -eq 0 ]; then
-        log_success "WVP Master Control Plane started successfully in Docker!"
-        log_info "• Web Dashboard (Nginx): http://localhost (hoặc http://localhost:80)"
-        log_info "• WVP REST API Backend: http://localhost:18978"
-        log_info "• SIP Signaling Port (GB28181): 8116 UDP/TCP"
-        log_info "• Default login credentials: admin / admin"
-        log_info "• Để thêm ZLMediaKit Worker: Dùng thư mục 'zlm-node' (nằm cạnh thư mục này) trên máy chủ Worker."
+        echo ""
+        log_info "Containers launched! Waiting for WVP Java Backend to finish booting (usually 20-30s)..."
+        wvp_ready=false
+        for i in {1..30}; do
+            if curl -s -m 2 http://127.0.0.1:18978/api/user/login &>/dev/null || curl -s -m 2 http://localhost:18978/api/user/login &>/dev/null; then
+                wvp_ready=true
+                break
+            fi
+            sleep 2
+        done
+
+        echo ""
+        if [ "$wvp_ready" = "true" ]; then
+            log_success "WVP Master Control Plane is fully UP, READY, and LISTENING on port 18978!"
+            log_info "• Web Dashboard (Nginx): http://localhost (hoặc http://localhost:80)"
+            log_info "• WVP REST API Backend: http://localhost:18978"
+            log_info "• SIP Signaling Port (GB28181): 8116 UDP/TCP"
+            log_info "• Default login credentials: admin / admin"
+            log_info "• Để thêm ZLMediaKit Worker: Dùng thư mục 'zlm-node' (nằm cạnh thư mục này) trên máy chủ Worker."
+        else
+            log_warning "WVP Backend is still booting or encountered a startup exception."
+            log_info "Displaying recent backend logs for inspection:"
+            if docker compose version &> /dev/null; then
+                docker compose -f docker-compose-master.yml logs --tail=40 polaris-wvp
+            else
+                docker-compose -f docker-compose-master.yml logs --tail=40 polaris-wvp
+            fi
+        fi
     else
         log_error "Failed to start WVP Master services."
         echo ""
         log_warning "Fetching Redis & MySQL container logs for diagnosis:"
         if docker compose version &> /dev/null; then
-            docker compose -f docker-compose-master.yml logs --tail=30 polaris-redis polaris-mysql
+            docker compose -f docker-compose-master.yml logs --tail=30 polaris-redis polaris-mysql polaris-wvp
         else
-            docker-compose -f docker-compose-master.yml logs --tail=30 polaris-redis polaris-mysql
+            docker-compose -f docker-compose-master.yml logs --tail=30 polaris-redis polaris-mysql polaris-wvp
         fi
         exit 1
     fi
@@ -177,18 +199,40 @@ elif [ "$mode_choice" = "2" ]; then
     fi
     
     if [ $? -eq 0 ]; then
-        log_success "All-in-One services started successfully in Docker!"
-        log_info "• WVP Web Dashboard (Nginx): http://localhost (hoặc http://localhost:80)"
-        log_info "• WVP REST API Backend: http://localhost:18978"
-        log_info "• Default login credentials: admin / admin"
+        echo ""
+        log_info "Containers launched! Waiting for WVP Java Backend to finish booting (usually 20-30s)..."
+        wvp_ready=false
+        for i in {1..30}; do
+            if curl -s -m 2 http://127.0.0.1:18978/api/user/login &>/dev/null || curl -s -m 2 http://localhost:18978/api/user/login &>/dev/null; then
+                wvp_ready=true
+                break
+            fi
+            sleep 2
+        done
+
+        echo ""
+        if [ "$wvp_ready" = "true" ]; then
+            log_success "All-in-One services are fully UP, READY, and LISTENING on port 18978!"
+            log_info "• WVP Web Dashboard (Nginx): http://localhost (hoặc http://localhost:80)"
+            log_info "• WVP REST API Backend: http://localhost:18978"
+            log_info "• Default login credentials: admin / admin"
+        else
+            log_warning "WVP Backend is still booting or encountered a startup exception."
+            log_info "Displaying recent backend logs for inspection:"
+            if docker compose version &> /dev/null; then
+                docker compose logs --tail=40 polaris-wvp
+            else
+                docker-compose logs --tail=40 polaris-wvp
+            fi
+        fi
     else
         log_error "Failed to start Docker Compose services."
         echo ""
         log_warning "Fetching container logs for diagnosis:"
         if docker compose version &> /dev/null; then
-            docker compose logs --tail=30 polaris-redis polaris-mysql
+            docker compose logs --tail=30 polaris-redis polaris-mysql polaris-wvp
         else
-            docker-compose logs --tail=30 polaris-redis polaris-mysql
+            docker-compose logs --tail=30 polaris-redis polaris-mysql polaris-wvp
         fi
         exit 1
     fi
