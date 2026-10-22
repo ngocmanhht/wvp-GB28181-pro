@@ -48,6 +48,7 @@ public class UserController {
     @Autowired
     private UserSetting userSetting;
 
+    @GetMapping("/login")
     @PostMapping("/login")
     @Operation(summary = "Login", description = "AccessToken is returned after successful login, which can be obtained from the return value or from the response header.")
     public LoginUser login(HttpServletRequest request, HttpServletResponse response,
