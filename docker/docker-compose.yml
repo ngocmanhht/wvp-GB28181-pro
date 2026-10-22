@@ -15,7 +15,7 @@ services:
     environment:
       TZ: "Asia/Ho_Chi_Minh"
       REDISCLI_AUTH: "${REDIS_PWD:-wvp_redis_secure_password_2026}"
-    command: redis-server --requirepass ${REDIS_PWD:-wvp_redis_secure_password_2026} --appendonly yes --protected-mode no --bind 0.0.0.0 --tcp-keepalive 300
+    command: redis-server --requirepass ${REDIS_PWD:-wvp_redis_secure_password_2026} --appendonly no --protected-mode no --bind 0.0.0.0 --tcp-keepalive 300
     logging:
       driver: "json-file"
       options:

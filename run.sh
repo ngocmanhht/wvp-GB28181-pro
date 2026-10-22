@@ -97,6 +97,12 @@ if [ "$mode_choice" = "1" ]; then
              "$SCRIPT_DIR/docker/logs/media" 2>/dev/null || true
     chmod -R 777 "$SCRIPT_DIR/docker/volumes" "$SCRIPT_DIR/docker/logs" 2>/dev/null || true
 
+    # Clean stale/incompatible Redis AOF cache files (e.g. from previous redis:latest run)
+    if [ -d "$SCRIPT_DIR/docker/volumes/redis/data/appendonlydir" ] || [ -f "$SCRIPT_DIR/docker/volumes/redis/data/dump.rdb" ]; then
+        log_info "Cleaning stale Redis cache files to ensure clean database startup..."
+        rm -rf "$SCRIPT_DIR/docker/volumes/redis/data"/* 2>/dev/null || true
+    fi
+
     log_info "Starting WVP Master Pure Control Plane (Không kèm ZLMediaKit)..."
     cd "$SCRIPT_DIR/docker"
     export DOCKER_BUILDKIT=1
@@ -147,6 +153,12 @@ elif [ "$mode_choice" = "2" ]; then
              "$SCRIPT_DIR/docker/media/record" \
              "$SCRIPT_DIR/docker/logs/media" 2>/dev/null || true
     chmod -R 777 "$SCRIPT_DIR/docker/volumes" "$SCRIPT_DIR/docker/logs" "$SCRIPT_DIR/docker/media" 2>/dev/null || true
+
+    # Clean stale/incompatible Redis AOF cache files (e.g. from previous redis:latest run)
+    if [ -d "$SCRIPT_DIR/docker/volumes/redis/data/appendonlydir" ] || [ -f "$SCRIPT_DIR/docker/volumes/redis/data/dump.rdb" ]; then
+        log_info "Cleaning stale Redis cache files to ensure clean database startup..."
+        rm -rf "$SCRIPT_DIR/docker/volumes/redis/data"/* 2>/dev/null || true
+    fi
 
     log_info "Starting All-in-One Full Stack with Docker Compose (kèm ZLMediaKit nội bộ)..."
     cd "$SCRIPT_DIR/docker"
