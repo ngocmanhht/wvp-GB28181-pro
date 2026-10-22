@@ -34,6 +34,13 @@ EOF
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$SCRIPT_DIR"
 
+# Load environment configuration if present
+if [ -f "$SCRIPT_DIR/docker/.env" ]; then
+    set -a
+    source "$SCRIPT_DIR/docker/.env"
+    set +a
+fi
+
 # 1. Dependency checks
 log_info "Checking system dependencies..."
 
@@ -100,14 +107,7 @@ if [ "$mode_choice" = "1" ]; then
     # Clean stale/incompatible Redis AOF cache files (e.g. from previous redis:latest run)
     if [ -d "$SCRIPT_DIR/docker/volumes/redis/data/appendonlydir" ] || [ -f "$SCRIPT_DIR/docker/volumes/redis/data/dump.rdb" ]; then
         log_info "Cleaning stale Redis cache files to ensure clean database startup..."
-        rm -rf "$SCRIPT_DIR/docker/volumes/redis/data"/* 2>/dev/null || true
-    fi
-
-    # Check if MySQL data directory was corrupted by a previous interrupted initialization
-    if [ -d "$SCRIPT_DIR/docker/volumes/mysql/data" ] && [ "$(ls -A "$SCRIPT_DIR/docker/volumes/mysql/data" 2>/dev/null)" ] && [ ! -d "$SCRIPT_DIR/docker/volumes/mysql/data/wvp" ]; then
-        log_warning "Detected incomplete/corrupted MySQL initialization (database 'wvp' was never created)."
-        log_info "Auto-cleaning broken MySQL data files to allow a fresh, healthy initialization..."
-        rm -rf "$SCRIPT_DIR/docker/volumes/mysql/data"/* 2>/dev/null || true
+        rm -rf "$SCRIPT_DIR/docker/volumes/redis/data" && mkdir -p "$SCRIPT_DIR/docker/volumes/redis/data" && chmod -R 777 "$SCRIPT_DIR/docker/volumes/redis/data" 2>/dev/null || true
     fi
 
     log_info "Starting WVP Master Pure Control Plane (Không kèm ZLMediaKit)..."
@@ -118,11 +118,23 @@ if [ "$mode_choice" = "1" ]; then
     # Clean up any previous stopped/unhealthy containers
     if docker compose version &> /dev/null; then
         docker compose -f docker-compose-master.yml down --remove-orphans 2>/dev/null || true
-        log_info "Running: docker compose -f docker-compose-master.yml up -d --build --force-recreate"
-        docker compose -f docker-compose-master.yml up -d --build --force-recreate
     else
         docker-compose -f docker-compose-master.yml down --remove-orphans 2>/dev/null || true
-        log_info "Running: docker-compose -f docker-compose-master.yml up -d --build --force-recreate"
+    fi
+
+    # Check if MySQL data directory was corrupted by a previous interrupted initialization
+    if [ -d "$SCRIPT_DIR/docker/volumes/mysql/data" ] && [ "$(ls -A "$SCRIPT_DIR/docker/volumes/mysql/data" 2>/dev/null)" ]; then
+        if [ ! -d "$SCRIPT_DIR/docker/volumes/mysql/data/wvp" ] || [ -z "$(ls -A "$SCRIPT_DIR/docker/volumes/mysql/data/wvp" 2>/dev/null)" ]; then
+            log_warning "Detected incomplete/corrupted MySQL initialization (database 'wvp' is empty or missing)."
+            log_info "Auto-cleaning broken MySQL data files to allow a fresh, healthy initialization..."
+            rm -rf "$SCRIPT_DIR/docker/volumes/mysql/data" && mkdir -p "$SCRIPT_DIR/docker/volumes/mysql/data" && chmod -R 777 "$SCRIPT_DIR/docker/volumes/mysql/data" 2>/dev/null || true
+        fi
+    fi
+
+    log_info "Running: docker compose -f docker-compose-master.yml up -d --build --force-recreate"
+    if docker compose version &> /dev/null; then
+        docker compose -f docker-compose-master.yml up -d --build --force-recreate
+    else
         docker-compose -f docker-compose-master.yml up -d --build --force-recreate
     fi
     
@@ -222,14 +234,7 @@ elif [ "$mode_choice" = "2" ]; then
     # Clean stale/incompatible Redis AOF cache files (e.g. from previous redis:latest run)
     if [ -d "$SCRIPT_DIR/docker/volumes/redis/data/appendonlydir" ] || [ -f "$SCRIPT_DIR/docker/volumes/redis/data/dump.rdb" ]; then
         log_info "Cleaning stale Redis cache files to ensure clean database startup..."
-        rm -rf "$SCRIPT_DIR/docker/volumes/redis/data"/* 2>/dev/null || true
-    fi
-
-    # Check if MySQL data directory was corrupted by a previous interrupted initialization
-    if [ -d "$SCRIPT_DIR/docker/volumes/mysql/data" ] && [ "$(ls -A "$SCRIPT_DIR/docker/volumes/mysql/data" 2>/dev/null)" ] && [ ! -d "$SCRIPT_DIR/docker/volumes/mysql/data/wvp" ]; then
-        log_warning "Detected incomplete/corrupted MySQL initialization (database 'wvp' was never created)."
-        log_info "Auto-cleaning broken MySQL data files to allow a fresh, healthy initialization..."
-        rm -rf "$SCRIPT_DIR/docker/volumes/mysql/data"/* 2>/dev/null || true
+        rm -rf "$SCRIPT_DIR/docker/volumes/redis/data" && mkdir -p "$SCRIPT_DIR/docker/volumes/redis/data" && chmod -R 777 "$SCRIPT_DIR/docker/volumes/redis/data" 2>/dev/null || true
     fi
 
     log_info "Starting All-in-One Full Stack with Docker Compose (kèm ZLMediaKit nội bộ)..."
@@ -240,11 +245,23 @@ elif [ "$mode_choice" = "2" ]; then
     # Clean up any previous stopped/unhealthy containers
     if docker compose version &> /dev/null; then
         docker compose down --remove-orphans 2>/dev/null || true
-        log_info "Running: docker compose up -d --build --force-recreate"
-        docker compose up -d --build --force-recreate
     else
         docker-compose down --remove-orphans 2>/dev/null || true
-        log_info "Running: docker-compose up -d --build --force-recreate"
+    fi
+
+    # Check if MySQL data directory was corrupted by a previous interrupted initialization
+    if [ -d "$SCRIPT_DIR/docker/volumes/mysql/data" ] && [ "$(ls -A "$SCRIPT_DIR/docker/volumes/mysql/data" 2>/dev/null)" ]; then
+        if [ ! -d "$SCRIPT_DIR/docker/volumes/mysql/data/wvp" ] || [ -z "$(ls -A "$SCRIPT_DIR/docker/volumes/mysql/data/wvp" 2>/dev/null)" ]; then
+            log_warning "Detected incomplete/corrupted MySQL initialization (database 'wvp' is empty or missing)."
+            log_info "Auto-cleaning broken MySQL data files to allow a fresh, healthy initialization..."
+            rm -rf "$SCRIPT_DIR/docker/volumes/mysql/data" && mkdir -p "$SCRIPT_DIR/docker/volumes/mysql/data" && chmod -R 777 "$SCRIPT_DIR/docker/volumes/mysql/data" 2>/dev/null || true
+        fi
+    fi
+
+    log_info "Running: docker compose up -d --build --force-recreate"
+    if docker compose version &> /dev/null; then
+        docker compose up -d --build --force-recreate
+    else
         docker-compose up -d --build --force-recreate
     fi
     
