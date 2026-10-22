@@ -102,11 +102,13 @@ if [ "$mode_choice" = "1" ]; then
     export DOCKER_BUILDKIT=1
     export COMPOSE_DOCKER_CLI_BUILD=1
     
-    # Check if docker-compose or docker compose is available
+    # Clean up any previous stopped/unhealthy containers
     if docker compose version &> /dev/null; then
+        docker compose -f docker-compose-master.yml down --remove-orphans 2>/dev/null || true
         log_info "Running: docker compose -f docker-compose-master.yml up -d --build --force-recreate"
         docker compose -f docker-compose-master.yml up -d --build --force-recreate
     else
+        docker-compose -f docker-compose-master.yml down --remove-orphans 2>/dev/null || true
         log_info "Running: docker-compose -f docker-compose-master.yml up -d --build --force-recreate"
         docker-compose -f docker-compose-master.yml up -d --build --force-recreate
     fi
@@ -120,6 +122,13 @@ if [ "$mode_choice" = "1" ]; then
         log_info "• Để thêm ZLMediaKit Worker: Dùng thư mục 'zlm-node' (nằm cạnh thư mục này) trên máy chủ Worker."
     else
         log_error "Failed to start WVP Master services."
+        echo ""
+        log_warning "Fetching Redis & MySQL container logs for diagnosis:"
+        if docker compose version &> /dev/null; then
+            docker compose -f docker-compose-master.yml logs --tail=30 polaris-redis polaris-mysql
+        else
+            docker-compose -f docker-compose-master.yml logs --tail=30 polaris-redis polaris-mysql
+        fi
         exit 1
     fi
 
@@ -144,11 +153,13 @@ elif [ "$mode_choice" = "2" ]; then
     export DOCKER_BUILDKIT=1
     export COMPOSE_DOCKER_CLI_BUILD=1
     
-    # Check if docker-compose or docker compose is available
+    # Clean up any previous stopped/unhealthy containers
     if docker compose version &> /dev/null; then
+        docker compose down --remove-orphans 2>/dev/null || true
         log_info "Running: docker compose up -d --build --force-recreate"
         docker compose up -d --build --force-recreate
     else
+        docker-compose down --remove-orphans 2>/dev/null || true
         log_info "Running: docker-compose up -d --build --force-recreate"
         docker-compose up -d --build --force-recreate
     fi
@@ -160,6 +171,13 @@ elif [ "$mode_choice" = "2" ]; then
         log_info "• Default login credentials: admin / admin"
     else
         log_error "Failed to start Docker Compose services."
+        echo ""
+        log_warning "Fetching container logs for diagnosis:"
+        if docker compose version &> /dev/null; then
+            docker compose logs --tail=30 polaris-redis polaris-mysql
+        else
+            docker-compose logs --tail=30 polaris-redis polaris-mysql
+        fi
         exit 1
     fi
 

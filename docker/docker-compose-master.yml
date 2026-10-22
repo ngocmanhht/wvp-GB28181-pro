@@ -3,7 +3,7 @@ services:
     image: redis:7-alpine
     restart: unless-stopped
     healthcheck:
-      test: ["CMD-SHELL", "redis-cli ping 2>/dev/null | grep -q PONG || redis-cli -a \"${REDIS_PWD:-wvp_redis_secure_password_2026}\" ping 2>/dev/null | grep -q PONG || exit 1"]
+      test: ["CMD", "redis-cli", "ping"]
       interval: 3s
       timeout: 3s
       retries: 15
@@ -11,12 +11,11 @@ services:
     networks:
       - wvp-master-net
     volumes:
-      - ./redis/conf/redis.conf:/opt/polaris/redis/redis.conf
-      - ./volumes/redis/data/:/data
+      - ./volumes/redis/data/:/data:z
     environment:
       TZ: "Asia/Ho_Chi_Minh"
       REDISCLI_AUTH: "${REDIS_PWD:-wvp_redis_secure_password_2026}"
-    command: redis-server /opt/polaris/redis/redis.conf --requirepass ${REDIS_PWD:-wvp_redis_secure_password_2026}
+    command: redis-server --requirepass ${REDIS_PWD:-wvp_redis_secure_password_2026} --appendonly yes --protected-mode no --bind 0.0.0.0 --tcp-keepalive 300
     logging:
       driver: "json-file"
       options:
@@ -41,10 +40,10 @@ services:
       MYSQL_PASSWORD: ${MYSQL_PASSWORD:-wvp_password}
       TZ: "Asia/Ho_Chi_Minh"
     volumes:
-      - ./mysql/conf:/etc/mysql/conf.d
-      - ./logs/mysql:/logs
-      - ./volumes/mysql/data:/var/lib/mysql
-      - ../database/2.7.4/init-mysql-2.7.4.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./mysql/conf:/etc/mysql/conf.d:z
+      - ./logs/mysql:/logs:z
+      - ./volumes/mysql/data:/var/lib/mysql:z
+      - ../database/2.7.4/init-mysql-2.7.4.sql:/docker-entrypoint-initdb.d/init.sql:z
     command: [
         "--innodb-buffer-pool-size=${MYSQL_INNODB_BUFFER_POOL_SIZE:-512M}",
         "--character-set-server=utf8mb4",
@@ -76,9 +75,9 @@ services:
       polaris-mysql:
         condition: service_healthy
     volumes:
-      - ./wvp/config:/opt/wvp/config
-      - ./wvp/wvp/:/opt/ylcx/wvp/
-      - ./logs/wvp:/opt/wvp/logs/
+      - ./wvp/config:/opt/wvp/config:z
+      - ./wvp/wvp/:/opt/ylcx/wvp/:z
+      - ./logs/wvp:/opt/wvp/logs/:z
     environment:
       TZ: "Asia/Ho_Chi_Minh"
       RUN_ENV: "docker"
@@ -122,8 +121,8 @@ services:
     depends_on:
       - polaris-wvp
     volumes:
-      - ./nginx/templates/nginx-master.conf.template:/etc/nginx/templates/default.conf.template
-      - ./logs/nginx:/var/log/nginx
+      - ./nginx/templates/nginx-master.conf.template:/etc/nginx/templates/default.conf.template:z
+      - ./logs/nginx:/var/log/nginx:z
     environment:
       Stream_IP: ${Stream_IP:-127.0.0.1}
     networks:
